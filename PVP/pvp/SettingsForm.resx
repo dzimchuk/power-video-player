@@ -1,0 +1,1266 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="radioSysTrayOnly.Location" type="System.Drawing.Point, System.Drawing">
+    <value>16, 78</value>
+  </data>
+  <data name="radioSysTrayOnly.Size" type="System.Drawing.Size, System.Drawing">
+    <value>224, 16</value>
+  </data>
+  <assembly alias="mscorlib" name="mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="radioSysTrayOnly.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="radioSysTrayOnly.Text" xml:space="preserve">
+    <value>System tray only (restart is required)</value>
+  </data>
+  <data name="&gt;&gt;radioSysTrayOnly.Name" xml:space="preserve">
+    <value>radioSysTrayOnly</value>
+  </data>
+  <data name="&gt;&gt;radioSysTrayOnly.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;radioSysTrayOnly.Parent" xml:space="preserve">
+    <value>grpSysTray</value>
+  </data>
+  <data name="&gt;&gt;radioSysTrayOnly.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="chkShowTrayAlways.Location" type="System.Drawing.Point, System.Drawing">
+    <value>40, 60</value>
+  </data>
+  <data name="chkShowTrayAlways.Size" type="System.Drawing.Size, System.Drawing">
+    <value>216, 16</value>
+  </data>
+  <data name="chkShowTrayAlways.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="chkShowTrayAlways.Text" xml:space="preserve">
+    <value>Show tray icon when not minimized</value>
+  </data>
+  <data name="&gt;&gt;chkShowTrayAlways.Name" xml:space="preserve">
+    <value>chkShowTrayAlways</value>
+  </data>
+  <data name="&gt;&gt;chkShowTrayAlways.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;chkShowTrayAlways.Parent" xml:space="preserve">
+    <value>grpSysTray</value>
+  </data>
+  <data name="&gt;&gt;chkShowTrayAlways.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="radioMinToTray.Location" type="System.Drawing.Point, System.Drawing">
+    <value>16, 42</value>
+  </data>
+  <data name="radioMinToTray.Size" type="System.Drawing.Size, System.Drawing">
+    <value>144, 16</value>
+  </data>
+  <data name="radioMinToTray.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="radioMinToTray.Text" xml:space="preserve">
+    <value>Minimize to system tray</value>
+  </data>
+  <data name="&gt;&gt;radioMinToTray.Name" xml:space="preserve">
+    <value>radioMinToTray</value>
+  </data>
+  <data name="&gt;&gt;radioMinToTray.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;radioMinToTray.Parent" xml:space="preserve">
+    <value>grpSysTray</value>
+  </data>
+  <data name="&gt;&gt;radioMinToTray.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="radioTaskbarOnly.Location" type="System.Drawing.Point, System.Drawing">
+    <value>16, 24</value>
+  </data>
+  <data name="radioTaskbarOnly.Size" type="System.Drawing.Size, System.Drawing">
+    <value>96, 16</value>
+  </data>
+  <data name="radioTaskbarOnly.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="radioTaskbarOnly.Text" xml:space="preserve">
+    <value>Taskbar only</value>
+  </data>
+  <data name="&gt;&gt;radioTaskbarOnly.Name" xml:space="preserve">
+    <value>radioTaskbarOnly</value>
+  </data>
+  <data name="&gt;&gt;radioTaskbarOnly.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;radioTaskbarOnly.Parent" xml:space="preserve">
+    <value>grpSysTray</value>
+  </data>
+  <data name="&gt;&gt;radioTaskbarOnly.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="grpSysTray.Location" type="System.Drawing.Point, System.Drawing">
+    <value>16, 168</value>
+  </data>
+  <data name="grpSysTray.Size" type="System.Drawing.Size, System.Drawing">
+    <value>328, 104</value>
+  </data>
+  <data name="grpSysTray.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="grpSysTray.Text" xml:space="preserve">
+    <value>System Tray</value>
+  </data>
+  <data name="&gt;&gt;grpSysTray.Name" xml:space="preserve">
+    <value>grpSysTray</value>
+  </data>
+  <data name="&gt;&gt;grpSysTray.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;grpSysTray.Parent" xml:space="preserve">
+    <value>pageGeneral</value>
+  </data>
+  <data name="&gt;&gt;grpSysTray.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="chkOnTop.Location" type="System.Drawing.Point, System.Drawing">
+    <value>16, 124</value>
+  </data>
+  <data name="chkOnTop.Size" type="System.Drawing.Size, System.Drawing">
+    <value>152, 16</value>
+  </data>
+  <data name="chkOnTop.TabIndex" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="chkOnTop.Text" xml:space="preserve">
+    <value>Always on top</value>
+  </data>
+  <data name="&gt;&gt;chkOnTop.Name" xml:space="preserve">
+    <value>chkOnTop</value>
+  </data>
+  <data name="&gt;&gt;chkOnTop.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;chkOnTop.Parent" xml:space="preserve">
+    <value>grpPlayerOptions</value>
+  </data>
+  <data name="&gt;&gt;chkOnTop.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="chkLogo.Location" type="System.Drawing.Point, System.Drawing">
+    <value>16, 104</value>
+  </data>
+  <data name="chkLogo.Size" type="System.Drawing.Size, System.Drawing">
+    <value>216, 16</value>
+  </data>
+  <data name="chkLogo.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="chkLogo.Text" xml:space="preserve">
+    <value>Show logo when no file is loaded</value>
+  </data>
+  <data name="&gt;&gt;chkLogo.Name" xml:space="preserve">
+    <value>chkLogo</value>
+  </data>
+  <data name="&gt;&gt;chkLogo.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;chkLogo.Parent" xml:space="preserve">
+    <value>grpPlayerOptions</value>
+  </data>
+  <data name="&gt;&gt;chkLogo.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="chkCenter.Location" type="System.Drawing.Point, System.Drawing">
+    <value>16, 84</value>
+  </data>
+  <data name="chkCenter.Size" type="System.Drawing.Size, System.Drawing">
+    <value>104, 16</value>
+  </data>
+  <data name="chkCenter.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="chkCenter.Text" xml:space="preserve">
+    <value>Center window</value>
+  </data>
+  <data name="&gt;&gt;chkCenter.Name" xml:space="preserve">
+    <value>chkCenter</value>
+  </data>
+  <data name="&gt;&gt;chkCenter.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;chkCenter.Parent" xml:space="preserve">
+    <value>grpPlayerOptions</value>
+  </data>
+  <data name="&gt;&gt;chkCenter.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="chkVolume.Location" type="System.Drawing.Point, System.Drawing">
+    <value>16, 64</value>
+  </data>
+  <data name="chkVolume.Size" type="System.Drawing.Size, System.Drawing">
+    <value>128, 16</value>
+  </data>
+  <data name="chkVolume.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="chkVolume.Text" xml:space="preserve">
+    <value>Remember volume</value>
+  </data>
+  <data name="&gt;&gt;chkVolume.Name" xml:space="preserve">
+    <value>chkVolume</value>
+  </data>
+  <data name="&gt;&gt;chkVolume.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;chkVolume.Parent" xml:space="preserve">
+    <value>grpPlayerOptions</value>
+  </data>
+  <data name="&gt;&gt;chkVolume.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="chkAutoPlay.Location" type="System.Drawing.Point, System.Drawing">
+    <value>16, 44</value>
+  </data>
+  <data name="chkAutoPlay.Size" type="System.Drawing.Size, System.Drawing">
+    <value>184, 16</value>
+  </data>
+  <data name="chkAutoPlay.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="chkAutoPlay.Text" xml:space="preserve">
+    <value>Automatically play a loaded file</value>
+  </data>
+  <data name="&gt;&gt;chkAutoPlay.Name" xml:space="preserve">
+    <value>chkAutoPlay</value>
+  </data>
+  <data name="&gt;&gt;chkAutoPlay.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;chkAutoPlay.Parent" xml:space="preserve">
+    <value>grpPlayerOptions</value>
+  </data>
+  <data name="&gt;&gt;chkAutoPlay.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="chkFullscreen.Location" type="System.Drawing.Point, System.Drawing">
+    <value>16, 24</value>
+  </data>
+  <data name="chkFullscreen.Size" type="System.Drawing.Size, System.Drawing">
+    <value>160, 16</value>
+  </data>
+  <data name="chkFullscreen.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="chkFullscreen.Text" xml:space="preserve">
+    <value>Start in a full screen mode</value>
+  </data>
+  <data name="&gt;&gt;chkFullscreen.Name" xml:space="preserve">
+    <value>chkFullscreen</value>
+  </data>
+  <data name="&gt;&gt;chkFullscreen.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;chkFullscreen.Parent" xml:space="preserve">
+    <value>grpPlayerOptions</value>
+  </data>
+  <data name="&gt;&gt;chkFullscreen.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="grpPlayerOptions.Location" type="System.Drawing.Point, System.Drawing">
+    <value>16, 8</value>
+  </data>
+  <data name="grpPlayerOptions.Size" type="System.Drawing.Size, System.Drawing">
+    <value>328, 152</value>
+  </data>
+  <data name="grpPlayerOptions.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="grpPlayerOptions.Text" xml:space="preserve">
+    <value>Player Options</value>
+  </data>
+  <data name="&gt;&gt;grpPlayerOptions.Name" xml:space="preserve">
+    <value>grpPlayerOptions</value>
+  </data>
+  <data name="&gt;&gt;grpPlayerOptions.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;grpPlayerOptions.Parent" xml:space="preserve">
+    <value>pageGeneral</value>
+  </data>
+  <data name="&gt;&gt;grpPlayerOptions.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="radioWindowed.Location" type="System.Drawing.Point, System.Drawing">
+    <value>16, 44</value>
+  </data>
+  <data name="radioWindowed.Size" type="System.Drawing.Size, System.Drawing">
+    <value>192, 16</value>
+  </data>
+  <data name="radioWindowed.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="radioWindowed.Text" xml:space="preserve">
+    <value>Windowed</value>
+  </data>
+  <data name="&gt;&gt;radioWindowed.Name" xml:space="preserve">
+    <value>radioWindowed</value>
+  </data>
+  <data name="&gt;&gt;radioWindowed.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;radioWindowed.Parent" xml:space="preserve">
+    <value>grpVMRMode</value>
+  </data>
+  <data name="&gt;&gt;radioWindowed.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="radioWindowless.Location" type="System.Drawing.Point, System.Drawing">
+    <value>16, 24</value>
+  </data>
+  <data name="radioWindowless.Size" type="System.Drawing.Size, System.Drawing">
+    <value>112, 16</value>
+  </data>
+  <data name="radioWindowless.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="radioWindowless.Text" xml:space="preserve">
+    <value>Windowless</value>
+  </data>
+  <data name="&gt;&gt;radioWindowless.Name" xml:space="preserve">
+    <value>radioWindowless</value>
+  </data>
+  <data name="&gt;&gt;radioWindowless.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;radioWindowless.Parent" xml:space="preserve">
+    <value>grpVMRMode</value>
+  </data>
+  <data name="&gt;&gt;radioWindowless.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="grpVMRMode.Location" type="System.Drawing.Point, System.Drawing">
+    <value>16, 132</value>
+  </data>
+  <data name="grpVMRMode.Size" type="System.Drawing.Size, System.Drawing">
+    <value>328, 72</value>
+  </data>
+  <data name="grpVMRMode.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="grpVMRMode.Text" xml:space="preserve">
+    <value>VMR Mode</value>
+  </data>
+  <data name="&gt;&gt;grpVMRMode.Name" xml:space="preserve">
+    <value>grpVMRMode</value>
+  </data>
+  <data name="&gt;&gt;grpVMRMode.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;grpVMRMode.Parent" xml:space="preserve">
+    <value>pageVideo</value>
+  </data>
+  <data name="&gt;&gt;grpVMRMode.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="radioEVR.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="radioEVR.Location" type="System.Drawing.Point, System.Drawing">
+    <value>16, 84</value>
+  </data>
+  <data name="radioEVR.Size" type="System.Drawing.Size, System.Drawing">
+    <value>151, 17</value>
+  </data>
+  <data name="radioEVR.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="radioEVR.Text" xml:space="preserve">
+    <value>Enhanced Video Renderer</value>
+  </data>
+  <data name="&gt;&gt;radioEVR.Name" xml:space="preserve">
+    <value>radioEVR</value>
+  </data>
+  <data name="&gt;&gt;radioEVR.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;radioEVR.Parent" xml:space="preserve">
+    <value>grpRenderer</value>
+  </data>
+  <data name="&gt;&gt;radioEVR.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="radioVMR9.Location" type="System.Drawing.Point, System.Drawing">
+    <value>16, 64</value>
+  </data>
+  <data name="radioVMR9.Size" type="System.Drawing.Size, System.Drawing">
+    <value>208, 16</value>
+  </data>
+  <data name="radioVMR9.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="radioVMR9.Text" xml:space="preserve">
+    <value>Video Mixing Renderer 9</value>
+  </data>
+  <data name="&gt;&gt;radioVMR9.Name" xml:space="preserve">
+    <value>radioVMR9</value>
+  </data>
+  <data name="&gt;&gt;radioVMR9.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;radioVMR9.Parent" xml:space="preserve">
+    <value>grpRenderer</value>
+  </data>
+  <data name="&gt;&gt;radioVMR9.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="radioVMR.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="radioVMR.Location" type="System.Drawing.Point, System.Drawing">
+    <value>16, 44</value>
+  </data>
+  <data name="radioVMR.Size" type="System.Drawing.Size, System.Drawing">
+    <value>264, 16</value>
+  </data>
+  <data name="radioVMR.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="radioVMR.Text" xml:space="preserve">
+    <value>Video Mixing Renderer</value>
+  </data>
+  <data name="&gt;&gt;radioVMR.Name" xml:space="preserve">
+    <value>radioVMR</value>
+  </data>
+  <data name="&gt;&gt;radioVMR.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;radioVMR.Parent" xml:space="preserve">
+    <value>grpRenderer</value>
+  </data>
+  <data name="&gt;&gt;radioVMR.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="radioVR.Location" type="System.Drawing.Point, System.Drawing">
+    <value>16, 24</value>
+  </data>
+  <data name="radioVR.Size" type="System.Drawing.Size, System.Drawing">
+    <value>112, 16</value>
+  </data>
+  <data name="radioVR.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="radioVR.Text" xml:space="preserve">
+    <value>Video Renderer</value>
+  </data>
+  <data name="&gt;&gt;radioVR.Name" xml:space="preserve">
+    <value>radioVR</value>
+  </data>
+  <data name="&gt;&gt;radioVR.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;radioVR.Parent" xml:space="preserve">
+    <value>grpRenderer</value>
+  </data>
+  <data name="&gt;&gt;radioVR.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="grpRenderer.Location" type="System.Drawing.Point, System.Drawing">
+    <value>16, 8</value>
+  </data>
+  <data name="grpRenderer.Size" type="System.Drawing.Size, System.Drawing">
+    <value>328, 118</value>
+  </data>
+  <data name="grpRenderer.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="grpRenderer.Text" xml:space="preserve">
+    <value>Preferred Video Render:</value>
+  </data>
+  <data name="&gt;&gt;grpRenderer.Name" xml:space="preserve">
+    <value>grpRenderer</value>
+  </data>
+  <data name="&gt;&gt;grpRenderer.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;grpRenderer.Parent" xml:space="preserve">
+    <value>pageVideo</value>
+  </data>
+  <data name="&gt;&gt;grpRenderer.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="btnRemoveAll.Location" type="System.Drawing.Point, System.Drawing">
+    <value>192, 264</value>
+  </data>
+  <data name="btnRemoveAll.Size" type="System.Drawing.Size, System.Drawing">
+    <value>75, 23</value>
+  </data>
+  <data name="btnRemoveAll.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="btnRemoveAll.Text" xml:space="preserve">
+    <value>Remove All</value>
+  </data>
+  <data name="&gt;&gt;btnRemoveAll.Name" xml:space="preserve">
+    <value>btnRemoveAll</value>
+  </data>
+  <data name="&gt;&gt;btnRemoveAll.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;btnRemoveAll.Parent" xml:space="preserve">
+    <value>pageFileTypes</value>
+  </data>
+  <data name="&gt;&gt;btnRemoveAll.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="btnSelectAll.Location" type="System.Drawing.Point, System.Drawing">
+    <value>96, 264</value>
+  </data>
+  <data name="btnSelectAll.Size" type="System.Drawing.Size, System.Drawing">
+    <value>75, 23</value>
+  </data>
+  <data name="btnSelectAll.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="btnSelectAll.Text" xml:space="preserve">
+    <value>Select All</value>
+  </data>
+  <data name="&gt;&gt;btnSelectAll.Name" xml:space="preserve">
+    <value>btnSelectAll</value>
+  </data>
+  <data name="&gt;&gt;btnSelectAll.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;btnSelectAll.Parent" xml:space="preserve">
+    <value>pageFileTypes</value>
+  </data>
+  <data name="&gt;&gt;btnSelectAll.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="columnExtensions.Width" type="System.Int32, mscorlib">
+    <value>290</value>
+  </data>
+  <data name="listTypes.Location" type="System.Drawing.Point, System.Drawing">
+    <value>16, 56</value>
+  </data>
+  <data name="listTypes.Size" type="System.Drawing.Size, System.Drawing">
+    <value>328, 192</value>
+  </data>
+  <data name="listTypes.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;listTypes.Name" xml:space="preserve">
+    <value>listTypes</value>
+  </data>
+  <data name="&gt;&gt;listTypes.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ListView, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;listTypes.Parent" xml:space="preserve">
+    <value>pageFileTypes</value>
+  </data>
+  <data name="&gt;&gt;listTypes.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="labelTypes.Location" type="System.Drawing.Point, System.Drawing">
+    <value>16, 16</value>
+  </data>
+  <data name="labelTypes.Size" type="System.Drawing.Size, System.Drawing">
+    <value>328, 32</value>
+  </data>
+  <data name="labelTypes.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="labelTypes.Text" xml:space="preserve">
+    <value>Select the file types for which you want Power Video Player to be the default player.</value>
+  </data>
+  <data name="&gt;&gt;labelTypes.Name" xml:space="preserve">
+    <value>labelTypes</value>
+  </data>
+  <data name="&gt;&gt;labelTypes.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;labelTypes.Parent" xml:space="preserve">
+    <value>pageFileTypes</value>
+  </data>
+  <data name="&gt;&gt;labelTypes.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="btnOK.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Bottom, Right</value>
+  </data>
+  <data name="btnOK.Location" type="System.Drawing.Point, System.Drawing">
+    <value>136, 344</value>
+  </data>
+  <data name="btnOK.Size" type="System.Drawing.Size, System.Drawing">
+    <value>75, 23</value>
+  </data>
+  <data name="btnOK.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="btnOK.Text" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="&gt;&gt;btnOK.Name" xml:space="preserve">
+    <value>btnOK</value>
+  </data>
+  <data name="&gt;&gt;btnOK.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;btnOK.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;btnOK.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="btnCancel.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Bottom, Right</value>
+  </data>
+  <data name="btnCancel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>218, 344</value>
+  </data>
+  <data name="btnCancel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>75, 23</value>
+  </data>
+  <data name="btnCancel.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="btnCancel.Text" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="&gt;&gt;btnCancel.Name" xml:space="preserve">
+    <value>btnCancel</value>
+  </data>
+  <data name="&gt;&gt;btnCancel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;btnCancel.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;btnCancel.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="btnApply.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Bottom, Right</value>
+  </data>
+  <data name="btnApply.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="btnApply.Location" type="System.Drawing.Point, System.Drawing">
+    <value>300, 344</value>
+  </data>
+  <data name="btnApply.Size" type="System.Drawing.Size, System.Drawing">
+    <value>75, 23</value>
+  </data>
+  <data name="btnApply.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="btnApply.Text" xml:space="preserve">
+    <value>Apply</value>
+  </data>
+  <data name="&gt;&gt;btnApply.Name" xml:space="preserve">
+    <value>btnApply</value>
+  </data>
+  <data name="&gt;&gt;btnApply.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;btnApply.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;btnApply.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="pageGeneral.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 22</value>
+  </data>
+  <data name="pageGeneral.Size" type="System.Drawing.Size, System.Drawing">
+    <value>360, 302</value>
+  </data>
+  <data name="pageGeneral.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="pageGeneral.Text" xml:space="preserve">
+    <value>General</value>
+  </data>
+  <data name="&gt;&gt;pageGeneral.Name" xml:space="preserve">
+    <value>pageGeneral</value>
+  </data>
+  <data name="&gt;&gt;pageGeneral.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;pageGeneral.Parent" xml:space="preserve">
+    <value>tabControl</value>
+  </data>
+  <data name="&gt;&gt;pageGeneral.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="btnRecommendedRenderer.Location" type="System.Drawing.Point, System.Drawing">
+    <value>249, 223</value>
+  </data>
+  <data name="btnRecommendedRenderer.Size" type="System.Drawing.Size, System.Drawing">
+    <value>95, 23</value>
+  </data>
+  <data name="btnRecommendedRenderer.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="btnRecommendedRenderer.Text" xml:space="preserve">
+    <value>Recommended</value>
+  </data>
+  <data name="&gt;&gt;btnRecommendedRenderer.Name" xml:space="preserve">
+    <value>btnRecommendedRenderer</value>
+  </data>
+  <data name="&gt;&gt;btnRecommendedRenderer.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;btnRecommendedRenderer.Parent" xml:space="preserve">
+    <value>pageVideo</value>
+  </data>
+  <data name="&gt;&gt;btnRecommendedRenderer.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="pageVideo.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 22</value>
+  </data>
+  <data name="pageVideo.Size" type="System.Drawing.Size, System.Drawing">
+    <value>360, 302</value>
+  </data>
+  <data name="pageVideo.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="pageVideo.Text" xml:space="preserve">
+    <value>Video</value>
+  </data>
+  <data name="&gt;&gt;pageVideo.Name" xml:space="preserve">
+    <value>pageVideo</value>
+  </data>
+  <data name="&gt;&gt;pageVideo.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;pageVideo.Parent" xml:space="preserve">
+    <value>tabControl</value>
+  </data>
+  <data name="&gt;&gt;pageVideo.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="panelFilters.AutoScroll" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="panelFilters.Location" type="System.Drawing.Point, System.Drawing">
+    <value>16, 96</value>
+  </data>
+  <data name="panelFilters.Size" type="System.Drawing.Size, System.Drawing">
+    <value>328, 192</value>
+  </data>
+  <data name="panelFilters.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;panelFilters.Name" xml:space="preserve">
+    <value>panelFilters</value>
+  </data>
+  <data name="&gt;&gt;panelFilters.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;panelFilters.Parent" xml:space="preserve">
+    <value>pagePrefFilters</value>
+  </data>
+  <data name="&gt;&gt;panelFilters.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="chkDVDGraphs.Location" type="System.Drawing.Point, System.Drawing">
+    <value>16, 48</value>
+  </data>
+  <data name="chkDVDGraphs.Size" type="System.Drawing.Size, System.Drawing">
+    <value>240, 16</value>
+  </data>
+  <data name="chkDVDGraphs.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="chkDVDGraphs.Text" xml:space="preserve">
+    <value>Use preferred filters for DVD graphs</value>
+  </data>
+  <data name="&gt;&gt;chkDVDGraphs.Name" xml:space="preserve">
+    <value>chkDVDGraphs</value>
+  </data>
+  <data name="&gt;&gt;chkDVDGraphs.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;chkDVDGraphs.Parent" xml:space="preserve">
+    <value>grpTechnique</value>
+  </data>
+  <data name="&gt;&gt;chkDVDGraphs.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="chkRegularGraphs.Location" type="System.Drawing.Point, System.Drawing">
+    <value>16, 24</value>
+  </data>
+  <data name="chkRegularGraphs.Size" type="System.Drawing.Size, System.Drawing">
+    <value>240, 16</value>
+  </data>
+  <data name="chkRegularGraphs.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="chkRegularGraphs.Text" xml:space="preserve">
+    <value>Use preferred filters for regular graphs</value>
+  </data>
+  <data name="&gt;&gt;chkRegularGraphs.Name" xml:space="preserve">
+    <value>chkRegularGraphs</value>
+  </data>
+  <data name="&gt;&gt;chkRegularGraphs.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;chkRegularGraphs.Parent" xml:space="preserve">
+    <value>grpTechnique</value>
+  </data>
+  <data name="&gt;&gt;chkRegularGraphs.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="grpTechnique.Location" type="System.Drawing.Point, System.Drawing">
+    <value>16, 8</value>
+  </data>
+  <data name="grpTechnique.Size" type="System.Drawing.Size, System.Drawing">
+    <value>328, 80</value>
+  </data>
+  <data name="grpTechnique.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="grpTechnique.Text" xml:space="preserve">
+    <value>Graph Building Technique</value>
+  </data>
+  <data name="&gt;&gt;grpTechnique.Name" xml:space="preserve">
+    <value>grpTechnique</value>
+  </data>
+  <data name="&gt;&gt;grpTechnique.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;grpTechnique.Parent" xml:space="preserve">
+    <value>pagePrefFilters</value>
+  </data>
+  <data name="&gt;&gt;grpTechnique.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="pagePrefFilters.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 22</value>
+  </data>
+  <data name="pagePrefFilters.Size" type="System.Drawing.Size, System.Drawing">
+    <value>360, 302</value>
+  </data>
+  <data name="pagePrefFilters.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="pagePrefFilters.Text" xml:space="preserve">
+    <value>Preferred Filters</value>
+  </data>
+  <data name="&gt;&gt;pagePrefFilters.Name" xml:space="preserve">
+    <value>pagePrefFilters</value>
+  </data>
+  <data name="&gt;&gt;pagePrefFilters.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;pagePrefFilters.Parent" xml:space="preserve">
+    <value>tabControl</value>
+  </data>
+  <data name="&gt;&gt;pagePrefFilters.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="btnKeysDefault.Location" type="System.Drawing.Point, System.Drawing">
+    <value>272, 80</value>
+  </data>
+  <data name="btnKeysDefault.Size" type="System.Drawing.Size, System.Drawing">
+    <value>75, 23</value>
+  </data>
+  <data name="btnKeysDefault.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="btnKeysDefault.Text" xml:space="preserve">
+    <value>Default</value>
+  </data>
+  <data name="&gt;&gt;btnKeysDefault.Name" xml:space="preserve">
+    <value>btnKeysDefault</value>
+  </data>
+  <data name="&gt;&gt;btnKeysDefault.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;btnKeysDefault.Parent" xml:space="preserve">
+    <value>pageKM</value>
+  </data>
+  <data name="&gt;&gt;btnKeysDefault.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="btnKeysClearAll.Location" type="System.Drawing.Point, System.Drawing">
+    <value>272, 48</value>
+  </data>
+  <data name="btnKeysClearAll.Size" type="System.Drawing.Size, System.Drawing">
+    <value>75, 23</value>
+  </data>
+  <data name="btnKeysClearAll.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="btnKeysClearAll.Text" xml:space="preserve">
+    <value>Clear All</value>
+  </data>
+  <data name="&gt;&gt;btnKeysClearAll.Name" xml:space="preserve">
+    <value>btnKeysClearAll</value>
+  </data>
+  <data name="&gt;&gt;btnKeysClearAll.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;btnKeysClearAll.Parent" xml:space="preserve">
+    <value>pageKM</value>
+  </data>
+  <data name="&gt;&gt;btnKeysClearAll.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="btnKeysClear.Location" type="System.Drawing.Point, System.Drawing">
+    <value>272, 16</value>
+  </data>
+  <data name="btnKeysClear.Size" type="System.Drawing.Size, System.Drawing">
+    <value>75, 23</value>
+  </data>
+  <data name="btnKeysClear.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="btnKeysClear.Text" xml:space="preserve">
+    <value>Clear</value>
+  </data>
+  <data name="&gt;&gt;btnKeysClear.Name" xml:space="preserve">
+    <value>btnKeysClear</value>
+  </data>
+  <data name="&gt;&gt;btnKeysClear.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;btnKeysClear.Parent" xml:space="preserve">
+    <value>pageKM</value>
+  </data>
+  <data name="&gt;&gt;btnKeysClear.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="columnAction.Text" xml:space="preserve">
+    <value>Action</value>
+  </data>
+  <data name="columnAction.Width" type="System.Int32, mscorlib">
+    <value>100</value>
+  </data>
+  <data name="columnKeys.Text" xml:space="preserve">
+    <value>Keys</value>
+  </data>
+  <data name="columnKeys.Width" type="System.Int32, mscorlib">
+    <value>119</value>
+  </data>
+  <data name="listKeys.Location" type="System.Drawing.Point, System.Drawing">
+    <value>16, 16</value>
+  </data>
+  <data name="listKeys.Size" type="System.Drawing.Size, System.Drawing">
+    <value>240, 200</value>
+  </data>
+  <data name="listKeys.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;listKeys.Name" xml:space="preserve">
+    <value>listKeys</value>
+  </data>
+  <data name="&gt;&gt;listKeys.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ListView, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;listKeys.Parent" xml:space="preserve">
+    <value>pageKM</value>
+  </data>
+  <data name="&gt;&gt;listKeys.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="radioSeek.Location" type="System.Drawing.Point, System.Drawing">
+    <value>16, 40</value>
+  </data>
+  <data name="radioSeek.Size" type="System.Drawing.Size, System.Drawing">
+    <value>104, 16</value>
+  </data>
+  <data name="radioSeek.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="radioSeek.Text" xml:space="preserve">
+    <value>Seek</value>
+  </data>
+  <data name="&gt;&gt;radioSeek.Name" xml:space="preserve">
+    <value>radioSeek</value>
+  </data>
+  <data name="&gt;&gt;radioSeek.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;radioSeek.Parent" xml:space="preserve">
+    <value>groupMouseWheel</value>
+  </data>
+  <data name="&gt;&gt;radioSeek.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="radioVolume.Location" type="System.Drawing.Point, System.Drawing">
+    <value>16, 16</value>
+  </data>
+  <data name="radioVolume.Size" type="System.Drawing.Size, System.Drawing">
+    <value>104, 16</value>
+  </data>
+  <data name="radioVolume.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="radioVolume.Text" xml:space="preserve">
+    <value>Sound volume</value>
+  </data>
+  <data name="&gt;&gt;radioVolume.Name" xml:space="preserve">
+    <value>radioVolume</value>
+  </data>
+  <data name="&gt;&gt;radioVolume.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;radioVolume.Parent" xml:space="preserve">
+    <value>groupMouseWheel</value>
+  </data>
+  <data name="&gt;&gt;radioVolume.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="groupMouseWheel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>16, 224</value>
+  </data>
+  <data name="groupMouseWheel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>240, 64</value>
+  </data>
+  <data name="groupMouseWheel.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="groupMouseWheel.Text" xml:space="preserve">
+    <value>Mouse Wheel</value>
+  </data>
+  <data name="&gt;&gt;groupMouseWheel.Name" xml:space="preserve">
+    <value>groupMouseWheel</value>
+  </data>
+  <data name="&gt;&gt;groupMouseWheel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;groupMouseWheel.Parent" xml:space="preserve">
+    <value>pageKM</value>
+  </data>
+  <data name="&gt;&gt;groupMouseWheel.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="pageKM.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 22</value>
+  </data>
+  <data name="pageKM.Size" type="System.Drawing.Size, System.Drawing">
+    <value>360, 302</value>
+  </data>
+  <data name="pageKM.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="pageKM.Text" xml:space="preserve">
+    <value>Keyboard/Mouse</value>
+  </data>
+  <data name="&gt;&gt;pageKM.Name" xml:space="preserve">
+    <value>pageKM</value>
+  </data>
+  <data name="&gt;&gt;pageKM.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;pageKM.Parent" xml:space="preserve">
+    <value>tabControl</value>
+  </data>
+  <data name="&gt;&gt;pageKM.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="pageFileTypes.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 22</value>
+  </data>
+  <data name="pageFileTypes.Size" type="System.Drawing.Size, System.Drawing">
+    <value>360, 302</value>
+  </data>
+  <data name="pageFileTypes.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="pageFileTypes.Text" xml:space="preserve">
+    <value>File Types</value>
+  </data>
+  <data name="&gt;&gt;pageFileTypes.Name" xml:space="preserve">
+    <value>pageFileTypes</value>
+  </data>
+  <data name="&gt;&gt;pageFileTypes.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;pageFileTypes.Parent" xml:space="preserve">
+    <value>tabControl</value>
+  </data>
+  <data name="&gt;&gt;pageFileTypes.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="tabControl.Location" type="System.Drawing.Point, System.Drawing">
+    <value>8, 8</value>
+  </data>
+  <data name="tabControl.Size" type="System.Drawing.Size, System.Drawing">
+    <value>368, 328</value>
+  </data>
+  <data name="tabControl.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="&gt;&gt;tabControl.Name" xml:space="preserve">
+    <value>tabControl</value>
+  </data>
+  <data name="&gt;&gt;tabControl.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabControl, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tabControl.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;tabControl.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
+    <value>6, 13</value>
+  </data>
+  <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
+    <value>386, 376</value>
+  </data>
+  <data name="$this.StartPosition" type="System.Windows.Forms.FormStartPosition, System.Windows.Forms">
+    <value>CenterParent</value>
+  </data>
+  <data name="$this.Text" xml:space="preserve">
+    <value>Preferences</value>
+  </data>
+  <data name="&gt;&gt;columnExtensions.Name" xml:space="preserve">
+    <value>columnExtensions</value>
+  </data>
+  <data name="&gt;&gt;columnExtensions.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ColumnHeader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;columnAction.Name" xml:space="preserve">
+    <value>columnAction</value>
+  </data>
+  <data name="&gt;&gt;columnAction.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ColumnHeader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;columnKeys.Name" xml:space="preserve">
+    <value>columnKeys</value>
+  </data>
+  <data name="&gt;&gt;columnKeys.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ColumnHeader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;$this.Name" xml:space="preserve">
+    <value>SettingsForm</value>
+  </data>
+  <data name="&gt;&gt;$this.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Form, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+</root>
