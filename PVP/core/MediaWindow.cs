@@ -177,6 +177,7 @@ namespace Dzimchuk.MediaEngine.Core
         {
             private bool bDoubleClick; // fix for extra mouse up message we want to discard
             private bool bTrackingContextMenu; // fix for additional WM_CONTEXTMENU from MediaWindow when it's already sent by nwnd
+            private uint _previousMousePosition; // fix against spurious WM_MOUSEMOVE messages, see http://blogs.msdn.com/oldnewthing/archive/2003/10/01/55108.aspx#55109
 			MediaWindow mw;
             public MediaWindowHandler(MediaWindow mw)
 			{
@@ -221,34 +222,38 @@ namespace Dzimchuk.MediaEngine.Core
 						bDoubleClick = false;
 						break;
 					case (int)WindowsMessages.WM_MOUSEMOVE:
-						if (!mw.bMouseOnWindow)
-						{
-							WindowsManagement.TRACKMOUSEEVENT tme = 
-								new WindowsManagement.TRACKMOUSEEVENT();
-							tme.cbSize=Marshal.SizeOf(tme);
-							tme.dwFlags=WindowsManagement.TME_LEAVE;
-							tme.dwHoverTime=WindowsManagement.HOVER_DEFAULT;
-							tme.hwndTrack=m.HWnd;
-							
-							WindowsManagement._TrackMouseEvent(ref tme);
-							mw.bMouseOnWindow = true;
-							if (mw.MW_MouseEnter != null)
-								mw.MW_MouseEnter(mw, EventArgs.Empty);
-						}
-                        if (mw.pFilterGraph != null && mw.pFilterGraph.bMenuOn && m.HWnd == mw.hnwnd)
-						{
-							uint lParam = (uint)m.LParam;
-							uint x = lParam & 0x0000FFFF;
-							uint y = lParam & 0xFFFF0000;
-							y >>= 16;
-								
-							GDI.POINT pt = new GDI.POINT();
-							pt.x=(int)x;
-							pt.y=(int)y;
-							mw.pFilterGraph.pDvdControl2.SelectAtPosition(pt);
-						}
-						if (mw.MW_MouseMove != null)
-							mw.MW_MouseMove(mw, EventArgs.Empty);
+                        if ((uint)m.LParam != _previousMousePosition) // mouse was actually moved as its position has changed
+                        {
+                            _previousMousePosition = (uint)m.LParam;
+                            if (!mw.bMouseOnWindow)
+                            {
+                                WindowsManagement.TRACKMOUSEEVENT tme =
+                                    new WindowsManagement.TRACKMOUSEEVENT();
+                                tme.cbSize = Marshal.SizeOf(tme);
+                                tme.dwFlags = WindowsManagement.TME_LEAVE;
+                                tme.dwHoverTime = WindowsManagement.HOVER_DEFAULT;
+                                tme.hwndTrack = m.HWnd;
+
+                                WindowsManagement._TrackMouseEvent(ref tme);
+                                mw.bMouseOnWindow = true;
+                                if (mw.MW_MouseEnter != null)
+                                    mw.MW_MouseEnter(mw, EventArgs.Empty);
+                            }
+                            if (mw.pFilterGraph != null && mw.pFilterGraph.bMenuOn && m.HWnd == mw.hnwnd)
+                            {
+                                uint lParam = (uint)m.LParam;
+                                uint x = lParam & 0x0000FFFF;
+                                uint y = lParam & 0xFFFF0000;
+                                y >>= 16;
+
+                                GDI.POINT pt = new GDI.POINT();
+                                pt.x = (int)x;
+                                pt.y = (int)y;
+                                mw.pFilterGraph.pDvdControl2.SelectAtPosition(pt);
+                            }
+                            if (mw.MW_MouseMove != null)
+                                mw.MW_MouseMove(mw, EventArgs.Empty);
+                        }
 						break;
 					case (int)WindowsMessages.WM_MOUSELEAVE:
 						mw.bMouseOnWindow = false;
