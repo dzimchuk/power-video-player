@@ -48,7 +48,7 @@ namespace Dzimchuk.Common
 		AboutDialogBorder Border;
 		bool bTracking;
 		Size szTopLeft;
-        SizeF sizefOrigAutoScaleDimensions;
+        SizeF sizefOrigAutoScaleDimensions = new SizeF(6F, 13F);
 
 		public AboutDialog(Form parent, 
 							AboutDialogBorder Border, 
@@ -62,8 +62,7 @@ namespace Dzimchuk.Common
 			//
 			// Required for Windows Form Designer support
 			//
-			InitializeComponent();
-            sizefOrigAutoScaleDimensions = AutoScaleDimensions;
+            InitializeComponent();
             
             Text = strCaptionText;
 			MainForm = parent;
@@ -105,6 +104,9 @@ namespace Dzimchuk.Common
                 label.Location = new Point(btnWidth / 3, ClientSize.Height - (int)(btnHeight * 2.2));
 				label.Size = new Size(btn.Location.X-label.Location.X, 
 										ClientSize.Height-label.Location.Y);
+
+                AutoScaleDimensions = sizefOrigAutoScaleDimensions;
+                PerformAutoScale();
 			}
 			catch
 			{
@@ -120,11 +122,7 @@ namespace Dzimchuk.Common
 
 			if (MainForm.Visible)
 			{
-                SizeF sizef = new SizeF(AutoScaleDimensions.Width / sizefOrigAutoScaleDimensions.Width,
-                    AutoScaleDimensions.Height / sizefOrigAutoScaleDimensions.Height);
-           		Scale(sizef);
-                
-            	int xPos = ClientSize.Width < MainForm.ClientSize.Width ? 
+                int xPos = ClientSize.Width < MainForm.ClientSize.Width ? 
 					MainForm.Location.X+(MainForm.ClientSize.Width-ClientSize.Width)/2 : 
 					MainForm.Location.X+SystemInformation.FrameBorderSize.Width+
 					SystemInformation.CaptionButtonSize.Width;
