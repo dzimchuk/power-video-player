@@ -1,0 +1,378 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="radioSysTrayOnly.Size" type="System.Drawing.Size, System.Drawing">
+    <value>333, 16</value>
+  </data>
+  <data name="radioSysTrayOnly.Text" xml:space="preserve">
+    <value>Размещать кнопку проигрывателя только в System Tray</value>
+  </data>
+  <data name="chkShowTrayAlways.Size" type="System.Drawing.Size, System.Drawing">
+    <value>309, 16</value>
+  </data>
+  <data name="chkShowTrayAlways.Text" xml:space="preserve">
+    <value>Всегда показывать иконку в System Tray</value>
+  </data>
+  <data name="radioMinToTray.Size" type="System.Drawing.Size, System.Drawing">
+    <value>333, 16</value>
+  </data>
+  <data name="radioMinToTray.Text" xml:space="preserve">
+    <value>Сворачивать проигрыватель в System Tray</value>
+  </data>
+  <data name="radioTaskbarOnly.Size" type="System.Drawing.Size, System.Drawing">
+    <value>333, 16</value>
+  </data>
+  <data name="radioTaskbarOnly.Text" xml:space="preserve">
+    <value>Размещать кнопку проигрывателя только на панели задач</value>
+  </data>
+  <data name="grpSysTray.Size" type="System.Drawing.Size, System.Drawing">
+    <value>392, 104</value>
+  </data>
+  <data name="grpSysTray.Text" xml:space="preserve">
+    <value>Другие</value>
+  </data>
+  <data name="grpPlayerOptions.Size" type="System.Drawing.Size, System.Drawing">
+    <value>392, 152</value>
+  </data>
+  <data name="grpPlayerOptions.Text" xml:space="preserve">
+    <value>Настройки проигрывателя</value>
+  </data>
+  <data name="chkOnTop.Size" type="System.Drawing.Size, System.Drawing">
+    <value>309, 16</value>
+  </data>
+  <data name="chkOnTop.Text" xml:space="preserve">
+    <value>Размещать окно проигрывателя поверх других окон</value>
+  </data>
+  <data name="chkLogo.Text" xml:space="preserve">
+    <value>Показывать логотип</value>
+  </data>
+  <data name="chkCenter.Size" type="System.Drawing.Size, System.Drawing">
+    <value>298, 16</value>
+  </data>
+  <data name="chkCenter.Text" xml:space="preserve">
+    <value>Размещать окно проигрывателя по центру экрана</value>
+  </data>
+  <data name="chkVolume.Size" type="System.Drawing.Size, System.Drawing">
+    <value>205, 16</value>
+  </data>
+  <data name="chkVolume.Text" xml:space="preserve">
+    <value>Запоминать уровень громкости</value>
+  </data>
+  <data name="chkAutoPlay.Size" type="System.Drawing.Size, System.Drawing">
+    <value>205, 16</value>
+  </data>
+  <data name="chkAutoPlay.Text" xml:space="preserve">
+    <value>Автоматически проигрывать файл</value>
+  </data>
+  <data name="chkFullscreen.Size" type="System.Drawing.Size, System.Drawing">
+    <value>205, 16</value>
+  </data>
+  <data name="chkFullscreen.Text" xml:space="preserve">
+    <value>Запуск в режиме 'на весь экран'</value>
+  </data>
+  <data name="grpVMRMode.Size" type="System.Drawing.Size, System.Drawing">
+    <value>392, 72</value>
+  </data>
+  <data name="grpVMRMode.Text" xml:space="preserve">
+    <value>VMR режим</value>
+  </data>
+  <data name="radioWindowed.Text" xml:space="preserve">
+    <value>Оконный</value>
+  </data>
+  <data name="radioWindowless.Text" xml:space="preserve">
+    <value>Безоконный</value>
+  </data>
+  <data name="grpRenderer.Size" type="System.Drawing.Size, System.Drawing">
+    <value>392, 118</value>
+  </data>
+  <data name="grpRenderer.Text" xml:space="preserve">
+    <value>Показывать видео используя:</value>
+  </data>
+  <data name="btnRemoveAll.Location" type="System.Drawing.Point, System.Drawing">
+    <value>220, 264</value>
+  </data>
+  <data name="btnRemoveAll.Size" type="System.Drawing.Size, System.Drawing">
+    <value>96, 23</value>
+  </data>
+  <data name="btnRemoveAll.Text" xml:space="preserve">
+    <value>Отменить все</value>
+  </data>
+  <data name="btnSelectAll.Location" type="System.Drawing.Point, System.Drawing">
+    <value>108, 264</value>
+  </data>
+  <data name="btnSelectAll.Size" type="System.Drawing.Size, System.Drawing">
+    <value>96, 23</value>
+  </data>
+  <data name="btnSelectAll.Text" xml:space="preserve">
+    <value>Выбрать все</value>
+  </data>
+  <data name="listTypes.Size" type="System.Drawing.Size, System.Drawing">
+    <value>392, 192</value>
+  </data>
+  <data name="labelTypes.Size" type="System.Drawing.Size, System.Drawing">
+    <value>392, 32</value>
+  </data>
+  <data name="labelTypes.Text" xml:space="preserve">
+    <value>Выберите типы файлов, для которых Вы бы хотели, чтобы Power Video Player был проигрывателем по умолчанию.</value>
+  </data>
+  <data name="btnOK.Location" type="System.Drawing.Point, System.Drawing">
+    <value>200, 344</value>
+  </data>
+  <data name="btnCancel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>282, 344</value>
+  </data>
+  <data name="btnCancel.Text" xml:space="preserve">
+    <value>Отмена</value>
+  </data>
+  <data name="btnApply.Location" type="System.Drawing.Point, System.Drawing">
+    <value>364, 344</value>
+  </data>
+  <data name="btnApply.Text" xml:space="preserve">
+    <value>Применить</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="tabControl.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Left, Right</value>
+  </data>
+  <data name="tabControl.Size" type="System.Drawing.Size, System.Drawing">
+    <value>432, 328</value>
+  </data>
+  <data name="pageGeneral.Size" type="System.Drawing.Size, System.Drawing">
+    <value>424, 302</value>
+  </data>
+  <data name="pageGeneral.Text" xml:space="preserve">
+    <value>Общие</value>
+  </data>
+  <data name="pageVideo.Size" type="System.Drawing.Size, System.Drawing">
+    <value>424, 302</value>
+  </data>
+  <data name="pageVideo.Text" xml:space="preserve">
+    <value>Видео</value>
+  </data>
+  <data name="btnRecommendedRenderer.Location" type="System.Drawing.Point, System.Drawing">
+    <value>242, 225</value>
+  </data>
+  <data name="btnRecommendedRenderer.Size" type="System.Drawing.Size, System.Drawing">
+    <value>166, 23</value>
+  </data>
+  <data name="btnRecommendedRenderer.Text" xml:space="preserve">
+    <value>Рекомендуемые настройки</value>
+  </data>
+  <data name="pagePrefFilters.Size" type="System.Drawing.Size, System.Drawing">
+    <value>424, 302</value>
+  </data>
+  <data name="pagePrefFilters.Text" xml:space="preserve">
+    <value>Фильтры</value>
+  </data>
+  <data name="panelFilters.Size" type="System.Drawing.Size, System.Drawing">
+    <value>392, 192</value>
+  </data>
+  <data name="grpTechnique.Size" type="System.Drawing.Size, System.Drawing">
+    <value>392, 80</value>
+  </data>
+  <data name="grpTechnique.Text" xml:space="preserve">
+    <value>Алгоритм построения цепочки фильтров</value>
+  </data>
+  <data name="chkDVDGraphs.Size" type="System.Drawing.Size, System.Drawing">
+    <value>370, 16</value>
+  </data>
+  <data name="chkDVDGraphs.Text" xml:space="preserve">
+    <value>Использовать предпочитаемые фильтры при проигрывании DVD</value>
+  </data>
+  <data name="chkRegularGraphs.Size" type="System.Drawing.Size, System.Drawing">
+    <value>333, 16</value>
+  </data>
+  <data name="chkRegularGraphs.Text" xml:space="preserve">
+    <value>Использовать предпочитаемые фильтры для видео файлов</value>
+  </data>
+  <data name="pageKM.Size" type="System.Drawing.Size, System.Drawing">
+    <value>424, 302</value>
+  </data>
+  <data name="pageKM.Text" xml:space="preserve">
+    <value>Клавиатура/Мышь</value>
+  </data>
+  <data name="btnKeysDefault.Location" type="System.Drawing.Point, System.Drawing">
+    <value>317, 80</value>
+  </data>
+  <data name="btnKeysDefault.Size" type="System.Drawing.Size, System.Drawing">
+    <value>93, 23</value>
+  </data>
+  <data name="btnKeysDefault.Text" xml:space="preserve">
+    <value>По умолчанию</value>
+  </data>
+  <data name="btnKeysClearAll.Location" type="System.Drawing.Point, System.Drawing">
+    <value>317, 48</value>
+  </data>
+  <data name="btnKeysClearAll.Size" type="System.Drawing.Size, System.Drawing">
+    <value>93, 23</value>
+  </data>
+  <data name="btnKeysClearAll.Text" xml:space="preserve">
+    <value>Убрать все</value>
+  </data>
+  <data name="btnKeysClear.Location" type="System.Drawing.Point, System.Drawing">
+    <value>317, 16</value>
+  </data>
+  <data name="btnKeysClear.Size" type="System.Drawing.Size, System.Drawing">
+    <value>93, 23</value>
+  </data>
+  <data name="btnKeysClear.Text" xml:space="preserve">
+    <value>Убрать</value>
+  </data>
+  <data name="listKeys.Size" type="System.Drawing.Size, System.Drawing">
+    <value>285, 200</value>
+  </data>
+  <data name="columnAction.Text" xml:space="preserve">
+    <value>Команда</value>
+  </data>
+  <data name="columnKeys.Text" xml:space="preserve">
+    <value>Сочетание клавиш</value>
+  </data>
+  <assembly alias="mscorlib" name="mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="columnKeys.Width" type="System.Int32, mscorlib">
+    <value>183</value>
+  </data>
+  <data name="groupMouseWheel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>285, 64</value>
+  </data>
+  <data name="groupMouseWheel.Text" xml:space="preserve">
+    <value>Команда, выполняемая колесиком мыши:</value>
+  </data>
+  <data name="radioSeek.Text" xml:space="preserve">
+    <value>Поиск</value>
+  </data>
+  <data name="radioVolume.Size" type="System.Drawing.Size, System.Drawing">
+    <value>149, 16</value>
+  </data>
+  <data name="radioVolume.Text" xml:space="preserve">
+    <value>Изменение громкости</value>
+  </data>
+  <data name="pageFileTypes.Size" type="System.Drawing.Size, System.Drawing">
+    <value>424, 302</value>
+  </data>
+  <data name="pageFileTypes.Text" xml:space="preserve">
+    <value>Ассоциация файлов</value>
+  </data>
+  <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
+    <value>450, 376</value>
+  </data>
+  <data name="$this.Text" xml:space="preserve">
+    <value>Настройки</value>
+  </data>
+</root>
