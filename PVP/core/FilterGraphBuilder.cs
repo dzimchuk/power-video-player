@@ -50,10 +50,10 @@ namespace Dzimchuk.MediaEngine.Core
     internal delegate void ThrowExceptionForHRPointer(int hr, Error error);
     
     /// <summary>
-	/// 
-	/// </summary>
-	internal abstract class FilterGraphBuilder
-	{
+    /// 
+    /// </summary>
+    internal abstract class FilterGraphBuilder
+    {
         public event FailedStreamsHandler FailedStreamsAvailable;
         
         protected struct FilterGraphBuilderParameters
@@ -206,76 +206,76 @@ namespace Dzimchuk.MediaEngine.Core
 
 
         protected bool BuildSoundRenderer(FilterGraph pGraph)
-		{
-			IBaseFilter pDSBaseFilter;
-			object comobj = null;
-			try
-			{
-				pGraph.error = Error.DirectSoundFilter;
-				Type type = Type.GetTypeFromCLSID(Clsid.DSoundRender, true);
-				comobj = Activator.CreateInstance(type);
-				pDSBaseFilter = (IBaseFilter)comobj;
-			}
-			catch
-			{
-				if (comobj != null)
-					while(Marshal.ReleaseComObject(comobj) > 0) {}
+        {
+            IBaseFilter pDSBaseFilter;
+            object comobj = null;
+            try
+            {
+                pGraph.error = Error.DirectSoundFilter;
+                Type type = Type.GetTypeFromCLSID(Clsid.DSoundRender, true);
+                comobj = Activator.CreateInstance(type);
+                pDSBaseFilter = (IBaseFilter)comobj;
+            }
+            catch
+            {
+                if (comobj != null)
+                    while(Marshal.ReleaseComObject(comobj) > 0) {}
                 Trace.GetTrace().TraceWarning("Could not instantiate DirectSound Filter.");
-				return false;
-			}
-			comobj = null;
+                return false;
+            }
+            comobj = null;
 
-			// add the DirectSound filter to the graph
-			pGraph.error = Error.AddDirectSoundFilter;
-			int hr = pGraph.pGraphBuilder.AddFilter(pDSBaseFilter, "DirectSound Filter");
-			if (DsHlp.FAILED(hr))
-			{
-				while(Marshal.ReleaseComObject(pDSBaseFilter) > 0) {}
+            // add the DirectSound filter to the graph
+            pGraph.error = Error.AddDirectSoundFilter;
+            int hr = pGraph.pGraphBuilder.AddFilter(pDSBaseFilter, "DirectSound Filter");
+            if (DsHlp.FAILED(hr))
+            {
+                while(Marshal.ReleaseComObject(pDSBaseFilter) > 0) {}
                 Trace.GetTrace().TraceWarning("Could not add DirectSound Filter to the filter graph.");
                 return false;
-			}
+            }
 
-			IBasicAudio pBA = pDSBaseFilter as IBasicAudio;
-			if (pBA == null)
-			{
-				while(Marshal.ReleaseComObject(pDSBaseFilter) > 0) {}
+            IBasicAudio pBA = pDSBaseFilter as IBasicAudio;
+            if (pBA == null)
+            {
+                while(Marshal.ReleaseComObject(pDSBaseFilter) > 0) {}
                 Trace.GetTrace().TraceWarning("Could not get IBasicAudio interface.");
-				return false;
-			}
+                return false;
+            }
 
-			pGraph.arrayBasicAudio.Add(pBA);
-			pGraph.arrayDSBaseFilter.Add(pDSBaseFilter);
-			return true;
-		}
-		
-		protected void GetFilter(Guid majortype, Guid subtype, out IBaseFilter filter)
-		{
-			filter = null;
-			Guid guidFilter = MediaTypeManager.GetInstance().GetTypeClsid(majortype, subtype);
-			if (guidFilter != Guid.Empty)
-				GetFilter(guidFilter, out filter);
-		}
+            pGraph.arrayBasicAudio.Add(pBA);
+            pGraph.arrayDSBaseFilter.Add(pDSBaseFilter);
+            return true;
+        }
+        
+        protected void GetFilter(Guid majortype, Guid subtype, out IBaseFilter filter)
+        {
+            filter = null;
+            Guid guidFilter = MediaTypeManager.GetInstance().GetTypeClsid(majortype, subtype);
+            if (guidFilter != Guid.Empty)
+                GetFilter(guidFilter, out filter);
+        }
 
-		protected void GetFilter(Guid clsId, out IBaseFilter filter)
-		{
-			filter = null;
-			object comobj = null;
-			try
-			{
-				Type type = Type.GetTypeFromCLSID(clsId, true);
-				comobj = Activator.CreateInstance(type);
-				filter = (IBaseFilter) comobj;
-				comobj = null; // important! (see the finally block)
-			}
-			catch
-			{
-			}
-			finally
-			{
-				if (comobj != null)
-					while(Marshal.ReleaseComObject(comobj) > 0) {}
-			}
-		}
+        protected void GetFilter(Guid clsId, out IBaseFilter filter)
+        {
+            filter = null;
+            object comobj = null;
+            try
+            {
+                Type type = Type.GetTypeFromCLSID(clsId, true);
+                comobj = Activator.CreateInstance(type);
+                filter = (IBaseFilter) comobj;
+                comobj = null; // important! (see the finally block)
+            }
+            catch
+            {
+            }
+            finally
+            {
+                if (comobj != null)
+                    while(Marshal.ReleaseComObject(comobj) > 0) {}
+            }
+        }
 
         protected void RemoveRedundantFilters(FilterGraph pGraph)
         {
@@ -360,5 +360,5 @@ namespace Dzimchuk.MediaEngine.Core
                 FailedStreamsAvailable(streams);
             }
         }
-	}
+    }
 }

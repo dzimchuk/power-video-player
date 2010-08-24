@@ -21,22 +21,22 @@ using Dzimchuk.AUI;
 
 namespace Dzimchuk.PVP
 {
-	/// <summary>
-	/// 
-	/// </summary>
-	public class MainFormFile : MainFormBase
-	{
-		protected MenuItemEx miFile, miOpen, miClose, miPlayDVD, miInfo;
-		
-		protected bool bPlayPending;
-		protected string strFileName;
-		protected WhatToPlay whatToPlay = WhatToPlay.PLAYING_FILE;
-			
-		public MainFormFile()
-		{
-			CreateFileMenu();
+    /// <summary>
+    /// 
+    /// </summary>
+    public class MainFormFile : MainFormBase
+    {
+        protected MenuItemEx miFile, miOpen, miClose, miPlayDVD, miInfo;
+        
+        protected bool bPlayPending;
+        protected string strFileName;
+        protected WhatToPlay whatToPlay = WhatToPlay.PLAYING_FILE;
+            
+        public MainFormFile()
+        {
+            CreateFileMenu();
             engine.FailedStreamsAvailable += new FailedStreamsHandler(engine_FailedStreamsAvailable);
-		}
+        }
         
         protected override void SetMenuItemsText()
         {
@@ -48,32 +48,32 @@ namespace Dzimchuk.PVP
             miPlayDVD.Text = Resources.Resources.mi_file_play_dvd;
         }
 
-		#region CreateFileMenu
-		void CreateFileMenu()
-		{
-			miFile = new MenuItemEx();
-			miFile.Popup += new EventHandler(OnFilePopup);
-			
-			miOpen = new MenuItemEx();
-			miOpen.Click += new EventHandler(OnFileOpen);
-					
-			miClose = new MenuItemEx();
-			miClose.Click += new EventHandler(OnFileClose);
-					
-			miInfo = new MenuItemEx();
-			miInfo.Click += new EventHandler(OnFileInfo);
-														
-			miFile.MenuItems.AddRange(new MenuItem[] {miOpen, miClose});
-			
-			CreateCDRomMenu();
+        #region CreateFileMenu
+        void CreateFileMenu()
+        {
+            miFile = new MenuItemEx();
+            miFile.Popup += new EventHandler(OnFilePopup);
+            
+            miOpen = new MenuItemEx();
+            miOpen.Click += new EventHandler(OnFileOpen);
+                    
+            miClose = new MenuItemEx();
+            miClose.Click += new EventHandler(OnFileClose);
+                    
+            miInfo = new MenuItemEx();
+            miInfo.Click += new EventHandler(OnFileInfo);
+                                                        
+            miFile.MenuItems.AddRange(new MenuItem[] {miOpen, miClose});
+            
+            CreateCDRomMenu();
 
-			miFile.MenuItems.AddRange(new MenuItem[] {sep.CloneMenu(), miInfo});
-		}
+            miFile.MenuItems.AddRange(new MenuItem[] {sep.CloneMenu(), miInfo});
+        }
 
-		private void CreateCDRomMenu()
-		{
-			miPlayDVD = new MenuItemEx();
-			miPlayDVD.Popup += new EventHandler(OnPlayDVDPopup);
+        private void CreateCDRomMenu()
+        {
+            miPlayDVD = new MenuItemEx();
+            miPlayDVD.Popup += new EventHandler(OnPlayDVDPopup);
 
             DriveInfo[] drives = DriveInfo.GetDrives();
             EventHandler eh = new EventHandler(OnPlayDVD);
@@ -93,28 +93,28 @@ namespace Dzimchuk.PVP
                 {
                 }
             }
-			if (miPlayDVD.MenuItems.Count != 0)
-				miFile.MenuItems.AddRange(new MenuItem[] {sep.CloneMenu(), miPlayDVD});
-		}
-		#endregion
-				
-		private void OnPlayDVDPopup(object sender, EventArgs e)
-		{
-		/*	uint VolumeSerialNumber, MaximumComponentLength, FileSystemFlags;
-			int nMode = NoCat.SetErrorMode(NoCat.SEM_FAILCRITICALERRORS);
-			System.Text.StringBuilder builder = new System.Text.StringBuilder(Storage.MAX_PATH);
-			foreach(MenuItemEx item in miPlayDVD.MenuItems)
-			{
-				string tag = (string)item.Tag;
-				item.Enabled = 
-					Storage.GetVolumeInformation(tag, builder, builder.Capacity-tag.Length, 
-					out VolumeSerialNumber, out MaximumComponentLength, 
-					out FileSystemFlags, null, 0) != 0;
-				builder.Insert(0, tag);
-				item.Text = builder.ToString();
-				builder.Remove(0, builder.Length);
-			}
-			NoCat.SetErrorMode(nMode); */
+            if (miPlayDVD.MenuItems.Count != 0)
+                miFile.MenuItems.AddRange(new MenuItem[] {sep.CloneMenu(), miPlayDVD});
+        }
+        #endregion
+                
+        private void OnPlayDVDPopup(object sender, EventArgs e)
+        {
+        /*	uint VolumeSerialNumber, MaximumComponentLength, FileSystemFlags;
+            int nMode = NoCat.SetErrorMode(NoCat.SEM_FAILCRITICALERRORS);
+            System.Text.StringBuilder builder = new System.Text.StringBuilder(Storage.MAX_PATH);
+            foreach(MenuItemEx item in miPlayDVD.MenuItems)
+            {
+                string tag = (string)item.Tag;
+                item.Enabled = 
+                    Storage.GetVolumeInformation(tag, builder, builder.Capacity-tag.Length, 
+                    out VolumeSerialNumber, out MaximumComponentLength, 
+                    out FileSystemFlags, null, 0) != 0;
+                builder.Insert(0, tag);
+                item.Text = builder.ToString();
+                builder.Remove(0, builder.Length);
+            }
+            NoCat.SetErrorMode(nMode); */
 
             System.Text.StringBuilder builder = new System.Text.StringBuilder();
             foreach (MenuItemEx item in miPlayDVD.MenuItems)
@@ -138,83 +138,83 @@ namespace Dzimchuk.PVP
                 item.Text = builder.ToString();
                 builder.Remove(0, builder.Length);
             }
-		}
+        }
 
-		protected virtual void OnPlayDVD(object sender, EventArgs e)
-		{
-			MenuItemEx item = (MenuItemEx)sender;
-			string source = (string)item.Tag;
-			source += "Video_ts";
-			strFileName = source;
-			whatToPlay = Dzimchuk.MediaEngine.Core.WhatToPlay.PLAYING_DVD;
-			bPlayPending = true;
-		}
-		
-		protected void OnFilePopup(object sender, EventArgs e)
-		{
-			miClose.Enabled = engine.GraphState != GraphState.Reset;
-			miInfo.Enabled = engine.GraphState != GraphState.Reset;
-		}
+        protected virtual void OnPlayDVD(object sender, EventArgs e)
+        {
+            MenuItemEx item = (MenuItemEx)sender;
+            string source = (string)item.Tag;
+            source += "Video_ts";
+            strFileName = source;
+            whatToPlay = Dzimchuk.MediaEngine.Core.WhatToPlay.PLAYING_DVD;
+            bPlayPending = true;
+        }
+        
+        protected void OnFilePopup(object sender, EventArgs e)
+        {
+            miClose.Enabled = engine.GraphState != GraphState.Reset;
+            miInfo.Enabled = engine.GraphState != GraphState.Reset;
+        }
 
-		bool bShowingFileDialog;
-		bool bShowingDialog;
-		Form CurrentDialog;
-		protected DialogResult ShowMyDialog(Form dlg)
-		{
-			if (bShowingFileDialog)
-				return DialogResult.Cancel;
-			
-			if (!bShowingDialog)
-			{
-				bShowingDialog = true;
-				CurrentDialog = dlg;
-				DialogResult result = dlg.ShowDialog(this);
-				bShowingDialog = false;
-				CurrentDialog = null;
-				return result;
-			}
-			else
-			{
-				WindowsManagement.SetForegroundWindow(CurrentDialog.Handle);
-				return DialogResult.Cancel;
-			}
-		}
-		
-		protected virtual void OnFileOpen(object sender, EventArgs e)
-		{
-			if (!bShowingFileDialog && !bShowingDialog)
-			{
-				bShowingFileDialog = true;
-				
-				OpenFileDialog dlg = new OpenFileDialog();
+        bool bShowingFileDialog;
+        bool bShowingDialog;
+        Form CurrentDialog;
+        protected DialogResult ShowMyDialog(Form dlg)
+        {
+            if (bShowingFileDialog)
+                return DialogResult.Cancel;
+            
+            if (!bShowingDialog)
+            {
+                bShowingDialog = true;
+                CurrentDialog = dlg;
+                DialogResult result = dlg.ShowDialog(this);
+                bShowingDialog = false;
+                CurrentDialog = null;
+                return result;
+            }
+            else
+            {
+                WindowsManagement.SetForegroundWindow(CurrentDialog.Handle);
+                return DialogResult.Cancel;
+            }
+        }
+        
+        protected virtual void OnFileOpen(object sender, EventArgs e)
+        {
+            if (!bShowingFileDialog && !bShowingDialog)
+            {
+                bShowingFileDialog = true;
+                
+                OpenFileDialog dlg = new OpenFileDialog();
                 dlg.Filter = "Video Files (*.avi;*.divx;*.mpg;*.mpeg;*.asf;*.wmv;*.mov;*.qt;*.vob;*.dat;*.mkv;*.flv;*.mp4;*.3gp;*.3g2;*.m1v;*.m2v)|" +
                     "*.avi;*.divx;*.mpg;*.mpeg;*.asf;*.wmv;*.mov;*.qt;*.vob;*.dat;*.mkv;*.flv;*.mp4;*.3gp;*.3g2;*.m1v;*.m2v|All Files (*.*)|*.*";
-				if (dlg.ShowDialog(this) == DialogResult.OK)
-				{
-					strFileName = dlg.FileName;
-					whatToPlay = Dzimchuk.MediaEngine.Core.WhatToPlay.PLAYING_FILE;
-					bPlayPending = true;
-				}
+                if (dlg.ShowDialog(this) == DialogResult.OK)
+                {
+                    strFileName = dlg.FileName;
+                    whatToPlay = Dzimchuk.MediaEngine.Core.WhatToPlay.PLAYING_FILE;
+                    bPlayPending = true;
+                }
 
-				bShowingFileDialog = false;
-			}
-			else if (bShowingDialog)
-				WindowsManagement.SetForegroundWindow(CurrentDialog.Handle);
-		}
-	
-		protected virtual void OnFileClose(object sender, EventArgs e)
-		{
-			engine.ResetGraph();
-		}
+                bShowingFileDialog = false;
+            }
+            else if (bShowingDialog)
+                WindowsManagement.SetForegroundWindow(CurrentDialog.Handle);
+        }
+    
+        protected virtual void OnFileClose(object sender, EventArgs e)
+        {
+            engine.ResetGraph();
+        }
 
-		protected virtual void OnFileInfo(object sender, EventArgs e)
-		{
-			InfoDialog dlg = new InfoDialog(engine);
-			dlg.TopMost = TopMost;
-			if (!Visible)
-				dlg.StartPosition = FormStartPosition.CenterScreen;
-			ShowMyDialog(dlg);
-		}
+        protected virtual void OnFileInfo(object sender, EventArgs e)
+        {
+            InfoDialog dlg = new InfoDialog(engine);
+            dlg.TopMost = TopMost;
+            if (!Visible)
+                dlg.StartPosition = FormStartPosition.CenterScreen;
+            ShowMyDialog(dlg);
+        }
 
         private void engine_FailedStreamsAvailable(IList<StreamInfo> streams)
         {
@@ -224,5 +224,5 @@ namespace Dzimchuk.PVP
                 dlg.StartPosition = FormStartPosition.CenterScreen;
             ShowMyDialog(dlg);
         }
-	}
+    }
 }

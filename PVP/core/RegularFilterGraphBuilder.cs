@@ -20,35 +20,35 @@ using Dzimchuk.MediaEngine.Core.Render;
 
 namespace Dzimchuk.MediaEngine.Core
 {
-	/// <summary>
-	/// 
-	/// </summary>
-	internal class RegularFilterGraphBuilder : FilterGraphBuilder
-	{
-		private bool bUsePreferredFilters;
-		private static RegularFilterGraphBuilder graphBuilder;
-        	
-		private RegularFilterGraphBuilder()
-		{
-		}
+    /// <summary>
+    /// 
+    /// </summary>
+    internal class RegularFilterGraphBuilder : FilterGraphBuilder
+    {
+        private bool bUsePreferredFilters;
+        private static RegularFilterGraphBuilder graphBuilder;
+            
+        private RegularFilterGraphBuilder()
+        {
+        }
 
         public static RegularFilterGraphBuilder GetGraphBuilder()
-		{
-			if (graphBuilder == null)
-				graphBuilder = new RegularFilterGraphBuilder();
-			return graphBuilder;
-		}
+        {
+            if (graphBuilder == null)
+                graphBuilder = new RegularFilterGraphBuilder();
+            return graphBuilder;
+        }
 
-		public bool UsePreferredFilters
-		{
-			get { return bUsePreferredFilters; }
-			set { bUsePreferredFilters = value; }
-		}
+        public bool UsePreferredFilters
+        {
+            get { return bUsePreferredFilters; }
+            set { bUsePreferredFilters = value; }
+        }
 
-		protected override void BuildFilterGraph(ref object comobj,
+        protected override void BuildFilterGraph(ref object comobj,
                                                  ref FilterGraphBuilderParameters parameters)
-		{
-			// TODO: remove these redundant declarations
+        {
+            // TODO: remove these redundant declarations
             FilterGraph pFilterGraph = parameters.pFilterGraph;
             string source = parameters.source;
             IntPtr hMediaWindow = parameters.hMediaWindow;
@@ -84,8 +84,8 @@ namespace Dzimchuk.MediaEngine.Core
                 throw new FilterGraphBuilderException(Error.NecessaryInterfaces, e);
             }
 
-			// SET the graph state window callback
-			pFilterGraph.pMediaEventEx.SetNotifyWindow(hMediaWindow, (int)FilterGraph.UWM_GRAPH_NOTIFY, IntPtr.Zero);
+            // SET the graph state window callback
+            pFilterGraph.pMediaEventEx.SetNotifyWindow(hMediaWindow, (int)FilterGraph.UWM_GRAPH_NOTIFY, IntPtr.Zero);
 
             // create a renderer
             ThrowExceptionForHRPointer errorFunc = delegate(int hrCode, Error error)
@@ -94,26 +94,26 @@ namespace Dzimchuk.MediaEngine.Core
             };
             
             pFilterGraph.pRenderer = RendererBase.AddRenderer(pFilterGraph.pGraphBuilder, PreferredVideoRenderer, errorFunc, hMediaWindow);
-            			
-			/*if (bUsePreferredFilters)
-				ManualBuildGraph(pFilterGraph);
-			else
-				AutoBuildGraph(pFilterGraph, hMediaWindow);*/
+                        
+            /*if (bUsePreferredFilters)
+                ManualBuildGraph(pFilterGraph);
+            else
+                AutoBuildGraph(pFilterGraph, hMediaWindow);*/
             DoBuildGraph(pFilterGraph, hMediaWindow);
-			
-			SeekingCapabilities caps = SeekingCapabilities.CanGetDuration;
-			int hr = pFilterGraph.pMediaSeeking.CheckCapabilities(ref caps);
-			if (hr == DsHlp.S_OK)
-			{
-				pFilterGraph.bSeekable = true;
-				pFilterGraph.pMediaSeeking.GetDuration(out pFilterGraph.rtDuration);
-			}
+            
+            SeekingCapabilities caps = SeekingCapabilities.CanGetDuration;
+            int hr = pFilterGraph.pMediaSeeking.CheckCapabilities(ref caps);
+            if (hr == DsHlp.S_OK)
+            {
+                pFilterGraph.bSeekable = true;
+                pFilterGraph.pMediaSeeking.GetDuration(out pFilterGraph.rtDuration);
+            }
 
-			// MEDIA SIZE
-			int Height=0;
-			int Width=0;
-			double w;
-			double h;
+            // MEDIA SIZE
+            int Height=0;
+            int Width=0;
+            double w;
+            double h;
 
             pFilterGraph.pRenderer.GetNativeVideoSize(out Width, out Height, out pFilterGraph.ARWidth, out pFilterGraph.ARHeight);
             
@@ -140,23 +140,23 @@ namespace Dzimchuk.MediaEngine.Core
                 // unrendered pins are reported below (to include audio ones)
             }
 
-			w=pFilterGraph.ARWidth;
-			h=pFilterGraph.ARHeight;
-			pFilterGraph.dAspectRatio = w/h;
+            w=pFilterGraph.ARWidth;
+            h=pFilterGraph.ARHeight;
+            pFilterGraph.dAspectRatio = w/h;
 
-			pFilterGraph.rcSrc.left = pFilterGraph.rcSrc.top = 0;
-			pFilterGraph.rcSrc.right = Width;
-			pFilterGraph.rcSrc.bottom = Height;
+            pFilterGraph.rcSrc.left = pFilterGraph.rcSrc.top = 0;
+            pFilterGraph.rcSrc.right = Width;
+            pFilterGraph.rcSrc.bottom = Height;
 
-			DsUtils.EnumFilters(pFilterGraph.pGraphBuilder, pFilterGraph.aFilters);
+            DsUtils.EnumFilters(pFilterGraph.pGraphBuilder, pFilterGraph.aFilters);
 #if DEBUG
-			pFilterGraph.bAddedToRot = DsUtils.AddToRot(pFilterGraph.pGraphBuilder, out pFilterGraph.dwRegister);
+            pFilterGraph.bAddedToRot = DsUtils.AddToRot(pFilterGraph.pGraphBuilder, out pFilterGraph.dwRegister);
 #endif
 
             if (FindSplitter(pFilterGraph))
                 ReportUnrenderedPins(pFilterGraph);
             GatherMediaInfo(pFilterGraph, source);
-		}
+        }
 
         private void AddSourceFilter(FilterGraph pFilterGraph, string source)
         {
@@ -319,158 +319,158 @@ namespace Dzimchuk.MediaEngine.Core
                 throw new FilterGraphBuilderException(Error.CantRenderFile);
         }
         
-		#region Manual graph
-		private void ManualBuildGraph(FilterGraph pGraph)
-		{
-			
-		}
+        #region Manual graph
+        private void ManualBuildGraph(FilterGraph pGraph)
+        {
+            
+        }
 
-		private void RenderFileStream(FilterGraph pGraph, IPin pPin, ref AMMediaType mediaType)
-		{
+        private void RenderFileStream(FilterGraph pGraph, IPin pPin, ref AMMediaType mediaType)
+        {
 
-		}
+        }
 
-		private void RenderVideoStream(FilterGraph pGraph, IPin pPin, ref AMMediaType mediaType)
-		{
+        private void RenderVideoStream(FilterGraph pGraph, IPin pPin, ref AMMediaType mediaType)
+        {
 
-		}
+        }
 
-		private void RenderAudioStream(FilterGraph pGraph, IPin pPin, ref AMMediaType mediaType)
-		{
-			if (BuildSoundRenderer(pGraph))
-			{
-				IBaseFilter pBaseFilter;
-				int hr;
-				GetFilter(mediaType.majorType, mediaType.subType, out pBaseFilter);
-				if (pBaseFilter != null)
-				{
-					hr = AddFilterToGraph(pGraph, pBaseFilter);
-					if (DsHlp.SUCCEEDED(hr))
-					{
-						
-					}
-					else
-					{
-						Marshal.ReleaseComObject(pBaseFilter);
-						if (!ConnectPinToSoundRenderer(pGraph, pPin))
-							RemoveSoundRenderer(pGraph);
-					}
-				}
-				else
-				{
+        private void RenderAudioStream(FilterGraph pGraph, IPin pPin, ref AMMediaType mediaType)
+        {
+            if (BuildSoundRenderer(pGraph))
+            {
+                IBaseFilter pBaseFilter;
+                int hr;
+                GetFilter(mediaType.majorType, mediaType.subType, out pBaseFilter);
+                if (pBaseFilter != null)
+                {
+                    hr = AddFilterToGraph(pGraph, pBaseFilter);
+                    if (DsHlp.SUCCEEDED(hr))
+                    {
+                        
+                    }
+                    else
+                    {
+                        Marshal.ReleaseComObject(pBaseFilter);
+                        if (!ConnectPinToSoundRenderer(pGraph, pPin))
+                            RemoveSoundRenderer(pGraph);
+                    }
+                }
+                else
+                {
 
-				}
-			}
-		}
+                }
+            }
+        }
 
-		private int AddFilterToGraph(FilterGraph pGraph, IBaseFilter pFilter)
-		{
-			string name = null;
-			FilterInfo fInfo = new FilterInfo();
-			int hr = pFilter.QueryFilterInfo(out fInfo);
-			if (DsHlp.SUCCEEDED(hr))
-			{
-				name = fInfo.achName;
-				if (fInfo.pGraph != null)
-					Marshal.ReleaseComObject(fInfo.pGraph);
-			}		
-			return pGraph.pGraphBuilder.AddFilter(pFilter, name);
-		}
+        private int AddFilterToGraph(FilterGraph pGraph, IBaseFilter pFilter)
+        {
+            string name = null;
+            FilterInfo fInfo = new FilterInfo();
+            int hr = pFilter.QueryFilterInfo(out fInfo);
+            if (DsHlp.SUCCEEDED(hr))
+            {
+                name = fInfo.achName;
+                if (fInfo.pGraph != null)
+                    Marshal.ReleaseComObject(fInfo.pGraph);
+            }		
+            return pGraph.pGraphBuilder.AddFilter(pFilter, name);
+        }
 
-		private bool ConnectPinToSoundRenderer(FilterGraph pGraph, IPin pPin)
-		{
-			IPin pInputPin=DsUtils.GetPin((IBaseFilter) pGraph.arrayDSBaseFilter[pGraph.arrayDSBaseFilter.Count-1],
-				PinDirection.Input);
-			int hr=pGraph.pGraphBuilder.Connect(pPin, pInputPin);
-			Marshal.ReleaseComObject(pInputPin);
-			return hr==DsHlp.S_OK || hr==DsHlp.VFW_S_PARTIAL_RENDER;
-		}
+        private bool ConnectPinToSoundRenderer(FilterGraph pGraph, IPin pPin)
+        {
+            IPin pInputPin=DsUtils.GetPin((IBaseFilter) pGraph.arrayDSBaseFilter[pGraph.arrayDSBaseFilter.Count-1],
+                PinDirection.Input);
+            int hr=pGraph.pGraphBuilder.Connect(pPin, pInputPin);
+            Marshal.ReleaseComObject(pInputPin);
+            return hr==DsHlp.S_OK || hr==DsHlp.VFW_S_PARTIAL_RENDER;
+        }
 
-		private void RemoveSoundRenderer(FilterGraph pGraph)
-		{
-			IBaseFilter pBaseFilter = (IBaseFilter) pGraph.arrayDSBaseFilter[pGraph.arrayDSBaseFilter.Count-1];
-			pGraph.pGraphBuilder.RemoveFilter(pBaseFilter);
-			Marshal.ReleaseComObject(pBaseFilter);
-																
-			pGraph.arrayBasicAudio.RemoveAt(pGraph.arrayBasicAudio.Count-1);
-			pGraph.arrayDSBaseFilter.RemoveAt(pGraph.arrayDSBaseFilter.Count-1);
-		}
-		#endregion
+        private void RemoveSoundRenderer(FilterGraph pGraph)
+        {
+            IBaseFilter pBaseFilter = (IBaseFilter) pGraph.arrayDSBaseFilter[pGraph.arrayDSBaseFilter.Count-1];
+            pGraph.pGraphBuilder.RemoveFilter(pBaseFilter);
+            Marshal.ReleaseComObject(pBaseFilter);
+                                                                
+            pGraph.arrayBasicAudio.RemoveAt(pGraph.arrayBasicAudio.Count-1);
+            pGraph.arrayDSBaseFilter.RemoveAt(pGraph.arrayDSBaseFilter.Count-1);
+        }
+        #endregion
 
-		#region Automatic Graph helpers
-		private void RenderAudioStreams(FilterGraph pGraph)
-		{
-			IPin pPin = null;
-			IPin pInputPin = null;
-	
-			IBasicAudio pBA;
-			IBaseFilter pBaseFilter;
+        #region Automatic Graph helpers
+        private void RenderAudioStreams(FilterGraph pGraph)
+        {
+            IPin pPin = null;
+            IPin pInputPin = null;
+    
+            IBasicAudio pBA;
+            IBaseFilter pBaseFilter;
 
-			int hr;
-			int nSkip = 0;
-			if (FindSplitter(pGraph))
-			{
-				while((pPin=DsUtils.GetPin(pGraph.pSplitterFilter, PinDirection.Output, false, nSkip)) != null)
-				{
-					if (DsUtils.IsMediaTypeSupported(pPin, MediaType.Audio) == 0)
-					{
-						// this unconnected pin supports audio type!
-						// let's render it!
-						if (BuildSoundRenderer(pGraph))
-						{
-							pInputPin=DsUtils.GetPin((IBaseFilter) pGraph.arrayDSBaseFilter[pGraph.arrayDSBaseFilter.Count-1],
-								PinDirection.Input);
-							hr=DsHlp.S_FALSE;
-							hr=pGraph.pGraphBuilder.Connect(pPin, pInputPin);
-							Marshal.ReleaseComObject(pInputPin);
-							if (hr==DsHlp.S_OK || hr==DsHlp.VFW_S_PARTIAL_RENDER)
-							{
-								if (pGraph.arrayDSBaseFilter.Count==8) 
-								{
-									Marshal.ReleaseComObject(pPin);
-									break; // out of while cicle
-								}
+            int hr;
+            int nSkip = 0;
+            if (FindSplitter(pGraph))
+            {
+                while((pPin=DsUtils.GetPin(pGraph.pSplitterFilter, PinDirection.Output, false, nSkip)) != null)
+                {
+                    if (DsUtils.IsMediaTypeSupported(pPin, MediaType.Audio) == 0)
+                    {
+                        // this unconnected pin supports audio type!
+                        // let's render it!
+                        if (BuildSoundRenderer(pGraph))
+                        {
+                            pInputPin=DsUtils.GetPin((IBaseFilter) pGraph.arrayDSBaseFilter[pGraph.arrayDSBaseFilter.Count-1],
+                                PinDirection.Input);
+                            hr=DsHlp.S_FALSE;
+                            hr=pGraph.pGraphBuilder.Connect(pPin, pInputPin);
+                            Marshal.ReleaseComObject(pInputPin);
+                            if (hr==DsHlp.S_OK || hr==DsHlp.VFW_S_PARTIAL_RENDER)
+                            {
+                                if (pGraph.arrayDSBaseFilter.Count==8) 
+                                {
+                                    Marshal.ReleaseComObject(pPin);
+                                    break; // out of while cicle
+                                }
 
-							}
-							else
-							{
-								pBaseFilter = (IBaseFilter) pGraph.arrayDSBaseFilter[pGraph.arrayDSBaseFilter.Count-1];
-								pGraph.pGraphBuilder.RemoveFilter(pBaseFilter);
-								Marshal.ReleaseComObject(pBaseFilter);
-																
-								pGraph.arrayBasicAudio.RemoveAt(pGraph.arrayBasicAudio.Count-1);
-								pGraph.arrayDSBaseFilter.RemoveAt(pGraph.arrayDSBaseFilter.Count-1);
+                            }
+                            else
+                            {
+                                pBaseFilter = (IBaseFilter) pGraph.arrayDSBaseFilter[pGraph.arrayDSBaseFilter.Count-1];
+                                pGraph.pGraphBuilder.RemoveFilter(pBaseFilter);
+                                Marshal.ReleaseComObject(pBaseFilter);
+                                                                
+                                pGraph.arrayBasicAudio.RemoveAt(pGraph.arrayBasicAudio.Count-1);
+                                pGraph.arrayDSBaseFilter.RemoveAt(pGraph.arrayDSBaseFilter.Count-1);
 
-								nSkip++;
-							}
-						}
-						else
-						{
-							// could not create/add DirectSound filter
-							Marshal.ReleaseComObject(pPin);
-							break; // out of while cicle
-						}
-					}
-					else
-						nSkip++;
-					Marshal.ReleaseComObject(pPin);
-				} // end of while
-			}
-	
-			pGraph.nCurrentAudioStream=0;
-			pGraph.nAudioStreams = pGraph.arrayBasicAudio.Count;
-			int lVolume = -10000;
-			for (int i=1; i<pGraph.nAudioStreams; i++)
-			{
-				pBA = (IBasicAudio) pGraph.arrayBasicAudio[i];
-				pBA.put_Volume(lVolume);
-			}
-		}
+                                nSkip++;
+                            }
+                        }
+                        else
+                        {
+                            // could not create/add DirectSound filter
+                            Marshal.ReleaseComObject(pPin);
+                            break; // out of while cicle
+                        }
+                    }
+                    else
+                        nSkip++;
+                    Marshal.ReleaseComObject(pPin);
+                } // end of while
+            }
+    
+            pGraph.nCurrentAudioStream=0;
+            pGraph.nAudioStreams = pGraph.arrayBasicAudio.Count;
+            int lVolume = -10000;
+            for (int i=1; i<pGraph.nAudioStreams; i++)
+            {
+                pBA = (IBasicAudio) pGraph.arrayBasicAudio[i];
+                pBA.put_Volume(lVolume);
+            }
+        }
 
-		// this function should be called AFTER the video stream has been rendered
-		// but before rendering the audio streams
-		private bool FindSplitter(FilterGraph pGraph)
-		{
+        // this function should be called AFTER the video stream has been rendered
+        // but before rendering the audio streams
+        private bool FindSplitter(FilterGraph pGraph)
+        {
             if (pGraph.pSplitterFilter != null)
             {
                 RemoveRedundantFilters(pGraph);
@@ -478,79 +478,79 @@ namespace Dzimchuk.MediaEngine.Core
             }
             
             IEnumFilters pEnumFilters = null;
-			IBaseFilter pFilter = null;
-			int cFetched;
-			bool bSplitterFound=false;
+            IBaseFilter pFilter = null;
+            int cFetched;
+            bool bSplitterFound=false;
 
-			int hr = pGraph.pGraphBuilder.EnumFilters(out pEnumFilters);
-			if (DsHlp.FAILED(hr)) return false;
-	
-			IPin pPin;
-			int nFilters=0;
-			bool bCanRelease;
-			while((pEnumFilters.Next(1, out pFilter, out cFetched) == DsHlp.S_OK))
-			{
-				nFilters++;
-				bCanRelease=true;
-				pPin=DsUtils.GetPin(pFilter, PinDirection.Output, false, 0);
-				if (pPin != null)
-				{
-					if (!bSplitterFound)
-					{
-						if (DsUtils.IsMediaTypeSupported(pPin, MediaType.Audio) == 0)
-						{
-							//this unconnected pin supports audio type!
-							bSplitterFound=true;
-							bCanRelease=false;
-							pGraph.pSplitterFilter=pFilter;
-						}
-					}
-					Marshal.ReleaseComObject(pPin);
-				}
+            int hr = pGraph.pGraphBuilder.EnumFilters(out pEnumFilters);
+            if (DsHlp.FAILED(hr)) return false;
+    
+            IPin pPin;
+            int nFilters=0;
+            bool bCanRelease;
+            while((pEnumFilters.Next(1, out pFilter, out cFetched) == DsHlp.S_OK))
+            {
+                nFilters++;
+                bCanRelease=true;
+                pPin=DsUtils.GetPin(pFilter, PinDirection.Output, false, 0);
+                if (pPin != null)
+                {
+                    if (!bSplitterFound)
+                    {
+                        if (DsUtils.IsMediaTypeSupported(pPin, MediaType.Audio) == 0)
+                        {
+                            //this unconnected pin supports audio type!
+                            bSplitterFound=true;
+                            bCanRelease=false;
+                            pGraph.pSplitterFilter=pFilter;
+                        }
+                    }
+                    Marshal.ReleaseComObject(pPin);
+                }
 
-				//let's have a look at another filter
-				if (bCanRelease)
-					Marshal.ReleaseComObject(pFilter);
+                //let's have a look at another filter
+                if (bCanRelease)
+                    Marshal.ReleaseComObject(pFilter);
 
                 if (bSplitterFound)
                     break;
-			}
-	
-			Marshal.ReleaseComObject(pEnumFilters);
-			
-			if (!bSplitterFound)
-			{
-				if (nFilters > 3)
-				{
-					pPin=DsUtils.GetPin(pGraph.pSource, PinDirection.Output, true, 0);
-					if (pPin != null)
-					{
-						IPin pInputPin;
-						hr=pPin.ConnectedTo(out pInputPin);
-						if (hr==DsHlp.S_OK)
-						{
-							PinInfo info = new PinInfo();
-							pInputPin.QueryPinInfo(out info);
-							if (hr==DsHlp.S_OK)
-							{
-								pGraph.pSplitterFilter=info.pFilter;
-								bSplitterFound=true;
-							}
-							Marshal.ReleaseComObject(pInputPin);
-						}
-						Marshal.ReleaseComObject(pPin);
-					}
-				}
-				else
-				{
-					pGraph.pSplitterFilter=pGraph.pSource;
-					bSplitterFound=true;
-				}
-			}
+            }
+    
+            Marshal.ReleaseComObject(pEnumFilters);
+            
+            if (!bSplitterFound)
+            {
+                if (nFilters > 3)
+                {
+                    pPin=DsUtils.GetPin(pGraph.pSource, PinDirection.Output, true, 0);
+                    if (pPin != null)
+                    {
+                        IPin pInputPin;
+                        hr=pPin.ConnectedTo(out pInputPin);
+                        if (hr==DsHlp.S_OK)
+                        {
+                            PinInfo info = new PinInfo();
+                            pInputPin.QueryPinInfo(out info);
+                            if (hr==DsHlp.S_OK)
+                            {
+                                pGraph.pSplitterFilter=info.pFilter;
+                                bSplitterFound=true;
+                            }
+                            Marshal.ReleaseComObject(pInputPin);
+                        }
+                        Marshal.ReleaseComObject(pPin);
+                    }
+                }
+                else
+                {
+                    pGraph.pSplitterFilter=pGraph.pSource;
+                    bSplitterFound=true;
+                }
+            }
 
             StripSplitter(pGraph);
             return bSplitterFound;
-		}
+        }
 
         // disconnect all connected audio out pins and remove unused filters
         private void StripSplitter(FilterGraph pGraph)
@@ -576,69 +576,69 @@ namespace Dzimchuk.MediaEngine.Core
             }
         }
 
-		#endregion
+        #endregion
 
-		#region Gathering the info about the media file
-		private void GatherMediaInfo(FilterGraph pGraph, string source)
-		{
-			pGraph.info.source = source;
-			if (pGraph.pSource == null)
-				return;
-			int hr;
-			IntPtr ptr;
-			IEnumMediaTypes pEnumTypes;
-			int cFetched;
-			IPin pPin;
-			
-			if (pGraph.SourceType == SourceType.Asf)
-				pGraph.info.StreamSubType = MediaSubType.Asf;
-			else
-			{
-				pPin=DsUtils.GetPin(pGraph.pSource, PinDirection.Output, true);
-				if (pPin != null)
-				{
-					hr=pPin.EnumMediaTypes(out pEnumTypes);
-					if (hr==DsHlp.S_OK)
-					{
-						if (pEnumTypes.Next(1, out ptr, out cFetched) == DsHlp.S_OK)
-						{
-							AMMediaType mt = (AMMediaType)Marshal.PtrToStructure(ptr, typeof(AMMediaType));
-							pGraph.info.StreamSubType=mt.subType;
-							DsUtils.FreeFormatBlock(ptr);
-							Marshal.FreeCoTaskMem(ptr);
-						}
-						Marshal.ReleaseComObject(pEnumTypes);
-					}
-					Marshal.ReleaseComObject(pPin);
-				}
-			}
+        #region Gathering the info about the media file
+        private void GatherMediaInfo(FilterGraph pGraph, string source)
+        {
+            pGraph.info.source = source;
+            if (pGraph.pSource == null)
+                return;
+            int hr;
+            IntPtr ptr;
+            IEnumMediaTypes pEnumTypes;
+            int cFetched;
+            IPin pPin;
+            
+            if (pGraph.SourceType == SourceType.Asf)
+                pGraph.info.StreamSubType = MediaSubType.Asf;
+            else
+            {
+                pPin=DsUtils.GetPin(pGraph.pSource, PinDirection.Output, true);
+                if (pPin != null)
+                {
+                    hr=pPin.EnumMediaTypes(out pEnumTypes);
+                    if (hr==DsHlp.S_OK)
+                    {
+                        if (pEnumTypes.Next(1, out ptr, out cFetched) == DsHlp.S_OK)
+                        {
+                            AMMediaType mt = (AMMediaType)Marshal.PtrToStructure(ptr, typeof(AMMediaType));
+                            pGraph.info.StreamSubType=mt.subType;
+                            DsUtils.FreeFormatBlock(ptr);
+                            Marshal.FreeCoTaskMem(ptr);
+                        }
+                        Marshal.ReleaseComObject(pEnumTypes);
+                    }
+                    Marshal.ReleaseComObject(pPin);
+                }
+            }
 
-			if (pGraph.pSplitterFilter==null)
-				return;
-	
-			StreamInfo pStreamInfo;
-			int nPinsToSkip=0;
-			while ((pPin=DsUtils.GetPin(pGraph.pSplitterFilter, PinDirection.Output, true, nPinsToSkip)) != null)
-			{
-				nPinsToSkip++;
-				pStreamInfo = new StreamInfo();
-				hr=pPin.EnumMediaTypes(out pEnumTypes);
-				if (hr==DsHlp.S_OK)
-				{
-					if (pEnumTypes.Next(1, out ptr, out cFetched) == DsHlp.S_OK)
-					{
-						AMMediaType mt = (AMMediaType)Marshal.PtrToStructure(ptr, typeof(AMMediaType));
-						GatherStreamInfo(pGraph, pStreamInfo, ref mt);
+            if (pGraph.pSplitterFilter==null)
+                return;
+    
+            StreamInfo pStreamInfo;
+            int nPinsToSkip=0;
+            while ((pPin=DsUtils.GetPin(pGraph.pSplitterFilter, PinDirection.Output, true, nPinsToSkip)) != null)
+            {
+                nPinsToSkip++;
+                pStreamInfo = new StreamInfo();
+                hr=pPin.EnumMediaTypes(out pEnumTypes);
+                if (hr==DsHlp.S_OK)
+                {
+                    if (pEnumTypes.Next(1, out ptr, out cFetched) == DsHlp.S_OK)
+                    {
+                        AMMediaType mt = (AMMediaType)Marshal.PtrToStructure(ptr, typeof(AMMediaType));
+                        GatherStreamInfo(pGraph, pStreamInfo, ref mt);
 
-						DsUtils.FreeFormatBlock(ptr);
-						Marshal.FreeCoTaskMem(ptr);
-					}
-					Marshal.ReleaseComObject(pEnumTypes);
-				}
-				Marshal.ReleaseComObject(pPin);
-				pGraph.info.streams.Add(pStreamInfo);
-			}
-		}
+                        DsUtils.FreeFormatBlock(ptr);
+                        Marshal.FreeCoTaskMem(ptr);
+                    }
+                    Marshal.ReleaseComObject(pEnumTypes);
+                }
+                Marshal.ReleaseComObject(pPin);
+                pGraph.info.streams.Add(pStreamInfo);
+            }
+        }
 
         private int GetVideoDimension(int value1, int value2)
         {
@@ -648,15 +648,15 @@ namespace Dzimchuk.MediaEngine.Core
             return value;
         }
 
-		private void GatherStreamInfo(FilterGraph pGraph, StreamInfo pStreamInfo, ref AMMediaType pmt)
-		{
-			pStreamInfo.MajorType = pmt.majorType;
-			pStreamInfo.SubType = pmt.subType;
-			pStreamInfo.FormatType = pmt.formatType;
-			
-			if (pmt.formatType == FormatType.VideoInfo)
-			{
-				// Check the buffer size.
+        private void GatherStreamInfo(FilterGraph pGraph, StreamInfo pStreamInfo, ref AMMediaType pmt)
+        {
+            pStreamInfo.MajorType = pmt.majorType;
+            pStreamInfo.SubType = pmt.subType;
+            pStreamInfo.FormatType = pmt.formatType;
+            
+            if (pmt.formatType == FormatType.VideoInfo)
+            {
+                // Check the buffer size.
                 if (pmt.formatSize >= Marshal.SizeOf(typeof(VIDEOINFOHEADER)))
                 {
                     VIDEOINFOHEADER pVih = (VIDEOINFOHEADER)Marshal.PtrToStructure(pmt.formatPtr, typeof(VIDEOINFOHEADER));
@@ -672,13 +672,13 @@ namespace Dzimchuk.MediaEngine.Core
                     pStreamInfo.rcSrc.right = pGraph.rcSrc.right;
                     pStreamInfo.rcSrc.bottom = pGraph.rcSrc.bottom;
                 }
-		
-				pStreamInfo.Flags |= (StreamInfoFlags.SI_RECT | StreamInfoFlags.SI_FOURCC);
-				return;
-			}
-			else if (pmt.formatType == FormatType.VideoInfo2)
-			{
-				// Check the buffer size.
+        
+                pStreamInfo.Flags |= (StreamInfoFlags.SI_RECT | StreamInfoFlags.SI_FOURCC);
+                return;
+            }
+            else if (pmt.formatType == FormatType.VideoInfo2)
+            {
+                // Check the buffer size.
                 if (pmt.formatSize >= Marshal.SizeOf(typeof(VIDEOINFOHEADER2)))
                 {
                     VIDEOINFOHEADER2 pVih2 = (VIDEOINFOHEADER2)Marshal.PtrToStructure(pmt.formatPtr, typeof(VIDEOINFOHEADER2));
@@ -699,31 +699,31 @@ namespace Dzimchuk.MediaEngine.Core
                     pStreamInfo.rcSrc.right = pGraph.rcSrc.right;
                     pStreamInfo.rcSrc.bottom = pGraph.rcSrc.bottom;
                 }
-		
-				pStreamInfo.Flags |= (StreamInfoFlags.SI_RECT | StreamInfoFlags.SI_FOURCC);
-				return;
-			}
-			else if (pmt.formatType == FormatType.WaveEx)
-			{
-				// Check the buffer size.
-				if (pmt.formatSize >= /*Marshal.SizeOf(typeof(WAVEFORMATEX))*/ 18)
-				{
-					WAVEFORMATEX pWfx = (WAVEFORMATEX)Marshal.PtrToStructure(pmt.formatPtr, typeof(WAVEFORMATEX));
-					pStreamInfo.wFormatTag=pWfx.wFormatTag;
-					pStreamInfo.nSamplesPerSec=pWfx.nSamplesPerSec;
-					pStreamInfo.nChannels=pWfx.nChannels;
-					pStreamInfo.wBitsPerSample=pWfx.wBitsPerSample;
-					pStreamInfo.nAvgBytesPerSec=pWfx.nAvgBytesPerSec;
-					pStreamInfo.Flags = StreamInfoFlags.SI_WAVEFORMAT | 
-						StreamInfoFlags.SI_SAMPLERATE | StreamInfoFlags.SI_WAVECHANNELS | 
-						StreamInfoFlags.SI_BITSPERSAMPLE | StreamInfoFlags.SI_AUDIOBITRATE;
-				}
-		
-				return;
-			}
-			else if (pmt.formatType == FormatType.MpegVideo)
-			{
-				// Check the buffer size.
+        
+                pStreamInfo.Flags |= (StreamInfoFlags.SI_RECT | StreamInfoFlags.SI_FOURCC);
+                return;
+            }
+            else if (pmt.formatType == FormatType.WaveEx)
+            {
+                // Check the buffer size.
+                if (pmt.formatSize >= /*Marshal.SizeOf(typeof(WAVEFORMATEX))*/ 18)
+                {
+                    WAVEFORMATEX pWfx = (WAVEFORMATEX)Marshal.PtrToStructure(pmt.formatPtr, typeof(WAVEFORMATEX));
+                    pStreamInfo.wFormatTag=pWfx.wFormatTag;
+                    pStreamInfo.nSamplesPerSec=pWfx.nSamplesPerSec;
+                    pStreamInfo.nChannels=pWfx.nChannels;
+                    pStreamInfo.wBitsPerSample=pWfx.wBitsPerSample;
+                    pStreamInfo.nAvgBytesPerSec=pWfx.nAvgBytesPerSec;
+                    pStreamInfo.Flags = StreamInfoFlags.SI_WAVEFORMAT | 
+                        StreamInfoFlags.SI_SAMPLERATE | StreamInfoFlags.SI_WAVECHANNELS | 
+                        StreamInfoFlags.SI_BITSPERSAMPLE | StreamInfoFlags.SI_AUDIOBITRATE;
+                }
+        
+                return;
+            }
+            else if (pmt.formatType == FormatType.MpegVideo)
+            {
+                // Check the buffer size.
                 if (pmt.formatSize >= Marshal.SizeOf(typeof(MPEG1VIDEOINFO)))
                 {
                     MPEG1VIDEOINFO pM1vi = (MPEG1VIDEOINFO)Marshal.PtrToStructure(pmt.formatPtr, typeof(MPEG1VIDEOINFO));
@@ -739,13 +739,13 @@ namespace Dzimchuk.MediaEngine.Core
                     pStreamInfo.rcSrc.right = pGraph.rcSrc.right;
                     pStreamInfo.rcSrc.bottom = pGraph.rcSrc.bottom;
                 }
-		
-				pStreamInfo.Flags |= (StreamInfoFlags.SI_RECT | StreamInfoFlags.SI_FOURCC);
-				return;
-			}
-			else if (pmt.formatType == FormatType.Mpeg2Video)
-			{
-				// Check the buffer size.
+        
+                pStreamInfo.Flags |= (StreamInfoFlags.SI_RECT | StreamInfoFlags.SI_FOURCC);
+                return;
+            }
+            else if (pmt.formatType == FormatType.Mpeg2Video)
+            {
+                // Check the buffer size.
                 if (pmt.formatSize >= Marshal.SizeOf(typeof(MPEG2VIDEOINFO)))
                 {
                     MPEG2VIDEOINFO pM2vi = (MPEG2VIDEOINFO)Marshal.PtrToStructure(pmt.formatPtr, typeof(MPEG2VIDEOINFO));
@@ -765,12 +765,12 @@ namespace Dzimchuk.MediaEngine.Core
                     pStreamInfo.rcSrc.right = pGraph.rcSrc.right;
                     pStreamInfo.rcSrc.bottom = pGraph.rcSrc.bottom;
                 }
-		
-				pStreamInfo.Flags |= (StreamInfoFlags.SI_RECT | StreamInfoFlags.SI_FOURCC);
-				return;
-			}
-		}
-		#endregion
+        
+                pStreamInfo.Flags |= (StreamInfoFlags.SI_RECT | StreamInfoFlags.SI_FOURCC);
+                return;
+            }
+        }
+        #endregion
 
         protected void ReportUnrenderedPins(FilterGraph pGraph)
         {

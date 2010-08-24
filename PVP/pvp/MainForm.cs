@@ -27,18 +27,18 @@ using Dzimchuk.PVP.Util;
 
 namespace Dzimchuk.PVP
 {
-	/// <summary>
-	/// The MainForm. This class contains the entry point.
-	/// </summary>
-	public class MainForm : MainFormSettings
-	{
-		static Guid guid = new Guid("{232FF40A-67C4-4a5d-B82C-6CF3C6053110}");
-		/// <summary>
-		/// The main entry point for the application.
-		/// </summary>
-		[STAThread]
-		static void Main(string[] args) 
-		{
+    /// <summary>
+    /// The MainForm. This class contains the entry point.
+    /// </summary>
+    public class MainForm : MainFormSettings
+    {
+        static Guid guid = new Guid("{232FF40A-67C4-4a5d-B82C-6CF3C6053110}");
+        /// <summary>
+        /// The main entry point for the application.
+        /// </summary>
+        [STAThread]
+        static void Main(string[] args) 
+        {
             if (Array.Find(args,
                             delegate(string arg)
                             {
@@ -63,94 +63,94 @@ namespace Dzimchuk.PVP
             }
             
             SingleInstance si = SingleInstance.CreateSingleInstance(guid);
-			si.ArgsRecieved += new ArgsHandler(OnNewCommandLineArgs);
+            si.ArgsRecieved += new ArgsHandler(OnNewCommandLineArgs);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             si.Run(typeof(MainForm));
-		}
-		
-		public MainForm()
-		{
-		}
+        }
+        
+        public MainForm()
+        {
+        }
 
-		protected override void OnLoad(EventArgs e)
-		{
-			base.OnLoad (e);
-			Application.Idle += new EventHandler(OnIdle);
-			string[] args = Environment.GetCommandLineArgs();
-			if (args.Length > 1) // astr[1] may contain the file name to play
-			{
-				strFileName = args[1];
-				whatToPlay = Dzimchuk.MediaEngine.Core.WhatToPlay.PLAYING_FILE;
-				bPlayPending = true;
-			}
-		}
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad (e);
+            Application.Idle += new EventHandler(OnIdle);
+            string[] args = Environment.GetCommandLineArgs();
+            if (args.Length > 1) // astr[1] may contain the file name to play
+            {
+                strFileName = args[1];
+                whatToPlay = Dzimchuk.MediaEngine.Core.WhatToPlay.PLAYING_FILE;
+                bPlayPending = true;
+            }
+        }
 
-		private static void OnNewCommandLineArgs(Form form, string[] args)
-		{
-			if (args.Length > 1)
-			{
-				MainForm me = (MainForm) form;
-				me.strFileName = args[1];
-				me.whatToPlay = Dzimchuk.MediaEngine.Core.WhatToPlay.PLAYING_FILE;
-				me.bPlayPending = true;
-			}
-		}
+        private static void OnNewCommandLineArgs(Form form, string[] args)
+        {
+            if (args.Length > 1)
+            {
+                MainForm me = (MainForm) form;
+                me.strFileName = args[1];
+                me.whatToPlay = Dzimchuk.MediaEngine.Core.WhatToPlay.PLAYING_FILE;
+                me.bPlayPending = true;
+            }
+        }
 
-		bool bSecondPending;
-		private void OnIdle(object sender, EventArgs e)
-		{
-			if (bPlayPending)
-			{
-				if (!bSecondPending)
-				{
-					bSecondPending = true;
-					nicon.Restore();
-				}
-				else
-				{
-					PlayIt(strFileName, whatToPlay);
-					bPlayPending = false;
-					bSecondPending = false;
-				}
-			}
-		}
+        bool bSecondPending;
+        private void OnIdle(object sender, EventArgs e)
+        {
+            if (bPlayPending)
+            {
+                if (!bSecondPending)
+                {
+                    bSecondPending = true;
+                    nicon.Restore();
+                }
+                else
+                {
+                    PlayIt(strFileName, whatToPlay);
+                    bPlayPending = false;
+                    bSecondPending = false;
+                }
+            }
+        }
 
-		private void PerformPopup(Menu popup, IntPtr hMenu, ref bool bFound)
-		{
-			if (hMenu == popup.Handle && !(popup is ContextMenu))
-			{
-				// no need to handle for ContextMenu
-				((MenuItemEx)popup).PerformPopup();
-				bFound = true;
-				return;
-			}
+        private void PerformPopup(Menu popup, IntPtr hMenu, ref bool bFound)
+        {
+            if (hMenu == popup.Handle && !(popup is ContextMenu))
+            {
+                // no need to handle for ContextMenu
+                ((MenuItemEx)popup).PerformPopup();
+                bFound = true;
+                return;
+            }
 
-			MenuItem item;
-			int count = popup.MenuItems.Count;
-			for(int i=0; i<count; i++)
-			{
-				if(bFound)
-					break;
-				item = popup.MenuItems[i];
-				if(item.IsParent)
-					PerformPopup(item, hMenu, ref bFound);
-			}
-		}
+            MenuItem item;
+            int count = popup.MenuItems.Count;
+            for(int i=0; i<count; i++)
+            {
+                if(bFound)
+                    break;
+                item = popup.MenuItems[i];
+                if(item.IsParent)
+                    PerformPopup(item, hMenu, ref bFound);
+            }
+        }
 
-		protected override void WndProc(ref Message m)
-		{
-			bool bFound = false;
-			if (m.Msg == (int)WindowsMessages.WM_INITMENUPOPUP)
-			{
-				PerformPopup(contextMenu, m.WParam, ref bFound);
-				if (bFound)
-					m.Result = IntPtr.Zero;
-			}
-			
-			if (!bFound)
-				base.WndProc (ref m);
-		}
+        protected override void WndProc(ref Message m)
+        {
+            bool bFound = false;
+            if (m.Msg == (int)WindowsMessages.WM_INITMENUPOPUP)
+            {
+                PerformPopup(contextMenu, m.WParam, ref bFound);
+                if (bFound)
+                    m.Result = IntPtr.Zero;
+            }
+            
+            if (!bFound)
+                base.WndProc (ref m);
+        }
 
         public static void HandleRegApp()
         {
@@ -245,5 +245,5 @@ namespace Dzimchuk.PVP
                 return principal.IsInRole(WindowsBuiltInRole.Administrator);
             }
         }
-	}
+    }
 }

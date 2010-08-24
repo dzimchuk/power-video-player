@@ -27,13 +27,13 @@ using Dzimchuk.Native;
 namespace Dzimchuk.DirectShow
 {
     [StructLayout(LayoutKind.Sequential), ComVisible(false)]
-	public struct MFVideoNormalizedRect 
-	{
-		public float left;  
+    public struct MFVideoNormalizedRect 
+    {
+        public float left;  
         public float top;  
         public float right;  
         public float bottom;
-	}
+    }
 
     [Flags, ComVisible(false)]
     public enum MFVideoAspectRatioMode 

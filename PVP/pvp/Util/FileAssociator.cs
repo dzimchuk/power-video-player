@@ -17,12 +17,12 @@ using Microsoft.Win32;
 
 namespace Dzimchuk.PVP.Util
 {
-	/// <summary>
-	/// Summary description for FileAssociator.
-	/// </summary>
-	public class FileAssociator : IDisposable
-	{
-		private string _docTypePrefix;
+    /// <summary>
+    /// Summary description for FileAssociator.
+    /// </summary>
+    public class FileAssociator : IDisposable
+    {
+        private string _docTypePrefix;
         protected string _appName; // canonical app name
         private const string SOFTWARE_CLASSES = @"Software\Classes\{0}";
 
@@ -55,10 +55,10 @@ namespace Dzimchuk.PVP.Util
         }
 
         protected FileAssociator(string docTypePrefix, string appName)
-		{
-			_docTypePrefix = docTypePrefix;
+        {
+            _docTypePrefix = docTypePrefix;
             _appName = appName;
-		}
+        }
 
         public void Register(string regPath, 
                              string defaultIcon, 
@@ -195,37 +195,37 @@ namespace Dzimchuk.PVP.Util
             }
         }
 
-		public virtual bool IsAssociated(string ext)
-		{
-			string docType = GetClassesValueUser(ext, null, String.Empty);
+        public virtual bool IsAssociated(string ext)
+        {
+            string docType = GetClassesValueUser(ext, null, String.Empty);
             return (docType != null && docType == (_docTypePrefix + ext.ToUpperInvariant()));
-		}
+        }
 
-		public virtual void Associate(string ext, bool bAssociate)
-		{
-			if (bAssociate)
-			{
+        public virtual void Associate(string ext, bool bAssociate)
+        {
+            if (bAssociate)
+            {
                 string docType = _docTypePrefix + ext.ToUpperInvariant();
                 string prevDocType = GetClassesValueUser(ext, null, String.Empty);
                 if (prevDocType != null && prevDocType != docType)
                     SetClassesValueUser(ext, "PrevDefault", prevDocType);
                 SetClassesValueUser(ext, null, docType);
-			}
-			else if (IsAssociated(ext))
-			{
+            }
+            else if (IsAssociated(ext))
+            {
                 string prevDocType = GetClassesValueUser(ext, "PrevDefault", String.Empty);
                 if (prevDocType != null)
                     SetClassesValueUser(ext, null, prevDocType);
-				else
-					SetClassesValueUser(ext, null, String.Empty);
-			}
-		}
+                else
+                    SetClassesValueUser(ext, null, String.Empty);
+            }
+        }
 
-		public static void NotifyShell()
-		{
-			Shell.SHChangeNotify(Shell.SHCNE_ASSOCCHANGED, Shell.SHCNF_IDLIST, 
-				IntPtr.Zero, IntPtr.Zero);
-		}
+        public static void NotifyShell()
+        {
+            Shell.SHChangeNotify(Shell.SHCNE_ASSOCCHANGED, Shell.SHCNF_IDLIST, 
+                IntPtr.Zero, IntPtr.Zero);
+        }
 
         protected void SetClassesValueUser(string strSubKey, string name, object val)
         {

@@ -15,28 +15,28 @@ using System.Runtime.InteropServices;
 
 namespace Dzimchuk.Native
 {
-	/// <summary>
-	/// 
-	/// </summary>
-	public class GDI
-	{
-		
-		#region Structures
-		[StructLayout(LayoutKind.Sequential)]
-		public struct POINT
-		{
-			public int x;
-			public int y;
-		}
+    /// <summary>
+    /// 
+    /// </summary>
+    public class GDI
+    {
+        
+        #region Structures
+        [StructLayout(LayoutKind.Sequential)]
+        public struct POINT
+        {
+            public int x;
+            public int y;
+        }
 
-		[StructLayout(LayoutKind.Sequential)]
-		public struct RECT
-		{
-			public int left;
-			public int top;
-			public int right;
-			public int bottom;
-		}
+        [StructLayout(LayoutKind.Sequential)]
+        public struct RECT
+        {
+            public int left;
+            public int top;
+            public int right;
+            public int bottom;
+        }
 
         [StructLayout(LayoutKind.Sequential)]
         public struct SIZE
@@ -45,35 +45,35 @@ namespace Dzimchuk.Native
             public int cy;
         }
 
-		[StructLayout(LayoutKind.Sequential)]
-		public struct MONITORINFO
-		{
-			public int cbSize;
-			public RECT rcMonitor;
-			public RECT rcWork;
-			public int dwFlags;
-		}
+        [StructLayout(LayoutKind.Sequential)]
+        public struct MONITORINFO
+        {
+            public int cbSize;
+            public RECT rcMonitor;
+            public RECT rcWork;
+            public int dwFlags;
+        }
 
-		#endregion
+        #endregion
 
-		#region Functions
-		[DllImport("gdi32.dll", CharSet=CharSet.Auto)]
-		public static extern int PtInRegion(IntPtr hRgn, int x, int y);
+        #region Functions
+        [DllImport("gdi32.dll", CharSet=CharSet.Auto)]
+        public static extern int PtInRegion(IntPtr hRgn, int x, int y);
 
-		[DllImport("user32.dll", CharSet=CharSet.Auto)]
-		public static extern int GetMonitorInfo(IntPtr hMonitor, ref MONITORINFO lpmi);
+        [DllImport("user32.dll", CharSet=CharSet.Auto)]
+        public static extern int GetMonitorInfo(IntPtr hMonitor, ref MONITORINFO lpmi);
 
-		[DllImport("user32.dll", CharSet=CharSet.Auto)]
-		public static extern IntPtr MonitorFromWindow(IntPtr hWnd, int dwFlags);
+        [DllImport("user32.dll", CharSet=CharSet.Auto)]
+        public static extern IntPtr MonitorFromWindow(IntPtr hWnd, int dwFlags);
 
-		#endregion
+        #endregion
 
-		#region Defines
-		public const int MONITOR_DEFAULTTONULL     = 0x00000000;
-		public const int MONITOR_DEFAULTTOPRIMARY  = 0x00000001;
-		public const int MONITOR_DEFAULTTONEAREST  = 0x00000002;
+        #region Defines
+        public const int MONITOR_DEFAULTTONULL     = 0x00000000;
+        public const int MONITOR_DEFAULTTOPRIMARY  = 0x00000001;
+        public const int MONITOR_DEFAULTTONEAREST  = 0x00000002;
 
-		public const int MONITORINFOF_PRIMARY      = 0x00000001;
-		#endregion
-	}
+        public const int MONITORINFOF_PRIMARY      = 0x00000001;
+        #endregion
+    }
 }

@@ -25,39 +25,39 @@ using Dzimchuk.PVP.Util;
 
 namespace Dzimchuk.PVP
 {
-	/// <summary>
-	/// 
-	/// </summary>
-	public class MainFormSettings : MainFormControls
-	{
-		bool bStartFullscreen;
-		bool bCenterWindow = true;
+    /// <summary>
+    /// 
+    /// </summary>
+    public class MainFormSettings : MainFormControls
+    {
+        bool bStartFullscreen;
+        bool bCenterWindow = true;
 
         MenuItemEx miControlbar, miPref, miExit, miAbout, miAppLang;
-						
-		public MainFormSettings()
-		{
-			CreateAppMenu();
-			PopulateContextMenu();
-			HandleSystemTray();
-			engine.MW_InitSize += new InitSizeHandler(engine_InitSize);
-		}
+                        
+        public MainFormSettings()
+        {
+            CreateAppMenu();
+            PopulateContextMenu();
+            HandleSystemTray();
+            engine.MW_InitSize += new InitSizeHandler(engine_InitSize);
+        }
 
-		protected override void OnLoad(EventArgs e)
-		{
-			base.OnLoad (e);
-			TopMost = bTopMost;
-			if (bCenterWindow && WindowState == FormWindowState.Normal)
-			{
-				Rectangle bounds = DesktopBounds;
-				Rectangle rect = Screen.FromControl(this).WorkingArea;
-				bounds.X=bounds.Width<rect.Width ? rect.X + (rect.Width-bounds.Width)/2 : rect.X;
-				bounds.Y=bounds.Height<rect.Height ? rect.Y + (rect.Height-bounds.Height)/2 : rect.Y;
-				DesktopBounds = bounds;
-			}
-			if (bStartFullscreen)
-				ToggleFullscreen();
-		}
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad (e);
+            TopMost = bTopMost;
+            if (bCenterWindow && WindowState == FormWindowState.Normal)
+            {
+                Rectangle bounds = DesktopBounds;
+                Rectangle rect = Screen.FromControl(this).WorkingArea;
+                bounds.X=bounds.Width<rect.Width ? rect.X + (rect.Width-bounds.Width)/2 : rect.X;
+                bounds.Y=bounds.Height<rect.Height ? rect.Y + (rect.Height-bounds.Height)/2 : rect.Y;
+                DesktopBounds = bounds;
+            }
+            if (bStartFullscreen)
+                ToggleFullscreen();
+        }
 
         protected override void SetMenuItemsText()
         {
@@ -86,20 +86,20 @@ namespace Dzimchuk.PVP
             }
         }
 
-		#region CreateAppMenu
-		void CreateAppMenu()
-		{
-			miApp = new MenuItemEx();
-			miApp.Popup += new EventHandler(OnAppPopup);
-			
-			miControlbar = new MenuItemEx();
-			miControlbar.Click += new EventHandler(OnSettingsControlbar);
-			
-			miPref = new MenuItemEx();
-			miPref.Click += new EventHandler(OnSettingsPreferences);
-			
-			miAbout = new MenuItemEx();
-			miAbout.Click += new EventHandler(OnHelpAbout);
+        #region CreateAppMenu
+        void CreateAppMenu()
+        {
+            miApp = new MenuItemEx();
+            miApp.Popup += new EventHandler(OnAppPopup);
+            
+            miControlbar = new MenuItemEx();
+            miControlbar.Click += new EventHandler(OnSettingsControlbar);
+            
+            miPref = new MenuItemEx();
+            miPref.Click += new EventHandler(OnSettingsPreferences);
+            
+            miAbout = new MenuItemEx();
+            miAbout.Click += new EventHandler(OnHelpAbout);
 
             miAppLang = new MenuItemEx();
             miAppLang.Popup += new EventHandler(miAppLang_Popup);
@@ -112,28 +112,28 @@ namespace Dzimchuk.PVP
             item.Tag = new AppLang("russian", "ru-RU");
             item.Click += eh;
             miAppLang.MenuItems.Add(item);
-			
-			miApp.MenuItems.AddRange(new MenuItem[] 
-				{ miControlbar, sep.CloneMenu(), miAppLang, miPref, miAbout } );
+            
+            miApp.MenuItems.AddRange(new MenuItem[] 
+                { miControlbar, sep.CloneMenu(), miAppLang, miPref, miAbout } );
 
-			miExit = new MenuItemEx();
-			miExit.Click += new EventHandler(OnClose);
+            miExit = new MenuItemEx();
+            miExit.Click += new EventHandler(OnClose);
 
-			htCommands.Add(SettingsForm.strKeysPref, miPref);
-			htCommands.Add(SettingsForm.strKeysAbout, miAbout);
-			htCommands.Add(SettingsForm.strKeysExit, miExit);
-		}
-		#endregion
+            htCommands.Add(SettingsForm.strKeysPref, miPref);
+            htCommands.Add(SettingsForm.strKeysAbout, miAbout);
+            htCommands.Add(SettingsForm.strKeysExit, miExit);
+        }
+        #endregion
 
-		#region Populate context menu
-		void PopulateContextMenu()
-		{
-			contextMenu.MenuItems.AddRange(new MenuItem[] { miFile, 
-					sep.CloneMenu(), miPlay, miPause, miStop, miRepeat, sep.CloneMenu(), 
-					miFullscreen, sep.CloneMenu(), miVideoSize, miAspectRatio, 
-					miRate, miVolume, sep.CloneMenu(), miApp, miExit} );
-		}
-		#endregion
+        #region Populate context menu
+        void PopulateContextMenu()
+        {
+            contextMenu.MenuItems.AddRange(new MenuItem[] { miFile, 
+                    sep.CloneMenu(), miPlay, miPause, miStop, miRepeat, sep.CloneMenu(), 
+                    miFullscreen, sep.CloneMenu(), miVideoSize, miAspectRatio, 
+                    miRate, miVolume, sep.CloneMenu(), miApp, miExit} );
+        }
+        #endregion
 
         private void miAppLang_Popup(object sender, EventArgs e)
         {
@@ -169,65 +169,65 @@ namespace Dzimchuk.PVP
             }
         }
 
-		private void OnHelpAbout(object sender, EventArgs e)
-		{
-			bOkToHideCursor = false;
-			ShowCursor();
-			Color inner, mid, outer;
-			GetBorderColors(out inner, out mid, out outer);
-			
-			string version = Application.ProductVersion;
-			int n = version.LastIndexOf('.');
-			if (n != -1)
-				version = version.Substring(0, n);
-			AboutDialog dlg = new AboutDialog(this, AboutDialogBorder.Own, GetType(),
+        private void OnHelpAbout(object sender, EventArgs e)
+        {
+            bOkToHideCursor = false;
+            ShowCursor();
+            Color inner, mid, outer;
+            GetBorderColors(out inner, out mid, out outer);
+            
+            string version = Application.ProductVersion;
+            int n = version.LastIndexOf('.');
+            if (n != -1)
+                version = version.Substring(0, n);
+            AboutDialog dlg = new AboutDialog(this, AboutDialogBorder.Own, GetType(),
                 "Dzimchuk.PVP.about.bmp", Resources.Resources.about_pvp,
                 String.Format("{0} {1}\n{2}\n{3}", Resources.Resources.program_name, version, Resources.Resources.about_copyright, Resources.Resources.about_license),
                 Color.White, Resources.Resources.ok);
-			dlg.clrInner = inner;
-			dlg.clrMid = mid;
-			dlg.clrOuter = outer;
-			dlg.TopMost = TopMost;
-			ShowMyDialog(dlg);
+            dlg.clrInner = inner;
+            dlg.clrMid = mid;
+            dlg.clrOuter = outer;
+            dlg.TopMost = TopMost;
+            ShowMyDialog(dlg);
 
-			bOkToHideCursor = true;
-		}
-		
-		private void OnAppPopup(object sender, EventArgs e)
-		{
-			miControlbar.Checked = bFullscreen ? controlbarHolder.Visible : controlbar.Visible;
-			miControlbar.Enabled = Visible;
-		}
+            bOkToHideCursor = true;
+        }
+        
+        private void OnAppPopup(object sender, EventArgs e)
+        {
+            miControlbar.Checked = bFullscreen ? controlbarHolder.Visible : controlbar.Visible;
+            miControlbar.Enabled = Visible;
+        }
 
-		private void OnSettingsControlbar(object sender, EventArgs e)
-		{
-			if (bFullscreen)
-				controlbarHolder.Visible = !miControlbar.Checked;
-			else
-				controlbar.Visible = !miControlbar.Checked;
-		}
+        private void OnSettingsControlbar(object sender, EventArgs e)
+        {
+            if (bFullscreen)
+                controlbarHolder.Visible = !miControlbar.Checked;
+            else
+                controlbar.Visible = !miControlbar.Checked;
+        }
 
-		private void OnSettingsPreferences(object sender, EventArgs e)
-		{
-			bOkToHideCursor = false;
-			ShowCursor();
-			
-			SettingsForm dlg = new SettingsForm();
-			dlg.TopMost = TopMost;
-			dlg.Apply += new EventHandler(OnSettingsApply);
+        private void OnSettingsPreferences(object sender, EventArgs e)
+        {
+            bOkToHideCursor = false;
+            ShowCursor();
+            
+            SettingsForm dlg = new SettingsForm();
+            dlg.TopMost = TopMost;
+            dlg.Apply += new EventHandler(OnSettingsApply);
 
-			dlg.AutoPlay = engine.AutoPlay;
-			dlg.VideoRenderer = engine.PreferredVideoRenderer;
-			dlg.ShowLogo = engine.ShowLogo;
-			
-			dlg.SystemTray = nicon.SystemTray;
-			dlg.ShowTrayAlways = nicon.ShowTrayAlways;
-			dlg.RememberVolume = bRememberVolume;
-			dlg.StartFullscreen = bStartFullscreen;
-			dlg.CenterWindow = bCenterWindow;
-			dlg.AlwaysOnTop = bTopMost;
-			if (!Visible)
-				dlg.StartPosition = FormStartPosition.CenterScreen;
+            dlg.AutoPlay = engine.AutoPlay;
+            dlg.VideoRenderer = engine.PreferredVideoRenderer;
+            dlg.ShowLogo = engine.ShowLogo;
+            
+            dlg.SystemTray = nicon.SystemTray;
+            dlg.ShowTrayAlways = nicon.ShowTrayAlways;
+            dlg.RememberVolume = bRememberVolume;
+            dlg.StartFullscreen = bStartFullscreen;
+            dlg.CenterWindow = bCenterWindow;
+            dlg.AlwaysOnTop = bTopMost;
+            if (!Visible)
+                dlg.StartPosition = FormStartPosition.CenterScreen;
 
             using (FileAssociator fa = FileAssociator.GetFileAssociator(strDocTypePrefix, strProgName))
             {
@@ -238,29 +238,29 @@ namespace Dzimchuk.PVP
                 dlg.SelectedFileTypes = table;
             }
 
-			dlg.KeysTable = htKeys;
-			dlg.MouseWheelAction = wheelAction;
+            dlg.KeysTable = htKeys;
+            dlg.MouseWheelAction = wheelAction;
 
-			dlg.UsePreferredFilters = engine.UsePreferredFilters;
-			dlg.UsePreferredFilters4DVD = engine.UsePreferredFilters4DVD;
-			
-			if (ShowMyDialog(dlg) == DialogResult.OK)
-				OnSettingsApply(dlg, EventArgs.Empty);
-			if (dlg.FileTypesChanged)
+            dlg.UsePreferredFilters = engine.UsePreferredFilters;
+            dlg.UsePreferredFilters4DVD = engine.UsePreferredFilters4DVD;
+            
+            if (ShowMyDialog(dlg) == DialogResult.OK)
+                OnSettingsApply(dlg, EventArgs.Empty);
+            if (dlg.FileTypesChanged)
                 FileAssociator.NotifyShell();
-			if (dlg.RestartTriggered)
-			{
+            if (dlg.RestartTriggered)
+            {
                 MessageBox.Show(String.Format(Resources.Resources.systray_warning_format, "\n"), 
                     Resources.Resources.program_name, MessageBoxButtons.OK, 
-					MessageBoxIcon.Exclamation);
-				Close();
-			}
+                    MessageBoxIcon.Exclamation);
+                Close();
+            }
 
-			bOkToHideCursor = true;
-		}
+            bOkToHideCursor = true;
+        }
 
         protected override void LoadSettings(PropertyBag props)
-		{
+        {
             base.LoadSettings(props);
             nicon.SystemTray = props.Get<int>("systray_mode", 0); // 0 - taskbar only
             nicon.ShowTrayAlways = props.Get<bool>("systray_always", false);
@@ -278,8 +278,8 @@ namespace Dzimchuk.PVP
                 nRenderer = (int)MediaWindow.RecommendedRenderer;
             }
             int[] values = (int[])Enum.GetValues(typeof(Renderer));
-			engine.PreferredVideoRenderer = (nRenderer >= 0 && nRenderer <= values[values.Length-1]) 
-				? (Renderer) nRenderer : Renderer.VR;
+            engine.PreferredVideoRenderer = (nRenderer >= 0 && nRenderer <= values[values.Length-1]) 
+                ? (Renderer) nRenderer : Renderer.VR;
 
             engine.ShowLogo = props.Get<bool>("show_logo", true);
             engine.Repeat = props.Get<bool>("repeat_on", false);
@@ -291,10 +291,10 @@ namespace Dzimchuk.PVP
             ChangeCurrentCulture(props.Get<string>("ui_language", null));
 
             MediaTypeManager.GetInstance().Load(props.Get);
-		}
+        }
 
         protected override void SaveSettings(PropertyBag props)
-		{
+        {
             base.SaveSettings(props);
             props.Add("systray_mode", nicon.SystemTray);
             props.Add("systray_always", nicon.ShowTrayAlways);
@@ -315,100 +315,100 @@ namespace Dzimchuk.PVP
             props.Add("ui_language", Thread.CurrentThread.CurrentUICulture.Name);
 
             MediaTypeManager.GetInstance().Save(props.Add);
-		}
-		
-		private void OnSettingsApply(object sender, EventArgs e)
-		{
-			SettingsForm dlg = (SettingsForm) sender;
+        }
+        
+        private void OnSettingsApply(object sender, EventArgs e)
+        {
+            SettingsForm dlg = (SettingsForm) sender;
 
-			htKeys = dlg.KeysTable;
-			wheelAction = dlg.MouseWheelAction;
-			
-			engine.AutoPlay = dlg.AutoPlay;
-			engine.PreferredVideoRenderer = dlg.VideoRenderer;
-			engine.ShowLogo = dlg.ShowLogo;
-			engine.UsePreferredFilters = dlg.UsePreferredFilters;
-			engine.UsePreferredFilters4DVD = dlg.UsePreferredFilters4DVD;
+            htKeys = dlg.KeysTable;
+            wheelAction = dlg.MouseWheelAction;
+            
+            engine.AutoPlay = dlg.AutoPlay;
+            engine.PreferredVideoRenderer = dlg.VideoRenderer;
+            engine.ShowLogo = dlg.ShowLogo;
+            engine.UsePreferredFilters = dlg.UsePreferredFilters;
+            engine.UsePreferredFilters4DVD = dlg.UsePreferredFilters4DVD;
 
-			string[] astrTypes = MediaTypeManager.GetInstance().TypeNames;
-			foreach(string type in astrTypes)
-				MediaTypeManager.GetInstance().SetTypesClsid(type, dlg.GetTypeClsid(type));
-			
-			bRememberVolume = dlg.RememberVolume;
-			bStartFullscreen = dlg.StartFullscreen;
-			bCenterWindow = dlg.CenterWindow;
-			bTopMost = dlg.AlwaysOnTop;
-			if (!bFullscreen)
-				TopMost = bTopMost;
+            string[] astrTypes = MediaTypeManager.GetInstance().TypeNames;
+            foreach(string type in astrTypes)
+                MediaTypeManager.GetInstance().SetTypesClsid(type, dlg.GetTypeClsid(type));
+            
+            bRememberVolume = dlg.RememberVolume;
+            bStartFullscreen = dlg.StartFullscreen;
+            bCenterWindow = dlg.CenterWindow;
+            bTopMost = dlg.AlwaysOnTop;
+            if (!bFullscreen)
+                TopMost = bTopMost;
 
-			nicon.SystemTray = dlg.SystemTray;
-			nicon.ShowTrayAlways = dlg.ShowTrayAlways;
-			if (!dlg.RestartTriggered)
-				HandleSystemTray();
+            nicon.SystemTray = dlg.SystemTray;
+            nicon.ShowTrayAlways = dlg.ShowTrayAlways;
+            if (!dlg.RestartTriggered)
+                HandleSystemTray();
 
-			LoadSaveSettings(false);
-			if (dlg.FileTypesChanged)
-				AssociateFiles(dlg);
-		}
+            LoadSaveSettings(false);
+            if (dlg.FileTypesChanged)
+                AssociateFiles(dlg);
+        }
 
-		void HandleSystemTray()
-		{
-			switch(nicon.SystemTray)
-			{
-				case 0:
-					nicon.Visible = false;
-					break;
-				case 1:
-					if (WindowState != FormWindowState.Minimized)
-						nicon.Visible = nicon.ShowTrayAlways;
-					break;
-				case 2:
-					nicon.Visible = true;
-					ShowInTaskbar = false;
-					break;
-			}
-		}
+        void HandleSystemTray()
+        {
+            switch(nicon.SystemTray)
+            {
+                case 0:
+                    nicon.Visible = false;
+                    break;
+                case 1:
+                    if (WindowState != FormWindowState.Minimized)
+                        nicon.Visible = nicon.ShowTrayAlways;
+                    break;
+                case 2:
+                    nicon.Visible = true;
+                    ShowInTaskbar = false;
+                    break;
+            }
+        }
 
-		void AssociateFiles(SettingsForm dlg)
-		{
+        void AssociateFiles(SettingsForm dlg)
+        {
             using (FileAssociator fa = FileAssociator.GetFileAssociator(strDocTypePrefix, strProgName))
             {
                 Hashtable table = dlg.SelectedFileTypes;
                 foreach (DictionaryEntry entry in table)
                     fa.Associate(entry.Key.ToString(), (bool)entry.Value);
             }
-		}
+        }
 
-		private void engine_InitSize(ref Dzimchuk.Native.GDI.RECT rcSrc)
-		{
-			int size = engine.GetVideoSize();
-			int div = 1;
-			if (size == MediaWindow.SIZE50)
-			{
-				size = MediaWindow.SIZE100;
-				div = 2;
-			}
-			if (WindowState != FormWindowState.Maximized && !bFullscreen 
-				&& size != MediaWindow.SIZE_FREE && rcSrc.bottom != 0 && rcSrc.right != 0)
-			{
-				Rectangle bounds = DesktopBounds;
-				Size client = engine.ClientSize;
-				
-				int hor  = ((int) (rcSrc.right*size/div))-client.Width;
-				int vert = ((int) (rcSrc.bottom*size/div))-client.Height;
+        private void engine_InitSize(ref Dzimchuk.Native.GDI.RECT rcSrc)
+        {
+            int size = engine.GetVideoSize();
+            int div = 1;
+            if (size == MediaWindow.SIZE50)
+            {
+                size = MediaWindow.SIZE100;
+                div = 2;
+            }
+            if (WindowState != FormWindowState.Maximized && !bFullscreen 
+                && size != MediaWindow.SIZE_FREE && rcSrc.bottom != 0 && rcSrc.right != 0)
+            {
+                Rectangle bounds = DesktopBounds;
+                Size client = engine.ClientSize;
+                
+                int hor  = ((int) (rcSrc.right*size/div))-client.Width;
+                int vert = ((int) (rcSrc.bottom*size/div))-client.Height;
 
-				bounds.Width += hor;
-				bounds.Height += vert;
+                bounds.Width += hor;
+                bounds.Height += vert;
 
-				if (bCenterWindow)
-				{
-					Rectangle rect = Screen.FromControl(this).WorkingArea;
-					bounds.X=bounds.Width<rect.Width ? rect.X + (rect.Width-bounds.Width)/2 : rect.X;
-					bounds.Y=bounds.Height<rect.Height ? rect.Y + (rect.Height-bounds.Height)/2 : rect.Y;
-				}
+                if (bCenterWindow)
+                {
+                    Rectangle rect = Screen.FromControl(this).WorkingArea;
+                    bounds.X=bounds.Width<rect.Width ? rect.X + (rect.Width-bounds.Width)/2 : rect.X;
+                    bounds.Y=bounds.Height<rect.Height ? rect.Y + (rect.Height-bounds.Height)/2 : rect.Y;
+                }
 
-				DesktopBounds = bounds;
-			}
-		}
-	}
+                DesktopBounds = bounds;
+            }
+        }
+    }
 }

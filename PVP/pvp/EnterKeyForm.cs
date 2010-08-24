@@ -18,105 +18,105 @@ using System.Windows.Forms;
 
 namespace Dzimchuk.PVP
 {
-	/// <summary>
-	/// Summary description for EnterKeyForm.
-	/// </summary>
-	public class EnterKeyForm : System.Windows.Forms.Form
-	{
-		private System.Windows.Forms.Label label1;
-		private System.Windows.Forms.Label labelKey;
-		private System.Windows.Forms.Button btnOK;
-		/// <summary>
-		/// Required designer variable.
-		/// </summary>
-		private System.ComponentModel.Container components = null;
-		
-		const string ctrl = "Ctrl+";
-		const string shift = "Shift+";
-		const string alt = "Alt+";
-		static System.Text.StringBuilder builder = new System.Text.StringBuilder();
-			
-		Keys keydata;
+    /// <summary>
+    /// Summary description for EnterKeyForm.
+    /// </summary>
+    public class EnterKeyForm : System.Windows.Forms.Form
+    {
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label labelKey;
+        private System.Windows.Forms.Button btnOK;
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.Container components = null;
+        
+        const string ctrl = "Ctrl+";
+        const string shift = "Shift+";
+        const string alt = "Alt+";
+        static System.Text.StringBuilder builder = new System.Text.StringBuilder();
+            
+        Keys keydata;
 
-		public EnterKeyForm()
-		{
-			//
-			// Required for Windows Form Designer support
-			//
-			InitializeComponent();
-		}
+        public EnterKeyForm()
+        {
+            //
+            // Required for Windows Form Designer support
+            //
+            InitializeComponent();
+        }
 
-		public Keys KeyData
-		{
-			get { return keydata; }
-			set
-			{
-				keydata = value;
-				labelKey.Text = GetString(keydata);
-			}
-		}
+        public Keys KeyData
+        {
+            get { return keydata; }
+            set
+            {
+                keydata = value;
+                labelKey.Text = GetString(keydata);
+            }
+        }
 
-		public static string GetString(Keys keydata)
-		{
-			if (keydata == Keys.None)
-				return String.Empty;
-			builder.Remove(0, builder.Length);
-			if ((keydata & Keys.Control) != 0)
-				builder.Append(ctrl);
-			if ((keydata & Keys.Shift) != 0)
-				builder.Append(shift);
-			if ((keydata & Keys.Alt) != 0)
-				builder.Append(alt);
-			Keys code = keydata & Keys.KeyCode;
-			if (code != Keys.ControlKey && code != Keys.ShiftKey && 
-				code != Keys.Menu)
-			{
-				if (code >= Keys.D0 && code <= Keys.D9)
-					builder.Append((code - Keys.D0).ToString());
-				else
-					builder.Append(code.ToString());
-			}
-			else
-				builder.Remove(builder.Length-1, 1);
-			return builder.ToString();
-		}
+        public static string GetString(Keys keydata)
+        {
+            if (keydata == Keys.None)
+                return String.Empty;
+            builder.Remove(0, builder.Length);
+            if ((keydata & Keys.Control) != 0)
+                builder.Append(ctrl);
+            if ((keydata & Keys.Shift) != 0)
+                builder.Append(shift);
+            if ((keydata & Keys.Alt) != 0)
+                builder.Append(alt);
+            Keys code = keydata & Keys.KeyCode;
+            if (code != Keys.ControlKey && code != Keys.ShiftKey && 
+                code != Keys.Menu)
+            {
+                if (code >= Keys.D0 && code <= Keys.D9)
+                    builder.Append((code - Keys.D0).ToString());
+                else
+                    builder.Append(code.ToString());
+            }
+            else
+                builder.Remove(builder.Length-1, 1);
+            return builder.ToString();
+        }
 
-		protected override void OnKeyDown(KeyEventArgs e)
-		{
-			base.OnKeyDown (e);
-			keydata = e.KeyData;
-			labelKey.Text = GetString(keydata);
-			e.Handled = true;
-		}
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            base.OnKeyDown (e);
+            keydata = e.KeyData;
+            labelKey.Text = GetString(keydata);
+            e.Handled = true;
+        }
 
-		protected override void OnActivated(EventArgs e)
-		{
-			base.OnActivated (e);
-			ActiveControl = null;
-		}
+        protected override void OnActivated(EventArgs e)
+        {
+            base.OnActivated (e);
+            ActiveControl = null;
+        }
 
-		/// <summary>
-		/// Clean up any resources being used.
-		/// </summary>
-		protected override void Dispose( bool disposing )
-		{
-			if( disposing )
-			{
-				if(components != null)
-				{
-					components.Dispose();
-				}
-			}
-			base.Dispose( disposing );
-		}
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        protected override void Dispose( bool disposing )
+        {
+            if( disposing )
+            {
+                if(components != null)
+                {
+                    components.Dispose();
+                }
+            }
+            base.Dispose( disposing );
+        }
 
-		#region Windows Form Designer generated code
-		/// <summary>
-		/// Required method for Designer support - do not modify
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent()
-		{
+        #region Windows Form Designer generated code
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EnterKeyForm));
             this.label1 = new System.Windows.Forms.Label();
             this.labelKey = new System.Windows.Forms.Label();
@@ -168,7 +168,7 @@ namespace Dzimchuk.PVP
             this.ShowInTaskbar = false;
             this.ResumeLayout(false);
 
-		}
-		#endregion
-	}
+        }
+        #endregion
+    }
 }

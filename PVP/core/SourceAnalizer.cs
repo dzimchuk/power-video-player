@@ -21,11 +21,11 @@ using Dzimchuk.DirectShow;
 
 namespace Dzimchuk.MediaEngine.Core
 {
-	/// <summary>
-	/// 
-	/// </summary>
-	internal abstract class SourceAnalizer
-	{
+    /// <summary>
+    /// 
+    /// </summary>
+    internal abstract class SourceAnalizer
+    {
         protected class SourceInfo
         {
             public SourceType type = SourceType.Unknown;
@@ -66,8 +66,8 @@ namespace Dzimchuk.MediaEngine.Core
         }
         
         internal SourceAnalizer()
-		{
-		}
+        {
+        }
 
         public static bool SourceFilterDetectionEnabled
         {
@@ -326,7 +326,7 @@ namespace Dzimchuk.MediaEngine.Core
 
         protected abstract int NumberOfBytes { get; }
         protected abstract SourceInfo GetSourceType(byte[] bytes);
-	}
+    }
 
     internal class SourceBasic : SourceAnalizer
     {
