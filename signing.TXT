@@ -1,0 +1,27 @@
+Assembly signing:
+
+Each project includes its own public key named public.snk and is configured for delayed signing using this key.
+Also each project has post-build actions to re-sign build assemblies with their private keys.
+
+Private keys are NOT included in the solution and are kept by Andrei Dzimchuk (that's the point of 'private' keys).
+
+This poses a few implications when you build the source code. Let's consider typical situations.
+
+1. Regular development.
+You may want to completely remove assembly signing. After all, these are just your local builds, why bother?
+However, suppose you updated a component and want to test it against the official build. In this case you can build the component delayed signed using the provided public.snk. 
+Just make sure you disable the CLR checks with (sn -Vr), you can use disable_verification.bat provided in the solution (perhaps some customization will be needed).
+When you're done, re-enable the CLR verification (sn -Vu) and submit your code changes for official build.
+
+2. A derivate case from the previous one: you are developing an independent module that makes use of some of the PVP component and for some reason you don't want to link against a pre-compiled 
+PVP assembly with against the PVP assembly compiled within your solution (because perhaps you made some changes to it). This is an example of an independant extension to PVP or a totally 
+different project that re-uses PVP's components. In all these cases you can delay-sign the PVP assembly with the provided public.snk. You can then submit your updates to PVP components to be 
+included in the official builds.
+
+3. Development with strongly typed assemblies.
+You may want to use your own public and private keypairs. You are free to set up the projects the way like. But be aware that these builds will be your builds, not the official builds.
+Official builds are done centrally and are signed with the PVP private keys.
+
+TODO:
+Apparently the procedure means you can't blindly submit your .csproj files as they should be adjusted for individual needs and will differ from those used to create official builds. 
+This is still something to figure out how to handle.
