@@ -27,12 +27,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_E00527B239E843B4B0B859A032F74D5B"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_DB48FA708CDB4654B378B26D2B8CF494"
         "MsmSig" = "8:_UNDEFINED"
@@ -931,34 +925,6 @@
             "OutputConfiguration" = "8:"
             "OutputGroupCanonicalName" = "8:ContentFiles"
             "OutputProjectGuid" = "8:{96AC1EE2-9A4A-412B-8A61-6C423E03C13E}"
-            "ShowKeyOutput" = "11:TRUE"
-                "ExcludeFilters"
-                {
-                }
-            }
-            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_E00527B239E843B4B0B859A032F74D5B"
-            {
-            "SourcePath" = "8:..\\nwnd\\Debug\\nwnd.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_0C08639D492A421BB5465B9207D81287"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            "ProjectOutputGroupRegister" = "3:1"
-            "OutputConfiguration" = "8:"
-            "OutputGroupCanonicalName" = "8:Built"
-            "OutputProjectGuid" = "8:{DFCA9D22-00F7-4681-8A0F-0489FE5143D5}"
             "ShowKeyOutput" = "11:TRUE"
                 "ExcludeFilters"
                 {
