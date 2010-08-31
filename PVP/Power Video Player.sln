@@ -17,8 +17,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "core", "core\core.csproj", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dshow", "dshow\dshow.csproj", "{977006BC-7D47-449C-9D0B-720A8B680BCD}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "nwnd", "nwnd\nwnd.vcxproj", "{DFCA9D22-00F7-4681-8A0F-0489FE5143D5}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "theme", "theme\theme.csproj", "{003E3233-557D-4170-9BFC-813A7A71DA49}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "pvp", "pvp\pvp.csproj", "{96AC1EE2-9A4A-412B-8A61-6C423E03C13E}"
@@ -27,15 +25,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "napi", "napi\napi.csproj", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdvancedUI", "AdvancedUI\AdvancedUI.csproj", "{8284DFC9-F996-4169-B947-96B36F3B27A1}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "nwnd64", "nwnd64\nwnd64.vcxproj", "{B2715412-5382-4CA1-A64F-A69C419B152A}"
-EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "PVPSetup", "PVPSetup\PVPSetup.vdproj", "{4303CDBC-87FC-411B-BDF3-CA694F88A1D4}"
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 10
+		SccNumberOfProjects = 8
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = https://tfs09.codeplex.com/
+		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs09
 		SccLocalPath0 = .
 		SccProjectUniqueName1 = AdvancedUI\\AdvancedUI.csproj
 		SccProjectName1 = AdvancedUI
@@ -49,21 +45,15 @@ Global
 		SccProjectUniqueName4 = napi\\napi.csproj
 		SccProjectName4 = napi
 		SccLocalPath4 = napi
-		SccProjectUniqueName5 = nwnd64\\nwnd64.vcxproj
-		SccProjectName5 = nwnd64
-		SccLocalPath5 = nwnd64
-		SccProjectUniqueName6 = nwnd\\nwnd.vcxproj
-		SccProjectName6 = nwnd
-		SccLocalPath6 = nwnd
-		SccProjectUniqueName7 = pvp\\pvp.csproj
-		SccProjectName7 = pvp
-		SccLocalPath7 = pvp
-		SccProjectUniqueName8 = PVPSetup\\PVPSetup.vdproj
-		SccProjectName8 = PVPSetup
-		SccLocalPath8 = PVPSetup
-		SccProjectUniqueName9 = theme\\theme.csproj
-		SccProjectName9 = theme
-		SccLocalPath9 = theme
+		SccProjectUniqueName5 = pvp\\pvp.csproj
+		SccProjectName5 = pvp
+		SccLocalPath5 = pvp
+		SccProjectUniqueName6 = PVPSetup\\PVPSetup.vdproj
+		SccProjectName6 = PVPSetup
+		SccLocalPath6 = PVPSetup
+		SccProjectUniqueName7 = theme\\theme.csproj
+		SccProjectName7 = theme
+		SccLocalPath7 = theme
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -104,18 +94,6 @@ Global
 		{977006BC-7D47-449C-9D0B-720A8B680BCD}.Release|Win32.ActiveCfg = Release|Any CPU
 		{977006BC-7D47-449C-9D0B-720A8B680BCD}.Release|x86.ActiveCfg = Release|x86
 		{977006BC-7D47-449C-9D0B-720A8B680BCD}.Release|x86.Build.0 = Release|x86
-		{DFCA9D22-00F7-4681-8A0F-0489FE5143D5}.Debug|Any CPU.ActiveCfg = Debug|Win32
-		{DFCA9D22-00F7-4681-8A0F-0489FE5143D5}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
-		{DFCA9D22-00F7-4681-8A0F-0489FE5143D5}.Debug|Mixed Platforms.Build.0 = Debug|Win32
-		{DFCA9D22-00F7-4681-8A0F-0489FE5143D5}.Debug|Win32.ActiveCfg = Debug|Win32
-		{DFCA9D22-00F7-4681-8A0F-0489FE5143D5}.Debug|Win32.Build.0 = Debug|Win32
-		{DFCA9D22-00F7-4681-8A0F-0489FE5143D5}.Debug|x86.ActiveCfg = Debug|Win32
-		{DFCA9D22-00F7-4681-8A0F-0489FE5143D5}.Release|Any CPU.ActiveCfg = Release|Win32
-		{DFCA9D22-00F7-4681-8A0F-0489FE5143D5}.Release|Mixed Platforms.ActiveCfg = Release|Win32
-		{DFCA9D22-00F7-4681-8A0F-0489FE5143D5}.Release|Mixed Platforms.Build.0 = Release|Win32
-		{DFCA9D22-00F7-4681-8A0F-0489FE5143D5}.Release|Win32.ActiveCfg = Release|Win32
-		{DFCA9D22-00F7-4681-8A0F-0489FE5143D5}.Release|Win32.Build.0 = Release|Win32
-		{DFCA9D22-00F7-4681-8A0F-0489FE5143D5}.Release|x86.ActiveCfg = Release|Win32
 		{003E3233-557D-4170-9BFC-813A7A71DA49}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{003E3233-557D-4170-9BFC-813A7A71DA49}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{003E3233-557D-4170-9BFC-813A7A71DA49}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
@@ -172,17 +150,6 @@ Global
 		{8284DFC9-F996-4169-B947-96B36F3B27A1}.Release|Win32.ActiveCfg = Release|Any CPU
 		{8284DFC9-F996-4169-B947-96B36F3B27A1}.Release|x86.ActiveCfg = Release|x86
 		{8284DFC9-F996-4169-B947-96B36F3B27A1}.Release|x86.Build.0 = Release|x86
-		{B2715412-5382-4CA1-A64F-A69C419B152A}.Debug|Any CPU.ActiveCfg = Debug|Win32
-		{B2715412-5382-4CA1-A64F-A69C419B152A}.Debug|Mixed Platforms.ActiveCfg = Debug|x64
-		{B2715412-5382-4CA1-A64F-A69C419B152A}.Debug|Win32.ActiveCfg = Debug|Win32
-		{B2715412-5382-4CA1-A64F-A69C419B152A}.Debug|Win32.Build.0 = Debug|Win32
-		{B2715412-5382-4CA1-A64F-A69C419B152A}.Debug|x86.ActiveCfg = Debug|x64
-		{B2715412-5382-4CA1-A64F-A69C419B152A}.Release|Any CPU.ActiveCfg = Release|Win32
-		{B2715412-5382-4CA1-A64F-A69C419B152A}.Release|Mixed Platforms.ActiveCfg = Release|x64
-		{B2715412-5382-4CA1-A64F-A69C419B152A}.Release|Mixed Platforms.Build.0 = Release|x64
-		{B2715412-5382-4CA1-A64F-A69C419B152A}.Release|Win32.ActiveCfg = Release|Win32
-		{B2715412-5382-4CA1-A64F-A69C419B152A}.Release|Win32.Build.0 = Release|Win32
-		{B2715412-5382-4CA1-A64F-A69C419B152A}.Release|x86.ActiveCfg = Release|x64
 		{4303CDBC-87FC-411B-BDF3-CA694F88A1D4}.Debug|Any CPU.ActiveCfg = Debug
 		{4303CDBC-87FC-411B-BDF3-CA694F88A1D4}.Debug|Mixed Platforms.ActiveCfg = Debug
 		{4303CDBC-87FC-411B-BDF3-CA694F88A1D4}.Debug|Win32.ActiveCfg = Debug
