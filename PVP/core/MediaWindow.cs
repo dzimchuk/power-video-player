@@ -81,94 +81,24 @@ namespace Dzimchuk.MediaEngine.Core
 
         #region Imported functions from nwnd.dll
 
-        private static class NwndWrapper
-        {
-            [DllImport("nwnd.dll")]
-            public static extern IntPtr CreateMediaWindow(IntPtr hParent, int nWidth, int nHeight);
+        [DllImport("nwnd.dll")]
+        public static extern IntPtr CreateMediaWindow(IntPtr hParent, int nWidth, int nHeight);
 
-            [DllImport("nwnd.dll")]
-            public static extern void SetDestinationRect(ref GDI.RECT lpDest);
+        [DllImport("nwnd.dll")]
+        public static extern void SetDestinationRect(ref GDI.RECT lpDest);
 
-            [DllImport("nwnd.dll")]
-            public static extern void SetRunning([MarshalAs(UnmanagedType.Bool)] bool bRunning,
-                IVMRWindowlessControl pVMR, IVMRWindowlessControl9 pVMR9, IMFVideoDisplayControl pEVR);
+        [DllImport("nwnd.dll")]
+        public static extern void SetRunning([MarshalAs(UnmanagedType.Bool)] bool bRunning,
+            IVMRWindowlessControl pVMR, IVMRWindowlessControl9 pVMR9, IMFVideoDisplayControl pEVR);
 
-            [DllImport("nwnd.dll")]
-            public static extern void SetLogo(IntPtr hLogo);
+        [DllImport("nwnd.dll")]
+        public static extern void SetLogo(IntPtr hLogo);
 
-            [DllImport("nwnd.dll")]
-            public static extern void IsShowLogo([MarshalAs(UnmanagedType.Bool)] bool bShow);
+        [DllImport("nwnd.dll")]
+        public static extern void IsShowLogo([MarshalAs(UnmanagedType.Bool)] bool bShow);
 
-            [DllImport("nwnd.dll")]
-            public static extern void InvalidateMediaWindow();
-        }
-
-        private static class Nwnd64Wrapper
-        {
-            [DllImport("nwnd64.dll")]
-            public static extern IntPtr CreateMediaWindow(IntPtr hParent, int nWidth, int nHeight);
-
-            [DllImport("nwnd64.dll")]
-            public static extern void SetDestinationRect(ref GDI.RECT lpDest);
-
-            [DllImport("nwnd64.dll")]
-            public static extern void SetRunning([MarshalAs(UnmanagedType.Bool)] bool bRunning,
-                IVMRWindowlessControl pVMR, IVMRWindowlessControl9 pVMR9, IMFVideoDisplayControl pEVR);
-
-            [DllImport("nwnd64.dll")]
-            public static extern void SetLogo(IntPtr hLogo);
-
-            [DllImport("nwnd64.dll")]
-            public static extern void IsShowLogo([MarshalAs(UnmanagedType.Bool)] bool bShow);
-
-            [DllImport("nwnd64.dll")]
-            public static extern void InvalidateMediaWindow();
-        }
-
-        private static IntPtr CreateMediaWindow(IntPtr hParent, int nWidth, int nHeight)
-        {
-            return IntPtr.Size == 8 ? Nwnd64Wrapper.CreateMediaWindow(hParent, nWidth, nHeight) : NwndWrapper.CreateMediaWindow(hParent, nWidth, nHeight);
-        }
-
-        private static void SetDestinationRect(ref GDI.RECT lpDest)
-        {
-            if (IntPtr.Size == 8)
-                Nwnd64Wrapper.SetDestinationRect(ref lpDest);
-            else 
-                NwndWrapper.SetDestinationRect(ref lpDest);
-        }
-
-        private static void SetRunning(bool bRunning, IVMRWindowlessControl pVMR, IVMRWindowlessControl9 pVMR9, IMFVideoDisplayControl pEVR)
-        {
-            if (IntPtr.Size == 8)
-                Nwnd64Wrapper.SetRunning(bRunning, pVMR, pVMR9, pEVR);
-            else
-                NwndWrapper.SetRunning(bRunning, pVMR, pVMR9, pEVR);
-        }
-
-        private static void SetLogo(IntPtr hLogo)
-        {
-            if (IntPtr.Size == 8)
-                Nwnd64Wrapper.SetLogo(hLogo);
-            else
-                NwndWrapper.SetLogo(hLogo);
-        }
-
-        private static void IsShowLogo(bool bShow)
-        {
-            if (IntPtr.Size == 8)
-                Nwnd64Wrapper.IsShowLogo(bShow);
-            else
-                NwndWrapper.IsShowLogo(bShow);
-        }
-
-        private static void InvalidateMediaWindow()
-        {
-            if (IntPtr.Size == 8)
-                Nwnd64Wrapper.InvalidateMediaWindow();
-            else
-                NwndWrapper.InvalidateMediaWindow();
-        }
+        [DllImport("nwnd.dll")]
+        public static extern void InvalidateMediaWindow();
 
         #endregion
 
