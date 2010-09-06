@@ -74,15 +74,15 @@ namespace Dzimchuk.PVP
             
             CreateControlsMenu();
             NormalizeShortcuts();
+
+            mediaWindowHost.MW_DoubleClick += new EventHandler(OnFullscreen);
+            mediaWindowHost.MW_ContextMenu += new ContextMenuHandler(OnContextMenu);
+            mediaWindowHost.MW_Click += new EventHandler(engine_MW_Click);
+            engine.Update += new EventHandler(engine_Update);
+            engine.ModifyMenu += new EventHandler(engine_ModifyMenu);
             
-            engine.MW_DoubleClick += new EventHandler(OnFullscreen);
-            engine.MW_ContextMenu += new ContextMenuHandler(OnContextMenu);
-            engine.MW_Click += new EventHandler(engine_MW_Click);
-            engine.MW_Update += new EventHandler(engine_MW_Update);
-            engine.MW_ModifyMenu += new EventHandler(engine_MW_ModifyMenu);
-            
-            engine.MW_MouseMove += new EventHandler(engine_MW_MouseMove);
-            engine.MW_MouseLeave += new EventHandler(engine_MW_MouseLeave);
+            mediaWindowHost.MW_MouseMove += new EventHandler(engine_MW_MouseMove);
+            mediaWindowHost.MW_MouseLeave += new EventHandler(engine_MW_MouseLeave);
                         
             nicon.BeforeShowMenu += new EventHandler(OnBeforeShowMenu);
             nicon.AfterShowMenu += new EventHandler(OnAfterShowMenu);
@@ -157,7 +157,7 @@ namespace Dzimchuk.PVP
             miVolumeMute.Text = Resources.Resources.mi_volume_mute;
 
             // recreate dynamic menus
-            engine_MW_ModifyMenu(this, EventArgs.Empty);
+            engine_ModifyMenu(this, EventArgs.Empty);
         }
 
         #region CreateControlsMenu
@@ -318,7 +318,7 @@ namespace Dzimchuk.PVP
             controlbar.dclock.ResetDClock();
             controlbar.seekbar.Enabled = false;
 
-            if (engine.BuildGraph(source, CurrentlyPlaying))
+            if (mediaWindowHost.BuildGraph(source, CurrentlyPlaying))
             {
                 int volume;
                 if (engine.GetVolume(out volume))
@@ -329,7 +329,7 @@ namespace Dzimchuk.PVP
                 bNeedUpdate = true;
             }
 
-            engine_MW_ModifyMenu(engine, EventArgs.Empty); 
+            engine_ModifyMenu(engine, EventArgs.Empty); 
             UpdateButtons();
         }
 
@@ -364,7 +364,7 @@ namespace Dzimchuk.PVP
             bCanChangeVolume = false;
             controlbar.dclock.ResetDClock();
 
-            engine_MW_ModifyMenu(engine, EventArgs.Empty);
+            engine_ModifyMenu(engine, EventArgs.Empty);
             UpdateButtons();
         }
         
@@ -381,7 +381,7 @@ namespace Dzimchuk.PVP
             miFullscreen.Checked = bFullscreen;
 
             if (miCloseMenu != null && contextMenu.MenuItems.Contains(miCloseMenu))
-                miCloseMenu.Enabled = engine.EnableResumeDVD();
+                miCloseMenu.Enabled = engine.IsResumeDVDEnabled();
         }
 
         private void OnPlay(object sender, EventArgs e)
@@ -467,7 +467,7 @@ namespace Dzimchuk.PVP
         {
             long duration=engine.GetDuration();
             double currentTime=controlbar.seekbar.CurrentPostion;
-            long time=(long) currentTime*MediaWindow.ONE_SECOND;
+            long time=(long) currentTime*CoreDefinitions.ONE_SECOND;
             engine.SetCurrentPosition(time);
         }
 
@@ -521,8 +521,8 @@ namespace Dzimchuk.PVP
             if (engine.IsGraphSeekable)
             {
                 long time=engine.GetCurrentPosition();
-                if (time>5*MediaWindow.ONE_SECOND)
-                    time-=5*MediaWindow.ONE_SECOND;
+                if (time > 5 * CoreDefinitions.ONE_SECOND)
+                    time -= 5 * CoreDefinitions.ONE_SECOND;
                 else
                     time=0;
                 engine.SetCurrentPosition(time);
@@ -535,8 +535,8 @@ namespace Dzimchuk.PVP
             {
                 long time=engine.GetCurrentPosition();
                 long duration=engine.GetDuration();
-                if (duration-time>5*MediaWindow.ONE_SECOND)
-                    time+=5*MediaWindow.ONE_SECOND;
+                if (duration - time > 5 * CoreDefinitions.ONE_SECOND)
+                    time += 5 * CoreDefinitions.ONE_SECOND;
                 else
                     time=duration;
                 engine.SetCurrentPosition(time);
@@ -571,14 +571,14 @@ namespace Dzimchuk.PVP
                     long h, _h;
                     long remain;
 
-                    _second = time/MediaWindow.ONE_SECOND;
+                    _second = time / CoreDefinitions.ONE_SECOND;
                     dCurrentTime = (double) _second;
                     remain = _second%3600;
                     _h=_second/3600;
                     _minute=remain/60;
                     _second = remain%60;
-                    
-                    second = duration/MediaWindow.ONE_SECOND;
+
+                    second = duration / CoreDefinitions.ONE_SECOND;
                     dDuration = (double) second;
                     remain = second%3600;
                     h=second/3600;
@@ -656,35 +656,35 @@ namespace Dzimchuk.PVP
         private void OnVideoSizePopup(object sender, EventArgs e)
         {
             MenuItemEx popup = (MenuItemEx)sender;
-            int size = engine.GetVideoSize();
-            popup.MenuItems[0].Checked = size == MediaWindow.SIZE50;
-            popup.MenuItems[1].Checked = size == MediaWindow.SIZE100;
-            popup.MenuItems[2].Checked = size == MediaWindow.SIZE200;
-            popup.MenuItems[4].Checked = size == MediaWindow.SIZE_FREE;
+            VideoSize size = engine.GetVideoSize();
+            popup.MenuItems[0].Checked = size == VideoSize.SIZE50;
+            popup.MenuItems[1].Checked = size == VideoSize.SIZE100;
+            popup.MenuItems[2].Checked = size == VideoSize.SIZE200;
+            popup.MenuItems[4].Checked = size == VideoSize.SIZE_FREE;
         }
 
         private void OnVideoSize50(object sender, EventArgs e)
         {
             nicon.Restore();
-            engine.SetVideoSize(MediaWindow.SIZE50);
+            engine.SetVideoSize(VideoSize.SIZE50);
         }
 
         private void OnVideoSize100(object sender, EventArgs e)
         {
             nicon.Restore();
-            engine.SetVideoSize(MediaWindow.SIZE100);
+            engine.SetVideoSize(VideoSize.SIZE100);
         }
 
         private void OnVideoSize200(object sender, EventArgs e)
         {
             nicon.Restore();
-            engine.SetVideoSize(MediaWindow.SIZE200);
+            engine.SetVideoSize(VideoSize.SIZE200);
         }
 
         private void OnVideoSizeFree(object sender, EventArgs e)
         {
             nicon.Restore();
-            engine.SetVideoSize(MediaWindow.SIZE_FREE);
+            engine.SetVideoSize(VideoSize.SIZE_FREE);
         }
 
         private void OnAspectRatioPopup(object sender, EventArgs e)
@@ -745,12 +745,12 @@ namespace Dzimchuk.PVP
             bContextMenu = false;
             if (bModifyMenuPending)
             {
-                engine_MW_ModifyMenu(engine, EventArgs.Empty);
+                engine_ModifyMenu(engine, EventArgs.Empty);
                 bModifyMenuPending = false;
             }
         }
 
-        private void engine_MW_Update(object sender, EventArgs e)
+        private void engine_Update(object sender, EventArgs e)
         {
             UpdateButtons();
         }
@@ -842,7 +842,7 @@ namespace Dzimchuk.PVP
             engine.CurrentAudioStream = (int)((MenuItemEx)sender).Tag;
         }
 
-        private void engine_MW_ModifyMenu(object sender, EventArgs e)
+        private void engine_ModifyMenu(object sender, EventArgs e)
         {
             if (bContextMenu)
             {

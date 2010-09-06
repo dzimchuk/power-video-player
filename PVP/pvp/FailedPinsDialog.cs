@@ -19,6 +19,7 @@ using System.Text;
 using System.Windows.Forms;
 using Dzimchuk.MediaEngine.Core;
 using Dzimchuk.DirectShow;
+using Dzimchuk.MediaEngine.Core.Description;
 
 namespace Dzimchuk.PVP
 {
@@ -58,7 +59,7 @@ namespace Dzimchuk.PVP
                 
                 if ((pStreamInfo.Flags & StreamInfoFlags.SI_FRAMERATE)!=0) 
                 {
-                    double d = MediaWindow.ONE_SECOND;
+                    double d = CoreDefinitions.ONE_SECOND;
                     double dTimePerFrame=(double) pStreamInfo.AvgTimePerFrame;
                     d /=dTimePerFrame;
                     InsertListItem(Resources.Resources.infodialog_Frame_Rate, 

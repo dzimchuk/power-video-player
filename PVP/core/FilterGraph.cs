@@ -14,55 +14,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using Dzimchuk.Native;
 using Dzimchuk.DirectShow;
 using Dzimchuk.MediaEngine.Core.Render;
+using Dzimchuk.Native;
+using Dzimchuk.MediaEngine.Core.Description;
 
 namespace Dzimchuk.MediaEngine.Core
 {
-    public enum Renderer
-    {
-        VR,
-        VMR_Windowless,
-        VMR_Windowed,
-        VMR9_Windowless,
-        VMR9_Windowed,
-        EVR
-    }
-
-    public enum WhatToPlay
-    {
-        PLAYING_FILE,
-        PLAYING_DVD
-    }
-
-    public enum GraphState
-    {
-        Running,
-        Paused,
-        Stopped,
-        Reset
-    }
-
-    public enum SourceType
-    {
-        Unknown,
-        Basic,		// avi, mpeg...
-        Asf,		// asf, wmv, wma
-        DVD,		// DVD disc
-        Mkv,        // matroska
-        Flv
-    }
-
-    public enum AspectRatio
-    {
-        AR_ORIGINAL,
-        AR_16x9,
-        AR_4x3,
-        AR_47x20,
-        AR_FREE
-    }
-
     internal enum Error
     {
         Unknown,

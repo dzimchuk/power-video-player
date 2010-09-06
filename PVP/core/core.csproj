@@ -129,12 +129,6 @@
     <Reference Include="System.Data">
       <Name>System.Data</Name>
     </Reference>
-    <Reference Include="System.Drawing">
-      <Name>System.Drawing</Name>
-    </Reference>
-    <Reference Include="System.Windows.Forms">
-      <Name>System.Windows.Forms</Name>
-    </Reference>
     <Reference Include="System.Xml">
       <Name>System.XML</Name>
     </Reference>
@@ -153,27 +147,32 @@
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DVDFilterGraphBuilder.cs">
+    <Compile Include="CoreDefinitions.cs" />
+    <Compile Include="CoreEnums.cs" />
+    <Compile Include="CoreEventArgs.cs" />
+    <Compile Include="GraphBuilders\DVDFilterGraphBuilder.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="FilterGraph.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="FilterGraphBuilder.cs">
+    <Compile Include="GraphBuilders\FilterGraphBuilder.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MediaInfo.cs">
+    <Compile Include="IMediaEngine.cs" />
+    <Compile Include="Description\MediaInfo.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="MediaEngine.cs" />
+    <Compile Include="MediaEngineServiceProvider.cs" />
     <Compile Include="MediaTypeManager.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MediaWindow.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="RegularFilterGraphBuilder.cs">
+    <Compile Include="DefaultMediaWindow.cs" />
+    <Compile Include="GraphBuilders\RegularFilterGraphBuilder.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="IMediaWindow.cs" />
     <Compile Include="Render\EVR.cs" />
     <Compile Include="Render\IRenderer.cs" />
     <Compile Include="Render\RendererBase.cs" />
@@ -188,16 +187,13 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="SourceAnalizer.cs">
+    <Compile Include="GraphBuilders\SourceAnalizer.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="StreamInfo.cs">
+    <Compile Include="Description\StreamInfo.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Trace.cs" />
-    <EmbeddedResource Include="MediaWindow.resx">
-      <DependentUpon>MediaWindow.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Resources\Resources.resx">
       <SubType>Designer</SubType>
       <Generator>ResXFileCodeGenerator</Generator>

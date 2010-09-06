@@ -13,12 +13,11 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using System.Windows.Forms;
 using Dzimchuk.DirectShow;
-using Dzimchuk.Native;
 using Dzimchuk.MediaEngine.Core.Render;
+using Dzimchuk.MediaEngine.Core.Description;
 
-namespace Dzimchuk.MediaEngine.Core
+namespace Dzimchuk.MediaEngine.Core.GraphBuilders
 {
     /// <summary>
     /// 
@@ -223,17 +222,22 @@ namespace Dzimchuk.MediaEngine.Core
             {
                 hr = pFilterGraph.pGraphBuilder.Connect(pFilterGraph.pSourceOutPin, pVideoRendererInputPin);
                 Marshal.ReleaseComObject(pVideoRendererInputPin);
+                                
+                // that's it, if hr > 0 (partial success) the video stream is already rendered but there are unrendered (audio) streams
+                
                 if (DsHlp.FAILED(hr))
                 {
-                    hr = FallbackRender(pFilterGraph, pFilterGraph.pSourceOutPin, hMediaWindow);
-                    ThrowExceptionForHR(pFilterGraph, hr, Error.CantRenderFile);
-                    // we need to render audio streams ourselves
+                    // if Connect failed (hr < 0) we either can't render video (no decoder) or there is no video (audio file) 
+                    
+                    // we will try to find the splitter and render audio streams
+                    // first let's try to add a splitter
+                    hr = pFilterGraph.pGraphBuilder.Render(pFilterGraph.pSourceOutPin);
+                    // RenderAudioStreams, FindSplitter and StripSplitter will take care about the rest
                 }
-                
-                // that's it, if there are audio streams hr will be more than 0 (partial success) but the video stream is already rendered
             }
             else
             {
+                // we shouldn't ever enter this path
                 hr = FallbackRender(pFilterGraph, pFilterGraph.pSourceOutPin, hMediaWindow);
                 ThrowExceptionForHR(pFilterGraph, hr, Error.CantRenderFile);
             }
@@ -469,6 +473,7 @@ namespace Dzimchuk.MediaEngine.Core
 
         // this function should be called AFTER the video stream has been rendered
         // but before rendering the audio streams
+        // however, it will try to find the splitter even if video wasn't rendered
         private bool FindSplitter(FilterGraph pGraph)
         {
             if (pGraph.pSplitterFilter != null)

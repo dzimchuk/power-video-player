@@ -18,6 +18,7 @@ using System.Windows.Forms;
 using Dzimchuk.MediaEngine.Core;
 using Dzimchuk.DirectShow;
 using Dzimchuk.PVP.Resources;
+using Dzimchuk.MediaEngine.Core.Description;
 
 namespace Dzimchuk.PVP
 {
@@ -43,7 +44,7 @@ namespace Dzimchuk.PVP
             InitializeComponent();
         }
 
-        public InfoDialog(MediaWindow engine) : this()
+        public InfoDialog(IMediaEngine engine) : this()
         {
             MediaInfo info = engine.MediaInfo;
             if (info != null)
@@ -61,8 +62,8 @@ namespace Dzimchuk.PVP
                         long minute;
                         long h;
                         long remain;
-        
-                        second = duration/MediaWindow.ONE_SECOND;
+
+                        second = duration / CoreDefinitions.ONE_SECOND;
                         remain = second%3600;
                         h=second/3600;
                         minute=remain/60;
@@ -109,7 +110,7 @@ namespace Dzimchuk.PVP
                                 long h;
                                 long remain;
                                         
-                                second = duration/MediaWindow.ONE_SECOND;
+                                second = duration / CoreDefinitions.ONE_SECOND;
                                 remain = second%3600;
                                 h=second/3600;
                                 minute=remain/60;
@@ -151,7 +152,7 @@ namespace Dzimchuk.PVP
                     
                     if ((pStreamInfo.Flags & StreamInfoFlags.SI_FRAMERATE)!=0) 
                     {
-                        d=MediaWindow.ONE_SECOND;
+                        d=CoreDefinitions.ONE_SECOND;
                         double dTimePerFrame=(double) pStreamInfo.AvgTimePerFrame;
                         d /=dTimePerFrame;
                         InsertListItem(Resources.Resources.infodialog_Frame_Rate, 

@@ -330,4 +330,13 @@
   <data name="error_cant_configure_evr" xml:space="preserve">
     <value>Could not configure the Enhanced Video Renderer.</value>
   </data>
+  <data name="error_no_hwnd" xml:space="preserve">
+    <value>Invalid HWND provided.</value>
+  </data>
+  <data name="error_cant_create_media_window" xml:space="preserve">
+    <value>Can't create media window.</value>
+  </data>
+  <data name="accept_parental_level_format" xml:space="preserve">
+    <value>Accept Parental Level Change Request to level {0}?</value>
+  </data>
 </root>

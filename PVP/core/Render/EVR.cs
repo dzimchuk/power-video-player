@@ -11,10 +11,9 @@
  * ***************************************************************************/
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Runtime.InteropServices;
 using Dzimchuk.DirectShow;
+using Dzimchuk.MediaEngine.Core.GraphBuilders;
 using Dzimchuk.Native;
 
 namespace Dzimchuk.MediaEngine.Core.Render

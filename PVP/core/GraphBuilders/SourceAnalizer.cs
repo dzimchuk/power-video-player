@@ -11,15 +11,13 @@
  * ***************************************************************************/
 
 using System;
-using System.IO;
-using System.Windows.Forms;
-using System.Runtime.InteropServices;
-using System.Text;
 using System.Collections.Generic;
-using Microsoft.Win32;
+using System.IO;
+using System.Text;
 using Dzimchuk.DirectShow;
+using Microsoft.Win32;
 
-namespace Dzimchuk.MediaEngine.Core
+namespace Dzimchuk.MediaEngine.Core.GraphBuilders
 {
     /// <summary>
     /// 

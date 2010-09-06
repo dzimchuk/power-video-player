@@ -29,9 +29,11 @@ Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "PVPSetup", "PVPSetup\PVPSet
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "nwnd", "nwnd\nwnd.vcxproj", "{69C37372-AFE3-4883-BD3C-06B88F053153}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "core.adapter", "core.adapter\core.adapter.csproj", "{D8BCB746-D8ED-4B1A-87F5-A50FECCF772F}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 9
+		SccNumberOfProjects = 10
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs09
 		SccLocalPath0 = .
@@ -59,6 +61,9 @@ Global
 		SccProjectUniqueName8 = nwnd\\nwnd.vcxproj
 		SccProjectName8 = nwnd
 		SccLocalPath8 = nwnd
+		SccProjectUniqueName9 = core.adapter\\core.adapter.csproj
+		SccProjectName9 = core.adapter
+		SccLocalPath9 = core.adapter
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -175,6 +180,18 @@ Global
 		{69C37372-AFE3-4883-BD3C-06B88F053153}.Release|Win32.ActiveCfg = Release|Win32
 		{69C37372-AFE3-4883-BD3C-06B88F053153}.Release|Win32.Build.0 = Release|Win32
 		{69C37372-AFE3-4883-BD3C-06B88F053153}.Release|x86.ActiveCfg = Release|Win32
+		{D8BCB746-D8ED-4B1A-87F5-A50FECCF772F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D8BCB746-D8ED-4B1A-87F5-A50FECCF772F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D8BCB746-D8ED-4B1A-87F5-A50FECCF772F}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{D8BCB746-D8ED-4B1A-87F5-A50FECCF772F}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{D8BCB746-D8ED-4B1A-87F5-A50FECCF772F}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{D8BCB746-D8ED-4B1A-87F5-A50FECCF772F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D8BCB746-D8ED-4B1A-87F5-A50FECCF772F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D8BCB746-D8ED-4B1A-87F5-A50FECCF772F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D8BCB746-D8ED-4B1A-87F5-A50FECCF772F}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{D8BCB746-D8ED-4B1A-87F5-A50FECCF772F}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{D8BCB746-D8ED-4B1A-87F5-A50FECCF772F}.Release|Win32.ActiveCfg = Release|Any CPU
+		{D8BCB746-D8ED-4B1A-87F5-A50FECCF772F}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -21,9 +21,8 @@
 HINSTANCE g_hinstThisDll = NULL;        // Our DLL's module handle
 HWND g_hWnd = NULL;
 HWND g_hParent = NULL;
-TCHAR szWindowClass[] = _T("MediaWindow");
+TCHAR szWindowClass[] = _T("PVP Media Window");
 
-RECT rcDest;
 BOOL bRunning = FALSE;
 BOOL bShowLogo = FALSE;
 HBITMAP hLogo = NULL;
@@ -78,19 +77,6 @@ extern "C" __declspec(dllexport) HWND __stdcall CreateMediaWindow(HWND hParent, 
     g_hWnd = CreateWindow(szWindowClass, NULL, WS_VISIBLE | WS_CHILD | WS_CLIPSIBLINGS, 
                     0, 0, nWidth, nHeight, hParent, (HMENU)0x16161616, g_hinstThisDll, NULL);
     return g_hWnd;
-}
-
-extern "C" __declspec(dllexport) void __stdcall SetDestinationRect(LPRECT lpDest)
-{
-    rcDest.left = lpDest->left;
-    rcDest.top = lpDest->top;
-    rcDest.right = lpDest->right;
-    rcDest.bottom = lpDest->bottom;
-
-    if (bRunning && pMFVideoDisplayControl != NULL) // set window size to be the same as video size (EVR issue)
-    {
-        MoveWindow(g_hWnd, rcDest.left, rcDest.top, rcDest.right - rcDest.left, rcDest.bottom - rcDest.top, TRUE);
-    }
 }
 
 extern "C" __declspec(dllexport) void __stdcall SetRunning(BOOL running, 
@@ -163,30 +149,12 @@ void OnPaint(HDC hDC)
     
     if (bRunning) 
     {
-        if (pMFVideoDisplayControl != NULL) // EVR should occupy the whole window to prevent issues around the video frame so there is no need to worry about surrounding area
-        {
+        if (pMFVideoDisplayControl != NULL)
             pMFVideoDisplayControl->RepaintVideo();
-        }
-        else
-        {
-            HRGN rgnClient = CreateRectRgnIndirect(&rcClient); 
-            HRGN rgnVideo  = CreateRectRgnIndirect(&rcDest);  
-            CombineRgn(rgnClient, rgnClient, rgnVideo, RGN_DIFF);  
-            
-            // Paint on window.
-            HBRUSH hbr = CreateSolidBrush(RGB(0,0,0)); 
-            FillRgn(hDC, rgnClient, hbr); 
-
-            // Clean up.
-            DeleteObject(hbr); 
-            DeleteObject(rgnClient); 
-            DeleteObject(rgnVideo); 
-            
-            if (pVMRWindowlessControl != NULL)
-                pVMRWindowlessControl->RepaintVideo(g_hWnd, hDC);
-            else if (pVMRWindowlessControl9 != NULL)
-                pVMRWindowlessControl9->RepaintVideo(g_hWnd, hDC);
-        }
+        else if (pVMRWindowlessControl != NULL)
+            pVMRWindowlessControl->RepaintVideo(g_hWnd, hDC);
+        else if (pVMRWindowlessControl9 != NULL)
+            pVMRWindowlessControl9->RepaintVideo(g_hWnd, hDC);
     }
     else if (bShowLogo && hLogo != NULL)
     {

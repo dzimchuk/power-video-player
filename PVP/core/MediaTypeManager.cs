@@ -17,6 +17,7 @@ using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
 using System.IO;
 using Dzimchuk.DirectShow;
+using System.Collections.ObjectModel;
 
 namespace Dzimchuk.MediaEngine.Core
 {
@@ -392,7 +393,10 @@ namespace Dzimchuk.MediaEngine.Core
             return null;
         }
 
-        public IList<Renderer> GetPresentVideoRenderers()
+        /// <summary>
+        /// Get a read-only list of all renderers that are supported on the current system.
+        /// </summary>
+        public ReadOnlyCollection<Renderer> GetPresentVideoRenderers()
         {
             IList<Renderer> renderers = new List<Renderer>();
             if (pMapper != null)
@@ -449,7 +453,7 @@ namespace Dzimchuk.MediaEngine.Core
                 }
                 
             }
-            return renderers;
+            return new ReadOnlyCollection<Renderer>(renderers);
         }
     }
 }

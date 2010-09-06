@@ -21,10 +21,10 @@ namespace Dzimchuk.Native
 	public class NoCat
 	{
 		#region Funtions
-		[DllImport("kernel32.dll", CharSet=CharSet.Auto)]
+		[DllImport("kernel32.dll", CharSet = CharSet.Unicode)]
 		public static extern int SetErrorMode(int uMode);
 
-		[DllImport("user32.dll", CharSet=CharSet.Auto)]
+		[DllImport("user32.dll", CharSet = CharSet.Unicode)]
 		public static extern int SystemParametersInfo(int uiAction, int uiParam, 
 			IntPtr pvParam,	int fWinIni);
 

@@ -18,6 +18,8 @@ using System.IO;
 using Dzimchuk.MediaEngine.Core;
 using Dzimchuk.Native;
 using Dzimchuk.AUI;
+using Dzimchuk.MediaEngine.Core.GraphBuilders;
+using Dzimchuk.MediaEngine.Core.Description;
 
 namespace Dzimchuk.PVP
 {
@@ -218,11 +220,14 @@ namespace Dzimchuk.PVP
 
         private void engine_FailedStreamsAvailable(IList<StreamInfo> streams)
         {
-            FailedPinsDialog dlg = new FailedPinsDialog(streams);
-            dlg.TopMost = TopMost;
-            if (!Visible)
-                dlg.StartPosition = FormStartPosition.CenterScreen;
-            ShowMyDialog(dlg);
+            Invoke(new MethodInvoker(delegate()
+            {
+                FailedPinsDialog dlg = new FailedPinsDialog(streams);
+                dlg.TopMost = TopMost;
+                if (!Visible)
+                    dlg.StartPosition = FormStartPosition.CenterScreen;
+                ShowMyDialog(dlg);
+            }));
         }
     }
 }

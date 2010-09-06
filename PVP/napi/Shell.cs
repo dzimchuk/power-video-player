@@ -48,7 +48,7 @@ namespace Dzimchuk.Native
         public static readonly Guid CLSID_ApplicationAssociationRegistrationUI = new Guid("1968106d-f3b5-44cf-890e-116fcb9ecef1");
             
         #region Structures
-        [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Auto)] 
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)] 
         public struct NotifyIconData
         {
             public int cbSize; // DWORD
@@ -71,10 +71,10 @@ namespace Dzimchuk.Native
         #endregion
 
         #region Funtions
-        [DllImport("shell32.dll", CharSet=CharSet.Auto)]
+        [DllImport("shell32.dll", CharSet = CharSet.Unicode)]
         public static extern int Shell_NotifyIcon(NotifyCommand cmd, ref NotifyIconData data);
 
-        [DllImport("shell32.dll", CharSet=CharSet.Auto)]
+        [DllImport("shell32.dll", CharSet = CharSet.Unicode)]
         public static extern void SHChangeNotify(int wEventId, int uFlags,	IntPtr dwItem1,	IntPtr dwItem2);
 
         #endregion

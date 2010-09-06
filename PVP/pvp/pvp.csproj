@@ -147,6 +147,10 @@
       <Project>{8284DFC9-F996-4169-B947-96B36F3B27A1}</Project>
       <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
     </ProjectReference>
+    <ProjectReference Include="..\core.adapter\core.adapter.csproj">
+      <Project>{D8BCB746-D8ED-4B1A-87F5-A50FECCF772F}</Project>
+      <Name>core.adapter</Name>
+    </ProjectReference>
     <ProjectReference Include="..\core\core.csproj">
       <Name>core</Name>
       <Project>{5B384C70-6B50-440A-9008-AC90DBE3ED6B}</Project>
