@@ -1128,7 +1128,7 @@ namespace Dzimchuk.PVP
 
         private void btnRecommendedRenderer_Click(object sender, EventArgs e)
         {
-            switch (MediaWindow.RecommendedRenderer)
+            switch (MediaEngineServiceProvider.RecommendedRenderer)
             {
                 case Renderer.EVR:
                     radioEVR.Checked = true;
@@ -1144,7 +1144,7 @@ namespace Dzimchuk.PVP
 
         private void SetRenderers()
         {
-            IList<Renderer> renderers = MediaWindow.PresentRenderers;
+            IList<Renderer> renderers = MediaEngineServiceProvider.PresentRenderers;
             radioEVR.Enabled = renderers.Contains(Renderer.EVR);
             radioVMR.Enabled = renderers.Contains(Renderer.VMR_Windowed);
             radioVMR9.Enabled = renderers.Contains(Renderer.VMR9_Windowed);

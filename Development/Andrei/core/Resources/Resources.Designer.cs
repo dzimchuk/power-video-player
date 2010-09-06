@@ -61,6 +61,15 @@ namespace Dzimchuk.MediaEngine.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Accept Parental Level Change Request to level {0}?.
+        /// </summary>
+        internal static string accept_parental_level_format {
+            get {
+                return ResourceManager.GetString("accept_parental_level_format", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to audio stream.
         /// </summary>
         internal static string dvd_audio_stream {
@@ -286,6 +295,15 @@ namespace Dzimchuk.MediaEngine.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Can&apos;t create media window..
+        /// </summary>
+        internal static string error_cant_create_media_window {
+            get {
+                return ResourceManager.GetString("error_cant_create_media_window", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Could not create an instance of the Video Renderer filter..
         /// </summary>
         internal static string error_cant_create_vr {
@@ -336,6 +354,15 @@ namespace Dzimchuk.MediaEngine.Core.Resources {
         internal static string error_cant_retrieve_all_interfaces {
             get {
                 return ResourceManager.GetString("error_cant_retrieve_all_interfaces", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid HWND provided..
+        /// </summary>
+        internal static string error_no_hwnd {
+            get {
+                return ResourceManager.GetString("error_no_hwnd", resourceCulture);
             }
         }
         

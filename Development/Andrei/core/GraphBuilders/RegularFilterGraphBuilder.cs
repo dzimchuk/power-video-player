@@ -13,12 +13,11 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using System.Windows.Forms;
 using Dzimchuk.DirectShow;
-using Dzimchuk.Native;
 using Dzimchuk.MediaEngine.Core.Render;
+using Dzimchuk.MediaEngine.Core.Description;
 
-namespace Dzimchuk.MediaEngine.Core
+namespace Dzimchuk.MediaEngine.Core.GraphBuilders
 {
     /// <summary>
     /// 

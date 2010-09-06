@@ -13,12 +13,13 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using System.Windows.Forms;
 using Dzimchuk.DirectShow;
-using Dzimchuk.Native;
+using Dzimchuk.MediaEngine.Core.Description;
 
-namespace Dzimchuk.MediaEngine.Core
+namespace Dzimchuk.MediaEngine.Core.GraphBuilders
 {
+    internal delegate TResult Func<T, TResult>(T args); // supported since .NET 3.5
+    
     public delegate void FailedStreamsHandler(IList<StreamInfo> streams);
     
     internal class AbortException : ApplicationException
@@ -58,21 +59,22 @@ namespace Dzimchuk.MediaEngine.Core
         
         protected struct FilterGraphBuilderParameters
         {
-            public FilterGraph pFilterGraph;           // regular and dvd
-            public string source;                      // regular
-            public IntPtr hMediaWindow;                // regular and dvd
-            public Renderer PreferredVideoRenderer;    // regular
+            public FilterGraph pFilterGraph;                // regular and dvd
+            public string source;                           // regular
+            public IntPtr hMediaWindow;                     // regular and dvd
+            public Renderer PreferredVideoRenderer;         // regular
             
-            public string DiscPath;                    // dvd
-            public AM_DVD_GRAPH_FLAGS dwFlags;         // dvd
-            public string caption;                     // dvd
+            public string DiscPath;                         // dvd
+            public AM_DVD_GRAPH_FLAGS dwFlags;              // dvd
+            public Func<string, bool> OnPartialSuccessCallback; // dvd
         }
         
         public static FilterGraph BuildFilterGraph(string source,
                                                    WhatToPlay CurrentlyPlaying,
                                                    IntPtr hMediaWindow,
                                                    Renderer PreferredVideoRenderer,
-                                                   string caption)
+                                                   Action<string> onErrorCallback,
+                                                   Func<string, bool> onPartialSuccessCallback)
         {
             object comobj = null;
             FilterGraph pFilterGraph = null;
@@ -89,14 +91,6 @@ namespace Dzimchuk.MediaEngine.Core
                 if (pFilterGraphBuilder == null)
                 {
                     Trace.GetTrace().TraceWarning("Could not identify source type.");
-                /*    if (MessageBox.Show(Resources.Resources.fgb_question_open_anyway,
-                        caption, MessageBoxButtons.YesNo, MessageBoxIcon.Question,
-                        MessageBoxDefaultButton.Button2) != DialogResult.Yes)
-                    {
-                        Trace.GetTrace().TraceWarning("User abort.");
-                        return null;
-                    }
-                    Trace.GetTrace().TraceWarning("User decided to continue."); */
                     pFilterGraphBuilder = RegularFilterGraphBuilder.GetGraphBuilder();
                 }
 
@@ -107,7 +101,7 @@ namespace Dzimchuk.MediaEngine.Core
                 parameters.PreferredVideoRenderer = PreferredVideoRenderer;
                 parameters.DiscPath = source;
                 parameters.dwFlags = AM_DVD_GRAPH_FLAGS.AM_DVD_HWDEC_PREFER;
-                parameters.caption = caption;
+                parameters.OnPartialSuccessCallback = onPartialSuccessCallback;
 
                 pFilterGraphBuilder.BuildFilterGraph(ref comobj, ref parameters);
                 Trace.GetTrace().TraceInformation("The graph was built successfully.");
@@ -125,7 +119,7 @@ namespace Dzimchuk.MediaEngine.Core
                 if (pFilterGraph != null)
                     pFilterGraph.Dispose();
                 Trace.GetTrace().TraceError(builder_ex.ToString());
-                MessageBox.Show(builder_ex.Message, caption, MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                onErrorCallback(builder_ex.Message);
                 return null;
             }
             catch (COMException com_ex)
@@ -141,7 +135,7 @@ namespace Dzimchuk.MediaEngine.Core
                     error = com_ex.Message;
                 Trace.GetTrace().TraceError(com_ex.ToString());
                 Trace.GetTrace().TraceError(error);
-                MessageBox.Show(error, caption, MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                onErrorCallback(error);
                 return null;
             }
             catch (Exception e)
@@ -149,7 +143,7 @@ namespace Dzimchuk.MediaEngine.Core
                 if (pFilterGraph != null)
                     pFilterGraph.Dispose();
                 Trace.GetTrace().TraceError(e.ToString());
-                MessageBox.Show(e.Message, caption, MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                onErrorCallback(e.Message);
                 return null;
             }
             finally

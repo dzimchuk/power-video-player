@@ -14,7 +14,7 @@ using System;
 using Dzimchuk.Native;
 using Dzimchuk.DirectShow;
 
-namespace Dzimchuk.MediaEngine.Core
+namespace Dzimchuk.MediaEngine.Core.Description
 {
     [Flags]
     public enum StreamInfoFlags

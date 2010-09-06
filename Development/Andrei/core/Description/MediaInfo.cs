@@ -14,7 +14,7 @@ using System;
 using System.Collections;
 using Dzimchuk.DirectShow;
 
-namespace Dzimchuk.MediaEngine.Core
+namespace Dzimchuk.MediaEngine.Core.Description
 {
     /// <summary>
     /// 

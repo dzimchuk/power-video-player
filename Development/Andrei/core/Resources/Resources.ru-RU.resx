@@ -330,4 +330,13 @@
   <data name="error_cant_configure_evr" xml:space="preserve">
     <value>Невозможно сконфигурировать Enhanced Video Renderer</value>
   </data>
+  <data name="error_no_hwnd" xml:space="preserve">
+    <value>Недействительный HWND.</value>
+  </data>
+  <data name="error_cant_create_media_window" xml:space="preserve">
+    <value>Невозможно создать медиа окно.</value>
+  </data>
+  <data name="accept_parental_level_format" xml:space="preserve">
+    <value>Принять изменение уровня родительского запрета {0}?</value>
+  </data>
 </root>

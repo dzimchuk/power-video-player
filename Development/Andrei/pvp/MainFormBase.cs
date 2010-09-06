@@ -40,9 +40,11 @@ namespace Dzimchuk.PVP
         protected ControlBar controlbar = new ControlBar();
         protected Form controlbarHolder = new Form();
         protected NotifyIconEx nicon = new NotifyIconEx();
-        protected MediaWindow engine = new MediaWindow();
+        protected MediaWindowHost mediaWindowHost = new MediaWindowHost();
         protected ContextMenu contextMenu = new ContextMenu();
         protected MenuItemEx sep = new MenuItemEx("-");
+
+        protected IMediaEngine engine;
                         
     //	bool bXsdOk;
         protected bool bInit = true;
@@ -57,7 +59,7 @@ namespace Dzimchuk.PVP
         private bool bControlbar;
         private int nControlbarChildIndex;
         private FormWindowState formWindowState;
-        private int nVideoSize;
+        private VideoSize nVideoSize;
                             
         public MainFormBase()
         {
@@ -82,14 +84,14 @@ namespace Dzimchuk.PVP
             {
             }
             
-            engine.Parent = this;
-            engine.Dock = DockStyle.Fill;
-            engine.Caption = strProgName;
+            mediaWindowHost.Parent = this;
+            mediaWindowHost.Dock = DockStyle.Fill;
+            mediaWindowHost.Caption = strProgName;
             Bitmap logo = null;
             try
             {
                 logo = new Bitmap(GetType(), "logo.bmp");
-                engine.Logo = logo;
+                mediaWindowHost.Logo = logo;
             }
             catch
             {
@@ -99,6 +101,10 @@ namespace Dzimchuk.PVP
                 if (logo != null)
                     logo.Dispose();
             }
+
+            engine = mediaWindowHost.MediaEngine;
+            engine.DvdParentalChange += OnUserDecisionNeeded;
+            engine.PartialSuccess += OnUserDecisionNeeded;
             
             controlbar.Parent = this;
 
@@ -108,6 +114,12 @@ namespace Dzimchuk.PVP
 
             LoadSaveSettings(true);
             LoadTheme(strCurTheme);
+        }
+
+        private void OnUserDecisionNeeded(object sender, UserDecisionEventArgs e)
+        {
+            e.Accept = (DialogResult.Yes == MessageBox.Show(e.Message, strProgName,
+                        MessageBoxButtons.YesNo, MessageBoxIcon.Question));
         }
 
         private const string logFileName = "pvplog.txt";
@@ -238,8 +250,8 @@ namespace Dzimchuk.PVP
                     {
                         // default settings
                         engine.AutoPlay = true;
-                        engine.ShowLogo = true;
-                        engine.PreferredVideoRenderer = MediaWindow.RecommendedRenderer;
+                        mediaWindowHost.ShowLogo = true;
+                        engine.PreferredVideoRenderer = MediaEngineServiceProvider.RecommendedRenderer;
                     }
                 }
                 else
@@ -467,7 +479,7 @@ namespace Dzimchuk.PVP
             TopMost = true;
 
             nVideoSize = engine.GetVideoSize();
-            engine.SetVideoSize(MediaWindow.SIZE_FREE, false);
+            engine.SetVideoSize(VideoSize.SIZE_FREE, false);
 
             Rectangle rect = Screen.FromControl(this).Bounds;
             MaximumSize = rect.Size;

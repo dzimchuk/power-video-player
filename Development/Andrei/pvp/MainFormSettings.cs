@@ -40,7 +40,7 @@ namespace Dzimchuk.PVP
             CreateAppMenu();
             PopulateContextMenu();
             HandleSystemTray();
-            engine.MW_InitSize += new InitSizeHandler(engine_InitSize);
+            engine.InitSize += new EventHandler<InitSizeEventArgs>(engine_InitSize);
         }
 
         protected override void OnLoad(EventArgs e)
@@ -218,7 +218,7 @@ namespace Dzimchuk.PVP
 
             dlg.AutoPlay = engine.AutoPlay;
             dlg.VideoRenderer = engine.PreferredVideoRenderer;
-            dlg.ShowLogo = engine.ShowLogo;
+            dlg.ShowLogo = mediaWindowHost.ShowLogo;
             
             dlg.SystemTray = nicon.SystemTray;
             dlg.ShowTrayAlways = nicon.ShowTrayAlways;
@@ -275,13 +275,13 @@ namespace Dzimchuk.PVP
             bool bRendererSet = props.TryGetValue<int>("preferred_renderer", out nRenderer);
             if (!bRendererSet) 
             {
-                nRenderer = (int)MediaWindow.RecommendedRenderer;
+                nRenderer = (int)MediaEngineServiceProvider.RecommendedRenderer;
             }
             int[] values = (int[])Enum.GetValues(typeof(Renderer));
             engine.PreferredVideoRenderer = (nRenderer >= 0 && nRenderer <= values[values.Length-1]) 
                 ? (Renderer) nRenderer : Renderer.VR;
 
-            engine.ShowLogo = props.Get<bool>("show_logo", true);
+            mediaWindowHost.ShowLogo = props.Get<bool>("show_logo", true);
             engine.Repeat = props.Get<bool>("repeat_on", false);
             engine.UsePreferredFilters = props.Get<bool>("use_preferred_filters", false);
             engine.UsePreferredFilters4DVD = props.Get<bool>("use_preferred_filters_4dvd", false);
@@ -305,7 +305,7 @@ namespace Dzimchuk.PVP
 
             props.Add("auto_play", engine.AutoPlay);
             props.Add("preferred_renderer", (int)engine.PreferredVideoRenderer);
-            props.Add("show_logo", engine.ShowLogo);
+            props.Add("show_logo", mediaWindowHost.ShowLogo);
             props.Add("repeat_on", engine.Repeat);
             props.Add("use_preferred_filters", engine.UsePreferredFilters);
             props.Add("use_preferred_filters_4dvd", engine.UsePreferredFilters4DVD);
@@ -326,7 +326,7 @@ namespace Dzimchuk.PVP
             
             engine.AutoPlay = dlg.AutoPlay;
             engine.PreferredVideoRenderer = dlg.VideoRenderer;
-            engine.ShowLogo = dlg.ShowLogo;
+            mediaWindowHost.ShowLogo = dlg.ShowLogo;
             engine.UsePreferredFilters = dlg.UsePreferredFilters;
             engine.UsePreferredFilters4DVD = dlg.UsePreferredFilters4DVD;
 
@@ -379,23 +379,24 @@ namespace Dzimchuk.PVP
             }
         }
 
-        private void engine_InitSize(ref Dzimchuk.Native.GDI.RECT rcSrc)
+        private void engine_InitSize(object sender, InitSizeEventArgs e)
         {
-            int size = engine.GetVideoSize();
+            VideoSize size = engine.GetVideoSize();
             int div = 1;
-            if (size == MediaWindow.SIZE50)
+            if (size == VideoSize.SIZE50)
             {
-                size = MediaWindow.SIZE100;
+                size = VideoSize.SIZE100;
                 div = 2;
             }
-            if (WindowState != FormWindowState.Maximized && !bFullscreen 
-                && size != MediaWindow.SIZE_FREE && rcSrc.bottom != 0 && rcSrc.right != 0)
+            if (WindowState != FormWindowState.Maximized && !bFullscreen
+                && size != VideoSize.SIZE_FREE && e.NewVideSize.cy != 0 && e.NewVideSize.cx != 0)
             {
                 Rectangle bounds = DesktopBounds;
-                Size client = engine.ClientSize;
-                
-                int hor  = ((int) (rcSrc.right*size/div))-client.Width;
-                int vert = ((int) (rcSrc.bottom*size/div))-client.Height;
+                Size client = mediaWindowHost.ClientSize;
+
+                int nSize = (int)size;
+                int hor = ((int)(e.NewVideSize.cx * nSize / div)) - client.Width;
+                int vert = ((int)(e.NewVideSize.cy * nSize / div)) - client.Height;
 
                 bounds.Width += hor;
                 bounds.Height += vert;
@@ -403,8 +404,8 @@ namespace Dzimchuk.PVP
                 if (bCenterWindow)
                 {
                     Rectangle rect = Screen.FromControl(this).WorkingArea;
-                    bounds.X=bounds.Width<rect.Width ? rect.X + (rect.Width-bounds.Width)/2 : rect.X;
-                    bounds.Y=bounds.Height<rect.Height ? rect.Y + (rect.Height-bounds.Height)/2 : rect.Y;
+                    bounds.X = bounds.Width < rect.Width ? rect.X + (rect.Width - bounds.Width) / 2 : rect.X;
+                    bounds.Y = bounds.Height < rect.Height ? rect.Y + (rect.Height - bounds.Height) / 2 : rect.Y;
                 }
 
                 DesktopBounds = bounds;

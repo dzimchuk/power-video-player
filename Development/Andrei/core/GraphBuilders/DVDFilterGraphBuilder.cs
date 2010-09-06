@@ -11,15 +11,14 @@
  * ***************************************************************************/
 
 using System;
+using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Globalization;
-using System.Windows.Forms;
 using Dzimchuk.DirectShow;
-using Dzimchuk.Native;
+using Dzimchuk.MediaEngine.Core.Description;
 using Dzimchuk.MediaEngine.Core.Render;
 
-namespace Dzimchuk.MediaEngine.Core
+namespace Dzimchuk.MediaEngine.Core.GraphBuilders
 {
     /// <summary>
     /// 
@@ -57,7 +56,7 @@ namespace Dzimchuk.MediaEngine.Core
             IntPtr hMediaWindow = parameters.hMediaWindow;
             string DiscPath = parameters.DiscPath;
             AM_DVD_GRAPH_FLAGS dwFlags = parameters.dwFlags;
-            string caption = parameters.caption;
+            Func<string, bool> onPartialSuccessCallback = parameters.OnPartialSuccessCallback;
             Renderer PreferredVideoRenderer = parameters.PreferredVideoRenderer;
                         
             // Create the DVD Graph Builder
@@ -119,9 +118,8 @@ namespace Dzimchuk.MediaEngine.Core
                 str = strError.Length == 0 ? Resources.Resources.dvd_unknown_error : strError.ToString();
                 if (!bOk)
                     throw new FilterGraphBuilderException(str);
-                if (MessageBox.Show(str + "\n" + Resources.Resources.dvd_question_continue, 
-                    caption, MessageBoxButtons.YesNo, MessageBoxIcon.Question, 
-                    MessageBoxDefaultButton.Button2) != DialogResult.Yes)
+
+                if (!onPartialSuccessCallback(str + "\n" + Resources.Resources.dvd_question_continue))
                 {
                     throw new AbortException();
                 }
@@ -341,7 +339,7 @@ namespace Dzimchuk.MediaEngine.Core
             if (hr==DsHlp.S_OK) 
             {
                 pGraph.rtDuration=TotalTime.bHours*3600 + TotalTime.bMinutes*60 + TotalTime.bSeconds;
-                pGraph.rtDuration *= MediaWindow.ONE_SECOND;
+                pGraph.rtDuration *= CoreDefinitions.ONE_SECOND;
                 pGraph.bSeekable=true;
             }
             else if (hr==DsHlp.VFW_S_DVD_NON_ONE_SEQUENTIAL) 

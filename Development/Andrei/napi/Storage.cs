@@ -22,10 +22,10 @@ namespace Dzimchuk.Native
 	public class Storage
 	{
 		#region Funtions
-		[DllImport("kernel32.dll", CharSet=CharSet.Auto)]
+		[DllImport("kernel32.dll", CharSet = CharSet.Unicode)]
 		public static extern uint GetDriveType([MarshalAs(UnmanagedType.LPTStr)] string lpRootPathName);
 		
-		[DllImport("kernel32.dll", CharSet=CharSet.Auto)]
+		[DllImport("kernel32.dll", CharSet = CharSet.Unicode)]
 		public static extern int GetVolumeInformation(
 			[MarshalAs(UnmanagedType.LPTStr)] string lpRootPathName,
 			StringBuilder lpVolumeNameBuffer,
