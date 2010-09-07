@@ -159,6 +159,7 @@
     <Compile Include="GraphBuilders\FilterGraphBuilder.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="IImageCreator.cs" />
     <Compile Include="IMediaEngine.cs" />
     <Compile Include="Description\MediaInfo.cs">
       <SubType>Code</SubType>

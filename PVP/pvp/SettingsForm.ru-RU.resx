@@ -266,8 +266,23 @@
   <data name="pageVideo.Text" xml:space="preserve">
     <value>Видео</value>
   </data>
+  <data name="groupBox1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>392, 51</value>
+  </data>
+  <data name="groupBox1.Text" xml:space="preserve">
+    <value>Папка для сохранения скриншотов:</value>
+  </data>
+  <data name="btnBrowseScreenshotsFolder.Location" type="System.Drawing.Point, System.Drawing">
+    <value>311, 18</value>
+  </data>
+  <data name="btnBrowseScreenshotsFolder.Text" xml:space="preserve">
+    <value>Выбрать</value>
+  </data>
+  <data name="tbScreenshotsFolder.Size" type="System.Drawing.Size, System.Drawing">
+    <value>299, 20</value>
+  </data>
   <data name="btnRecommendedRenderer.Location" type="System.Drawing.Point, System.Drawing">
-    <value>242, 225</value>
+    <value>242, 210</value>
   </data>
   <data name="btnRecommendedRenderer.Size" type="System.Drawing.Size, System.Drawing">
     <value>166, 23</value>

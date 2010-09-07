@@ -727,6 +727,15 @@ namespace Dzimchuk.PVP.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Take screenshot.
+        /// </summary>
+        internal static string keys_screenshot {
+            get {
+                return ResourceManager.GetString("keys_screenshot", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Seek.
         /// </summary>
         internal static string keys_seek {

@@ -525,4 +525,7 @@
   <data name="about_license" xml:space="preserve">
     <value>Продукт лицензирован на условиях Ms-PL.</value>
   </data>
+  <data name="keys_screenshot" xml:space="preserve">
+    <value>Сделать скриншот</value>
+  </data>
 </root>

@@ -87,6 +87,7 @@ namespace Dzimchuk.MediaEngine.Core.Render
 
         public abstract void SetVideoPosition(ref GDI.RECT rcSrc, ref GDI.RECT rcDest);
         public abstract void GetNativeVideoSize(out int width, out int height, out int ARWidth, out int ARHeight);
+        public abstract bool GetCurrentImage(out BITMAPINFOHEADER header, out IntPtr dibFull, out IntPtr dibDataOnly);
 
         #endregion
 

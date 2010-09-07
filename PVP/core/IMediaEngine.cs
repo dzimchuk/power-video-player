@@ -17,6 +17,9 @@ using Dzimchuk.MediaEngine.Core.GraphBuilders;
 
 namespace Dzimchuk.MediaEngine.Core
 {
+    /// <summary>
+    /// Specifies a public contract of the core media engine.
+    /// </summary>
     public interface IMediaEngine
     {
         #region Events
@@ -131,6 +134,15 @@ namespace Dzimchuk.MediaEngine.Core
         VideoSize GetVideoSize();
         void SetVideoSize(VideoSize size);
         void SetVideoSize(VideoSize size, bool bInitSize);
+
+        /// <summary>
+        /// Gets a snapshot of the current image that is being shown.
+        /// It is recommended to wrap the call to this method in a try/catch block.
+        /// A pointer provided to IImageCreator.CreateImage method will be released upon return
+        /// so a caller should make sure there is no dependency on the pointer.
+        /// </summary>
+        /// <param name="imageCreator">A platform/technology specific image creator.</param>
+        void GetCurrentImage(IImageCreator imageCreator);
 
         #endregion
 

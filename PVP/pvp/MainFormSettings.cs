@@ -226,6 +226,7 @@ namespace Dzimchuk.PVP
             dlg.StartFullscreen = bStartFullscreen;
             dlg.CenterWindow = bCenterWindow;
             dlg.AlwaysOnTop = bTopMost;
+            dlg.ScreenshotsFolder = screenshotsFolder;
             if (!Visible)
                 dlg.StartPosition = FormStartPosition.CenterScreen;
 
@@ -333,7 +334,8 @@ namespace Dzimchuk.PVP
             string[] astrTypes = MediaTypeManager.GetInstance().TypeNames;
             foreach(string type in astrTypes)
                 MediaTypeManager.GetInstance().SetTypesClsid(type, dlg.GetTypeClsid(type));
-            
+
+            screenshotsFolder = dlg.ScreenshotsFolder;
             bRememberVolume = dlg.RememberVolume;
             bStartFullscreen = dlg.StartFullscreen;
             bCenterWindow = dlg.CenterWindow;
