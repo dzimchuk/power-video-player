@@ -125,5 +125,24 @@ namespace Dzimchuk.MediaEngine.Core.Render
         {
             get { return typeof(IEVRFilterConfig).GUID; }
         }
+
+        public override bool GetCurrentImage(out BITMAPINFOHEADER header, out IntPtr dibFull, out IntPtr dibDataOnly)
+        {
+            int cbDib;
+            long timestamp = 0;
+            header = new BITMAPINFOHEADER();
+            header.biSize = Marshal.SizeOf(typeof(BITMAPINFOHEADER));
+            int hr = pMFVideoDisplayControl.GetCurrentImage(ref header, out dibFull, out cbDib, ref timestamp);
+            if (DsHlp.SUCCEEDED(hr))
+            {
+                dibDataOnly = new IntPtr(dibFull.ToInt64() + Marshal.SizeOf(typeof(BITMAPINFOHEADER)));
+                return true;
+            }
+            else
+            {
+                dibDataOnly = IntPtr.Zero;
+                return false;
+            }
+        }
     }
 }

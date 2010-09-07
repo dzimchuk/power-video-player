@@ -14,6 +14,7 @@ using System;
 using Dzimchuk.DirectShow;
 using Dzimchuk.MediaEngine.Core.GraphBuilders;
 using Dzimchuk.Native;
+using System.Runtime.InteropServices;
 
 namespace Dzimchuk.MediaEngine.Core.Render
 {
@@ -85,6 +86,28 @@ namespace Dzimchuk.MediaEngine.Core.Render
             
             pBasicVideo2.GetVideoSize(out width, out height);
             pBasicVideo2.GetPreferredAspectRatio(out ARWidth, out ARHeight);
+        }
+
+        public override bool GetCurrentImage(out BITMAPINFOHEADER header, out IntPtr dibFull, out IntPtr dibDataOnly)
+        {
+            int bufferSize = 0;
+            int hr = pBasicVideo2.GetCurrentImage(ref bufferSize, IntPtr.Zero); // get the required buffer size first
+            if (DsHlp.SUCCEEDED(hr))
+            {
+                dibFull = Marshal.AllocCoTaskMem(bufferSize);
+                hr = pBasicVideo2.GetCurrentImage(ref bufferSize, dibFull); // actually get the image
+                if (DsHlp.SUCCEEDED(hr))
+                {
+                    header = (BITMAPINFOHEADER)Marshal.PtrToStructure(dibFull, typeof(BITMAPINFOHEADER));
+                    dibDataOnly = new IntPtr(dibFull.ToInt64() + Marshal.SizeOf(typeof(BITMAPINFOHEADER)));
+                    return true;
+                }
+            }
+
+            header = new BITMAPINFOHEADER();
+            dibDataOnly = IntPtr.Zero;
+            dibFull = IntPtr.Zero;
+            return false;
         }
     }
 }

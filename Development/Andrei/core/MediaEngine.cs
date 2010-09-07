@@ -499,6 +499,45 @@ namespace Dzimchuk.MediaEngine.Core
         {
             SetVideoSize(size, true);
         }
+
+        public void GetCurrentImage(IImageCreator imageCreator)
+        {
+            if (_filterGraph != null)
+            {
+                GraphState currentState = GraphState;
+                
+                IntPtr dibFull = IntPtr.Zero;
+                IntPtr dibDataOnly;
+                BITMAPINFOHEADER header;
+                try
+                {
+                    if (_filterGraph.pRenderer is VideoRenderer)
+                    {
+                        if (currentState != Core.GraphState.Paused)
+                            PauseGraph();
+                    }
+
+                    if (_filterGraph.pRenderer.GetCurrentImage(out header, out dibFull, out dibDataOnly))
+                        imageCreator.CreateImage(ref header, dibDataOnly);
+                }
+                finally
+                {
+                    Marshal.FreeCoTaskMem(dibFull);
+                    if (GraphState != currentState)
+                    {
+                        switch (currentState)
+                        {
+                            case Core.GraphState.Running:
+                                ResumeGraph();
+                                break;
+                            case Core.GraphState.Stopped:
+                                StopGraph();
+                                break;
+                        }
+                    }
+                }
+            }
+        }
         #endregion
 
         #region Playback control methods

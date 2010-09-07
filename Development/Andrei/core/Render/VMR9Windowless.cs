@@ -11,6 +11,7 @@
  * ***************************************************************************/
 
 using System;
+using System.Runtime.InteropServices;
 using Dzimchuk.DirectShow;
 using Dzimchuk.MediaEngine.Core.GraphBuilders;
 using Dzimchuk.Native;
@@ -96,6 +97,23 @@ namespace Dzimchuk.MediaEngine.Core.Render
         protected override Guid IID_4DVDGraphInstantiation
         {
             get { return typeof(IVMRFilterConfig9).GUID; }
+        }
+
+        public override bool GetCurrentImage(out BITMAPINFOHEADER header, out IntPtr dibFull, out IntPtr dibDataOnly)
+        {
+            int hr = pVMRWindowlessControl9.GetCurrentImage(out dibFull);
+            if (DsHlp.SUCCEEDED(hr))
+            {
+                header = (BITMAPINFOHEADER)Marshal.PtrToStructure(dibFull, typeof(BITMAPINFOHEADER));
+                dibDataOnly = new IntPtr(dibFull.ToInt64() + Marshal.SizeOf(typeof(BITMAPINFOHEADER)));
+                return true;
+            }
+            else
+            {
+                header = new BITMAPINFOHEADER();
+                dibDataOnly = IntPtr.Zero;
+                return false;
+            }
         }
     }
 }

@@ -17,6 +17,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
 using Dzimchuk.MediaEngine.Core;
+using System.IO;
 
 namespace Dzimchuk.PVP
 {
@@ -108,6 +109,7 @@ namespace Dzimchuk.PVP
         public const string strKeysAspect4_3 = "4:3";
         public const string strKeysAspect47_20 = "47:20";
         public const string strKeysAspectFree = "Aspect_Free";
+        public const string strKeysScreenshot = "Screenshot";
 
         const string strDivx3 = "DivX 3 Video";
         const string strDivx4 = "DivX 4 Video";
@@ -130,6 +132,9 @@ namespace Dzimchuk.PVP
         SizeF sizefOrigAutoScaleDimensions;
         private RadioButton radioEVR;
         private Button btnRecommendedRenderer;
+        private GroupBox groupBox1;
+        private Button btnBrowseScreenshotsFolder;
+        private TextBox tbScreenshotsFolder;
         public static Hashtable htDefault; // will be initialized by the static constructor
                 
         public event EventHandler Apply;
@@ -194,6 +199,7 @@ namespace Dzimchuk.PVP
             listKeys.Items.Add(GetListViewItem(Resources.Resources.keys_volume_decrease, strKeysDown));
             listKeys.Items.Add(GetListViewItem(Resources.Resources.keys_volume_mute, strKeysMute));
             listKeys.Items.Add(GetListViewItem(indent + Resources.Resources.keys_app, null));
+            listKeys.Items.Add(GetListViewItem(Resources.Resources.keys_screenshot, strKeysScreenshot));
             listKeys.Items.Add(GetListViewItem(Resources.Resources.keys_pref, strKeysPref));
             listKeys.Items.Add(GetListViewItem(Resources.Resources.keys_about, strKeysAbout));
             listKeys.Items.Add(GetListViewItem(Resources.Resources.keys_exit, strKeysExit));
@@ -409,6 +415,7 @@ namespace Dzimchuk.PVP
             htDefault.Add(Keys.Alt | Keys.D4, strKeysAspect47_20);
             htDefault.Add(Keys.Alt | Keys.D5, strKeysAspectFree);
             htDefault.Add(Keys.F2, strKeysPref);
+            htDefault.Add(Keys.Control | Keys.S, strKeysScreenshot);
         }
         #endregion
 
@@ -477,7 +484,7 @@ namespace Dzimchuk.PVP
             this.btnRemoveAll = new System.Windows.Forms.Button();
             this.btnSelectAll = new System.Windows.Forms.Button();
             this.listTypes = new System.Windows.Forms.ListView();
-            this.columnExtensions = new System.Windows.Forms.ColumnHeader();
+            this.columnExtensions = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.labelTypes = new System.Windows.Forms.Label();
             this.btnOK = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
@@ -485,6 +492,9 @@ namespace Dzimchuk.PVP
             this.tabControl = new System.Windows.Forms.TabControl();
             this.pageGeneral = new System.Windows.Forms.TabPage();
             this.pageVideo = new System.Windows.Forms.TabPage();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.btnBrowseScreenshotsFolder = new System.Windows.Forms.Button();
+            this.tbScreenshotsFolder = new System.Windows.Forms.TextBox();
             this.btnRecommendedRenderer = new System.Windows.Forms.Button();
             this.pagePrefFilters = new System.Windows.Forms.TabPage();
             this.panelFilters = new System.Windows.Forms.Panel();
@@ -496,8 +506,8 @@ namespace Dzimchuk.PVP
             this.btnKeysClearAll = new System.Windows.Forms.Button();
             this.btnKeysClear = new System.Windows.Forms.Button();
             this.listKeys = new System.Windows.Forms.ListView();
-            this.columnAction = new System.Windows.Forms.ColumnHeader();
-            this.columnKeys = new System.Windows.Forms.ColumnHeader();
+            this.columnAction = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnKeys = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.groupMouseWheel = new System.Windows.Forms.GroupBox();
             this.radioSeek = new System.Windows.Forms.RadioButton();
             this.radioVolume = new System.Windows.Forms.RadioButton();
@@ -509,6 +519,7 @@ namespace Dzimchuk.PVP
             this.tabControl.SuspendLayout();
             this.pageGeneral.SuspendLayout();
             this.pageVideo.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.pagePrefFilters.SuspendLayout();
             this.grpTechnique.SuspendLayout();
             this.pageKM.SuspendLayout();
@@ -518,11 +529,11 @@ namespace Dzimchuk.PVP
             // 
             // grpSysTray
             // 
+            resources.ApplyResources(this.grpSysTray, "grpSysTray");
             this.grpSysTray.Controls.Add(this.radioSysTrayOnly);
             this.grpSysTray.Controls.Add(this.chkShowTrayAlways);
             this.grpSysTray.Controls.Add(this.radioMinToTray);
             this.grpSysTray.Controls.Add(this.radioTaskbarOnly);
-            resources.ApplyResources(this.grpSysTray, "grpSysTray");
             this.grpSysTray.Name = "grpSysTray";
             this.grpSysTray.TabStop = false;
             // 
@@ -546,21 +557,21 @@ namespace Dzimchuk.PVP
             // 
             // radioTaskbarOnly
             // 
-            this.radioTaskbarOnly.Checked = true;
             resources.ApplyResources(this.radioTaskbarOnly, "radioTaskbarOnly");
+            this.radioTaskbarOnly.Checked = true;
             this.radioTaskbarOnly.Name = "radioTaskbarOnly";
             this.radioTaskbarOnly.TabStop = true;
             this.radioTaskbarOnly.CheckedChanged += new System.EventHandler(this.OnCheckChanged);
             // 
             // grpPlayerOptions
             // 
+            resources.ApplyResources(this.grpPlayerOptions, "grpPlayerOptions");
             this.grpPlayerOptions.Controls.Add(this.chkOnTop);
             this.grpPlayerOptions.Controls.Add(this.chkLogo);
             this.grpPlayerOptions.Controls.Add(this.chkCenter);
             this.grpPlayerOptions.Controls.Add(this.chkVolume);
             this.grpPlayerOptions.Controls.Add(this.chkAutoPlay);
             this.grpPlayerOptions.Controls.Add(this.chkFullscreen);
-            resources.ApplyResources(this.grpPlayerOptions, "grpPlayerOptions");
             this.grpPlayerOptions.Name = "grpPlayerOptions";
             this.grpPlayerOptions.TabStop = false;
             // 
@@ -602,9 +613,9 @@ namespace Dzimchuk.PVP
             // 
             // grpVMRMode
             // 
+            resources.ApplyResources(this.grpVMRMode, "grpVMRMode");
             this.grpVMRMode.Controls.Add(this.radioWindowed);
             this.grpVMRMode.Controls.Add(this.radioWindowless);
-            resources.ApplyResources(this.grpVMRMode, "grpVMRMode");
             this.grpVMRMode.Name = "grpVMRMode";
             this.grpVMRMode.TabStop = false;
             // 
@@ -616,19 +627,19 @@ namespace Dzimchuk.PVP
             // 
             // radioWindowless
             // 
-            this.radioWindowless.Checked = true;
             resources.ApplyResources(this.radioWindowless, "radioWindowless");
+            this.radioWindowless.Checked = true;
             this.radioWindowless.Name = "radioWindowless";
             this.radioWindowless.TabStop = true;
             this.radioWindowless.CheckedChanged += new System.EventHandler(this.OnCheckChanged);
             // 
             // grpRenderer
             // 
+            resources.ApplyResources(this.grpRenderer, "grpRenderer");
             this.grpRenderer.Controls.Add(this.radioEVR);
             this.grpRenderer.Controls.Add(this.radioVMR9);
             this.grpRenderer.Controls.Add(this.radioVMR);
             this.grpRenderer.Controls.Add(this.radioVR);
-            resources.ApplyResources(this.grpRenderer, "grpRenderer");
             this.grpRenderer.Name = "grpRenderer";
             this.grpRenderer.TabStop = false;
             // 
@@ -654,8 +665,8 @@ namespace Dzimchuk.PVP
             // 
             // radioVR
             // 
-            this.radioVR.Checked = true;
             resources.ApplyResources(this.radioVR, "radioVR");
+            this.radioVR.Checked = true;
             this.radioVR.Name = "radioVR";
             this.radioVR.TabStop = true;
             this.radioVR.CheckedChanged += new System.EventHandler(this.OnCheckChanged);
@@ -674,11 +685,11 @@ namespace Dzimchuk.PVP
             // 
             // listTypes
             // 
+            resources.ApplyResources(this.listTypes, "listTypes");
             this.listTypes.CheckBoxes = true;
             this.listTypes.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnExtensions});
             this.listTypes.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
-            resources.ApplyResources(this.listTypes, "listTypes");
             this.listTypes.Name = "listTypes";
             this.listTypes.UseCompatibleStateImageBehavior = false;
             this.listTypes.View = System.Windows.Forms.View.Details;
@@ -713,31 +724,52 @@ namespace Dzimchuk.PVP
             // 
             // tabControl
             // 
+            resources.ApplyResources(this.tabControl, "tabControl");
             this.tabControl.Controls.Add(this.pageGeneral);
             this.tabControl.Controls.Add(this.pageVideo);
             this.tabControl.Controls.Add(this.pagePrefFilters);
             this.tabControl.Controls.Add(this.pageKM);
             this.tabControl.Controls.Add(this.pageFileTypes);
-            resources.ApplyResources(this.tabControl, "tabControl");
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
             // 
             // pageGeneral
             // 
+            resources.ApplyResources(this.pageGeneral, "pageGeneral");
             this.pageGeneral.Controls.Add(this.grpPlayerOptions);
             this.pageGeneral.Controls.Add(this.grpSysTray);
-            resources.ApplyResources(this.pageGeneral, "pageGeneral");
             this.pageGeneral.Name = "pageGeneral";
             this.pageGeneral.UseVisualStyleBackColor = true;
             // 
             // pageVideo
             // 
+            resources.ApplyResources(this.pageVideo, "pageVideo");
+            this.pageVideo.Controls.Add(this.groupBox1);
             this.pageVideo.Controls.Add(this.btnRecommendedRenderer);
             this.pageVideo.Controls.Add(this.grpRenderer);
             this.pageVideo.Controls.Add(this.grpVMRMode);
-            resources.ApplyResources(this.pageVideo, "pageVideo");
             this.pageVideo.Name = "pageVideo";
             this.pageVideo.UseVisualStyleBackColor = true;
+            // 
+            // groupBox1
+            // 
+            resources.ApplyResources(this.groupBox1, "groupBox1");
+            this.groupBox1.Controls.Add(this.btnBrowseScreenshotsFolder);
+            this.groupBox1.Controls.Add(this.tbScreenshotsFolder);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.TabStop = false;
+            // 
+            // btnBrowseScreenshotsFolder
+            // 
+            resources.ApplyResources(this.btnBrowseScreenshotsFolder, "btnBrowseScreenshotsFolder");
+            this.btnBrowseScreenshotsFolder.Name = "btnBrowseScreenshotsFolder";
+            this.btnBrowseScreenshotsFolder.UseVisualStyleBackColor = true;
+            this.btnBrowseScreenshotsFolder.Click += new System.EventHandler(this.btnBrowseScreenshotsFolder_Click);
+            // 
+            // tbScreenshotsFolder
+            // 
+            resources.ApplyResources(this.tbScreenshotsFolder, "tbScreenshotsFolder");
+            this.tbScreenshotsFolder.Name = "tbScreenshotsFolder";
             // 
             // btnRecommendedRenderer
             // 
@@ -748,9 +780,9 @@ namespace Dzimchuk.PVP
             // 
             // pagePrefFilters
             // 
+            resources.ApplyResources(this.pagePrefFilters, "pagePrefFilters");
             this.pagePrefFilters.Controls.Add(this.panelFilters);
             this.pagePrefFilters.Controls.Add(this.grpTechnique);
-            resources.ApplyResources(this.pagePrefFilters, "pagePrefFilters");
             this.pagePrefFilters.Name = "pagePrefFilters";
             this.pagePrefFilters.UseVisualStyleBackColor = true;
             // 
@@ -764,9 +796,9 @@ namespace Dzimchuk.PVP
             // 
             // grpTechnique
             // 
+            resources.ApplyResources(this.grpTechnique, "grpTechnique");
             this.grpTechnique.Controls.Add(this.chkDVDGraphs);
             this.grpTechnique.Controls.Add(this.chkRegularGraphs);
-            resources.ApplyResources(this.grpTechnique, "grpTechnique");
             this.grpTechnique.Name = "grpTechnique";
             this.grpTechnique.TabStop = false;
             // 
@@ -784,12 +816,12 @@ namespace Dzimchuk.PVP
             // 
             // pageKM
             // 
+            resources.ApplyResources(this.pageKM, "pageKM");
             this.pageKM.Controls.Add(this.btnKeysDefault);
             this.pageKM.Controls.Add(this.btnKeysClearAll);
             this.pageKM.Controls.Add(this.btnKeysClear);
             this.pageKM.Controls.Add(this.listKeys);
             this.pageKM.Controls.Add(this.groupMouseWheel);
-            resources.ApplyResources(this.pageKM, "pageKM");
             this.pageKM.Name = "pageKM";
             this.pageKM.UseVisualStyleBackColor = true;
             // 
@@ -813,6 +845,7 @@ namespace Dzimchuk.PVP
             // 
             // listKeys
             // 
+            resources.ApplyResources(this.listKeys, "listKeys");
             this.listKeys.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnAction,
             this.columnKeys});
@@ -820,7 +853,6 @@ namespace Dzimchuk.PVP
             this.listKeys.GridLines = true;
             this.listKeys.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.listKeys.HideSelection = false;
-            resources.ApplyResources(this.listKeys, "listKeys");
             this.listKeys.MultiSelect = false;
             this.listKeys.Name = "listKeys";
             this.listKeys.UseCompatibleStateImageBehavior = false;
@@ -836,9 +868,9 @@ namespace Dzimchuk.PVP
             // 
             // groupMouseWheel
             // 
+            resources.ApplyResources(this.groupMouseWheel, "groupMouseWheel");
             this.groupMouseWheel.Controls.Add(this.radioSeek);
             this.groupMouseWheel.Controls.Add(this.radioVolume);
-            resources.ApplyResources(this.groupMouseWheel, "groupMouseWheel");
             this.groupMouseWheel.Name = "groupMouseWheel";
             this.groupMouseWheel.TabStop = false;
             // 
@@ -856,11 +888,11 @@ namespace Dzimchuk.PVP
             // 
             // pageFileTypes
             // 
+            resources.ApplyResources(this.pageFileTypes, "pageFileTypes");
             this.pageFileTypes.Controls.Add(this.labelTypes);
             this.pageFileTypes.Controls.Add(this.listTypes);
             this.pageFileTypes.Controls.Add(this.btnRemoveAll);
             this.pageFileTypes.Controls.Add(this.btnSelectAll);
-            resources.ApplyResources(this.pageFileTypes, "pageFileTypes");
             this.pageFileTypes.Name = "pageFileTypes";
             this.pageFileTypes.UseVisualStyleBackColor = true;
             // 
@@ -887,6 +919,8 @@ namespace Dzimchuk.PVP
             this.tabControl.ResumeLayout(false);
             this.pageGeneral.ResumeLayout(false);
             this.pageVideo.ResumeLayout(false);
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.pagePrefFilters.ResumeLayout(false);
             this.grpTechnique.ResumeLayout(false);
             this.pageKM.ResumeLayout(false);
@@ -1043,6 +1077,12 @@ namespace Dzimchuk.PVP
             get { return chkOnTop.Checked; }
         }
 
+        public string ScreenshotsFolder
+        {
+            get { return tbScreenshotsFolder.Text; }
+            set { tbScreenshotsFolder.Text = value; }
+        }
+
         public int SystemTray
         {
             set
@@ -1149,6 +1189,20 @@ namespace Dzimchuk.PVP
             radioVMR.Enabled = renderers.Contains(Renderer.VMR_Windowed);
             radioVMR9.Enabled = renderers.Contains(Renderer.VMR9_Windowed);
             radioVR.Enabled = renderers.Contains(Renderer.VR);
+        }
+
+        private void btnBrowseScreenshotsFolder_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialog dlg = new FolderBrowserDialog();
+            // this is a standard dialog, for proper localization we should have created a custom one
+            dlg.Description = "Please select a folder into which screenshots will be saved.";
+            dlg.RootFolder = Environment.SpecialFolder.Desktop;
+            dlg.ShowNewFolderButton = true;
+            if (!string.IsNullOrEmpty(tbScreenshotsFolder.Text) && 
+                Directory.Exists(tbScreenshotsFolder.Text))
+                dlg.SelectedPath = tbScreenshotsFolder.Text;
+            if (dlg.ShowDialog() == DialogResult.OK)
+                tbScreenshotsFolder.Text = dlg.SelectedPath;
         }
     }
 

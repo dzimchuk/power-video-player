@@ -525,4 +525,7 @@
   <data name="about_license" xml:space="preserve">
     <value>This product is licensed under Ms-PL.</value>
   </data>
+  <data name="keys_screenshot" xml:space="preserve">
+    <value>Take screenshot</value>
+  </data>
 </root>

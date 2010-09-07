@@ -53,6 +53,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ImageCreator.cs" />
     <Compile Include="MediaWindow.cs" />
     <Compile Include="MediaWindowHost.cs">
       <SubType>UserControl</SubType>

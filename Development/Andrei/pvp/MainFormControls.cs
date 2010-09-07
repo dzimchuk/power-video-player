@@ -22,6 +22,7 @@ using Dzimchuk.Theme;
 using Dzimchuk.DirectShow;
 using Dzimchuk.Native;
 using Dzimchuk.AUI;
+using System.Text.RegularExpressions;
 
 namespace Dzimchuk.PVP
 {
@@ -34,6 +35,8 @@ namespace Dzimchuk.PVP
         
         protected MouseWheelAction wheelAction = MouseWheelAction.Volume;
         protected bool bRememberVolume = true;
+        protected string screenshotsFolder = DefaultScreenshotsFolder;
+        
         int nVolume = DEFAULT_VOLUME;
         bool bMute;     
         
@@ -62,6 +65,11 @@ namespace Dzimchuk.PVP
 
         protected Hashtable htKeys;
         protected Hashtable htCommands;
+
+        private static string DefaultScreenshotsFolder
+        {
+            get { return Environment.GetFolderPath(Environment.SpecialFolder.Desktop); }
+        }
                     
         public MainFormControls()
         {
@@ -71,6 +79,7 @@ namespace Dzimchuk.PVP
             htCommands.Add(SettingsForm.strKeysFileInfo, miInfo);
             htCommands.Add(SettingsForm.strKeysBack, new MenuItemEx("Back", new EventHandler(OnBack)));
             htCommands.Add(SettingsForm.strKeysForth, new MenuItemEx("Forth", new EventHandler(OnForth)));
+            htCommands.Add(SettingsForm.strKeysScreenshot, new MenuItemEx("Screenshot", new EventHandler(OnTakeScreenshot)));
             
             CreateControlsMenu();
             NormalizeShortcuts();
@@ -298,6 +307,8 @@ namespace Dzimchuk.PVP
             }
             wheelAction = props.Get<MouseWheelAction>("wheel_action", MouseWheelAction.Volume);
 
+            screenshotsFolder = props.Get("screenshots_folder", DefaultScreenshotsFolder);
+
             htKeys = props.Get<Hashtable>("keys_definition", null);
         }
 
@@ -308,6 +319,7 @@ namespace Dzimchuk.PVP
             props.Add<bool>("mute_on", bMute);
             props.Add<bool>("remember_volume", bRememberVolume);
             props.Add<MouseWheelAction>("wheel_action", wheelAction);
+            props.Add("screenshots_folder", screenshotsFolder);
 
             props.Add("keys_definition", htKeys);
         }
@@ -1303,6 +1315,76 @@ namespace Dzimchuk.PVP
         private void controlbarHolder_MouseWheel(object sender, MouseEventArgs e)
         {
             OnMouseWheel(e);
+        }
+
+        private void OnTakeScreenshot(object sender, EventArgs e)
+        {
+            if (engine.GraphState == GraphState.Reset)
+                return;
+
+            ImageCreator imageCreator = new ImageCreator();
+            try
+            {
+                engine.GetCurrentImage(imageCreator);
+                if (imageCreator.Created)
+                {
+                    System.Threading.ThreadPool.QueueUserWorkItem(SaveScreenshot, imageCreator);
+                }
+            }
+            catch (Exception ex)
+            {
+                Trace.GetTrace().TraceError("Error creating a screenshot: " + ex.Message);
+            }
+        }
+
+        private object _syncRoot = new object();
+        private void SaveScreenshot(object state)
+        {
+            ImageCreator imageCreator = state as ImageCreator;
+            if (imageCreator == null)
+                return;
+
+            try
+            {
+                lock (_syncRoot)
+                {
+                    imageCreator.Save(GetNewScreenshotName());
+                }
+            }
+            catch(Exception e)
+            {
+                Trace.GetTrace().TraceError("Error saving a screenshot: " + e.Message);
+            }
+            finally
+            {
+                imageCreator.Dispose();
+            }
+        }
+
+        private const string SCREENSHOT_NAME_FORMAT = "pvp_screenshot_{0}.jpg";
+        private Regex regexScrnshotName = new Regex(@"pvp_screenshot_(?<index>\d+).jpg");
+        private string GetNewScreenshotName()
+        {
+            string dir = screenshotsFolder;
+            if (!Directory.Exists(dir))
+                dir = DefaultScreenshotsFolder;
+            string[] files = Directory.GetFiles(dir, "*.jpg", SearchOption.TopDirectoryOnly);
+            int index = 0;
+            foreach (string file in files)
+            {
+                Match m = regexScrnshotName.Match(file);
+                if (m.Success)
+                {
+                    int i;
+                    if (Int32.TryParse(m.Groups["index"].Value, out i))
+                    {
+                        if (i >= index)
+                            index = ++i;
+                    }
+                }
+            }
+
+            return Path.Combine(dir, string.Format(SCREENSHOT_NAME_FORMAT, index));
         }
     }
 }
