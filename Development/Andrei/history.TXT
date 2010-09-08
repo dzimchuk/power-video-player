@@ -1,3 +1,13 @@
+v1.2.3902
+09/07/2010
+
+4856 - Ability to take screenshots (new feature).
+5519 - Refactor the core and extract presentation independent logic.
+4851 - If video cannot be rendered the whole file is not played.
+4905 - About dialog doesn't scale properly.
+4452 - Cursor keeps showing up in fullscreen mode even if mouse does not move
++ a few minor fixes.
+
 v1.1.3776
 05/04/2010
 
