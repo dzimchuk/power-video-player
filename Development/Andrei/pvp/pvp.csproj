@@ -15,7 +15,8 @@
     <AssemblyKeyContainerName>
     </AssemblyKeyContainerName>
     <AssemblyName>pvp</AssemblyName>
-    <AssemblyOriginatorKeyFile>public.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
     <DefaultClientScript>JScript</DefaultClientScript>
     <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
     <DefaultTargetSchema>IE50</DefaultTargetSchema>
@@ -29,9 +30,9 @@
     </FileUpgradeFlags>
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
-    <SignAssembly>true</SignAssembly>
+    <SignAssembly>false</SignAssembly>
     <OldToolsVersion>3.5</OldToolsVersion>
-    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -47,6 +48,7 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <OutputPath>bin\Debug\</OutputPath>
@@ -147,24 +149,13 @@
       <Project>{8284DFC9-F996-4169-B947-96B36F3B27A1}</Project>
       <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
     </ProjectReference>
-    <ProjectReference Include="..\core.adapter\core.adapter.csproj">
-      <Project>{D8BCB746-D8ED-4B1A-87F5-A50FECCF772F}</Project>
-      <Name>core.adapter</Name>
+    <ProjectReference Include="..\Pvp.Core.WindowsForms\Pvp.Core.WindowsForms.csproj">
+      <Project>{DD243C13-EE02-49F5-949B-FAC91BE3220E}</Project>
+      <Name>Pvp.Core.WindowsForms</Name>
     </ProjectReference>
-    <ProjectReference Include="..\core\core.csproj">
-      <Name>core</Name>
-      <Project>{5B384C70-6B50-440A-9008-AC90DBE3ED6B}</Project>
-      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
-    </ProjectReference>
-    <ProjectReference Include="..\dshow\dshow.csproj">
-      <Name>dshow</Name>
-      <Project>{977006BC-7D47-449C-9D0B-720A8B680BCD}</Project>
-      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
-    </ProjectReference>
-    <ProjectReference Include="..\napi\napi.csproj">
-      <Name>napi</Name>
-      <Project>{DE5BAF7F-906F-43B5-B837-021BC0C9605B}</Project>
-      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
+    <ProjectReference Include="..\Pvp.Core\Pvp.Core.csproj">
+      <Project>{C2E6EE93-B834-4445-9AA2-28F6A6E23D8E}</Project>
+      <Name>Pvp.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\theme\theme.csproj">
       <Name>theme</Name>
@@ -298,7 +289,6 @@
     </Compile>
     <Compile Include="Util\FileAssociatorW6.cs" />
     <None Include="App.config" />
-    <None Include="public.snk" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
@@ -326,11 +316,7 @@
   <PropertyGroup>
     <PreBuildEvent>
     </PreBuildEvent>
-    <PostBuildEvent>call "$(DevEnvDir)..\..\VC\vcvarsall.bat" x86
-sn /R "$(TargetPath)" "$(SolutionDir)keypairs\$(TargetName).snk"
-sn /R "$(ProjectDir)obj\x86\$(ConfigurationName)\$(TargetFileName)" "$(SolutionDir)keypairs\$(TargetName).snk"
-
-sn /R "$(TargetDir)ru-RU\$(TargetName).resources.dll" "$(SolutionDir)keypairs\$(TargetName).snk"
-sn /R "$(ProjectDir)obj\x86\$(ConfigurationName)\ru-RU\$(TargetName).resources.dll" "$(SolutionDir)keypairs\$(TargetName).snk"</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
 </Project>
