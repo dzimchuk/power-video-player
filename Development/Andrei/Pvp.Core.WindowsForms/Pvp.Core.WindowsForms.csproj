@@ -8,7 +8,7 @@
     <ProjectGuid>{DD243C13-EE02-49F5-949B-FAC91BE3220E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Pvp.Core.WindowsForms</RootNamespace>
+    <RootNamespace>Dzimchuk</RootNamespace>
     <AssemblyName>Pvp.Core.WindowsForms</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -47,15 +47,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ImageCreator.cs" />
-    <Compile Include="MediaWindow.cs" />
-    <Compile Include="MediaWindowHost.cs">
+    <Compile Include="MediaEngine\Core\ImageCreator.cs" />
+    <Compile Include="MediaEngine\Core\MediaWindow.cs" />
+    <Compile Include="MediaEngine\Core\MediaWindowHost.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="MediaWindowHost.resx">
+    <EmbeddedResource Include="MediaEngine\Core\MediaWindowHost.resx">
       <DependentUpon>MediaWindowHost.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
