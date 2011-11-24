@@ -1,0 +1,116 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{C2E6EE93-B834-4445-9AA2-28F6A6E23D8E}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Dzimchuk</RootNamespace>
+    <AssemblyName>Pvp.Core</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="MediaEngine\Core\CoreDefinitions.cs" />
+    <Compile Include="MediaEngine\Core\CoreEnums.cs" />
+    <Compile Include="MediaEngine\Core\CoreEventArgs.cs" />
+    <Compile Include="MediaEngine\Core\DefaultMediaWindow.cs" />
+    <Compile Include="MediaEngine\Core\Description\MediaInfo.cs" />
+    <Compile Include="MediaEngine\Core\Description\StreamInfo.cs" />
+    <Compile Include="DirectShow\control.cs" />
+    <Compile Include="DirectShow\core.cs" />
+    <Compile Include="DirectShow\dvd.cs" />
+    <Compile Include="DirectShow\evr.cs" />
+    <Compile Include="DirectShow\extend.cs" />
+    <Compile Include="DirectShow\structs.cs" />
+    <Compile Include="DirectShow\utils.cs" />
+    <Compile Include="DirectShow\uuids.cs" />
+    <Compile Include="DirectShow\vmr.cs" />
+    <Compile Include="DirectShow\vmr9.cs" />
+    <Compile Include="MediaEngine\Core\FilterGraph.cs" />
+    <Compile Include="MediaEngine\Core\GraphBuilders\DVDFilterGraphBuilder.cs" />
+    <Compile Include="MediaEngine\Core\GraphBuilders\FilterGraphBuilder.cs" />
+    <Compile Include="MediaEngine\Core\GraphBuilders\RegularFilterGraphBuilder.cs" />
+    <Compile Include="MediaEngine\Core\GraphBuilders\SourceAnalizer.cs" />
+    <Compile Include="MediaEngine\Core\IImageCreator.cs" />
+    <Compile Include="MediaEngine\Core\IMediaEngine.cs" />
+    <Compile Include="MediaEngine\Core\IMediaWindow.cs" />
+    <Compile Include="MediaEngine\Core\MediaEngine.cs" />
+    <Compile Include="MediaEngine\Core\MediaEngineServiceProvider.cs" />
+    <Compile Include="MediaEngine\Core\MediaTypeManager.cs" />
+    <Compile Include="Native\GDI.cs" />
+    <Compile Include="Native\NoCat.cs" />
+    <Compile Include="Native\Shell.cs" />
+    <Compile Include="Native\Storage.cs" />
+    <Compile Include="Native\WindowsManagement.cs" />
+    <Compile Include="Native\WindowsMessages.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="MediaEngine\Core\Render\EVR.cs" />
+    <Compile Include="MediaEngine\Core\Render\IRenderer.cs" />
+    <Compile Include="MediaEngine\Core\Render\RendererBase.cs" />
+    <Compile Include="MediaEngine\Core\Render\VideoRenderer.cs" />
+    <Compile Include="MediaEngine\Core\Render\VMR9Windowed.cs" />
+    <Compile Include="MediaEngine\Core\Render\VMR9Windowless.cs" />
+    <Compile Include="MediaEngine\Core\Render\VMRWindowed.cs" />
+    <Compile Include="MediaEngine\Core\Render\VMRWindowless.cs" />
+    <Compile Include="MediaEngine\Core\Render\WindowedRenderer.cs" />
+    <Compile Include="MediaEngine\Core\Resources\Resources.Designer.cs">
+      <DependentUpon>Resources.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="MediaEngine\Core\Trace.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="MediaEngine\Core\Resources\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MediaEngine\Core\Resources\Resources.ru-RU.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
