@@ -10,12 +10,12 @@ Displays detailed information about each video and audio stream
 Reports the format that could not be rendered because of the missing codec(s)
 Customizable keyboard and mouse actions  
 Multilingual interface: English, Russian  
-Skinnable (only one default skin is shipped now)
+Skinnable
 Supports various video renderers: Legacy Video Renderer, VMR/VMR9, EVR
+Ability to take screenshots of a movie
  
  
 To include in the next release:
-Ability to take screenshots of a movie
 More aspect ratio's: 1:1, 5:4, 16:10
 Play directory  
 Playlists with bookmarks (media library)
@@ -25,11 +25,8 @@ Drag-and-drop support
 Future:
 
 Preferred filters
-Advanced video control: brightness, contrast, sharpness...
-AVISynth filters support  
 Subtitles support: *.SUB,*.SRT,*.SSA  
 Subtitles control: position, font, color, transparency, background... 
-Multi-audio media support  
-External audio tracks  
-Infrared Remotes support: (WinLIRC)  
-Commandline parameters support 
+Multi-audio media support 
+Infrared Remotes support: (WinLIRC)
+Advanced video control: brightness, contrast, sharpness...
