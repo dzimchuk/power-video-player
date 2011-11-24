@@ -2,15 +2,9 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{6B228E9F-22B3-4347-867B-F33FF44B8F00}"
 	ProjectSection(SolutionItems) = preProject
-		disable_verification.bat = disable_verification.bat
-		enable_verification.bat = enable_verification.bat
 		features.TXT = features.TXT
 		history.TXT = history.TXT
-		license.htm = license.htm
-		license.rtf = license.rtf
-		res.zip = res.zip
-		sign.bat = sign.bat
-		signing.TXT = signing.TXT
+		license.txt = license.txt
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "theme", "theme\theme.csproj", "{003E3233-557D-4170-9BFC-813A7A71DA49}"
@@ -27,9 +21,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pvp.Core.WindowsForms", "Pv
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "nwnd64", "nwnd64\nwnd64.vcxproj", "{B2715412-5382-4CA1-A64F-A69C419B152A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pvp.App", "Pvp.App\Pvp.App.csproj", "{F3EDD60A-1420-47D9-85F6-6BA5BE8D1ACF}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 8
+		SccNumberOfProjects = 9
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs09
 		SccLocalPath0 = .
@@ -54,6 +50,9 @@ Global
 		SccProjectUniqueName7 = nwnd64\\nwnd64.vcxproj
 		SccProjectName7 = nwnd64
 		SccLocalPath7 = nwnd64
+		SccProjectUniqueName8 = Pvp.App\\Pvp.App.csproj
+		SccProjectName8 = Pvp.App
+		SccLocalPath8 = Pvp.App
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -174,6 +173,20 @@ Global
 		{B2715412-5382-4CA1-A64F-A69C419B152A}.Release|x64.ActiveCfg = Release|x64
 		{B2715412-5382-4CA1-A64F-A69C419B152A}.Release|x64.Build.0 = Release|x64
 		{B2715412-5382-4CA1-A64F-A69C419B152A}.Release|x86.ActiveCfg = Release|x64
+		{F3EDD60A-1420-47D9-85F6-6BA5BE8D1ACF}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{F3EDD60A-1420-47D9-85F6-6BA5BE8D1ACF}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{F3EDD60A-1420-47D9-85F6-6BA5BE8D1ACF}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{F3EDD60A-1420-47D9-85F6-6BA5BE8D1ACF}.Debug|Win32.ActiveCfg = Debug|x86
+		{F3EDD60A-1420-47D9-85F6-6BA5BE8D1ACF}.Debug|x64.ActiveCfg = Debug|x86
+		{F3EDD60A-1420-47D9-85F6-6BA5BE8D1ACF}.Debug|x86.ActiveCfg = Debug|x86
+		{F3EDD60A-1420-47D9-85F6-6BA5BE8D1ACF}.Debug|x86.Build.0 = Debug|x86
+		{F3EDD60A-1420-47D9-85F6-6BA5BE8D1ACF}.Release|Any CPU.ActiveCfg = Release|x86
+		{F3EDD60A-1420-47D9-85F6-6BA5BE8D1ACF}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{F3EDD60A-1420-47D9-85F6-6BA5BE8D1ACF}.Release|Mixed Platforms.Build.0 = Release|x86
+		{F3EDD60A-1420-47D9-85F6-6BA5BE8D1ACF}.Release|Win32.ActiveCfg = Release|x86
+		{F3EDD60A-1420-47D9-85F6-6BA5BE8D1ACF}.Release|x64.ActiveCfg = Release|x86
+		{F3EDD60A-1420-47D9-85F6-6BA5BE8D1ACF}.Release|x86.ActiveCfg = Release|x86
+		{F3EDD60A-1420-47D9-85F6-6BA5BE8D1ACF}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
