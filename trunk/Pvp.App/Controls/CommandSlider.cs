@@ -5,9 +5,11 @@ using System.Text;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows;
+using System.Windows.Controls.Primitives;
 
 namespace Dzimchuk.Pvp.App.Controls
 {
+    [TemplatePart(Name = "PART_Track", Type = typeof(Track))]
     public class CommandSlider : Slider, ICommandSource
     {
         public static readonly DependencyProperty CommandProperty =
@@ -75,6 +77,36 @@ namespace Dzimchuk.Pvp.App.Controls
             if (command != null)
             {
                 command.Execute(CommandParameter);
+            }
+        }
+
+        public override void OnApplyTemplate()
+        {
+            base.OnApplyTemplate();
+
+            var track = Template.FindName("PART_Track", this) as Track;
+            if (track != null)
+            {
+                track.Thumb.MouseEnter += new MouseEventHandler(thumb_MouseEnter);
+            }
+        }
+
+        private void thumb_MouseEnter(object sender, MouseEventArgs e)
+        {
+            if (e.LeftButton == MouseButtonState.Pressed && e.MouseDevice.Captured == null)
+            {
+                // the left button is pressed on mouse enter
+                // but the mouse isn't captured, so the thumb
+                // must have been moved under the mouse in response
+                // to a click on the track.
+                //
+                // Generate a MouseLeftButtonDown event.
+                
+                MouseButtonEventArgs args = new MouseButtonEventArgs(e.MouseDevice, e.Timestamp, MouseButton.Left);
+
+                args.RoutedEvent = MouseLeftButtonDownEvent;
+
+                (sender as Thumb).RaiseEvent(args);
             }
         }
     }

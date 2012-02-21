@@ -15,6 +15,7 @@ namespace Dzimchuk.Pvp.App.Composition
         {
             Bind<IMediaEngine>().ToMethod(context => MediaEngineServiceProvider.GetMediaEngine()).InSingletonScope();
 
+            Bind<ViewModelBase>().To<MainWindowViewModel>().InSingletonScope().Named(ViewModelLocator.MainWindowViewModelName);
             Bind<ViewModelBase>().To<MainViewModel>().InSingletonScope().Named(ViewModelLocator.MainViewModelName);
             Bind<ControlPanelViewModel>().ToSelf().InSingletonScope();
         }

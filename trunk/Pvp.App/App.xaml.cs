@@ -4,9 +4,10 @@ using System.Configuration;
 using System.Data;
 using System.Linq;
 using System.Windows;
-using Dzimchuk.Pvp.App.Util;
-using Ninject;
 using Dzimchuk.Pvp.App.Composition;
+using Dzimchuk.Pvp.App.Util;
+using Dzimchuk.Pvp.App.View;
+using Ninject;
 
 namespace Dzimchuk.Pvp.App
 {
