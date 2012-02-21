@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Data;
 using System.Windows.Controls.Primitives;
+using res=Dzimchuk.Pvp.App.Resources;
 
 namespace Dzimchuk.Pvp.App.Controls
 {
@@ -323,7 +324,77 @@ namespace Dzimchuk.Pvp.App.Controls
                 binding.Mode = BindingMode.OneWay;
                 volumeSlider.SetBinding(CommandSlider.CommandProperty, binding);
             }
+
+            UpdateTooltips();
         }
 
+        private void UpdateTooltips()
+        {
+            var playButton = Template.FindName("PART_PlayButton", this) as ButtonBase;
+            if (playButton != null)
+            {
+                playButton.ToolTip = res.Resources.controlbar_play;
+            }
+
+            var pauseButton = Template.FindName("PART_PauseButton", this) as ButtonBase;
+            if (pauseButton != null)
+            {
+                pauseButton.ToolTip = res.Resources.controlbar_pause;
+            }
+
+            var stopButton = Template.FindName("PART_StopButton", this) as ButtonBase;
+            if (stopButton != null)
+            {
+                stopButton.ToolTip = res.Resources.controlbar_stop;
+            }
+
+            var forwardButton = Template.FindName("PART_ForwardButton", this) as ButtonBase;
+            if (forwardButton != null)
+            {
+                forwardButton.ToolTip = res.Resources.controlbar_forward;
+            }
+
+            var backwardButton = Template.FindName("PART_BackwardButton", this) as ButtonBase;
+            if (backwardButton != null)
+            {
+                backwardButton.ToolTip = res.Resources.controlbar_backward;
+            }
+
+            var toEndButton = Template.FindName("PART_ToEndButton", this) as ButtonBase;
+            if (toEndButton != null)
+            {
+                toEndButton.ToolTip = res.Resources.controlbar_to_end;
+            }
+
+            var toBeginingButton = Template.FindName("PART_ToBeginingButton", this) as ButtonBase;
+            if (toBeginingButton != null)
+            {
+                toBeginingButton.ToolTip = res.Resources.controlbar_to_begining;
+            }
+
+            var repeatButton = Template.FindName("PART_RepeatButton", this) as ToggleButton;
+            if (repeatButton != null)
+            {
+                repeatButton.ToolTip = res.Resources.controlbar_repeat;
+            }
+
+            var muteButton = Template.FindName("PART_MuteButton", this) as ToggleButton;
+            if (muteButton != null)
+            {
+                muteButton.ToolTip = res.Resources.controlbar_mute;
+            }
+
+            var seekSlider = Template.FindName("PART_SeekSlider", this) as CommandSlider;
+            if (seekSlider != null)
+            {
+                seekSlider.ToolTip = res.Resources.controlbar_seekbar;
+            }
+
+            var volumeSlider = Template.FindName("PART_VolumeSlider", this) as CommandSlider;
+            if (volumeSlider != null)
+            {
+                volumeSlider.ToolTip = res.Resources.controlbar_volume;
+            }
+        }
     }
 }
