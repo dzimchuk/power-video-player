@@ -1,9 +1,10 @@
 ﻿<Window x:Class="Dzimchuk.Pvp.App.View.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:res="clr-namespace:Dzimchuk.Pvp.App.Resources"
         xmlns:view="clr-namespace:Dzimchuk.Pvp.App.View"
         xmlns:app="clr-namespace:Dzimchuk.Pvp.App"
-        Title="MainWindow" Height="350" Width="525"
+        Title="{x:Static res:Resources.program_name}" Height="350" Width="525"
         DataContext="{x:Static app:ViewModelLocator.MainWindowViewModel}"
         Style="{DynamicResource MainWindowStyle}">
     <view:MainView />

@@ -14,6 +14,7 @@ using System.Windows.Shapes;
 using System.Windows.Controls.Primitives;
 using Dzimchuk.Pvp.App.Messaging;
 using Dzimchuk.Pvp.App.Util;
+using res = Dzimchuk.Pvp.App.Resources;
 using GalaSoft.MvvmLight.Messaging;
 
 namespace Dzimchuk.Pvp.App.View
@@ -126,6 +127,8 @@ namespace Dzimchuk.Pvp.App.View
                 var bounds = win._restoreBounds;
                 win.MoveWindow(bounds.Left, bounds.Top, bounds.Width, bounds.Height);
             }
+
+            win.SetMaximizeButtonTooltip();
         }
 
         private static void IsMinimizedChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -274,6 +277,8 @@ namespace Dzimchuk.Pvp.App.View
                 icon.Width = width;
                 icon.Height = height;
             }
+
+            UpdateTooltips();
         }
 
         private void Resize(object sender, MouseEventArgs e)
@@ -310,6 +315,32 @@ namespace Dzimchuk.Pvp.App.View
 
             var element = (UIElement)sender;
             element.ReleaseMouseCapture();
+        }
+
+        private void SetMaximizeButtonTooltip()
+        {
+            var button = Template.FindName("PART_MaximizeButton", this) as Button;
+            if (button != null)
+            {
+                button.ToolTip = IsMaximized ? res.Resources.captionbar_restore : res.Resources.captionbar_maximize;
+            }
+        }
+
+        private void UpdateTooltips()
+        {
+            SetMaximizeButtonTooltip();
+
+            var button = Template.FindName("PART_MinimizeButton", this) as Button;
+            if (button != null)
+            {
+                button.ToolTip = res.Resources.captionbar_minimize;
+            }
+
+            button = Template.FindName("PART_CloseButton", this) as Button;
+            if (button != null)
+            {
+                button.ToolTip = res.Resources.captionbar_close;
+            }
         }
     }
 }
