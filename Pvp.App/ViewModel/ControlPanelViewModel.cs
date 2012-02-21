@@ -6,6 +6,7 @@ using GalaSoft.MvvmLight;
 using Dzimchuk.MediaEngine.Core;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.Messaging;
 
 namespace Dzimchuk.Pvp.App.ViewModel
 {
@@ -30,6 +31,8 @@ namespace Dzimchuk.Pvp.App.ViewModel
         public ControlPanelViewModel(IMediaEngine engine)
         {
             _engine = engine;
+
+            Messenger.Default.Register<PropertyChangedMessageBase>(this, true, OnPropertyChanged);
         }
 
         public bool IsFullScreen
@@ -39,6 +42,26 @@ namespace Dzimchuk.Pvp.App.ViewModel
             {
                 _isFullScreen = value;
                 RaisePropertyChanged("IsFullScreen");
+            }
+        }
+
+        private void FlipFullScreen(bool sendNotification)
+        {
+            IsFullScreen = !IsFullScreen;
+            if (sendNotification)
+            {
+                Messenger.Default.Send(new PropertyChangedMessage<bool>(this, !IsFullScreen, IsFullScreen, "IsFullScreen"));
+            }
+        }
+
+        private void OnPropertyChanged(PropertyChangedMessageBase message)
+        {
+            if (message.Sender != this)
+            {
+                if (message.PropertyName == "IsFullScreen")
+                {
+                    FlipFullScreen(false);
+                }
             }
         }
 

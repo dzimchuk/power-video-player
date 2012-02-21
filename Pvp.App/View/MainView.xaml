@@ -3,15 +3,17 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:pvp="clr-namespace:Dzimchuk.Pvp.App"
+             xmlns:app="clr-namespace:Dzimchuk.Pvp.App"
              xmlns:ctrls="clr-namespace:Dzimchuk.Pvp.App.Controls"
              xmlns:view="clr-namespace:Dzimchuk.Pvp.App.View"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300"
-             DataContext="{x:Static pvp:ViewModelLocator.MainViewModel}">
+             d:DesignHeight="350" d:DesignWidth="525"
+             DataContext="{x:Static app:ViewModelLocator.MainViewModel}">
     <UserControl.Resources>
+        
         <view:RegularControlPanelVisibilityValueConverter x:Key="RegularControlPanelVisibilityValueConverter" />
         <view:FullSceenPanelVisibilityValueConverter x:Key="FullSceenPanelVisibilityValueConverter" />
+        
     </UserControl.Resources>
     
     <Grid>
@@ -19,11 +21,31 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        
-        <TextBlock Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center">Media Window placeholder</TextBlock>
-        
-        <Grid Grid.Row="1" DataContext="{Binding Path=ControlViewModel, Mode=OneTime}">
-            <ctrls:RegularControlPanel Visibility="{Binding Path=IsFullScreen, Converter={StaticResource RegularControlPanelVisibilityValueConverter}}"
+
+        <Border Grid.Row="0" BorderThickness="0" Background="Black">
+            <Rectangle StrokeThickness="0" Fill="{StaticResource Logo}" MaxHeight="160" />
+        </Border>
+
+        <ctrls:FullScreenControlPanel  Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Bottom"
+                                       DataContext="{Binding Path=ControlViewModel, Mode=OneTime}"
+                                       Style="{DynamicResource FullScreenControlPanelStyle}"
+                                       Visibility="{Binding Path=IsFullScreen, Converter={StaticResource FullSceenPanelVisibilityValueConverter}}"
+                                       PlayCommand="{Binding Path=PlayCommand}"
+                                       PauseCommand="{Binding Path=PauseCommand}"
+                                       StopCommand="{Binding Path=StopCommand}"
+                                       ForwardCommand="{Binding Path=ForwardCommand}"
+                                       BackwardCommand="{Binding Path=BackwardCommand}"
+                                       ToEndCommand="{Binding Path=ToEndCommand}"
+                                       ToBeginingCommand="{Binding Path=ToBeginingCommand}"
+                                       RepeatCommand="{Binding Path=RepeatCommand}"
+                                       MuteCommand="{Binding Path=MuteCommand}"
+                                       VolumeCommand="{Binding Path=VolumeCommand}"
+                                       SeekCommand="{Binding Path=SeekCommand}"/>
+
+        <ctrls:RegularControlPanel Grid.Row="1"
+                                       DataContext="{Binding Path=ControlViewModel, Mode=OneTime}"
+                                       Style="{DynamicResource RegularControlPanelStyle}"
+                                       Visibility="{Binding Path=IsFullScreen, Converter={StaticResource RegularControlPanelVisibilityValueConverter}}"
                                        HorizontalAlignment="Stretch" 
                                        PlayCommand="{Binding Path=PlayCommand}"
                                        PauseCommand="{Binding Path=PauseCommand}"
@@ -36,21 +58,6 @@
                                        MuteCommand="{Binding Path=MuteCommand}"
                                        VolumeCommand="{Binding Path=VolumeCommand}"
                                        SeekCommand="{Binding Path=SeekCommand}" />
-
-            <ctrls:FullScreenControlPanel Visibility="{Binding Path=IsFullScreen, Converter={StaticResource FullSceenPanelVisibilityValueConverter}}"
-                                       HorizontalAlignment="Center" 
-                                       PlayCommand="{Binding Path=PlayCommand}"
-                                       PauseCommand="{Binding Path=PauseCommand}"
-                                       StopCommand="{Binding Path=StopCommand}"
-                                       ForwardCommand="{Binding Path=ForwardCommand}"
-                                       BackwardCommand="{Binding Path=BackwardCommand}"
-                                       ToEndCommand="{Binding Path=ToEndCommand}"
-                                       ToBeginingCommand="{Binding Path=ToBeginingCommand}"
-                                       RepeatCommand="{Binding Path=RepeatCommand}"
-                                       MuteCommand="{Binding Path=MuteCommand}"
-                                       VolumeCommand="{Binding Path=VolumeCommand}"
-                                       SeekCommand="{Binding Path=SeekCommand}" />
-        </Grid>
         
     </Grid>
 </UserControl>
