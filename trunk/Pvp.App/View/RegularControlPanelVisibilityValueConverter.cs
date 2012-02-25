@@ -7,15 +7,17 @@ using System.Windows;
 
 namespace Dzimchuk.Pvp.App.View
 {
-    internal class RegularControlPanelVisibilityValueConverter : IValueConverter
+    internal class RegularControlPanelVisibilityValueConverter : IMultiValueConverter
     {
-        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        public object Convert(object[] values, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            bool isFullScreen = (bool)value;
-            return isFullScreen ? Visibility.Collapsed : Visibility.Visible;
+            bool isFullScreen = (bool)values[0];
+            bool isVisible = (bool)values[1];
+
+            return isVisible ? (isFullScreen ? Visibility.Collapsed : Visibility.Visible) : Visibility.Collapsed;
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, System.Globalization.CultureInfo culture)
         {
             throw new NotImplementedException();
         }

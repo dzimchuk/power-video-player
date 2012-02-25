@@ -131,7 +131,7 @@
                                         <Grid>
                                             <Grid.RowDefinitions>
                                                 <RowDefinition Height="Auto" />
-                                                <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="*" />
                                             </Grid.RowDefinitions>
 
                                             <Border Background="{StaticResource InnerBrightPart}" Padding="14,0,0,5" CornerRadius="0,0,0,24">
@@ -160,7 +160,12 @@
                                                 </StackPanel>
                                             </Border>
 
-
+                                            <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,6,0"
+                                                        HorizontalAlignment="Right" VerticalAlignment="Center">
+                                                <TextBlock x:Name="PART_CurrentPosition" Foreground="{StaticResource TextBrush}" />
+                                                <TextBlock Text=" / " Foreground="{StaticResource TextBrush}" />
+                                                <TextBlock x:Name="PART_Duration" Foreground="{StaticResource TextBrush}" />
+                                            </StackPanel>
 
                                         </Grid>
                                     </Border>
@@ -191,7 +196,7 @@
                                 </VisualState>
                                 <VisualState Name="MouseLeave" />
                                 <VisualStateGroup.Transitions>
-                                    <VisualTransition To="MouseLeave" GeneratedDuration="00:00:2"/>
+                                    <VisualTransition To="MouseLeave" GeneratedDuration="00:00:1.5"/>
                                     <VisualTransition To="MouseEnter" GeneratedDuration="00:00:0.5"/>
                                 </VisualStateGroup.Transitions>
                             </VisualStateGroup>
@@ -344,7 +349,12 @@
                                                     </StackPanel>
                                                 </Border>
 
-
+                                                <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,6,0"
+                                                        HorizontalAlignment="Right" VerticalAlignment="Center">
+                                                    <TextBlock x:Name="PART_CurrentPosition" Foreground="{StaticResource TextBrush}" />
+                                                    <TextBlock Text=" / " Foreground="{StaticResource TextBrush}" />
+                                                    <TextBlock x:Name="PART_Duration" Foreground="{StaticResource TextBrush}" />
+                                                </StackPanel>
 
                                             </Grid>
                                         </Border>

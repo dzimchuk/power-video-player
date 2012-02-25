@@ -186,6 +186,13 @@ namespace Dzimchuk.Pvp.App.View
                 Close();
         }
 
+        protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
+        {
+            base.OnClosing(e);
+
+            Messenger.Default.Send(new EventMessage(Event.MainWindowClosing), MessageTokens.App);
+        }
+
         public override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
@@ -223,7 +230,7 @@ namespace Dzimchuk.Pvp.App.View
                     {
                         Messenger.Default.Send(new EventMessage(Event.TitleBarDoubleClick), MessageTokens.UI);
                     }
-                    else
+                    else if (!IsMaximized && !IsFullScreen)
                     {
                         DragMove();
                     }

@@ -8,6 +8,8 @@ namespace Dzimchuk.Pvp.App.Messaging
     internal enum Event
     {
         TitleBarDoubleClick,
-        VideoAreaDoubleClick
+        VideoAreaDoubleClick,
+        MainWindowClosing,
+        SessionEnding
     }
 }

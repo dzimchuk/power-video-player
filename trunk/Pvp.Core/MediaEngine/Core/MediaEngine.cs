@@ -281,6 +281,25 @@ namespace Dzimchuk.MediaEngine.Core
             return 0;
         }
 
+        public TimeSpan CurrentPosition
+        {
+            get
+            {
+                var time = GetCurrentPosition();
+                var totalSeconds = time / CoreDefinitions.ONE_SECOND;
+                var remain = totalSeconds % 3600;
+                var h = totalSeconds / 3600;
+                var minute = remain / 60;
+                var second = remain % 60;
+
+                return new TimeSpan((int)h, (int)minute, (int)second);
+            }
+            set
+            {
+                SetCurrentPosition((value.Hours * 3600 + value.Minutes * 60 + value.Seconds) * CoreDefinitions.ONE_SECOND);
+            }
+        }
+
         public long GetDuration()
         {
             if (_filterGraph == null)
@@ -288,6 +307,21 @@ namespace Dzimchuk.MediaEngine.Core
             if (_filterGraph.bSeekable)
                 return _filterGraph.rtDuration;
             return 0;
+        }
+
+        public TimeSpan Duration
+        {
+            get
+            {
+                var duration = GetDuration();
+                var totalSeconds = duration / CoreDefinitions.ONE_SECOND;
+                var remain = totalSeconds % 3600;
+                var h = totalSeconds / 3600;
+                var minute = remain / 60;
+                var second = remain % 60;
+
+                return new TimeSpan((int)h, (int)minute, (int)second);
+            }
         }
 
         public string GetFilterName(int nFilterNum)

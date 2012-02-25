@@ -8,6 +8,8 @@ using Dzimchuk.Pvp.App.Composition;
 using Dzimchuk.Pvp.App.Util;
 using Dzimchuk.Pvp.App.View;
 using Ninject;
+using GalaSoft.MvvmLight.Messaging;
+using Dzimchuk.Pvp.App.Messaging;
 
 namespace Dzimchuk.Pvp.App
 {
@@ -45,6 +47,13 @@ namespace Dzimchuk.Pvp.App
 
             var resolver = new NinjectDependencyResolver(kernel);
             DependencyResolver.SetResolver(resolver);
+        }
+
+        protected override void OnSessionEnding(SessionEndingCancelEventArgs e)
+        {
+            base.OnSessionEnding(e);
+
+            Messenger.Default.Send(new EventMessage(Event.SessionEnding), MessageTokens.App);
         }
     }
 }

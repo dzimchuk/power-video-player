@@ -7,6 +7,7 @@ namespace Dzimchuk.Pvp.App.Messaging
 {
     internal enum MessageTokens
     {
-        UI
+        UI,
+        App
     }
 }

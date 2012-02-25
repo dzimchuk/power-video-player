@@ -86,6 +86,7 @@
     <Compile Include="Composition\IDependencyResolver.cs" />
     <Compile Include="Composition\NinjectDependencyResolver.cs" />
     <Compile Include="Composition\PvpModule.cs" />
+    <Compile Include="Controls\TimeSpanValueConverter.cs" />
     <Compile Include="Messaging\CommandMessage.cs" />
     <Compile Include="Messaging\Command.cs" />
     <Compile Include="Messaging\MessageTokens.cs" />

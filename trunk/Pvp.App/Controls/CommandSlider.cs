@@ -39,7 +39,15 @@ namespace Dzimchuk.Pvp.App.Controls
 
         public object CommandParameter
         {
-            get { return null; }
+            get 
+            {
+                var max = Maximum;
+                if (max != 0.0)
+                {
+                    return Value / max;
+                }
+                return 0.0; 
+            }
         }
 
         public IInputElement CommandTarget

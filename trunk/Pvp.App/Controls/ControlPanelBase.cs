@@ -22,6 +22,8 @@ namespace Dzimchuk.Pvp.App.Controls
     [TemplatePart(Name = "PART_MuteButton", Type = typeof(ToggleButton))]
     [TemplatePart(Name = "PART_SeekSlider", Type = typeof(CommandSlider))]
     [TemplatePart(Name = "PART_VolumeSlider", Type = typeof(CommandSlider))]
+    [TemplatePart(Name = "PART_CurrentPosition", Type = typeof(TextBlock))]
+    [TemplatePart(Name = "PART_Duration", Type = typeof(TextBlock))]
     public abstract class ControlPanelBase : Control
     {
         public static readonly DependencyProperty PlayCommandProperty = 
@@ -89,6 +91,30 @@ namespace Dzimchuk.Pvp.App.Controls
                                         typeof(ICommand),
                                         typeof(ControlPanelBase),
                                         new PropertyMetadata((ICommand)null));
+
+        public static readonly DependencyProperty DurationProperty =
+            DependencyProperty.Register("Duration",
+                                        typeof(TimeSpan),
+                                        typeof(ControlPanelBase),
+                                        new PropertyMetadata(TimeSpan.Zero));
+
+        public static readonly DependencyProperty CurrentPositionProperty =
+            DependencyProperty.Register("CurrentPosition",
+                                        typeof(TimeSpan),
+                                        typeof(ControlPanelBase),
+                                        new PropertyMetadata(TimeSpan.Zero));
+
+        public static readonly DependencyProperty IsRepeatProperty =
+            DependencyProperty.Register("IsRepeat",
+                                        typeof(bool),
+                                        typeof(ControlPanelBase),
+                                        new PropertyMetadata(false));
+
+        public static readonly DependencyProperty IsMuteProperty =
+            DependencyProperty.Register("IsMute",
+                                        typeof(bool),
+                                        typeof(ControlPanelBase),
+                                        new PropertyMetadata(false));
         
         public ICommand PlayCommand
         {
@@ -222,6 +248,30 @@ namespace Dzimchuk.Pvp.App.Controls
             }
         }
 
+        public TimeSpan Duration
+        {
+            get { return (TimeSpan)GetValue(DurationProperty); }
+            set { SetValue(DurationProperty, value); }
+        }
+
+        public TimeSpan CurrentPosition
+        {
+            get { return (TimeSpan)GetValue(CurrentPositionProperty); }
+            set { SetValue(CurrentPositionProperty, value); }
+        }
+
+        public bool IsRepeat
+        {
+            get { return (bool)GetValue(IsRepeatProperty); }
+            set { SetValue(IsRepeatProperty, value); }
+        }
+
+        public bool IsMute
+        {
+            get { return (bool)GetValue(IsMuteProperty); }
+            set { SetValue(IsMuteProperty, value); }
+        }
+
         public override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
@@ -296,6 +346,11 @@ namespace Dzimchuk.Pvp.App.Controls
                 binding.Source = this;
                 binding.Mode = BindingMode.OneWay;
                 repeatButton.SetBinding(ButtonBase.CommandProperty, binding);
+
+                binding = new Binding("IsRepeat");
+                binding.Source = this;
+                binding.Mode = BindingMode.OneWay;
+                repeatButton.SetBinding(ToggleButton.IsCheckedProperty, binding);
             }
 
             var muteButton = Template.FindName("PART_MuteButton", this) as ToggleButton;
@@ -305,6 +360,11 @@ namespace Dzimchuk.Pvp.App.Controls
                 binding.Source = this;
                 binding.Mode = BindingMode.OneWay;
                 muteButton.SetBinding(ButtonBase.CommandProperty, binding);
+
+                binding = new Binding("IsMute");
+                binding.Source = this;
+                binding.Mode = BindingMode.OneWay;
+                muteButton.SetBinding(ToggleButton.IsCheckedProperty, binding);
             }
 
             var seekSlider = Template.FindName("PART_SeekSlider", this) as CommandSlider;
@@ -323,6 +383,26 @@ namespace Dzimchuk.Pvp.App.Controls
                 binding.Source = this;
                 binding.Mode = BindingMode.OneWay;
                 volumeSlider.SetBinding(CommandSlider.CommandProperty, binding);
+            }
+
+            var currentPosition = Template.FindName("PART_CurrentPosition", this) as TextBlock;
+            if (currentPosition != null)
+            {
+                Binding binding = new Binding("CurrentPosition");
+                binding.Source = this;
+                binding.Mode = BindingMode.OneWay;
+                binding.Converter = new TimeSpanValueConverter();
+                currentPosition.SetBinding(TextBlock.TextProperty, binding);
+            }
+
+            var duration = Template.FindName("PART_Duration", this) as TextBlock;
+            if (duration != null)
+            {
+                Binding binding = new Binding("Duration");
+                binding.Source = this;
+                binding.Mode = BindingMode.OneWay;
+                binding.Converter = new TimeSpanValueConverter();
+                duration.SetBinding(TextBlock.TextProperty, binding);
             }
 
             UpdateTooltips();
