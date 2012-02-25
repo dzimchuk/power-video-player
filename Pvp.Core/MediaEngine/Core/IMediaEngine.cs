@@ -131,6 +131,9 @@ namespace Dzimchuk.MediaEngine.Core
         void   SetRate(double dRate);
         bool   SetVolume(int volume);
 
+        TimeSpan CurrentPosition { get; set; }
+        TimeSpan Duration { get; }
+
         VideoSize GetVideoSize();
         void SetVideoSize(VideoSize size);
         void SetVideoSize(VideoSize size, bool bInitSize);

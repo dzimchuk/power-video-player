@@ -27,6 +27,11 @@ namespace Dzimchuk.Pvp.App.ViewModel
         private ICommand _seekCommand;
 
         private bool _isFullScreen;
+        private bool _isRepeat;
+        private bool _isMute;
+        private TimeSpan _duration;
+        private TimeSpan _currentPosition;
+        private bool _isControlPanelVisible;
 
         public ControlPanelViewModel(IMediaEngine engine)
         {
@@ -45,12 +50,33 @@ namespace Dzimchuk.Pvp.App.ViewModel
             }
         }
 
-        private void FlipFullScreen(bool sendNotification)
+        public bool IsRepeat
         {
-            IsFullScreen = !IsFullScreen;
-            if (sendNotification)
+            get { return _isRepeat; }
+            set
             {
-                Messenger.Default.Send(new PropertyChangedMessage<bool>(this, !IsFullScreen, IsFullScreen, "IsFullScreen"));
+                _isRepeat = value;
+                RaisePropertyChanged("IsRepeat");
+            }
+        }
+
+        public bool IsMute
+        {
+            get { return _isMute; }
+            set
+            {
+                _isMute = value;
+                RaisePropertyChanged("IsMute");
+            }
+        }
+
+        public bool IsControlPanelVisible
+        {
+            get { return _isControlPanelVisible; }
+            set
+            {
+                _isControlPanelVisible = value;
+                RaisePropertyChanged("IsControlPanelVisible");
             }
         }
 
@@ -60,8 +86,32 @@ namespace Dzimchuk.Pvp.App.ViewModel
             {
                 if (message.PropertyName == "IsFullScreen")
                 {
-                    FlipFullScreen(false);
+                    IsFullScreen = !IsFullScreen;
                 }
+                else if (message.PropertyName == "IsControlPanelVisible")
+                {
+                    IsControlPanelVisible = !IsControlPanelVisible;
+                }
+            }
+        }
+
+        public TimeSpan Duration
+        {
+            get { return _duration; }
+            set
+            {
+                _duration = value;
+                RaisePropertyChanged("Duration");
+            }
+        }
+
+        public TimeSpan CurrentPosition
+        {
+            get { return _currentPosition; }
+            set
+            {
+                _currentPosition = value;
+                RaisePropertyChanged("CurrentPosition");
             }
         }
 
@@ -236,7 +286,8 @@ namespace Dzimchuk.Pvp.App.ViewModel
                         (
                             () =>
                             {
-
+                                IsRepeat = !IsRepeat;
+                                Messenger.Default.Send(new PropertyChangedMessage<bool>(this, !IsRepeat, IsRepeat, "IsRepeat"));
                             },
                             () =>
                             {
@@ -259,7 +310,8 @@ namespace Dzimchuk.Pvp.App.ViewModel
                         (
                             () =>
                             {
-
+                                IsMute = !IsMute;
+                                Messenger.Default.Send(new PropertyChangedMessage<bool>(this, !IsMute, IsMute, "IsMute"));
                             },
                             () =>
                             {

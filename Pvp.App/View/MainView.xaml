@@ -6,6 +6,7 @@
              xmlns:app="clr-namespace:Dzimchuk.Pvp.App"
              xmlns:ctrls="clr-namespace:Dzimchuk.Pvp.App.Controls"
              xmlns:view="clr-namespace:Dzimchuk.Pvp.App.View"
+             xmlns:res="clr-namespace:Dzimchuk.Pvp.App.Resources"
              mc:Ignorable="d" 
              d:DesignHeight="350" d:DesignWidth="525"
              DataContext="{x:Static app:ViewModelLocator.MainViewModel}">
@@ -13,6 +14,66 @@
         
         <view:RegularControlPanelVisibilityValueConverter x:Key="RegularControlPanelVisibilityValueConverter" />
         <view:FullSceenPanelVisibilityValueConverter x:Key="FullSceenPanelVisibilityValueConverter" />
+        
+        <ContextMenu x:Key="PvpContextMenu">
+            <MenuItem Header="{x:Static res:Resources.mi_file}">
+                <MenuItem Header="{x:Static res:Resources.mi_file_open}"/>
+                <MenuItem Header="{x:Static res:Resources.mi_file_close}"/>
+                <Separator/>
+                <MenuItem Header="{x:Static res:Resources.mi_file_play_dvd}"/>
+                <Separator/>
+                <MenuItem Header="{x:Static res:Resources.mi_file_information}"/> 
+            </MenuItem>
+            <Separator/>
+            <MenuItem Header="{x:Static res:Resources.mi_play}" Command="{Binding Path=PlayCommand}"/>
+            <MenuItem Header="{x:Static res:Resources.mi_pause}" Command="{Binding Path=PauseCommand}"/>
+            <MenuItem Header="{x:Static res:Resources.mi_stop}" Command="{Binding Path=StopCommand}"/>
+            <MenuItem Header="{x:Static res:Resources.mi_repeat}" Command="{Binding Path=RepeatCommand}" IsChecked="{Binding Path=IsRepeat}"/>
+            <Separator/>
+            <MenuItem Header="{x:Static res:Resources.mi_fullscreen}" Command="{Binding Path=FullScreenCommand}" IsChecked="{Binding Path=IsFullScreen}"/>
+            <Separator/>
+            <MenuItem Header="{x:Static res:Resources.mi_video_size}">
+                <MenuItem Header="50 %"/>
+                <MenuItem Header="100 %"/>
+                <MenuItem Header="200 %"/>
+                <Separator/>
+                <MenuItem Header="{x:Static res:Resources.mi_video_size_free}"/>
+            </MenuItem>
+            <MenuItem Header="{x:Static res:Resources.mi_aspect_ratio}">
+                <MenuItem Header="{x:Static res:Resources.mi_aspect_ratio_original}"/>
+                <Separator/>
+                <MenuItem Header="4:3"/>
+                <MenuItem Header="16:9"/>
+                <MenuItem Header="47:20"/>
+                <Separator/>
+                <MenuItem Header="{x:Static res:Resources.mi_aspect_ratio_free}"/>
+            </MenuItem>
+            <MenuItem Header="{x:Static res:Resources.mi_playrate}">
+                <MenuItem Header="50 %"/>
+                <MenuItem Header="75 %"/>
+                <MenuItem Header="100 %"/>
+                <MenuItem Header="125 %"/>
+                <MenuItem Header="150 %"/>
+                <MenuItem Header="200 %"/>
+            </MenuItem>
+            <MenuItem Header="{x:Static res:Resources.mi_volume}">
+                <MenuItem Header="{x:Static res:Resources.mi_volume_up}"/>
+                <MenuItem Header="{x:Static res:Resources.mi_volume_down}"/>
+                <MenuItem Header="{x:Static res:Resources.mi_volume_mute}" Command="{Binding Path=MuteCommand}" IsChecked="{Binding Path=IsMute}"/>
+            </MenuItem>
+            <Separator/>
+            <MenuItem Header="{x:Static res:Resources.mi_application}">
+                <MenuItem Header="{x:Static res:Resources.mi_controlbar}" Command="{Binding Path=ControlPanelVisibilityToggleCommand}" IsChecked="{Binding Path=IsControlPanelVisible}"/>
+                <Separator/>
+                <MenuItem Header="{x:Static res:Resources.mi_app_lang}">
+                    <MenuItem Header="{x:Static res:Resources.mi_app_lang_default}"/>
+                    <MenuItem Header="{x:Static res:Resources.mi_app_lang_russian}"/>
+                </MenuItem>
+                <MenuItem Header="{x:Static res:Resources.mi_preferences}"/>
+                <MenuItem Header="{x:Static res:Resources.mi_about}"/>
+            </MenuItem>
+            <MenuItem Header="{x:Static res:Resources.mi_exit}" Command="{Binding Path=ExitCommand}"/>
+        </ContextMenu>
         
     </UserControl.Resources>
     
@@ -23,13 +84,15 @@
         </Grid.RowDefinitions>
 
         <Border Grid.Row="0" BorderThickness="0" Background="Black">
-            <Rectangle StrokeThickness="0" Fill="{StaticResource Logo}" MaxHeight="160" />
+            <Rectangle StrokeThickness="0" Fill="{StaticResource Logo}" MaxHeight="160"/>
+            <Border.ContextMenu>
+                <StaticResource ResourceKey="PvpContextMenu"/>
+            </Border.ContextMenu>
         </Border>
 
         <ctrls:FullScreenControlPanel  Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Bottom"
                                        DataContext="{Binding Path=ControlViewModel, Mode=OneTime}"
                                        Style="{DynamicResource FullScreenControlPanelStyle}"
-                                       Visibility="{Binding Path=IsFullScreen, Converter={StaticResource FullSceenPanelVisibilityValueConverter}}"
                                        PlayCommand="{Binding Path=PlayCommand}"
                                        PauseCommand="{Binding Path=PauseCommand}"
                                        StopCommand="{Binding Path=StopCommand}"
@@ -40,12 +103,22 @@
                                        RepeatCommand="{Binding Path=RepeatCommand}"
                                        MuteCommand="{Binding Path=MuteCommand}"
                                        VolumeCommand="{Binding Path=VolumeCommand}"
-                                       SeekCommand="{Binding Path=SeekCommand}"/>
+                                       SeekCommand="{Binding Path=SeekCommand}"
+                                       Duration="{Binding Path=Duration}"
+                                       CurrentPosition="{Binding Path=CurrentPosition}"
+                                       IsRepeat="{Binding Path=IsRepeat}"
+                                       IsMute="{Binding Path=IsMute}">
+            <ctrls:FullScreenControlPanel.Visibility>
+                <MultiBinding Converter="{StaticResource FullSceenPanelVisibilityValueConverter}">
+                    <Binding Path="IsFullScreen"/>
+                    <Binding Path="IsControlPanelVisible"/>
+                </MultiBinding>
+            </ctrls:FullScreenControlPanel.Visibility>
+        </ctrls:FullScreenControlPanel>
 
         <ctrls:RegularControlPanel Grid.Row="1"
                                        DataContext="{Binding Path=ControlViewModel, Mode=OneTime}"
                                        Style="{DynamicResource RegularControlPanelStyle}"
-                                       Visibility="{Binding Path=IsFullScreen, Converter={StaticResource RegularControlPanelVisibilityValueConverter}}"
                                        HorizontalAlignment="Stretch" 
                                        PlayCommand="{Binding Path=PlayCommand}"
                                        PauseCommand="{Binding Path=PauseCommand}"
@@ -57,7 +130,18 @@
                                        RepeatCommand="{Binding Path=RepeatCommand}"
                                        MuteCommand="{Binding Path=MuteCommand}"
                                        VolumeCommand="{Binding Path=VolumeCommand}"
-                                       SeekCommand="{Binding Path=SeekCommand}" />
+                                       SeekCommand="{Binding Path=SeekCommand}"
+                                       Duration="{Binding Path=Duration}"
+                                       CurrentPosition="{Binding Path=CurrentPosition}"
+                                       IsRepeat="{Binding Path=IsRepeat}"
+                                       IsMute="{Binding Path=IsMute}">
+            <ctrls:RegularControlPanel.Visibility>
+                <MultiBinding Converter="{StaticResource RegularControlPanelVisibilityValueConverter}">
+                    <Binding Path="IsFullScreen"/>
+                    <Binding Path="IsControlPanelVisible"/>
+                </MultiBinding>
+            </ctrls:RegularControlPanel.Visibility>
+        </ctrls:RegularControlPanel>
         
     </Grid>
 </UserControl>

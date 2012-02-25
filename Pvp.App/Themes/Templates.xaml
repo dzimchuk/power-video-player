@@ -20,6 +20,8 @@
         <GradientStop Color="#FFBABABA" Offset="0"/>
         <GradientStop Color="#FF8E8E8E" Offset="1"/>
     </LinearGradientBrush>
+
+    <SolidColorBrush x:Key="TextBrush" Color="#FFE7E7E7"/>
     
     <Style x:Key="ArrowStyle" TargetType="Path">
         <Setter Property="Data" Value="M14,14 L40,0 26,26" />
