@@ -22,10 +22,10 @@ namespace Dzimchuk.MediaEngine.Core
         EVR
     }
 
-    public enum WhatToPlay
+    public enum MediaSourceType
     {
-        PLAYING_FILE,
-        PLAYING_DVD
+        File,
+        Dvd
     }
 
     public enum GraphState

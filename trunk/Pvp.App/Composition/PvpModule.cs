@@ -6,6 +6,7 @@ using Ninject.Modules;
 using Dzimchuk.MediaEngine.Core;
 using GalaSoft.MvvmLight;
 using Dzimchuk.Pvp.App.ViewModel;
+using Dzimchuk.Pvp.App.Service;
 
 namespace Dzimchuk.Pvp.App.Composition
 {
@@ -13,7 +14,10 @@ namespace Dzimchuk.Pvp.App.Composition
     {
         public override void Load()
         {
-            Bind<IMediaEngine>().ToMethod(context => MediaEngineServiceProvider.GetMediaEngine()).InSingletonScope();
+            Bind<IMediaEngineProvider>().ToMethod(context => MediaEngineProvider.Instance);
+            Bind<IMediaEngineProviderSetter>().ToMethod(context => MediaEngineProvider.Instance);
+
+            Bind<IFileSelector>().To<FileSelector>();
 
             Bind<ViewModelBase>().To<MainWindowViewModel>().InSingletonScope().Named(ViewModelLocator.MainWindowViewModelName);
             Bind<ViewModelBase>().To<MainViewModel>().InSingletonScope().Named(ViewModelLocator.MainViewModelName);

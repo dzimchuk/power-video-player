@@ -7,6 +7,7 @@
              xmlns:ctrls="clr-namespace:Dzimchuk.Pvp.App.Controls"
              xmlns:view="clr-namespace:Dzimchuk.Pvp.App.View"
              xmlns:res="clr-namespace:Dzimchuk.Pvp.App.Resources"
+             xmlns:core="clr-namespace:Dzimchuk.MediaEngine.Core;assembly=Pvp.Core.Wpf"
              mc:Ignorable="d" 
              d:DesignHeight="350" d:DesignWidth="525"
              DataContext="{x:Static app:ViewModelLocator.MainViewModel}">
@@ -17,8 +18,8 @@
         
         <ContextMenu x:Key="PvpContextMenu">
             <MenuItem Header="{x:Static res:Resources.mi_file}">
-                <MenuItem Header="{x:Static res:Resources.mi_file_open}"/>
-                <MenuItem Header="{x:Static res:Resources.mi_file_close}"/>
+                <MenuItem Header="{x:Static res:Resources.mi_file_open}" Command="{Binding Path=OpenCommand}"/>
+                <MenuItem Header="{x:Static res:Resources.mi_file_close}" Command="{Binding Path=CloseCommand}"/>
                 <Separator/>
                 <MenuItem Header="{x:Static res:Resources.mi_file_play_dvd}"/>
                 <Separator/>
@@ -83,12 +84,12 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <Border Grid.Row="0" BorderThickness="0" Background="Black">
-            <Rectangle StrokeThickness="0" Fill="{StaticResource Logo}" MaxHeight="160"/>
-            <Border.ContextMenu>
+        <core:MediaWindowHost x:Name="_mediaWindowHost" Grid.Row="0" BorderThickness="0" Background="Black" 
+                              LogoBrush="{StaticResource Logo}" LogoMaxHeight="160">
+            <core:MediaWindowHost.ContextMenu>
                 <StaticResource ResourceKey="PvpContextMenu"/>
-            </Border.ContextMenu>
-        </Border>
+            </core:MediaWindowHost.ContextMenu>
+        </core:MediaWindowHost>
 
         <ctrls:FullScreenControlPanel  Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Bottom"
                                        DataContext="{Binding Path=ControlViewModel, Mode=OneTime}"

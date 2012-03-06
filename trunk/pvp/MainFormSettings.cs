@@ -291,7 +291,11 @@ namespace Dzimchuk.PVP
 
             ChangeCurrentCulture(props.Get<string>("ui_language", null));
 
-            MediaTypeManager.GetInstance().Load(props.Get);
+            using (var manager = new MediaTypeManager())
+            {
+                manager.Load(props.Get);
+            }
+                        
         }
 
         protected override void SaveSettings(PropertyBag props)
@@ -315,7 +319,11 @@ namespace Dzimchuk.PVP
 
             props.Add("ui_language", Thread.CurrentThread.CurrentUICulture.Name);
 
-            MediaTypeManager.GetInstance().Save(props.Add);
+            using (var manager = new MediaTypeManager())
+            {
+                manager.Save(props.Add);
+            }
+            
         }
         
         private void OnSettingsApply(object sender, EventArgs e)
@@ -331,10 +339,13 @@ namespace Dzimchuk.PVP
             engine.UsePreferredFilters = dlg.UsePreferredFilters;
             engine.UsePreferredFilters4DVD = dlg.UsePreferredFilters4DVD;
 
-            string[] astrTypes = MediaTypeManager.GetInstance().TypeNames;
-            foreach(string type in astrTypes)
-                MediaTypeManager.GetInstance().SetTypesClsid(type, dlg.GetTypeClsid(type));
-
+            using (var manager = new MediaTypeManager())
+            {
+                string[] astrTypes = manager.TypeNames;
+                foreach (string type in astrTypes)
+                    manager.SetTypesClsid(type, dlg.GetTypeClsid(type));
+            }
+            
             screenshotsFolder = dlg.ScreenshotsFolder;
             bRememberVolume = dlg.RememberVolume;
             bStartFullscreen = dlg.StartFullscreen;

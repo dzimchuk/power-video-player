@@ -20,10 +20,6 @@ namespace Dzimchuk.MediaEngine.Core
 {
     internal class MediaWindow : NativeWindow, IMediaWindow
     {
-        private IntPtr _hwnParent;
-        private bool _keepOpen;
-        private bool _running;
-
         #region Imported functions from nwnd.dll
 
         private static class NwndWrapper
@@ -103,13 +99,10 @@ namespace Dzimchuk.MediaEngine.Core
 
         #endregion
         
-        public MediaWindow(IntPtr hwndParent, int nWidth, int nHeight, bool keepOpen)
+        public MediaWindow(IntPtr hwndParent, int nWidth, int nHeight)
         {
             IntPtr hwnd = CreateMediaWindow(hwndParent, nWidth, nHeight);
             AssignHandle(hwnd);
-
-            _hwnParent = hwndParent;
-            _keepOpen = keepOpen;
         }
         
         protected override void WndProc(ref Message m)
@@ -121,16 +114,6 @@ namespace Dzimchuk.MediaEngine.Core
         }
 
         public event EventHandler<MessageReceivedEventArgs> MessageReceived;
-
-        public IntPtr HostHandle
-        {
-            get { return _hwnParent; }
-        }
-
-        public bool KeepOpen
-        {
-            get { return _keepOpen; }
-        }
 
         public void Invalidate()
         {
@@ -147,7 +130,6 @@ namespace Dzimchuk.MediaEngine.Core
                                           IMFVideoDisplayControl MFVideoDisplayControl)
         {
             SetRunning(true, VMRWindowlessControl, VMRWindowlessControl9, MFVideoDisplayControl);
-            _running = true;
         }
 
         ~MediaWindow()
@@ -165,15 +147,6 @@ namespace Dzimchuk.MediaEngine.Core
         {
             SetRunning(false, null, null, null);
             DestroyHandle();
-            if (disposing && _running && Recreate != null) // when disposing is FALSE we are not on UI thread anyway
-                Recreate(null, EventArgs.Empty);
-        }
-
-        public event EventHandler Recreate;
-
-        public bool IsRunning
-        {
-            get { return _running; }
         }
     }
 }

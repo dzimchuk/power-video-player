@@ -69,6 +69,7 @@
     <Compile Include="MediaEngine\Core\IImageCreator.cs" />
     <Compile Include="MediaEngine\Core\IMediaEngine.cs" />
     <Compile Include="MediaEngine\Core\IMediaWindow.cs" />
+    <Compile Include="MediaEngine\Core\IMediaWindowHost.cs" />
     <Compile Include="MediaEngine\Core\MediaEngine.cs" />
     <Compile Include="MediaEngine\Core\MediaEngineServiceProvider.cs" />
     <Compile Include="MediaEngine\Core\MediaTypeManager.cs" />

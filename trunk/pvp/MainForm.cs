@@ -81,7 +81,7 @@ namespace Dzimchuk.PVP
             if (args.Length > 1) // astr[1] may contain the file name to play
             {
                 strFileName = args[1];
-                whatToPlay = Dzimchuk.MediaEngine.Core.WhatToPlay.PLAYING_FILE;
+                whatToPlay = Dzimchuk.MediaEngine.Core.MediaSourceType.File;
                 bPlayPending = true;
             }
         }
@@ -92,7 +92,7 @@ namespace Dzimchuk.PVP
             {
                 MainForm me = (MainForm) form;
                 me.strFileName = args[1];
-                me.whatToPlay = Dzimchuk.MediaEngine.Core.WhatToPlay.PLAYING_FILE;
+                me.whatToPlay = Dzimchuk.MediaEngine.Core.MediaSourceType.File;
                 me.bPlayPending = true;
             }
         }

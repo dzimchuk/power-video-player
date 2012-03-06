@@ -87,6 +87,9 @@
     <Compile Include="Composition\NinjectDependencyResolver.cs" />
     <Compile Include="Composition\PvpModule.cs" />
     <Compile Include="Controls\TimeSpanValueConverter.cs" />
+    <Compile Include="IMediaEngineProvider.cs" />
+    <Compile Include="IMediaEngineProviderSetter.cs" />
+    <Compile Include="MediaEngineProvider.cs" />
     <Compile Include="Messaging\CommandMessage.cs" />
     <Compile Include="Messaging\Command.cs" />
     <Compile Include="Messaging\MessageTokens.cs" />
@@ -97,10 +100,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Service\FileSelector.cs" />
     <Compile Include="Util\Extensions.cs" />
     <Compile Include="Util\SingleInstance.cs" />
     <Compile Include="ViewModelLocator.cs" />
     <Compile Include="ViewModel\ControlPanelViewModel.cs" />
+    <Compile Include="ViewModel\IFileSelector.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
     <Compile Include="View\FullSceenPanelVisibilityValueConverter.cs" />
@@ -163,6 +168,10 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Pvp.Core.Wpf\Pvp.Core.Wpf.csproj">
+      <Project>{E20389D6-73AD-410A-BB08-D4009B897E4A}</Project>
+      <Name>Pvp.Core.Wpf</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Pvp.Core\Pvp.Core.csproj">
       <Project>{C2E6EE93-B834-4445-9AA2-28F6A6E23D8E}</Project>
       <Name>Pvp.Core</Name>

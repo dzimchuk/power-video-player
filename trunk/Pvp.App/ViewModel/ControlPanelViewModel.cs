@@ -12,7 +12,7 @@ namespace Dzimchuk.Pvp.App.ViewModel
 {
     internal class ControlPanelViewModel : ViewModelBase
     {
-        private readonly IMediaEngine _engine;
+        private readonly IMediaEngineProvider _engineProvider;
 
         private ICommand _playCommand;
         private ICommand _pauseCommand;
@@ -33,9 +33,9 @@ namespace Dzimchuk.Pvp.App.ViewModel
         private TimeSpan _currentPosition;
         private bool _isControlPanelVisible;
 
-        public ControlPanelViewModel(IMediaEngine engine)
+        public ControlPanelViewModel(IMediaEngineProvider engineProvider)
         {
-            _engine = engine;
+            _engineProvider = engineProvider;
 
             Messenger.Default.Register<PropertyChangedMessageBase>(this, true, OnPropertyChanged);
         }

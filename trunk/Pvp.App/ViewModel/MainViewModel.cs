@@ -13,9 +13,14 @@ namespace Dzimchuk.Pvp.App.ViewModel
 {
     internal class MainViewModel : ViewModelBase
     {
-        private readonly IMediaEngine _engine;
+        private readonly IMediaEngineProvider _engineProvider;
         private readonly ControlPanelViewModel _controlViewModel;
 
+        private readonly IFileSelector _fileSelector;
+
+        private ICommand _openCommand;
+        private ICommand _closeCommand;
+        private ICommand _infoCommand;
         private ICommand _fullScreenCommand;
         private ICommand _exitCommand;
         private ICommand _controlPanelVisibilityToggleCommand;
@@ -25,10 +30,13 @@ namespace Dzimchuk.Pvp.App.ViewModel
         private bool _isMute;
         private bool _isControlPanelVisible;
         
-        public MainViewModel(IMediaEngine engine, ControlPanelViewModel controlViewModel)
+        public MainViewModel(IMediaEngineProvider engineProvider, 
+                             ControlPanelViewModel controlViewModel,
+                             IFileSelector fileSelector)
         {
-            _engine = engine;
+            _engineProvider = engineProvider;
             _controlViewModel = controlViewModel;
+            _fileSelector = fileSelector;
 
             Messenger.Default.Register<PropertyChangedMessageBase>(this, true, OnPropertyChanged);
 
@@ -84,6 +92,76 @@ namespace Dzimchuk.Pvp.App.ViewModel
         {
             IsControlPanelVisible = !IsControlPanelVisible;
             Messenger.Default.Send(new PropertyChangedMessage<bool>(this, !IsControlPanelVisible, IsControlPanelVisible, "IsControlPanelVisible"));
+        }
+
+        public ICommand OpenCommand
+        {
+            get
+            {
+                if (_openCommand == null)
+                {
+                    _openCommand = new RelayCommand
+                        (
+                            () =>
+                            {
+                                var filename = _fileSelector.SelectFile("Video Files (*.avi;*.divx;*.mpg;*.mpeg;*.asf;*.wmv;*.mov;*.qt;*.vob;*.dat;*.mkv;*.flv;*.mp4;*.3gp;*.3g2;*.m1v;*.m2v)|" +
+                                                                        "*.avi;*.divx;*.mpg;*.mpeg;*.asf;*.wmv;*.mov;*.qt;*.vob;*.dat;*.mkv;*.flv;*.mp4;*.3gp;*.3g2;*.m1v;*.m2v|All Files (*.*)|*.*");
+                                if (!string.IsNullOrEmpty(filename))
+                                {
+
+                                }
+                            }
+                        );
+                }
+
+                return _openCommand;
+            }
+        }
+
+        public ICommand CloseCommand
+        {
+            get
+            {
+                if (_closeCommand == null)
+                {
+                    _closeCommand = new RelayCommand
+                        (
+                            () =>
+                            {
+                                _engineProvider.MediaEngine.ResetGraph();
+                            },
+                            () =>
+                            {
+                                return _engineProvider.MediaEngine.GraphState != GraphState.Reset;
+                            }
+                        );
+                }
+
+                return _closeCommand;
+            }
+        }
+
+        public ICommand InfoCommand
+        {
+            get
+            {
+                if (_infoCommand == null)
+                {
+                    _infoCommand = new RelayCommand
+                        (
+                            () =>
+                            {
+
+                            },
+                            () =>
+                            {
+                                return _engineProvider.MediaEngine.GraphState != GraphState.Reset;
+                            }
+                        );
+                }
+
+                return _infoCommand;
+            }
         }
 
         public ICommand FullScreenCommand

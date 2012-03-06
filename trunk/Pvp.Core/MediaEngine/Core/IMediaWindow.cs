@@ -42,18 +42,6 @@ namespace Dzimchuk.MediaEngine.Core
         /// Gets HWND of the media window.
         /// </summary>
         IntPtr Handle { get; }
-
-        /// <summary>
-        /// Gets HWND of the media window host.
-        /// </summary>
-        IntPtr HostHandle { get; }
-
-        /// <summary>
-        /// A flag that defines whether the media engine should dispose the window when the graph is reset.
-        /// If it returns TRUE the media engine won't dispose the window and the application will have to
-        /// take care of that.
-        /// </summary>
-        bool KeepOpen { get; }
         
         /// <summary>
         /// Invalidates the media window.

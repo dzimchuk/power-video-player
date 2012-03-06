@@ -324,19 +324,19 @@ namespace Dzimchuk.PVP
             props.Add("keys_definition", htKeys);
         }
 
-        protected void PlayIt(string source, WhatToPlay CurrentlyPlaying)
+        protected void PlayIt(string source, MediaSourceType CurrentlyPlaying)
         {
             bNeedUpdate = false;
             controlbar.dclock.ResetDClock();
             controlbar.seekbar.Enabled = false;
 
-            if (mediaWindowHost.BuildGraph(source, CurrentlyPlaying))
+            if (engine.BuildGraph(source, CurrentlyPlaying))
             {
                 int volume;
                 if (engine.GetVolume(out volume))
                 {
                     bCanChangeVolume = true;
-                    engine.SetVolume(bMute ? -10000 : nVolume);
+                    nVolume = volume;
                 }
                 bNeedUpdate = true;
             }

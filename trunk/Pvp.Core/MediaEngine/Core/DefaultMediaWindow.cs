@@ -21,13 +21,12 @@ namespace Dzimchuk.MediaEngine.Core
     /// <summary>
     /// A native window wrapper
     /// </summary>
-    internal class DefaultMediaWindow : IMediaWindow
+    public class DefaultMediaWindow : IMediaWindow
     {
         public event EventHandler<MessageReceivedEventArgs> MessageReceived;
         
         private const string WINDOW_CLASS_NAME = "PVP_MEDIA_WINDOW";
         private IntPtr _hwnd;
-        private IntPtr _hwndParent;
 
         private IVMRWindowlessControl  _VMRWindowlessControl;
         private IVMRWindowlessControl9 _VMRWindowlessControl9;
@@ -81,7 +80,6 @@ namespace Dzimchuk.MediaEngine.Core
                 throw new Exception(Resources.Resources.error_cant_create_media_window);
 
             _procs.Add(_hwnd, OnWndProc);
-            _hwndParent = hwndParent;
         }
 
         ~DefaultMediaWindow()
@@ -133,8 +131,9 @@ namespace Dzimchuk.MediaEngine.Core
             switch (msg)
             {
                 case (int)WindowsMessages.WM_PAINT:
-                    Paint();
-                //    args.ReturnValue = IntPtr.Zero;
+                    var processed = Paint();
+                    if (processed)
+                        args.ReturnValue = IntPtr.Zero;
                     break;
                 case (int)WindowsMessages.WM_ERASEBKGND:
                     args.ReturnValue = new IntPtr(1); // return non-zero to indicate no further erasing is required
@@ -150,11 +149,13 @@ namespace Dzimchuk.MediaEngine.Core
             return args.ReturnValue ?? WindowsManagement.DefWindowProc(hWnd, msg, wParam, lParam);
         }
 
-        protected virtual void Paint()
+        protected virtual bool Paint()
         {
+            bool processed = false;
             if (_MFVideoDisplayControl != null)
             {
                 _MFVideoDisplayControl.RepaintVideo();
+                processed = true;
             }
             else
             {
@@ -162,12 +163,20 @@ namespace Dzimchuk.MediaEngine.Core
                 IntPtr hDC = GDI.BeginPaint(_hwnd, out ps);
 
                 if (_VMRWindowlessControl != null)
+                {
                     _VMRWindowlessControl.RepaintVideo(_hwnd, hDC);
+                    processed = true;
+                }
                 else if (_VMRWindowlessControl9 != null)
+                {
                     _VMRWindowlessControl9.RepaintVideo(_hwnd, hDC);
+                    processed = true;
+                }
 
                 GDI.EndPaint(_hwnd, ref ps);
             }
+
+            return processed;
         }
 
         protected virtual void OnMessageReceived(MessageReceivedEventArgs args)
@@ -195,16 +204,6 @@ namespace Dzimchuk.MediaEngine.Core
         public IntPtr Handle
         {
             get { return _hwnd; }
-        }
-
-        public IntPtr HostHandle
-        {
-            get { return _hwndParent; }
-        }
-
-        public bool KeepOpen 
-        {
-            get { return false; } 
         }
 
         public void SetRendererInterfaces(IVMRWindowlessControl VMRWindowlessControl,

@@ -86,7 +86,6 @@ namespace Dzimchuk.PVP
             
             mediaWindowHost.Parent = this;
             mediaWindowHost.Dock = DockStyle.Fill;
-            mediaWindowHost.Caption = strProgName;
             Bitmap logo = null;
             try
             {
@@ -105,6 +104,11 @@ namespace Dzimchuk.PVP
             engine = mediaWindowHost.MediaEngine;
             engine.DvdParentalChange += OnUserDecisionNeeded;
             engine.PartialSuccess += OnUserDecisionNeeded;
+
+            engine.ErrorOccured += delegate(object sender, ErrorOccuredEventArgs args)
+            {
+                MessageBox.Show(args.Message, strProgName, MessageBoxButtons.OK, MessageBoxIcon.Stop);
+            };
             
             controlbar.Parent = this;
 

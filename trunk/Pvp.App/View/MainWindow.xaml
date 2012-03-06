@@ -5,6 +5,7 @@
         xmlns:view="clr-namespace:Dzimchuk.Pvp.App.View"
         xmlns:app="clr-namespace:Dzimchuk.Pvp.App"
         Title="{x:Static res:Resources.program_name}" Height="350" Width="525"
+        MinHeight="150" MinWidth="480"
         DataContext="{x:Static app:ViewModelLocator.MainWindowViewModel}"
         Style="{DynamicResource MainWindowStyle}">
     <view:MainView />
