@@ -15,6 +15,7 @@ using System.Drawing;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows.Forms;
 using Dzimchuk.MediaEngine.Core;
 using System.IO;
@@ -215,7 +216,9 @@ namespace Dzimchuk.PVP
         #region Preferred Filters
         void CreateFiltersPanel()
         {
-            string[,] astrTypes = {{strDVDNavigator, strDVDNavigator}, 
+            using (var manager = new MediaTypeManager())
+            {
+                string[,] astrTypes = {{strDVDNavigator, strDVDNavigator}, 
                                     {"Avi Splitter", "Avi"},
                                     {"MPEG 1 Splitter", strMPEG1},
                                     {"MPEG 2 Splitter", strMPEG2},
@@ -227,43 +230,45 @@ namespace Dzimchuk.PVP
                                     {strMPEG2Video, strMPEG2Video},
                                     {strAC3, strAC3},
                                     {strMP3, strMP3}};
-            int y = 5;
-            for (int i=0; i<astrTypes.GetLength(0); i++)
-            {
-                Label label = new Label();
-                label.Parent = panelFilters;
-                label.Text = astrTypes[i,0];
-                label.Location = new Point(5, y);
-                label.Width = 110;
-                
-                ComboBox cb = new ComboBox();
-                cb.Parent = panelFilters;
-                cb.DropDownStyle = ComboBoxStyle.DropDownList;
-                cb.Location = new Point(label.Right, y);
-                cb.Width = panelFilters.Width - cb.Left - (int)(SystemInformation.VerticalScrollBarWidth*1.5);
-                cb.Tag = astrTypes[i,1];
+                int y = 5;
+                for (int i = 0; i < astrTypes.GetLength(0); i++)
+                {
+                    Label label = new Label();
+                    label.Parent = panelFilters;
+                    label.Text = astrTypes[i, 0];
+                    label.Location = new Point(5, y);
+                    label.Width = 110;
 
-                MediaTypeManager.Filter[] filters = MediaTypeManager.GetInstance().GetFilters(astrTypes[i,1]);
-                MediaTypeManager.Filter[] afilters = 
-                    new MediaTypeManager.Filter[filters != null ? filters.Length+1 : 1];
-                afilters[0] = new MediaTypeManager.Filter();
-                afilters[0].filterName = Resources.Resources.preferred_filter_auto;
-                afilters[0].Clsid = Guid.Empty;
-                if (filters != null)
-                    filters.CopyTo(afilters, 1);
-                
-                cb.DataSource = afilters;
-                Guid filterid = MediaTypeManager.GetInstance().GetTypeClsid(astrTypes[i,1]);
-                if (filterid != Guid.Empty)
-                    for(int n=1; n<afilters.Length; n++)
-                        if (filterid == afilters[n].Clsid)
-                        {
-                            cb.SelectedIndex = n;
-                            break;
-                        }
-                                
-                y+=label.Height+5;
+                    ComboBox cb = new ComboBox();
+                    cb.Parent = panelFilters;
+                    cb.DropDownStyle = ComboBoxStyle.DropDownList;
+                    cb.Location = new Point(label.Right, y);
+                    cb.Width = panelFilters.Width - cb.Left - (int)(SystemInformation.VerticalScrollBarWidth * 1.5);
+                    cb.Tag = astrTypes[i, 1];
+
+                    MediaTypeManager.Filter[] filters = manager.GetFilters(astrTypes[i, 1]);
+                    MediaTypeManager.Filter[] afilters =
+                        new MediaTypeManager.Filter[filters != null ? filters.Length + 1 : 1];
+                    afilters[0] = new MediaTypeManager.Filter();
+                    afilters[0].filterName = Resources.Resources.preferred_filter_auto;
+                    afilters[0].Clsid = Guid.Empty;
+                    if (filters != null)
+                        filters.CopyTo(afilters, 1);
+
+                    cb.DataSource = afilters;
+                    Guid filterid = manager.GetTypeClsid(astrTypes[i, 1]);
+                    if (filterid != Guid.Empty)
+                        for (int n = 1; n < afilters.Length; n++)
+                            if (filterid == afilters[n].Clsid)
+                            {
+                                cb.SelectedIndex = n;
+                                break;
+                            }
+
+                    y += label.Height + 5;
+                }
             }
+            
         }
 
         public Guid GetTypeClsid(string strType)
@@ -1184,7 +1189,7 @@ namespace Dzimchuk.PVP
 
         private void SetRenderers()
         {
-            IList<Renderer> renderers = MediaEngineServiceProvider.PresentRenderers;
+            IEnumerable<Renderer> renderers = MediaEngineServiceProvider.PresentRenderers;
             radioEVR.Enabled = renderers.Contains(Renderer.EVR);
             radioVMR.Enabled = renderers.Contains(Renderer.VMR_Windowed);
             radioVMR9.Enabled = renderers.Contains(Renderer.VMR9_Windowed);

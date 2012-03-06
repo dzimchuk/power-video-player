@@ -42,7 +42,7 @@ namespace Dzimchuk.MediaEngine.Core.Description
     /// <summary>
     /// 
     /// </summary>
-    public class StreamInfo
+    public class StreamInfo : IDisposable
     {
         public StreamInfoFlags Flags; // what data members contain valid data
         public Guid MajorType;
@@ -73,9 +73,12 @@ namespace Dzimchuk.MediaEngine.Core.Description
 
         public int dwFrequency; // in hertz
         public byte Quantization; // 0 - the resolution is unknown
+
+        private readonly MediaTypeManager _mediaTypeManager;
         
         public StreamInfo()
         {
+            _mediaTypeManager = new MediaTypeManager();
         }
 
         public string GetMajorType()
@@ -166,8 +169,8 @@ namespace Dzimchuk.MediaEngine.Core.Description
     
             if (strFormat.Length != 0)
                 return strFormat;
-            strFormat = MediaTypeManager.GetInstance().GetTypeName(MajorType, SubType);
-            return strFormat != null ? strFormat : MediaTypeManager.GetInstance().GetFourCC(SubType);
+            strFormat = _mediaTypeManager.GetTypeName(MajorType, SubType);
+            return strFormat != null ? strFormat : _mediaTypeManager.GetFourCC(SubType);
         }
 
         public string GetInterlaceMode()
@@ -295,7 +298,7 @@ Thus, for PCM audio the subtype GUID (defined in uuids.h as MEDIASUBTYPE_PCM) is
                     strFormat = "(AAC)";
                     break;
                 default:
-                    strFormat = MediaTypeManager.GetInstance().GetTypeName(MajorType, SubType);
+                    strFormat = _mediaTypeManager.GetTypeName(MajorType, SubType);
                     break;
             }
             if (strFormat != null)
@@ -349,6 +352,28 @@ Thus, for PCM audio the subtype GUID (defined in uuids.h as MEDIASUBTYPE_PCM) is
                     break;
             }
             return str;
+        }
+
+        ~StreamInfo()
+        {
+            Dispose(false);
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        private void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (_mediaTypeManager != null)
+                {
+                    _mediaTypeManager.Dispose();
+                }
+            }
         }
     }
 }

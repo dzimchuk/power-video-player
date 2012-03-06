@@ -11,6 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Dzimchuk.Pvp.App.Composition;
 
 namespace Dzimchuk.Pvp.App.View
 {
@@ -22,6 +23,9 @@ namespace Dzimchuk.Pvp.App.View
         public MainView()
         {
             InitializeComponent();
+
+            var provider = (IMediaEngineProviderSetter)DependencyResolver.Current.Resolve<IMediaEngineProviderSetter>();
+            provider.MediaEngine = _mediaWindowHost.MediaEngine;
         }
     }
 }

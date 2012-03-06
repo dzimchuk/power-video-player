@@ -24,19 +24,155 @@ namespace Dzimchuk.MediaEngine.Core
     /// <summary>
     /// Summary description for MediaTypeManager.
     /// </summary>
-    public class MediaTypeManager
+    public class MediaTypeManager : IDisposable
     {
         public delegate void SaveAction<T1, T2>(T1 name, T2 value); // Action<T1, T2> is supported since .NET 3.5
         public delegate TResult LoadAction<T1, TResult>(T1 name, TResult defaultValue); 
+
+        private class MediaTypesHolder
+        {
+            public Hashtable Types { get; set; }
+            public Hashtable AggrTypes { get; set; }
+
+            private static MediaTypesHolder _instance;
+
+            static MediaTypesHolder()
+            {
+                _instance = new MediaTypesHolder();
+            }
+
+            public static MediaTypesHolder Instance
+            {
+                get { return _instance; }
+            }
+
+            private MediaTypesHolder()
+            {
+                CreateHashtables();
+            }
+
+            private void CreateHashtables()
+            {
+                Types = new Hashtable();
+                AggrTypes = new Hashtable();
+
+                MediaTypeInfo[] types = new MediaTypeInfo[2];
+                types[0] = new MediaTypeInfo(MediaType.Video, GetGuid("div3"));
+                types[1] = new MediaTypeInfo(MediaType.Video, GetGuid("DIV3"));
+                AggrTypes.Add("DivX 3 Video", types);
+
+                types = new MediaTypeInfo[2];
+                types[0] = new MediaTypeInfo(MediaType.Video, GetGuid("div4"));
+                types[1] = new MediaTypeInfo(MediaType.Video, GetGuid("DIV4"));
+                AggrTypes.Add("DivX 4 Video", types);
+
+                types = new MediaTypeInfo[10];
+                types[0] = new MediaTypeInfo(MediaType.Video, GetGuid("div5"));
+                types[1] = new MediaTypeInfo(MediaType.Video, GetGuid("DIV5"));
+                types[2] = new MediaTypeInfo(MediaType.Video, GetGuid("div6"));
+                types[3] = new MediaTypeInfo(MediaType.Video, GetGuid("DIV6"));
+                types[4] = new MediaTypeInfo(MediaType.Video, GetGuid("divx"));
+                types[5] = new MediaTypeInfo(MediaType.Video, GetGuid("DIVX"));
+                types[6] = new MediaTypeInfo(MediaType.Video, GetGuid("dx50"));
+                types[7] = new MediaTypeInfo(MediaType.Video, GetGuid("DX50"));
+                types[8] = new MediaTypeInfo(MediaType.Video, GetGuid("dvx1"));
+                types[9] = new MediaTypeInfo(MediaType.Video, GetGuid("DVX1"));
+                AggrTypes.Add("DivX 5 Video", types);
+
+                types = new MediaTypeInfo[2];
+                types[0] = new MediaTypeInfo(MediaType.Video, GetGuid("xvid"));
+                types[1] = new MediaTypeInfo(MediaType.Video, GetGuid("XVID"));
+                AggrTypes.Add("XviD Video", types);
+
+                types = new MediaTypeInfo[2];
+                types[0] = new MediaTypeInfo(MediaType.Video, MediaSubType.MPEG1Payload);
+                types[1] = new MediaTypeInfo(MediaType.Video, MediaSubType.MPEG1Packet);
+                AggrTypes.Add("MPEG 1 Video", types);
+
+                types = new MediaTypeInfo[4];
+                types[0] = new MediaTypeInfo(MediaType.Video, MediaSubType.MPEG2_VIDEO);
+                types[1] = new MediaTypeInfo(MediaType.MPEG2_PES, MediaSubType.MPEG2_VIDEO);
+                types[2] = new MediaTypeInfo(MediaType.DVD_ENCRYPTED_PACK, MediaSubType.MPEG2_VIDEO);
+                types[3] = new MediaTypeInfo(MediaType.MPEG2_PACK, MediaSubType.MPEG2_VIDEO);
+                AggrTypes.Add("MPEG 2 Video", types);
+
+                types = new MediaTypeInfo[3];
+                types[0] = new MediaTypeInfo(MediaType.Audio, MediaSubType.DOLBY_AC3);
+                types[1] = new MediaTypeInfo(MediaType.MPEG2_PES, MediaSubType.DOLBY_AC3);
+                types[2] = new MediaTypeInfo(MediaType.DVD_ENCRYPTED_PACK, MediaSubType.DOLBY_AC3);
+                AggrTypes.Add("Dolby AC3 Audio", types);
+
+                types = new MediaTypeInfo[3];
+                types[0] = new MediaTypeInfo(MediaType.Video, MediaSubType.DVD_SUBPICTURE);
+                types[1] = new MediaTypeInfo(MediaType.MPEG2_PES, MediaSubType.DVD_SUBPICTURE);
+                types[2] = new MediaTypeInfo(MediaType.DVD_ENCRYPTED_PACK, MediaSubType.DVD_SUBPICTURE);
+                AggrTypes.Add("DVD Subpicture", types);
+
+                types = new MediaTypeInfo[1];
+                types[0] = new MediaTypeInfo(MediaType.Audio, GetGuid(DsHlp.WAVE_FORMAT_MPEGLAYER3));
+                AggrTypes.Add("MPEG Layer3 Audio", types);
+
+                types = new MediaTypeInfo[1];
+                types[0] = new MediaTypeInfo(MediaType.Stream, MediaSubType.Avi);
+                AggrTypes.Add("Avi", types);
+
+                types = new MediaTypeInfo[3];
+                types[0] = new MediaTypeInfo(MediaType.Stream, MediaSubType.MPEG1System);
+                types[1] = new MediaTypeInfo(MediaType.Stream, MediaSubType.MPEG1Video);
+                types[2] = new MediaTypeInfo(MediaType.Stream, MediaSubType.MPEG1VideoCD);
+                AggrTypes.Add("MPEG 1", types);
+
+                types = new MediaTypeInfo[2];
+                types[0] = new MediaTypeInfo(MediaType.Stream, MediaSubType.MPEG2_PROGRAM);
+                types[1] = new MediaTypeInfo(MediaType.Stream, MediaSubType.MPEG2_TRANSPORT);
+                AggrTypes.Add("MPEG 2", types);
+
+                IDictionaryEnumerator ide = AggrTypes.GetEnumerator();
+                while (ide.MoveNext())
+                {
+                    string name = (string)ide.Key;
+                    MediaTypeInfo[] atypes = (MediaTypeInfo[])ide.Value;
+                    IEnumerator ie = atypes.GetEnumerator();
+                    while (ie.MoveNext())
+                    {
+                        MediaTypeInfo type = (MediaTypeInfo)ie.Current;
+                        if (!Types.ContainsKey(type.majortype))
+                            Types.Add(type.majortype, new Hashtable());
+                        Hashtable htSubtype = (Hashtable)Types[type.majortype];
+                        if (!htSubtype.ContainsKey(type.subtype))
+                            htSubtype.Add(type.subtype, new SubTypeInfo());
+                        SubTypeInfo info = (SubTypeInfo)htSubtype[type.subtype];
+                        info.Clsid = Guid.Empty;
+                        info.typeName = name;
+                    }
+                }
+            }
+
+            private Guid GetGuid(string strFourCC)
+            {
+                char[] achar = strFourCC.ToCharArray();
+                if (achar.Length >= 4)
+                {
+                    byte[] abyte = { (byte)achar[0], (byte)achar[1], (byte)achar[2], (byte)achar[3], 0x00, 0x00, 0x10, 0x00, 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71 };
+                    return new Guid(abyte);
+                }
+                else
+                    return Guid.Empty;
+            }
+
+            public Guid GetGuid(int data1)
+            {
+                return new Guid(data1, 0x0000, 0x0010, 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71);
+            }
+        }
         
-        private static MediaTypeManager manager;
-        private Hashtable htTypes;
-        private Hashtable htAggrTypes;
+        private readonly MediaTypesHolder _typesHolder;
         private IFilterMapper2 pMapper;
                 
-        private MediaTypeManager()
+        public MediaTypeManager()
         {
-            CreateHashtables();
+            _typesHolder = MediaTypesHolder.Instance;
+
             object comobj = null;
             try
             {
@@ -55,11 +191,27 @@ namespace Dzimchuk.MediaEngine.Core
             }
         }
 
-        public static MediaTypeManager GetInstance()
+        ~MediaTypeManager()
         {
-            if (manager == null)
-                manager = new MediaTypeManager();
-            return manager;
+            Dispose(false);
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        private void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (pMapper != null)
+                {
+                    Marshal.FinalReleaseComObject(pMapper);
+                    pMapper = null;
+                }
+            }
         }
 
         public class Filter
@@ -94,124 +246,29 @@ namespace Dzimchuk.MediaEngine.Core
         #endregion
 
         #region Private methods
-        private void CreateHashtables()
-        {
-            htTypes = new Hashtable();
-            htAggrTypes = new Hashtable();
-            
-            MediaTypeInfo[] types = new MediaTypeInfo[2];
-            types[0] = new MediaTypeInfo(MediaType.Video, GetGuid("div3"));
-            types[1] = new MediaTypeInfo(MediaType.Video, GetGuid("DIV3"));
-            htAggrTypes.Add("DivX 3 Video", types);
-
-            types = new MediaTypeInfo[2];
-            types[0] = new MediaTypeInfo(MediaType.Video, GetGuid("div4"));
-            types[1] = new MediaTypeInfo(MediaType.Video, GetGuid("DIV4"));
-            htAggrTypes.Add("DivX 4 Video", types);
-
-            types = new MediaTypeInfo[10];
-            types[0] = new MediaTypeInfo(MediaType.Video, GetGuid("div5"));
-            types[1] = new MediaTypeInfo(MediaType.Video, GetGuid("DIV5"));
-            types[2] = new MediaTypeInfo(MediaType.Video, GetGuid("div6"));
-            types[3] = new MediaTypeInfo(MediaType.Video, GetGuid("DIV6"));
-            types[4] = new MediaTypeInfo(MediaType.Video, GetGuid("divx"));
-            types[5] = new MediaTypeInfo(MediaType.Video, GetGuid("DIVX"));
-            types[6] = new MediaTypeInfo(MediaType.Video, GetGuid("dx50"));
-            types[7] = new MediaTypeInfo(MediaType.Video, GetGuid("DX50"));
-            types[8] = new MediaTypeInfo(MediaType.Video, GetGuid("dvx1"));
-            types[9] = new MediaTypeInfo(MediaType.Video, GetGuid("DVX1"));
-            htAggrTypes.Add("DivX 5 Video", types);
-
-            types = new MediaTypeInfo[2];
-            types[0] = new MediaTypeInfo(MediaType.Video, GetGuid("xvid"));
-            types[1] = new MediaTypeInfo(MediaType.Video, GetGuid("XVID"));
-            htAggrTypes.Add("XviD Video", types);
-
-            types = new MediaTypeInfo[2];
-            types[0] = new MediaTypeInfo(MediaType.Video, MediaSubType.MPEG1Payload);
-            types[1] = new MediaTypeInfo(MediaType.Video, MediaSubType.MPEG1Packet);
-            htAggrTypes.Add("MPEG 1 Video", types);
-
-            types = new MediaTypeInfo[4];
-            types[0] = new MediaTypeInfo(MediaType.Video, MediaSubType.MPEG2_VIDEO);
-            types[1] = new MediaTypeInfo(MediaType.MPEG2_PES, MediaSubType.MPEG2_VIDEO);
-            types[2] = new MediaTypeInfo(MediaType.DVD_ENCRYPTED_PACK, MediaSubType.MPEG2_VIDEO);
-            types[3] = new MediaTypeInfo(MediaType.MPEG2_PACK, MediaSubType.MPEG2_VIDEO);
-            htAggrTypes.Add("MPEG 2 Video", types);
-
-            types = new MediaTypeInfo[3];
-            types[0] = new MediaTypeInfo(MediaType.Audio, MediaSubType.DOLBY_AC3);
-            types[1] = new MediaTypeInfo(MediaType.MPEG2_PES, MediaSubType.DOLBY_AC3);
-            types[2] = new MediaTypeInfo(MediaType.DVD_ENCRYPTED_PACK, MediaSubType.DOLBY_AC3);
-            htAggrTypes.Add("Dolby AC3 Audio", types);
-
-            types = new MediaTypeInfo[3];
-            types[0] = new MediaTypeInfo(MediaType.Video, MediaSubType.DVD_SUBPICTURE);
-            types[1] = new MediaTypeInfo(MediaType.MPEG2_PES, MediaSubType.DVD_SUBPICTURE);
-            types[2] = new MediaTypeInfo(MediaType.DVD_ENCRYPTED_PACK, MediaSubType.DVD_SUBPICTURE);
-            htAggrTypes.Add("DVD Subpicture", types);
-
-            types = new MediaTypeInfo[1];
-            types[0] = new MediaTypeInfo(MediaType.Audio, GetGuid(DsHlp.WAVE_FORMAT_MPEGLAYER3));
-            htAggrTypes.Add("MPEG Layer3 Audio", types);
-
-            types = new MediaTypeInfo[1];
-            types[0] = new MediaTypeInfo(MediaType.Stream, MediaSubType.Avi);
-            htAggrTypes.Add("Avi", types);
-
-            types = new MediaTypeInfo[3];
-            types[0] = new MediaTypeInfo(MediaType.Stream, MediaSubType.MPEG1System);
-            types[1] = new MediaTypeInfo(MediaType.Stream, MediaSubType.MPEG1Video);
-            types[2] = new MediaTypeInfo(MediaType.Stream, MediaSubType.MPEG1VideoCD);
-            htAggrTypes.Add("MPEG 1", types);
-
-            types = new MediaTypeInfo[2];
-            types[0] = new MediaTypeInfo(MediaType.Stream, MediaSubType.MPEG2_PROGRAM);
-            types[1] = new MediaTypeInfo(MediaType.Stream, MediaSubType.MPEG2_TRANSPORT);
-            htAggrTypes.Add("MPEG 2", types);
-
-            IDictionaryEnumerator ide = htAggrTypes.GetEnumerator();
-            while(ide.MoveNext())
-            {
-                string name = (string)ide.Key;
-                MediaTypeInfo[] atypes = (MediaTypeInfo[])ide.Value;
-                IEnumerator ie = atypes.GetEnumerator();
-                while(ie.MoveNext())
-                {
-                    MediaTypeInfo type = (MediaTypeInfo)ie.Current;
-                    if (!htTypes.ContainsKey(type.majortype))
-                        htTypes.Add(type.majortype, new Hashtable());
-                    Hashtable htSubtype = (Hashtable)htTypes[type.majortype];
-                    if (!htSubtype.ContainsKey(type.subtype))
-                        htSubtype.Add(type.subtype, new SubTypeInfo());
-                    SubTypeInfo info = (SubTypeInfo)htSubtype[type.subtype];
-                    info.Clsid = Guid.Empty;
-                    info.typeName = name;
-                }
-            }
-        }
-
+        
         private MediaTypeInfo[] GetMediaTypeInfoArray(string strType)
         {
-            if (htAggrTypes.ContainsKey(strType))
-                return (MediaTypeInfo[])htAggrTypes[strType];
+            if (_typesHolder.AggrTypes.ContainsKey(strType))
+                return (MediaTypeInfo[])_typesHolder.AggrTypes[strType];
             else
                 return null;
         }
+
         #endregion
 
         public void Load(LoadAction<string, Hashtable> load)
         {
             Hashtable ht1 = load("mtm_media_types", new Hashtable());
             Hashtable ht2 = load("mtm_aggr_types", new Hashtable());
-            htTypes = ht1;
-            htAggrTypes = ht2;
+            _typesHolder.Types = ht1;
+            _typesHolder.AggrTypes = ht2;
         }
 
         public void Save(SaveAction<string, Hashtable> save)
         {
-            save("mtm_media_types", htTypes);
-            save("mtm_aggr_types", htAggrTypes);
+            save("mtm_media_types", _typesHolder.Types);
+            save("mtm_aggr_types", _typesHolder.AggrTypes);
         }
         
         public string GetFourCC(Guid guid)
@@ -225,30 +282,13 @@ namespace Dzimchuk.MediaEngine.Core
             
             return new string(achar);
         }
-
-        public Guid GetGuid(string strFourCC)
-        {
-            char[] achar = strFourCC.ToCharArray();
-            if (achar.Length >= 4)
-            {
-                byte[] abyte = {(byte)achar[0], (byte)achar[1], (byte)achar[2], (byte)achar[3], 0x00, 0x00, 0x10, 0x00, 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71};
-                return new Guid(abyte);
-            }
-            else
-                return Guid.Empty;
-        }
-
-        public Guid GetGuid(int data1)
-        {
-            return new Guid(data1, 0x0000, 0x0010, 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71);
-        }
     
         // Get the type's name
         public string GetTypeName(Guid majortype, Guid subtype)
         {
-            if (htTypes != null && htTypes.ContainsKey(majortype))
+            if (_typesHolder.Types != null && _typesHolder.Types.ContainsKey(majortype))
             {
-                Hashtable htSubtype = (Hashtable)htTypes[majortype];
+                Hashtable htSubtype = (Hashtable)_typesHolder.Types[majortype];
                 if (htSubtype.ContainsKey(subtype))
                     return ((SubTypeInfo)htSubtype[subtype]).typeName;
             }
@@ -258,9 +298,9 @@ namespace Dzimchuk.MediaEngine.Core
         // Get Clsid of the filter associated with a media type
         public Guid GetTypeClsid(Guid majortype, Guid subtype)
         {
-            if (htTypes != null && htTypes.ContainsKey(majortype))
+            if (_typesHolder.Types != null && _typesHolder.Types.ContainsKey(majortype))
             {
-                Hashtable htSubtype = (Hashtable)htTypes[majortype];
+                Hashtable htSubtype = (Hashtable)_typesHolder.Types[majortype];
                 if (htSubtype.ContainsKey(subtype))
                     return ((SubTypeInfo)htSubtype[subtype]).Clsid;
             }
@@ -283,9 +323,9 @@ namespace Dzimchuk.MediaEngine.Core
             {
                 foreach(MediaTypeInfo type in atypes)
                 {
-                    if (htTypes.ContainsKey(type.majortype))
+                    if (_typesHolder.Types.ContainsKey(type.majortype))
                     {
-                        Hashtable htSubtype = (Hashtable)htTypes[type.majortype];
+                        Hashtable htSubtype = (Hashtable)_typesHolder.Types[type.majortype];
                         if (htSubtype.ContainsKey(type.subtype))
                             ((SubTypeInfo)htSubtype[type.subtype]).Clsid = filterClsid;
                     }
@@ -298,7 +338,7 @@ namespace Dzimchuk.MediaEngine.Core
         {
             get
             {
-                ArrayList list = new ArrayList(htAggrTypes.Keys);
+                ArrayList list = new ArrayList(_typesHolder.AggrTypes.Keys);
                 return (string[])list.ToArray(typeof(string));
             }
         }

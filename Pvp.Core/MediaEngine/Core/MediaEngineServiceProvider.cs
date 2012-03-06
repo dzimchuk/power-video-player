@@ -12,6 +12,8 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
 
 namespace Dzimchuk.MediaEngine.Core
 {
@@ -21,12 +23,31 @@ namespace Dzimchuk.MediaEngine.Core
         /// Get a media engine implementation.
         /// </summary>
         /// <returns>Suitable media engine implementation.</returns>
-        public static IMediaEngine GetMediaEngine()
+        public static IMediaEngine GetMediaEngine(IMediaWindowHost mediaWindowHost)
         {
-            return new MediaEngine();
+            ThreadPool.QueueUserWorkItem(RetrieveVideoRenderers);
+            return new MediaEngine(mediaWindowHost);
         }
 
-        private static IList<Renderer> _renderers = null;
+        private static IEnumerable<Renderer> _renderers = null;
+        private static readonly object _syncRoot = new object();
+
+        private static void RetrieveVideoRenderers(object state)
+        {
+            if (_renderers == null)
+            {
+                lock (_syncRoot)
+                {
+                    if (_renderers == null)
+                    {
+                        using (var manager = new MediaTypeManager())
+                        {
+                            _renderers = manager.GetPresentVideoRenderers();
+                        }
+                    }
+                }
+            }
+        }
         
         /// <summary>
         /// Get a recommended renderer from Renderer enumeration for the current system.
@@ -35,8 +56,7 @@ namespace Dzimchuk.MediaEngine.Core
         {
             get
             {
-                if (_renderers == null)
-                    _renderers = MediaTypeManager.GetInstance().GetPresentVideoRenderers();
+                RetrieveVideoRenderers(null);
 
                 Renderer r = Renderer.VR;
                 OperatingSystem os = Environment.OSVersion;
@@ -54,12 +74,11 @@ namespace Dzimchuk.MediaEngine.Core
         /// <summary>
         /// Get a read-only list of all renderers that are supported on the current system.
         /// </summary>
-        public static IList<Renderer> PresentRenderers
+        public static IEnumerable<Renderer> PresentRenderers
         {
             get
             {
-                if (_renderers == null)
-                    _renderers = MediaTypeManager.GetInstance().GetPresentVideoRenderers();
+                RetrieveVideoRenderers(null);
                 return _renderers;
             }
         }

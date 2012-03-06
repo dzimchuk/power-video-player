@@ -70,7 +70,7 @@ namespace Dzimchuk.MediaEngine.Core.GraphBuilders
         }
         
         public static FilterGraph BuildFilterGraph(string source,
-                                                   WhatToPlay CurrentlyPlaying,
+                                                   MediaSourceType CurrentlyPlaying,
                                                    IntPtr hMediaWindow,
                                                    Renderer PreferredVideoRenderer,
                                                    Action<string> onErrorCallback,
@@ -164,11 +164,11 @@ namespace Dzimchuk.MediaEngine.Core.GraphBuilders
         }
         
         private static FilterGraphBuilder GetFilterGraphBuilder(string source,
-                                                                WhatToPlay CurrentlyPlaying,
+                                                                MediaSourceType CurrentlyPlaying,
                                                                 FilterGraph pFilterGraph)
         {
             FilterGraphBuilder pFilterGraphBuilder;
-            if (CurrentlyPlaying == WhatToPlay.PLAYING_DVD)
+            if (CurrentlyPlaying == MediaSourceType.Dvd)
             {
                 pFilterGraphBuilder = DVDFilterGraphBuilder.GetGraphBuilder();
             }
@@ -245,7 +245,11 @@ namespace Dzimchuk.MediaEngine.Core.GraphBuilders
         protected void GetFilter(Guid majortype, Guid subtype, out IBaseFilter filter)
         {
             filter = null;
-            Guid guidFilter = MediaTypeManager.GetInstance().GetTypeClsid(majortype, subtype);
+            Guid guidFilter = Guid.Empty;
+            using (var manager = new MediaTypeManager())
+            {
+                guidFilter = manager.GetTypeClsid(majortype, subtype);
+            }
             if (guidFilter != Guid.Empty)
                 GetFilter(guidFilter, out filter);
         }

@@ -32,7 +32,7 @@ namespace Dzimchuk.PVP
         
         protected bool bPlayPending;
         protected string strFileName;
-        protected WhatToPlay whatToPlay = WhatToPlay.PLAYING_FILE;
+        protected MediaSourceType whatToPlay = MediaSourceType.File;
             
         public MainFormFile()
         {
@@ -148,7 +148,7 @@ namespace Dzimchuk.PVP
             string source = (string)item.Tag;
             source += "Video_ts";
             strFileName = source;
-            whatToPlay = Dzimchuk.MediaEngine.Core.WhatToPlay.PLAYING_DVD;
+            whatToPlay = Dzimchuk.MediaEngine.Core.MediaSourceType.Dvd;
             bPlayPending = true;
         }
         
@@ -194,7 +194,7 @@ namespace Dzimchuk.PVP
                 if (dlg.ShowDialog(this) == DialogResult.OK)
                 {
                     strFileName = dlg.FileName;
-                    whatToPlay = Dzimchuk.MediaEngine.Core.WhatToPlay.PLAYING_FILE;
+                    whatToPlay = Dzimchuk.MediaEngine.Core.MediaSourceType.File;
                     bPlayPending = true;
                 }
 

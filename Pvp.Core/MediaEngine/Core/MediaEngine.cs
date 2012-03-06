@@ -33,6 +33,7 @@ namespace Dzimchuk.MediaEngine.Core
         private bool _repeat;
 
         private IMediaWindow _mediaWindow;
+        private readonly IMediaWindowHost _mediaWindowHost;
 
         private const int DIVIDESIZE50 = 2;
 
@@ -47,8 +48,10 @@ namespace Dzimchuk.MediaEngine.Core
         /// <summary>
         /// Constructor.
         /// </summary>
-        public MediaEngine()
+        public MediaEngine(IMediaWindowHost mediaWindowHost)
         {
+            _mediaWindowHost = mediaWindowHost;
+
             _regularBuilder = RegularFilterGraphBuilder.GetGraphBuilder();
             _dvdBuilder = DVDFilterGraphBuilder.GetGraphBuilder();
 
@@ -461,6 +464,13 @@ namespace Dzimchuk.MediaEngine.Core
 
         public bool SetVolume(int volume)
         {
+            _volume = CalculateVolumeValue(volume);
+            IsMuted = volume == -10000;
+            return true;
+        }
+
+        private bool SetVolumeInternal(int volume)
+        {
             if (_filterGraph == null)
                 return false;
             if (_filterGraph.SourceType == SourceType.DVD)
@@ -469,6 +479,62 @@ namespace Dzimchuk.MediaEngine.Core
                 return false;
             IBasicAudio pBA = (IBasicAudio)_filterGraph.arrayBasicAudio[_filterGraph.nCurrentAudioStream];
             return pBA.put_Volume(volume) == DsHlp.S_OK;
+        }
+
+        private const int VOLUME_RANGE = -5000;
+        private int CalculateVolumeValue(double volume)
+        {
+            return (int)(VOLUME_RANGE * (1.0 - volume));
+        }
+
+        private double CalculateVolumeValue(int volume)
+        {
+            if (volume > 0)
+                throw new ArgumentException("Volume value cannot be greater than 0.");
+
+            if (volume < VOLUME_RANGE)
+                return 0.0;
+
+            return 1.0 - volume / VOLUME_RANGE;
+        }
+
+        private double _volume = 0.5;
+        public double Volume
+        {
+            get
+            {
+                return _volume;
+            }
+            set
+            {
+                if (value < 0.0 || value > 1.0)
+                    throw new ArgumentException("Volume should be between 0 and 1.");
+                
+                if (!IsMuted)
+                {
+                    SetVolumeInternal(CalculateVolumeValue(value));
+                }
+
+                _volume = value;
+            }
+        }
+
+        private bool _isMuted;
+        public bool IsMuted
+        {
+            get
+            {
+                return _isMuted;
+            }
+            set
+            {
+                if (value)
+                    SetVolumeInternal(-10000);
+                else
+                    SetVolumeInternal(CalculateVolumeValue(_volume));
+
+                _isMuted = value;
+            }
         }
 
         public VideoSize GetVideoSize()
@@ -581,16 +647,16 @@ namespace Dzimchuk.MediaEngine.Core
         /// <param name="mediaWindow">An instance of the media window.
         /// </param>
         /// <param name="source">Filename.</param>
-        /// <param name="CurrentlyPlaying">One of the WhatToPlay values (FILE or DVD).</param>
+        /// <param name="CurrentlyPlaying">One of the MediaSourceType.</param>
         /// <returns></returns>
-        public bool BuildGraph(IMediaWindow mediaWindow, string source, WhatToPlay CurrentlyPlaying)
+        public bool BuildGraph(string source, MediaSourceType mediaSourceType)
         {
             ResetGraph();
 
-            _mediaWindow = mediaWindow;
+            _mediaWindow = _mediaWindowHost.GetMediaWindow();
             _mediaWindow.MessageReceived += new EventHandler<MessageReceivedEventArgs>(_mediaWindow_MessageReceived);
             _filterGraph = FilterGraphBuilder.BuildFilterGraph(source,
-                                                               CurrentlyPlaying,
+                                                               mediaSourceType,
                                                                _mediaWindow.Handle,
                                                                _preferredRenderer,
                                                                ReportError,
@@ -607,6 +673,7 @@ namespace Dzimchuk.MediaEngine.Core
                     _filterGraph.pRenderer is VMR9Windowless ? ((VMR9Windowless)_filterGraph.pRenderer).VMRWindowlessControl : null,
                     _filterGraph.pRenderer is EVR ? ((EVR)_filterGraph.pRenderer).MFVideoDisplayControl : null);
                 OnInitSize();
+                IsMuted = IsMuted; // this resets the volume
                 if (_autoPlay)
                     return ResumeGraph();
                 else
@@ -1186,9 +1253,10 @@ namespace Dzimchuk.MediaEngine.Core
         private void CleanUpMediaWindow()
         {
             _mediaWindow.MessageReceived -= new EventHandler<MessageReceivedEventArgs>(_mediaWindow_MessageReceived);
-            if (!_mediaWindow.KeepOpen)
-                _mediaWindow.Dispose();
+            _mediaWindow.Dispose();
             _mediaWindow = null;
+
+            OnMediaWindowDisposed(EventArgs.Empty);
         }
 
         private void ReportError(string error)
@@ -1292,7 +1360,7 @@ namespace Dzimchuk.MediaEngine.Core
                 return;
 
             GDI.RECT rect;
-            WindowsManagement.GetClientRect(_mediaWindow.HostHandle, out rect);
+            WindowsManagement.GetClientRect(_mediaWindowHost.Handle, out rect);
             int clientWidth = rect.right - rect.left;
             int clientHeight = rect.bottom - rect.top;
 
@@ -1681,5 +1749,13 @@ namespace Dzimchuk.MediaEngine.Core
         }
 
         #endregion
+
+        public event EventHandler MediaWindowDisposed;
+
+        protected virtual void OnMediaWindowDisposed(EventArgs args)
+        {
+            if (MediaWindowDisposed != null)
+                MediaWindowDisposed(this, args);
+        }
     }
 }

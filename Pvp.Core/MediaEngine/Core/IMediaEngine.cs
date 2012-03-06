@@ -95,6 +95,15 @@ namespace Dzimchuk.MediaEngine.Core
         /// </summary>
         event EventHandler Update;
 
+        /// <summary>
+        /// Occures when the engine disposes of the media window, that is, it should no longer be used.
+        /// This event is raised when the grapg is reset.
+        /// 
+        /// Application might be interested in this event if it wants to display something like a logo inside a
+        /// media widow host's frame when the video is not rendered.
+        /// </summary>
+        event EventHandler MediaWindowDisposed;
+
         #endregion
 
         
@@ -122,14 +131,23 @@ namespace Dzimchuk.MediaEngine.Core
         SourceType  SourceType { get; }
 
         string GetAudioStreamName(int nStream);
-        long   GetCurrentPosition();
-        long   GetDuration();
         string GetFilterName(int nFilterNum);
         double GetRate();
+        void SetRate(double dRate);
+
+        [Obsolete("Use Volume property instead.")]
         bool   GetVolume(out int volume);
+        [Obsolete("Use Volume property instead.")]
+        bool SetVolume(int volume);
+        [Obsolete("Use CurrentPosition property instead.")]
         void   SetCurrentPosition(long time);
-        void   SetRate(double dRate);
-        bool   SetVolume(int volume);
+        [Obsolete("Use CurrentPosition property instead.")]
+        long GetCurrentPosition();
+        [Obsolete("Use Duration property instead.")]
+        long GetDuration();
+
+        double Volume { get; set; }
+        bool IsMuted { get; set; }
 
         TimeSpan CurrentPosition { get; set; }
         TimeSpan Duration { get; }
@@ -152,7 +170,7 @@ namespace Dzimchuk.MediaEngine.Core
 
         #region Playback control methods
 
-        bool BuildGraph(IMediaWindow mediaWindow, string source, WhatToPlay CurrentlyPlaying);
+        bool BuildGraph(string source, MediaSourceType mediaSourceType);
         bool PauseGraph();
         void ResetGraph();
         bool ResumeGraph();

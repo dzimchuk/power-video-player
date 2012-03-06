@@ -23,7 +23,7 @@ namespace Dzimchuk.MediaEngine.Core
     /// <summary>
     /// Media Window.
     /// </summary>
-    public class MediaWindowHost : System.Windows.Forms.UserControl
+    public class MediaWindowHost : System.Windows.Forms.UserControl, IMediaWindowHost
     {
         /// <summary> 
         /// Required designer variable.
@@ -39,7 +39,6 @@ namespace Dzimchuk.MediaEngine.Core
 
         private MediaWindow _mediaWindow;
         private IMediaEngine _engine;
-        private string _caption;
         private bool _showLogo;
 
         private MediaWindowHandler _mwHandler;
@@ -139,10 +138,15 @@ namespace Dzimchuk.MediaEngine.Core
 
             BackColor = Color.Black;
 
-            _engine = MediaEngineServiceProvider.GetMediaEngine();
-            _engine.ErrorOccured += delegate(object sender, ErrorOccuredEventArgs args)
+            _engine = MediaEngineServiceProvider.GetMediaEngine(this);
+            _engine.MediaWindowDisposed += delegate(object sender, EventArgs args)
             {
-                MessageBox.Show(args.Message, _caption, MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                if (_mediaWindow != null)
+                {
+                    _mediaWindow.MessageReceived -= new EventHandler<MessageReceivedEventArgs>(_mediaWindow_MessageReceived);
+                }
+
+                CreateMediaWindow();
             };
         }
 
@@ -154,15 +158,8 @@ namespace Dzimchuk.MediaEngine.Core
 
         private void CreateMediaWindow()
         {
-            _mediaWindow = new MediaWindow(Handle, Width, Height, false);
+            _mediaWindow = new MediaWindow(Handle, Width, Height);
             _mediaWindow.MessageReceived += new EventHandler<MessageReceivedEventArgs>(_mediaWindow_MessageReceived);
-            _mediaWindow.Recreate += new EventHandler(MediaWindowHost_Recreate);
-        }
-
-        private void MediaWindowHost_Recreate(object sender, EventArgs e)
-        {
-            if (_mediaWindow.IsRunning) // FALSE for a newly created window in BuildGraph -> no need to recreate
-                CreateMediaWindow();
         }
 
         public new Control Parent
@@ -250,22 +247,9 @@ namespace Dzimchuk.MediaEngine.Core
 
         #region Public methods and properties
 
-        public bool BuildGraph(string source, WhatToPlay CurrentlyPlaying)
-        {
-            if (_mediaWindow.IsRunning) // TRUE when BuildGraph is called while previous video is still not closed
-                CreateMediaWindow(); // This new window will have IsRunning == FALSE until _engine.BuildGraph returns
-            return _engine.BuildGraph(_mediaWindow, source, CurrentlyPlaying);
-        }
-
         public IMediaEngine MediaEngine
         {
             get { return _engine; }
-        }
-
-        public string Caption
-        {
-            get { return _caption; }
-            set { _caption = value; }
         }
 
         public bool ShowLogo
@@ -288,5 +272,10 @@ namespace Dzimchuk.MediaEngine.Core
         }
 
         #endregion
+
+        IMediaWindow IMediaWindowHost.GetMediaWindow()
+        {
+            return _mediaWindow;
+        }
     }
 }

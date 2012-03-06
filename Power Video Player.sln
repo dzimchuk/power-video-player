@@ -23,9 +23,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "nwnd64", "nwnd64\nwnd64.vcx
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pvp.App", "Pvp.App\Pvp.App.csproj", "{F3EDD60A-1420-47D9-85F6-6BA5BE8D1ACF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pvp.Core.Wpf", "Pvp.Core.Wpf\Pvp.Core.Wpf.csproj", "{E20389D6-73AD-410A-BB08-D4009B897E4A}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 9
+		SccNumberOfProjects = 10
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs09
 		SccLocalPath0 = .
@@ -53,6 +55,9 @@ Global
 		SccProjectUniqueName8 = Pvp.App\\Pvp.App.csproj
 		SccProjectName8 = Pvp.App
 		SccLocalPath8 = Pvp.App
+		SccProjectUniqueName9 = Pvp.Core.Wpf\\Pvp.Core.Wpf.csproj
+		SccProjectName9 = Pvp.Core.Wpf
+		SccLocalPath9 = Pvp.Core.Wpf
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -187,6 +192,20 @@ Global
 		{F3EDD60A-1420-47D9-85F6-6BA5BE8D1ACF}.Release|x64.ActiveCfg = Release|x86
 		{F3EDD60A-1420-47D9-85F6-6BA5BE8D1ACF}.Release|x86.ActiveCfg = Release|x86
 		{F3EDD60A-1420-47D9-85F6-6BA5BE8D1ACF}.Release|x86.Build.0 = Release|x86
+		{E20389D6-73AD-410A-BB08-D4009B897E4A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E20389D6-73AD-410A-BB08-D4009B897E4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E20389D6-73AD-410A-BB08-D4009B897E4A}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{E20389D6-73AD-410A-BB08-D4009B897E4A}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{E20389D6-73AD-410A-BB08-D4009B897E4A}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{E20389D6-73AD-410A-BB08-D4009B897E4A}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{E20389D6-73AD-410A-BB08-D4009B897E4A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E20389D6-73AD-410A-BB08-D4009B897E4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E20389D6-73AD-410A-BB08-D4009B897E4A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E20389D6-73AD-410A-BB08-D4009B897E4A}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{E20389D6-73AD-410A-BB08-D4009B897E4A}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{E20389D6-73AD-410A-BB08-D4009B897E4A}.Release|Win32.ActiveCfg = Release|Any CPU
+		{E20389D6-73AD-410A-BB08-D4009B897E4A}.Release|x64.ActiveCfg = Release|Any CPU
+		{E20389D6-73AD-410A-BB08-D4009B897E4A}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
