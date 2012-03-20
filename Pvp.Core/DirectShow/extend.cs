@@ -23,7 +23,7 @@ using System.Runtime.InteropServices.ComTypes;
  * IPropertyBag
  * IErrorLog
 */
-namespace Dzimchuk.DirectShow
+namespace Pvp.Core.DirectShow
 {
 	[StructLayout(LayoutKind.Sequential), ComVisible(false)]
 	public struct REGPINMEDIUM

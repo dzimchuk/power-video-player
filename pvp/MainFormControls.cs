@@ -17,14 +17,14 @@ using System.IO;
 using System.Windows.Forms;
 using System.Drawing;
 using System.Globalization;
-using Dzimchuk.MediaEngine.Core;
-using Dzimchuk.Theme;
-using Dzimchuk.DirectShow;
-using Dzimchuk.Native;
+using Pvp.Core.MediaEngine;
+using Pvp.Theme;
+using Pvp.Core.DirectShow;
+using Pvp.Core.Native;
 using Dzimchuk.AUI;
 using System.Text.RegularExpressions;
 
-namespace Dzimchuk.PVP
+namespace Pvp
 {
     /// <summary>
     /// 

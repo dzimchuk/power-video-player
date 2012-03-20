@@ -8,7 +8,7 @@
     <ProjectGuid>{F3EDD60A-1420-47D9-85F6-6BA5BE8D1ACF}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Dzimchuk.Pvp.App</RootNamespace>
+    <RootNamespace>Pvp.App</RootNamespace>
     <AssemblyName>Pvp.App</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
@@ -100,11 +100,13 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Service\DialogService.cs" />
     <Compile Include="Service\FileSelector.cs" />
     <Compile Include="Util\Extensions.cs" />
     <Compile Include="Util\SingleInstance.cs" />
     <Compile Include="ViewModelLocator.cs" />
     <Compile Include="ViewModel\ControlPanelViewModel.cs" />
+    <Compile Include="ViewModel\IDialogService.cs" />
     <Compile Include="ViewModel\IFileSelector.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />

@@ -13,7 +13,7 @@
 using System;
 using System.Drawing;
 using System.Windows.Forms;
-using Dzimchuk.Native;
+using Pvp.Core.Native;
 using System.Runtime.InteropServices;
 using System.ComponentModel;
 using System.Reflection;

@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Windows.Interop;
 using System.Runtime.InteropServices;
-using Dzimchuk.Native;
+using Pvp.Core.Native;
 
-namespace Dzimchuk.MediaEngine.Core
+namespace Pvp.Core.MediaEngine
 {
     internal class MediaWindowHwndHost : HwndHost
     {
@@ -17,12 +17,12 @@ namespace Dzimchuk.MediaEngine.Core
             VerticalAlignment = System.Windows.VerticalAlignment.Stretch;
             HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch;
         }
-
+        
         protected override HandleRef BuildWindowCore(HandleRef hwndParent)
         {
             var hostHandle = WindowsManagement.CreateWindowEx(0,
                                                 "static",
-                                                null,
+                                                "",
                                                 WindowsManagement.WS_VISIBLE | WindowsManagement.WS_CHILD | WindowsManagement.WS_CLIPSIBLINGS,
                                                 0,
                                                 0,
@@ -33,7 +33,7 @@ namespace Dzimchuk.MediaEngine.Core
                                                 IntPtr.Zero,
                                                 IntPtr.Zero);
 
-            _mediaWindow = new DefaultMediaWindow(hostHandle);
+            _mediaWindow = new MediaWindow(hostHandle, 0, 0);
 
             return new HandleRef(this, hostHandle);
         }
@@ -53,7 +53,10 @@ namespace Dzimchuk.MediaEngine.Core
         // if we are not going to handle messages, just leave the default implementation
         protected override IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
         {
-            return base.WndProc(hwnd, msg, wParam, lParam, ref handled);
+            handled = false;
+            return IntPtr.Zero;
+
+            // return base.WndProc(hwnd, msg, wParam, lParam, ref handled);
         }
 
         public IMediaWindow MediaWindow

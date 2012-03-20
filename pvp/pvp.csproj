@@ -22,7 +22,7 @@
     <DefaultTargetSchema>IE50</DefaultTargetSchema>
     <DelaySign>true</DelaySign>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>Dzimchuk.PVP</RootNamespace>
+    <RootNamespace>Pvp</RootNamespace>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
     <StartupObject>
     </StartupObject>

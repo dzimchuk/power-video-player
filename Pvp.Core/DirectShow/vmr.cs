@@ -12,7 +12,7 @@
 
 using System;
 using System.Runtime.InteropServices;
-using Dzimchuk.Native;
+using Pvp.Core.Native;
 
 /* 
  * VMR_ASPECT_RATIO_MODE
@@ -26,7 +26,7 @@ using Dzimchuk.Native;
  * IVMRImageCompositor
  * IVMRAspectRatioControl
 */
-namespace Dzimchuk.DirectShow
+namespace Pvp.Core.DirectShow
 {
     [ComVisible(false)]
     public enum VMR_ASPECT_RATIO_MODE

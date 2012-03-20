@@ -17,7 +17,7 @@ using System.Drawing;
 using System.Data;
 using System.Windows.Forms;
 
-namespace Dzimchuk.Theme
+namespace Pvp.Theme
 {
 	/// <summary>
 	/// Summary description for DClock.

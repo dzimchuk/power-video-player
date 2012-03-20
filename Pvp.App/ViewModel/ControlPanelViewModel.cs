@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using GalaSoft.MvvmLight;
-using Dzimchuk.MediaEngine.Core;
+using Pvp.Core.MediaEngine;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 
-namespace Dzimchuk.Pvp.App.ViewModel
+namespace Pvp.App.ViewModel
 {
     internal class ControlPanelViewModel : ViewModelBase
     {
@@ -125,11 +125,12 @@ namespace Dzimchuk.Pvp.App.ViewModel
                         (
                             () =>
                             {
-                                
+                                _engineProvider.MediaEngine.ResumeGraph();
                             },
                             () =>
                             {
-                                return true;
+                                GraphState state = _engineProvider.MediaEngine.GraphState;
+                                return state != GraphState.Running && state != GraphState.Reset;
                             }
                         );
                 }
@@ -148,11 +149,12 @@ namespace Dzimchuk.Pvp.App.ViewModel
                         (
                             () =>
                             {
-
+                                _engineProvider.MediaEngine.PauseGraph();
                             },
                             () =>
                             {
-                                return true;
+                                GraphState state = _engineProvider.MediaEngine.GraphState;
+                                return state == GraphState.Running;
                             }
                         );
                 }
@@ -171,11 +173,12 @@ namespace Dzimchuk.Pvp.App.ViewModel
                         (
                             () =>
                             {
-
+                                _engineProvider.MediaEngine.StopGraph();
                             },
                             () =>
                             {
-                                return true;
+                                GraphState state = _engineProvider.MediaEngine.GraphState;
+                                return state == GraphState.Running || state == GraphState.Paused;
                             }
                         );
                 }
@@ -286,11 +289,14 @@ namespace Dzimchuk.Pvp.App.ViewModel
                         (
                             () =>
                             {
-                                IsRepeat = !IsRepeat;
+                                var repeat = _engineProvider.MediaEngine.Repeat;
+                                _engineProvider.MediaEngine.Repeat = !repeat;
+                                IsRepeat = !repeat;
                                 Messenger.Default.Send(new PropertyChangedMessage<bool>(this, !IsRepeat, IsRepeat, "IsRepeat"));
                             },
                             () =>
                             {
+                                GraphState state = _engineProvider.MediaEngine.GraphState;
                                 return true;
                             }
                         );

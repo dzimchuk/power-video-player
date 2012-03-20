@@ -8,7 +8,7 @@
     <ProjectGuid>{DD243C13-EE02-49F5-949B-FAC91BE3220E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Dzimchuk</RootNamespace>
+    <RootNamespace>Pvp.Core</RootNamespace>
     <AssemblyName>Pvp.Core.WindowsForms</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -47,15 +47,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MediaEngine\Core\ImageCreator.cs" />
-    <Compile Include="MediaEngine\Core\MediaWindow.cs" />
-    <Compile Include="MediaEngine\Core\MediaWindowHost.cs">
+    <Compile Include="MediaEngine\ImageCreator.cs" />
+    <Compile Include="MediaEngine\MediaWindow.cs" />
+    <Compile Include="MediaEngine\MediaWindowHost.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="MediaEngine\Core\MediaWindowHost.resx">
+    <EmbeddedResource Include="MediaEngine\MediaWindowHost.resx">
       <DependentUpon>MediaWindowHost.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
@@ -64,6 +64,9 @@
       <Project>{C2E6EE93-B834-4445-9AA2-28F6A6E23D8E}</Project>
       <Name>Pvp.Core</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="MediaEngine\Core\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

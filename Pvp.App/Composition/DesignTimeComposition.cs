@@ -6,7 +6,7 @@ using Ninject;
 using System.ComponentModel;
 using System.Windows;
 
-namespace Dzimchuk.Pvp.App.Composition
+namespace Pvp.App.Composition
 {
     internal static class DesignTimeComposition
     {

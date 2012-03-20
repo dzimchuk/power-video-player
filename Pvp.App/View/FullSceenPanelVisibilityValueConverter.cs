@@ -5,7 +5,7 @@ using System.Text;
 using System.Windows.Data;
 using System.Windows;
 
-namespace Dzimchuk.Pvp.App.View
+namespace Pvp.App.View
 {
     internal class FullSceenPanelVisibilityValueConverter : IMultiValueConverter
     {

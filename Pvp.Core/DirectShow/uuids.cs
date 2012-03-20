@@ -13,7 +13,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace Dzimchuk.DirectShow
+namespace Pvp.Core.DirectShow
 {
     [ComVisible(false)]
     public class FilterCategory

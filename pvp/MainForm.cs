@@ -20,12 +20,12 @@ using System.Threading;
 using System.Windows.Forms;
 using System.Drawing;
 using Dzimchuk.Common;
-using Dzimchuk.Native;
+using Pvp.Core.Native;
 using System.Runtime.InteropServices;
 using Dzimchuk.AUI;
-using Dzimchuk.PVP.Util;
+using Pvp.Util;
 
-namespace Dzimchuk.PVP
+namespace Pvp
 {
     /// <summary>
     /// The MainForm. This class contains the entry point.
@@ -81,7 +81,7 @@ namespace Dzimchuk.PVP
             if (args.Length > 1) // astr[1] may contain the file name to play
             {
                 strFileName = args[1];
-                whatToPlay = Dzimchuk.MediaEngine.Core.MediaSourceType.File;
+                whatToPlay = Pvp.Core.MediaEngine.MediaSourceType.File;
                 bPlayPending = true;
             }
         }
@@ -92,7 +92,7 @@ namespace Dzimchuk.PVP
             {
                 MainForm me = (MainForm) form;
                 me.strFileName = args[1];
-                me.whatToPlay = Dzimchuk.MediaEngine.Core.MediaSourceType.File;
+                me.whatToPlay = Pvp.Core.MediaEngine.MediaSourceType.File;
                 me.bPlayPending = true;
             }
         }
@@ -229,7 +229,7 @@ namespace Dzimchuk.PVP
             
             IList<FileAssociator.DocTypeInfo> types = new List<FileAssociator.DocTypeInfo>();
 
-            IList<FileType> ts = Dzimchuk.PVP.FileTypes.GetFileTypes();
+            IList<FileType> ts = Pvp.FileTypes.GetFileTypes();
             foreach (FileType t in ts)
                 types.Add(new FileAssociator.DocTypeInfo(t.Extension, t.Description.Substring(t.Description.IndexOf('-') + 2), icon, command, command, true));
 

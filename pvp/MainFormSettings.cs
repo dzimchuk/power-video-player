@@ -18,12 +18,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Globalization;
-using Dzimchuk.MediaEngine.Core;
+using Pvp.Core.MediaEngine;
 using Dzimchuk.AUI;
 using Dzimchuk.Common;
-using Dzimchuk.PVP.Util;
+using Pvp.Util;
 
-namespace Dzimchuk.PVP
+namespace Pvp
 {
     /// <summary>
     /// 
@@ -181,7 +181,7 @@ namespace Dzimchuk.PVP
             if (n != -1)
                 version = version.Substring(0, n);
             AboutDialog dlg = new AboutDialog(this, AboutDialogBorder.Own, GetType(),
-                "Dzimchuk.PVP.about.bmp", Resources.Resources.about_pvp,
+                "Pvp.about.bmp", Resources.Resources.about_pvp,
                 String.Format("{0} {1}\n{2}\n{3}", Resources.Resources.program_name, version, Resources.Resources.about_copyright, Resources.Resources.about_license),
                 Color.White, Resources.Resources.ok);
             dlg.clrInner = inner;

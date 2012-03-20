@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Ninject.Modules;
-using Dzimchuk.MediaEngine.Core;
+using Pvp.Core.MediaEngine;
 using GalaSoft.MvvmLight;
-using Dzimchuk.Pvp.App.ViewModel;
-using Dzimchuk.Pvp.App.Service;
+using Pvp.App.ViewModel;
+using Pvp.App.Service;
 
-namespace Dzimchuk.Pvp.App.Composition
+namespace Pvp.App.Composition
 {
     public class PvpModule : NinjectModule
     {
@@ -18,6 +18,7 @@ namespace Dzimchuk.Pvp.App.Composition
             Bind<IMediaEngineProviderSetter>().ToMethod(context => MediaEngineProvider.Instance);
 
             Bind<IFileSelector>().To<FileSelector>();
+            Bind<IDialogService>().To<DialogService>();
 
             Bind<ViewModelBase>().To<MainWindowViewModel>().InSingletonScope().Named(ViewModelLocator.MainWindowViewModelName);
             Bind<ViewModelBase>().To<MainViewModel>().InSingletonScope().Named(ViewModelLocator.MainViewModelName);

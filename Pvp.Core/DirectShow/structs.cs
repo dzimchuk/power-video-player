@@ -12,9 +12,9 @@
 
 using System;
 using System.Runtime.InteropServices;
-using Dzimchuk.Native;
+using Pvp.Core.Native;
 
-namespace Dzimchuk.DirectShow
+namespace Pvp.Core.DirectShow
 {
     [StructLayout(LayoutKind.Sequential), ComVisible(false)]
     public struct BITMAPINFOHEADER

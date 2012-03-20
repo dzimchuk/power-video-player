@@ -1,4 +1,4 @@
-﻿namespace Dzimchuk.PVP
+﻿namespace Pvp
 {
     partial class FailedPinsDialog
     {

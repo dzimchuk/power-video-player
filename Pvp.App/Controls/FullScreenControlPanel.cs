@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 
-namespace Dzimchuk.Pvp.App.Controls
+namespace Pvp.App.Controls
 {
     [TemplateVisualState(Name = "MouseEnter", GroupName = "MouseStates")]
     [TemplateVisualState(Name = "MouseLeave", GroupName = "MouseStates")]

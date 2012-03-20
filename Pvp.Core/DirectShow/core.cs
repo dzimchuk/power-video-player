@@ -33,7 +33,7 @@ using System.Runtime.InteropServices;
  * CAUUID
  * IFileSourceFilter
 */
-namespace Dzimchuk.DirectShow
+namespace Pvp.Core.DirectShow
 {
     [ComVisible(false)]
     public enum PinDirection		// PIN_DIRECTION

@@ -14,7 +14,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Dzimchuk.PVP
+namespace Pvp
 {
     internal class FileType
     {

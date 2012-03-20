@@ -8,7 +8,7 @@
     <ProjectGuid>{E20389D6-73AD-410A-BB08-D4009B897E4A}</ProjectGuid>
     <OutputType>library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Dzimchuk.MediaEngine.Core</RootNamespace>
+    <RootNamespace>Pvp.Core.MediaEngine</RootNamespace>
     <AssemblyName>Pvp.Core.Wpf</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
@@ -40,6 +40,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -59,6 +60,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MediaWindow.cs" />
     <Compile Include="MediaWindowHost.cs" />
     <Compile Include="MediaWindowHwndHost.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">

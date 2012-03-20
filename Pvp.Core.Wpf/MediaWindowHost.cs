@@ -11,9 +11,11 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Pvp.Core.Native;
 
-namespace Dzimchuk.MediaEngine.Core
+namespace Pvp.Core.MediaEngine
 {
+    [TemplatePart(Name = "PART_Border", Type = typeof(Border))]
     public class MediaWindowHost : Control, IMediaWindowHost
     {
         static MediaWindowHost()
@@ -75,6 +77,7 @@ namespace Dzimchuk.MediaEngine.Core
             if (active)
             {
                 _hwndHost = new MediaWindowHwndHost();
+                _hwndHost.MessageHook += new System.Windows.Interop.HwndSourceHook(_hwndHost_MessageHook);
                 if (_border != null)
                     _border.Child = _hwndHost;
             }
@@ -102,10 +105,26 @@ namespace Dzimchuk.MediaEngine.Core
 
                     _border.Child = rect;
                 }
-                
+
                 if (_hwndHost != null)
+                {
+                    _hwndHost.MessageHook -= new System.Windows.Interop.HwndSourceHook(_hwndHost_MessageHook);
                     _hwndHost.Dispose();
+                    _hwndHost = null;
+                }
             }
+        }
+
+        private IntPtr _hwndHost_MessageHook(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
+        {
+            handled = false;
+            if (msg == (int)WindowsMessages.WM_SIZE)
+            {
+                _engine.OnMediaWindowHostResized();
+                handled = true;
+            }
+
+            return IntPtr.Zero;
         }
 
         public IMediaWindow GetMediaWindow()

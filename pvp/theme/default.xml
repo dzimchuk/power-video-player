@@ -23,49 +23,49 @@
 		<background parent="mainform" >
 			<name>caption</name>
 			<loc>resource</loc>
-			<file>Dzimchuk.PVP.theme.caption_back.bmp</file>
+			<file>Pvp.theme.caption_back.bmp</file>
 		</background>
 		<background parent="controlbar" >
 			<name>left</name>
 			<loc>resource</loc>
-			<file>Dzimchuk.PVP.theme.background_left.bmp</file>
+			<file>Pvp.theme.background_left.bmp</file>
 		</background>
 		<background parent="controlbar" >
 			<name>mid</name>
 			<loc>resource</loc>
-			<file>Dzimchuk.PVP.theme.background_mid.bmp</file>
+			<file>Pvp.theme.background_mid.bmp</file>
 		</background>
 		<background parent="controlbar" >
 			<name>right</name>
 			<loc>resource</loc>
-			<file>Dzimchuk.PVP.theme.background_right.bmp</file>
+			<file>Pvp.theme.background_right.bmp</file>
 		</background>
 		<background parent="dclock" >
 			<name>dclock</name>
 			<loc>resource</loc>
-			<file>Dzimchuk.PVP.theme.clock_background.bmp</file>
+			<file>Pvp.theme.clock_background.bmp</file>
 		</background>
 	</backgrounds>
 	<buttons>
 		<button parent="mainform" >
 			<name>Minimize</name>
 			<loc>resource</loc>
-			<file>Dzimchuk.PVP.theme.minimize.bmp</file>
+			<file>Pvp.theme.minimize.bmp</file>
 		</button>
 		<button parent="mainform" >
 			<name>Maximize</name>
 			<loc>resource</loc>
-			<file>Dzimchuk.PVP.theme.maximize.bmp</file>
+			<file>Pvp.theme.maximize.bmp</file>
 		</button>
 		<button parent="mainform" >
 			<name>Close</name>
 			<loc>resource</loc>
-			<file>Dzimchuk.PVP.theme.close.bmp</file>
+			<file>Pvp.theme.close.bmp</file>
 		</button>
 		<button parent="controlbar" >
 			<name>Play</name>
 			<loc>resource</loc>
-			<file>Dzimchuk.PVP.theme.play.bmp</file>
+			<file>Pvp.theme.play.bmp</file>
 			<position digits="2" value="0C1C" />
 			<path>
 				<points>
@@ -89,7 +89,7 @@
 		<button parent="controlbar" >
 			<name>Pause</name>
 			<loc>resource</loc>
-			<file>Dzimchuk.PVP.theme.pause.bmp</file>
+			<file>Pvp.theme.pause.bmp</file>
 			<position digits="2" value="2C1C" />
 			<path>
 				<points>
@@ -113,7 +113,7 @@
 		<button parent="controlbar" >
 			<name>Stop</name>
 			<loc>resource</loc>
-			<file>Dzimchuk.PVP.theme.stop.bmp</file>
+			<file>Pvp.theme.stop.bmp</file>
 			<position digits="2" value="4C1C" />
 			<path>
 				<points>
@@ -137,7 +137,7 @@
 		<button parent="controlbar" >
 			<name>Forward</name>
 			<loc>resource</loc>
-			<file>Dzimchuk.PVP.theme.forward.bmp</file>
+			<file>Pvp.theme.forward.bmp</file>
 			<position digits="2" value="B41C" />
 			<path>
 				<points>
@@ -161,7 +161,7 @@
 		<button parent="controlbar" >
 			<name>Backward</name>
 			<loc>resource</loc>
-			<file>Dzimchuk.PVP.theme.backward.bmp</file>
+			<file>Pvp.theme.backward.bmp</file>
 			<position digits="2" value="941C" />
 			<path>
 				<points>
@@ -185,7 +185,7 @@
 		<button parent="controlbar" >
 			<name>To the end</name>
 			<loc>resource</loc>
-			<file>Dzimchuk.PVP.theme.to_end.bmp</file>
+			<file>Pvp.theme.to_end.bmp</file>
 			<position digits="2" value="D41C" />
 			<path>
 				<points>
@@ -209,7 +209,7 @@
 		<button parent="controlbar" >
 			<name>To the begining</name>
 			<loc>resource</loc>
-			<file>Dzimchuk.PVP.theme.to_begining.bmp</file>
+			<file>Pvp.theme.to_begining.bmp</file>
 			<position digits="2" value="741C" />
 			<path>
 				<points>
@@ -233,7 +233,7 @@
 		<button parent="controlbar" >
 			<name>Repeat</name>
 			<loc>resource</loc>
-			<file>Dzimchuk.PVP.theme.repeat.bmp</file>
+			<file>Pvp.theme.repeat.bmp</file>
 			<position digits="2" value="FC1C" />
 			<path>
 				<points>
@@ -257,7 +257,7 @@
 		<button parent="controlbar" >
 			<name>Mute</name>
 			<loc>resource</loc>
-			<file>Dzimchuk.PVP.theme.mute.bmp</file>
+			<file>Pvp.theme.mute.bmp</file>
 			<position digits="3" value="15B017" />
 			<path>
 				<points>
@@ -306,8 +306,8 @@
 		<trackbar parent="controlbar" >
 			<name>Seekbar</name>
 			<loc>resource</loc>
-			<filebkgr>Dzimchuk.PVP.theme.seekbar_bkgr.bmp</filebkgr>
-			<fileslider>Dzimchuk.PVP.theme.seekbar_slider.bmp</fileslider>
+			<filebkgr>Pvp.theme.seekbar_bkgr.bmp</filebkgr>
+			<fileslider>Pvp.theme.seekbar_slider.bmp</fileslider>
 			<pos digits="2" value="0704" />
 			<size digits="3" value="1C100A" />
 			<tanchor left="1" top="0" right="1" bottom="0" />
@@ -315,8 +315,8 @@
 		<trackbar parent="controlbar" >
 			<name>Volume</name>
 			<loc>resource</loc>
-			<filebkgr>Dzimchuk.PVP.theme.volume_bkgr.bmp</filebkgr>
-			<fileslider>Dzimchuk.PVP.theme.volume_slider.bmp</fileslider>
+			<filebkgr>Pvp.theme.volume_bkgr.bmp</filebkgr>
+			<fileslider>Pvp.theme.volume_slider.bmp</fileslider>
 			<pos digits="3" value="182019" />
 			<size digits="2" value="470E" />
 			<tanchor left="0" top="1" right="1" bottom="0" />
