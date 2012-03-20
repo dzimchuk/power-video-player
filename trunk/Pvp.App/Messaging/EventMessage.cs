@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using GalaSoft.MvvmLight.Messaging;
 
-namespace Dzimchuk.Pvp.App.Messaging
+namespace Pvp.App.Messaging
 {
     internal class EventMessage : GenericMessage<Event>
     {

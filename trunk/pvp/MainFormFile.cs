@@ -15,13 +15,13 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Drawing;
 using System.IO;
-using Dzimchuk.MediaEngine.Core;
-using Dzimchuk.Native;
+using Pvp.Core.MediaEngine;
+using Pvp.Core.Native;
 using Dzimchuk.AUI;
-using Dzimchuk.MediaEngine.Core.GraphBuilders;
-using Dzimchuk.MediaEngine.Core.Description;
+using Pvp.Core.MediaEngine.GraphBuilders;
+using Pvp.Core.MediaEngine.Description;
 
-namespace Dzimchuk.PVP
+namespace Pvp
 {
     /// <summary>
     /// 
@@ -148,7 +148,7 @@ namespace Dzimchuk.PVP
             string source = (string)item.Tag;
             source += "Video_ts";
             strFileName = source;
-            whatToPlay = Dzimchuk.MediaEngine.Core.MediaSourceType.Dvd;
+            whatToPlay = Pvp.Core.MediaEngine.MediaSourceType.Dvd;
             bPlayPending = true;
         }
         
@@ -194,7 +194,7 @@ namespace Dzimchuk.PVP
                 if (dlg.ShowDialog(this) == DialogResult.OK)
                 {
                     strFileName = dlg.FileName;
-                    whatToPlay = Dzimchuk.MediaEngine.Core.MediaSourceType.File;
+                    whatToPlay = Pvp.Core.MediaEngine.MediaSourceType.File;
                     bPlayPending = true;
                 }
 

@@ -5,10 +5,10 @@ using System.Text;
 using GalaSoft.MvvmLight;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Command;
-using Dzimchuk.Pvp.App.Messaging;
+using Pvp.App.Messaging;
 using GalaSoft.MvvmLight.Messaging;
 
-namespace Dzimchuk.Pvp.App.ViewModel
+namespace Pvp.App.ViewModel
 {
     internal class MainWindowViewModel : ViewModelBase
     {

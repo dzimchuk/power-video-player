@@ -11,9 +11,11 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using Dzimchuk.Pvp.App.Composition;
+using Pvp.App.Composition;
+using GalaSoft.MvvmLight.Messaging;
+using Pvp.App.Messaging;
 
-namespace Dzimchuk.Pvp.App.View
+namespace Pvp.App.View
 {
     /// <summary>
     /// Interaction logic for MainView.xaml
@@ -26,6 +28,8 @@ namespace Dzimchuk.Pvp.App.View
 
             var provider = (IMediaEngineProviderSetter)DependencyResolver.Current.Resolve<IMediaEngineProviderSetter>();
             provider.MediaEngine = _mediaWindowHost.MediaEngine;
+
+            Messenger.Default.Send<EventMessage>(new EventMessage(Event.MediaWindowHostCreated), MessageTokens.App);
         }
     }
 }

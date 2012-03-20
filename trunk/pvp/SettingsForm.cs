@@ -17,10 +17,10 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Forms;
-using Dzimchuk.MediaEngine.Core;
+using Pvp.Core.MediaEngine;
 using System.IO;
 
-namespace Dzimchuk.PVP
+namespace Pvp
 {
     public enum MouseWheelAction
     {
@@ -166,7 +166,7 @@ namespace Dzimchuk.PVP
 
         private void FillListViews()
         {
-            IList<FileType> types = Dzimchuk.PVP.FileTypes.GetFileTypes();
+            IList<FileType> types = Pvp.FileTypes.GetFileTypes();
             foreach (FileType t in types)
                 listTypes.Items.Add(GetListViewItem(t.Description, t.Extension));            
 

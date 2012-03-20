@@ -21,14 +21,14 @@ using System.IO.IsolatedStorage;
 using System.Security;
 using System.Security.Permissions;
 using Dzimchuk.AUI;
-using Dzimchuk.Theme;
-using Dzimchuk.MediaEngine.Core;
-using Dzimchuk.Native;
+using Pvp.Theme;
+using Pvp.Core.MediaEngine;
+using Pvp.Core.Native;
 using System.Xml;
 //using System.Xml.Schema;
 using System.Reflection;
 
-namespace Dzimchuk.PVP
+namespace Pvp
 {
     public class MainFormBase : FormBase
     {
@@ -48,8 +48,8 @@ namespace Dzimchuk.PVP
                         
     //	bool bXsdOk;
         protected bool bInit = true;
-    //	const string strXSD = "Dzimchuk.PVP.theme.default.xsd";
-        private const string strDefaultTheme = "Dzimchuk.PVP.theme.default.xml";
+    //	const string strXSD = "Pvp.theme.default.xsd";
+        private const string strDefaultTheme = "Pvp.theme.default.xml";
         private string strCurTheme = strDefaultTheme;
 
         private Rectangle rectNormal;

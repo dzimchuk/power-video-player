@@ -10,7 +10,7 @@
  *
  * ***************************************************************************/
 
-namespace Dzimchuk.Native
+namespace Pvp.Core.Native
 {
 	public enum WindowsMessages
 	{

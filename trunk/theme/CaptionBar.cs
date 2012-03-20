@@ -14,9 +14,9 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 using Dzimchuk.AUI;
-using Dzimchuk.Native;
+using Pvp.Core.Native;
 
-namespace Dzimchuk.Theme
+namespace Pvp.Theme
 {
     /// <summary>
     /// 

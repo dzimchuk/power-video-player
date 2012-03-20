@@ -20,7 +20,7 @@ using System.Drawing.Drawing2D;
 using System.Collections;
 using System.Reflection;
 
-namespace Dzimchuk.Theme
+namespace Pvp.Theme
 {
     /// <summary>
     /// 

@@ -5,7 +5,7 @@ using System.Text;
 using System.Windows.Controls;
 using System.Windows;
 
-namespace Dzimchuk.Pvp.App.Controls
+namespace Pvp.App.Controls
 {
     public class RegularControlPanel : ControlPanelBase
     {

@@ -16,7 +16,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Data;
 using System.Windows.Forms;
-using Dzimchuk.Native;
+using Pvp.Core.Native;
 
 namespace Dzimchuk.AUI
 {

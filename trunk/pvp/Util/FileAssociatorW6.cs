@@ -15,9 +15,9 @@ using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
 using Microsoft.Win32;
-using Dzimchuk.Native;
+using Pvp.Core.Native;
 
-namespace Dzimchuk.PVP.Util
+namespace Pvp.Util
 {
     public class FileAssociatorW6 : FileAssociator
     {

@@ -4,14 +4,14 @@ using System.Configuration;
 using System.Data;
 using System.Linq;
 using System.Windows;
-using Dzimchuk.Pvp.App.Composition;
-using Dzimchuk.Pvp.App.Util;
-using Dzimchuk.Pvp.App.View;
+using Pvp.App.Composition;
+using Pvp.App.Util;
+using Pvp.App.View;
 using Ninject;
 using GalaSoft.MvvmLight.Messaging;
-using Dzimchuk.Pvp.App.Messaging;
+using Pvp.App.Messaging;
 
-namespace Dzimchuk.Pvp.App
+namespace Pvp.App
 {
     /// <summary>
     /// Interaction logic for App.xaml

@@ -16,7 +16,7 @@ using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
 using System.Reflection;
-using Dzimchuk.Native;
+using Pvp.Core.Native;
 
 namespace Dzimchuk.Common
 {

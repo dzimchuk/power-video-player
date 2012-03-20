@@ -7,9 +7,9 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Data;
 using System.Windows.Controls.Primitives;
-using res=Dzimchuk.Pvp.App.Resources;
+using res=Pvp.App.Resources;
 
-namespace Dzimchuk.Pvp.App.Controls
+namespace Pvp.App.Controls
 {
     [TemplatePart(Name = "PART_PlayButton", Type = typeof(ButtonBase))]
     [TemplatePart(Name = "PART_PauseButton", Type = typeof(ButtonBase))]

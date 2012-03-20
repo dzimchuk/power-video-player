@@ -19,7 +19,7 @@ using System.Runtime.InteropServices;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Drawing;
-using Dzimchuk.Native;
+using Pvp.Core.Native;
 
 namespace Dzimchuk.Common
 {

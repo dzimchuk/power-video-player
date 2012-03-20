@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Windows.Media;
 using System.Windows;
-using Dzimchuk.Native;
+using Pvp.Core.Native;
 using System.Windows.Interop;
 using System.Runtime.InteropServices;
 
-namespace Dzimchuk.Pvp.App.Util
+namespace Pvp.App.Util
 {
     internal static class Extensions
     {

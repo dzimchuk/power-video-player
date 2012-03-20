@@ -14,7 +14,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
-using Dzimchuk.Native;
+using Pvp.Core.Native;
 
 /* 
  * MFVideoNormalizedRect
@@ -24,7 +24,7 @@ using Dzimchuk.Native;
  * IMFVideoDisplayControl
  * IEVRFilterConfig
 */
-namespace Dzimchuk.DirectShow
+namespace Pvp.Core.DirectShow
 {
     [StructLayout(LayoutKind.Sequential), ComVisible(false)]
     public struct MFVideoNormalizedRect 

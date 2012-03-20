@@ -13,7 +13,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace Dzimchuk.Native
+namespace Pvp.Core.Native
 {
     /// <summary>
     /// 

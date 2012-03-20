@@ -12,12 +12,12 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Controls.Primitives;
-using Dzimchuk.Pvp.App.Messaging;
-using Dzimchuk.Pvp.App.Util;
-using res = Dzimchuk.Pvp.App.Resources;
+using Pvp.App.Messaging;
+using Pvp.App.Util;
+using res = Pvp.App.Resources;
 using GalaSoft.MvvmLight.Messaging;
 
-namespace Dzimchuk.Pvp.App.View
+namespace Pvp.App.View
 {
     [TemplatePart(Name = "PART_ResizeGrip_Width", Type = typeof(UIElement))]
     [TemplatePart(Name = "PART_ResizeGrip_Height", Type = typeof(UIElement))]

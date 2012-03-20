@@ -12,7 +12,7 @@
 
 using System;
 using System.Runtime.InteropServices;
-using Dzimchuk.Native;
+using Pvp.Core.Native;
 
 /* 
  * DVD_ERROR
@@ -65,7 +65,7 @@ using Dzimchuk.Native;
  * AM_LINE21_DRAWBGMODE
  * IAMLine21Decoder
 */
-namespace Dzimchuk.DirectShow
+namespace Pvp.Core.DirectShow
 {
     [ComVisible(false)]
     public class DvdHlp

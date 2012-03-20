@@ -13,7 +13,7 @@
 using System;
 using System.Windows.Forms;
 using System.Drawing;
-using Dzimchuk.Native;
+using Pvp.Core.Native;
 
 namespace Dzimchuk.AUI
 {

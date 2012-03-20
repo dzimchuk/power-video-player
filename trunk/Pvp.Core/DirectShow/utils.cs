@@ -17,7 +17,7 @@ using System.Diagnostics;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Dzimchuk.DirectShow
+namespace Pvp.Core.DirectShow
 {
     [ComVisible(false)]
     public class DsUtils

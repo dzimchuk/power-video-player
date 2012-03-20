@@ -16,7 +16,7 @@ using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
 
-namespace Dzimchuk.PVP
+namespace Pvp
 {
     /// <summary>
     /// Summary description for EnterKeyForm.

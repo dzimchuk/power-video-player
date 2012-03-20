@@ -7,7 +7,7 @@ using System.Windows.Input;
 using System.Windows;
 using System.Windows.Controls.Primitives;
 
-namespace Dzimchuk.Pvp.App.Controls
+namespace Pvp.App.Controls
 {
     [TemplatePart(Name = "PART_Track", Type = typeof(Track))]
     public class CommandSlider : Slider, ICommandSource

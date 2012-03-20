@@ -27,7 +27,7 @@ using System.Runtime.InteropServices;
  * IBasicAudio
 */
 
-namespace Dzimchuk.DirectShow
+namespace Pvp.Core.DirectShow
 {
     public enum DsEvCode
     {

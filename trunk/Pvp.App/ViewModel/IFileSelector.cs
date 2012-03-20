@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Dzimchuk.Pvp.App.ViewModel
+namespace Pvp.App.ViewModel
 {
     public interface IFileSelector
     {

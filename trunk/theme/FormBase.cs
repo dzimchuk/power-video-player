@@ -18,9 +18,9 @@ using System.Windows.Forms;
 using System.IO;
 using System.Xml;
 using System.Reflection;
-using Dzimchuk.Native;
+using Pvp.Core.Native;
 
-namespace Dzimchuk.Theme
+namespace Pvp.Theme
 {
     /// <summary>
     /// Summary description for FormBase.

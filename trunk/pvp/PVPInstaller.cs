@@ -17,7 +17,7 @@ using System.ComponentModel;
 using System.Configuration.Install;
 
 
-namespace Dzimchuk.PVP
+namespace Pvp
 {
     [RunInstaller(true)]
     public partial class PVPInstaller : Installer

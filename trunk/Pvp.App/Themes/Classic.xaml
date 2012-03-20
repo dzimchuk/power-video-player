@@ -3,7 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
     xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions" 
     xmlns:ee="http://schemas.microsoft.com/expression/2010/effects"
-    xmlns:ctrls="clr-namespace:Dzimchuk.Pvp.App.Controls">
+    xmlns:ctrls="clr-namespace:Pvp.App.Controls">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="Templates.xaml" />
         <ResourceDictionary Source="MainWindowTemplate.xaml" />

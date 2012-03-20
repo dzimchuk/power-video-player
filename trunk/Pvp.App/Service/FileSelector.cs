@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Dzimchuk.Pvp.App.ViewModel;
+using Pvp.App.ViewModel;
 using System.Windows;
 
-namespace Dzimchuk.Pvp.App.Service
+namespace Pvp.App.Service
 {
     internal class FileSelector : IFileSelector
     {

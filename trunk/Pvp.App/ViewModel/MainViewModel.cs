@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using GalaSoft.MvvmLight;
-using Dzimchuk.MediaEngine.Core;
+using Pvp.Core.MediaEngine;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
-using Dzimchuk.Pvp.App.Messaging;
+using Pvp.App.Messaging;
 
-namespace Dzimchuk.Pvp.App.ViewModel
+namespace Pvp.App.ViewModel
 {
     internal class MainViewModel : ViewModelBase
     {
@@ -17,6 +17,7 @@ namespace Dzimchuk.Pvp.App.ViewModel
         private readonly ControlPanelViewModel _controlViewModel;
 
         private readonly IFileSelector _fileSelector;
+        private readonly IDialogService _dialogService;
 
         private ICommand _openCommand;
         private ICommand _closeCommand;
@@ -32,13 +33,16 @@ namespace Dzimchuk.Pvp.App.ViewModel
         
         public MainViewModel(IMediaEngineProvider engineProvider, 
                              ControlPanelViewModel controlViewModel,
-                             IFileSelector fileSelector)
+                             IFileSelector fileSelector,
+                             IDialogService dialogService)
         {
             _engineProvider = engineProvider;
             _controlViewModel = controlViewModel;
             _fileSelector = fileSelector;
+            _dialogService = dialogService;
 
             Messenger.Default.Register<PropertyChangedMessageBase>(this, true, OnPropertyChanged);
+            Messenger.Default.Register<EventMessage>(this, MessageTokens.App, true, OnEventMessage);
 
             FlipControlPanelVisibility(); // TODO: read it from settings
         }
@@ -108,7 +112,10 @@ namespace Dzimchuk.Pvp.App.ViewModel
                                                                         "*.avi;*.divx;*.mpg;*.mpeg;*.asf;*.wmv;*.mov;*.qt;*.vob;*.dat;*.mkv;*.flv;*.mp4;*.3gp;*.3g2;*.m1v;*.m2v|All Files (*.*)|*.*");
                                 if (!string.IsNullOrEmpty(filename))
                                 {
+                                    // TODO set video renderer somewhere else
+                                    _engineProvider.MediaEngine.PreferredVideoRenderer = MediaEngineServiceProvider.RecommendedRenderer;
 
+                                    _engineProvider.MediaEngine.BuildGraph(filename, MediaSourceType.File);
                                 }
                             }
                         );
@@ -287,6 +294,25 @@ namespace Dzimchuk.Pvp.App.ViewModel
                     IsMute = !IsMute;
                 }
             }
+        }
+
+        private void OnEventMessage(EventMessage message)
+        {
+            if (message.Content == Event.MediaWindowHostCreated)
+            {
+                _engineProvider.MediaEngine.ErrorOccured += delegate(object sender, ErrorOccuredEventArgs args)
+                {
+                    _dialogService.DisplayError(args.Message);
+                };
+
+                _engineProvider.MediaEngine.DvdParentalChange += OnUserDecisionNeeded;
+                _engineProvider.MediaEngine.PartialSuccess += OnUserDecisionNeeded;
+            }
+        }
+
+        private void OnUserDecisionNeeded(object sender, UserDecisionEventArgs e)
+        {
+            e.Accept = _dialogService.DisplayYesNoDialog(e.Message);
         }
     }
 }

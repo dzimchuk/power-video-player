@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Ninject;
 
-namespace Dzimchuk.Pvp.App.Composition
+namespace Pvp.App.Composition
 {
     internal class NinjectDependencyResolver : IDependencyResolver
     {

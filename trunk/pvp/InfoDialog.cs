@@ -15,12 +15,12 @@ using System.Drawing;
 using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
-using Dzimchuk.MediaEngine.Core;
-using Dzimchuk.DirectShow;
-using Dzimchuk.PVP.Resources;
-using Dzimchuk.MediaEngine.Core.Description;
+using Pvp.Core.MediaEngine;
+using Pvp.Core.DirectShow;
+using Pvp.Resources;
+using Pvp.Core.MediaEngine.Description;
 
-namespace Dzimchuk.PVP
+namespace Pvp
 {
     /// <summary>
     /// Summary description for InfoDialog.

@@ -12,10 +12,10 @@
 
 using System;
 using System.Collections.Generic;
-using Dzimchuk.Native;
+using Pvp.Core.Native;
 using Microsoft.Win32;
 
-namespace Dzimchuk.PVP.Util
+namespace Pvp.Util
 {
     /// <summary>
     /// Summary description for FileAssociator.
