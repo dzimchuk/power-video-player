@@ -26,10 +26,10 @@ namespace Pvp.App.View
         {
             InitializeComponent();
 
-            var provider = (IMediaEngineProviderSetter)DependencyResolver.Current.Resolve<IMediaEngineProviderSetter>();
-            provider.MediaEngine = _mediaWindowHost.MediaEngine;
+            var acceptor = (IMediaControlAcceptor)DependencyResolver.Current.Resolve<IMediaControlAcceptor>();
+            acceptor.MediaControl = _mediaControl;
 
-            Messenger.Default.Send<EventMessage>(new EventMessage(Event.MediaWindowHostCreated), MessageTokens.App);
+            Messenger.Default.Send<EventMessage>(new EventMessage(Event.MediaControlCreated), MessageTokens.App);
         }
     }
 }

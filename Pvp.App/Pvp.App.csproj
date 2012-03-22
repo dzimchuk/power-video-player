@@ -87,9 +87,9 @@
     <Compile Include="Composition\NinjectDependencyResolver.cs" />
     <Compile Include="Composition\PvpModule.cs" />
     <Compile Include="Controls\TimeSpanValueConverter.cs" />
-    <Compile Include="IMediaEngineProvider.cs" />
-    <Compile Include="IMediaEngineProviderSetter.cs" />
-    <Compile Include="MediaEngineProvider.cs" />
+    <Compile Include="IMediaControlAcceptor.cs" />
+    <Compile Include="IMediaEngineFacade.cs" />
+    <Compile Include="Service\MediaEngineFacade.cs" />
     <Compile Include="Messaging\CommandMessage.cs" />
     <Compile Include="Messaging\Command.cs" />
     <Compile Include="Messaging\MessageTokens.cs" />

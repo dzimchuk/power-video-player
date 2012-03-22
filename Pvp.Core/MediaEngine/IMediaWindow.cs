@@ -20,15 +20,15 @@ namespace Pvp.Core.MediaEngine
     /// Desribes a media window functionality.
     /// 
     /// Media window is the window that DirectShow renderers will paint video on.
-    /// This window will be resized to the size of the video content (inspired by the odd EVR behavior).
+    /// This window SHOULD be resized to the size of the video content (inspired by the odd EVR behavior).
     /// Thus, applications should host the media window inside another client window which is called
-    /// Media Window Host. The host's client area defines the boundaries for the media engine.
+    /// Media Window Host.
     /// All calculations (video size, aspect ratio) are done relative to the host's client area.
     /// 
     /// Applications are responsible for painting the host's background.
     /// 
     /// New media window should be created for each video and passed to IMediaEngine.BuildGraph.
-    /// The media engine will dispose the window when the graph is reset (if KeepOpen == FALSE).
+    /// The media engine will dispose the window when the graph is reset.
     /// </summary>
     public interface IMediaWindow : IDisposable
     {

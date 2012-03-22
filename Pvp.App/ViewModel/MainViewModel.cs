@@ -13,7 +13,7 @@ namespace Pvp.App.ViewModel
 {
     internal class MainViewModel : ViewModelBase
     {
-        private readonly IMediaEngineProvider _engineProvider;
+        private readonly IMediaEngineFacade _engine;
         private readonly ControlPanelViewModel _controlViewModel;
 
         private readonly IFileSelector _fileSelector;
@@ -31,12 +31,12 @@ namespace Pvp.App.ViewModel
         private bool _isMute;
         private bool _isControlPanelVisible;
         
-        public MainViewModel(IMediaEngineProvider engineProvider, 
+        public MainViewModel(IMediaEngineFacade engine, 
                              ControlPanelViewModel controlViewModel,
                              IFileSelector fileSelector,
                              IDialogService dialogService)
         {
-            _engineProvider = engineProvider;
+            _engine = engine;
             _controlViewModel = controlViewModel;
             _fileSelector = fileSelector;
             _dialogService = dialogService;
@@ -113,9 +113,9 @@ namespace Pvp.App.ViewModel
                                 if (!string.IsNullOrEmpty(filename))
                                 {
                                     // TODO set video renderer somewhere else
-                                    _engineProvider.MediaEngine.PreferredVideoRenderer = MediaEngineServiceProvider.RecommendedRenderer;
+                                    _engine.PreferredVideoRenderer = MediaEngineServiceProvider.RecommendedRenderer;
 
-                                    _engineProvider.MediaEngine.BuildGraph(filename, MediaSourceType.File);
+                                    _engine.BuildGraph(filename, MediaSourceType.File);
                                 }
                             }
                         );
@@ -135,11 +135,11 @@ namespace Pvp.App.ViewModel
                         (
                             () =>
                             {
-                                _engineProvider.MediaEngine.ResetGraph();
+                                _engine.ResetGraph();
                             },
                             () =>
                             {
-                                return _engineProvider.MediaEngine.GraphState != GraphState.Reset;
+                                return _engine.GraphState != GraphState.Reset;
                             }
                         );
                 }
@@ -162,7 +162,7 @@ namespace Pvp.App.ViewModel
                             },
                             () =>
                             {
-                                return _engineProvider.MediaEngine.GraphState != GraphState.Reset;
+                                return _engine.GraphState != GraphState.Reset;
                             }
                         );
                 }
@@ -298,15 +298,15 @@ namespace Pvp.App.ViewModel
 
         private void OnEventMessage(EventMessage message)
         {
-            if (message.Content == Event.MediaWindowHostCreated)
+            if (message.Content == Event.MediaControlCreated)
             {
-                _engineProvider.MediaEngine.ErrorOccured += delegate(object sender, ErrorOccuredEventArgs args)
+                _engine.ErrorOccured += delegate(object sender, ErrorOccuredEventArgs args)
                 {
                     _dialogService.DisplayError(args.Message);
                 };
 
-                _engineProvider.MediaEngine.DvdParentalChange += OnUserDecisionNeeded;
-                _engineProvider.MediaEngine.PartialSuccess += OnUserDecisionNeeded;
+                _engine.DvdParentalChange += OnUserDecisionNeeded;
+                _engine.PartialSuccess += OnUserDecisionNeeded;
             }
         }
 

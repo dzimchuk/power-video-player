@@ -12,7 +12,7 @@ namespace Pvp.App.ViewModel
 {
     internal class ControlPanelViewModel : ViewModelBase
     {
-        private readonly IMediaEngineProvider _engineProvider;
+        private readonly IMediaEngineFacade _engine;
 
         private ICommand _playCommand;
         private ICommand _pauseCommand;
@@ -33,9 +33,9 @@ namespace Pvp.App.ViewModel
         private TimeSpan _currentPosition;
         private bool _isControlPanelVisible;
 
-        public ControlPanelViewModel(IMediaEngineProvider engineProvider)
+        public ControlPanelViewModel(IMediaEngineFacade engine)
         {
-            _engineProvider = engineProvider;
+            _engine = engine;
 
             Messenger.Default.Register<PropertyChangedMessageBase>(this, true, OnPropertyChanged);
         }
@@ -125,11 +125,11 @@ namespace Pvp.App.ViewModel
                         (
                             () =>
                             {
-                                _engineProvider.MediaEngine.ResumeGraph();
+                                _engine.ResumeGraph();
                             },
                             () =>
                             {
-                                GraphState state = _engineProvider.MediaEngine.GraphState;
+                                GraphState state = _engine.GraphState;
                                 return state != GraphState.Running && state != GraphState.Reset;
                             }
                         );
@@ -149,11 +149,11 @@ namespace Pvp.App.ViewModel
                         (
                             () =>
                             {
-                                _engineProvider.MediaEngine.PauseGraph();
+                                _engine.PauseGraph();
                             },
                             () =>
                             {
-                                GraphState state = _engineProvider.MediaEngine.GraphState;
+                                GraphState state = _engine.GraphState;
                                 return state == GraphState.Running;
                             }
                         );
@@ -173,11 +173,11 @@ namespace Pvp.App.ViewModel
                         (
                             () =>
                             {
-                                _engineProvider.MediaEngine.StopGraph();
+                                _engine.StopGraph();
                             },
                             () =>
                             {
-                                GraphState state = _engineProvider.MediaEngine.GraphState;
+                                GraphState state = _engine.GraphState;
                                 return state == GraphState.Running || state == GraphState.Paused;
                             }
                         );
@@ -289,14 +289,14 @@ namespace Pvp.App.ViewModel
                         (
                             () =>
                             {
-                                var repeat = _engineProvider.MediaEngine.Repeat;
-                                _engineProvider.MediaEngine.Repeat = !repeat;
+                                var repeat = _engine.Repeat;
+                                _engine.Repeat = !repeat;
                                 IsRepeat = !repeat;
                                 Messenger.Default.Send(new PropertyChangedMessage<bool>(this, !IsRepeat, IsRepeat, "IsRepeat"));
                             },
                             () =>
                             {
-                                GraphState state = _engineProvider.MediaEngine.GraphState;
+                                GraphState state = _engine.GraphState;
                                 return true;
                             }
                         );

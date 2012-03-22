@@ -11,12 +11,13 @@
  * ***************************************************************************/
 
 using System;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using Pvp.Core.DirectShow;
+using Pvp.Core.MediaEngine;
 using Pvp.Core.Native;
-using System.Runtime.InteropServices;
 
-namespace Pvp.Core.MediaEngine
+namespace Pvp.Core.WindowsForms
 {
     internal class MediaWindow : NativeWindow, IMediaWindow
     {

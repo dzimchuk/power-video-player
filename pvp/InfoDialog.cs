@@ -19,6 +19,7 @@ using Pvp.Core.MediaEngine;
 using Pvp.Core.DirectShow;
 using Pvp.Resources;
 using Pvp.Core.MediaEngine.Description;
+using Pvp.Core.WindowsForms;
 
 namespace Pvp
 {
@@ -44,9 +45,9 @@ namespace Pvp
             InitializeComponent();
         }
 
-        public InfoDialog(IMediaEngine engine) : this()
+        public InfoDialog(MediaControl mediaControl) : this()
         {
-            MediaInfo info = engine.MediaInfo;
+            MediaInfo info = mediaControl.MediaInfo;
             if (info != null)
             {			
                 InsertListItem(Resources.Resources.infodialog_media_source, info.source);
@@ -55,7 +56,7 @@ namespace Pvp
                 string s = String.Empty;
                 if (info.StreamSubType != MediaSubType.DVD)
                 {
-                    long duration = engine.GetDuration();
+                    long duration = mediaControl.GetDuration();
                     if (duration != 0)
                     {
                         long second;
@@ -76,7 +77,7 @@ namespace Pvp
                 {
                     InsertListItem(String.Empty, String.Empty);
                     DVD_DOMAIN domain;
-                    if (engine.GetCurrentDomain(out domain))
+                    if (mediaControl.GetCurrentDomain(out domain))
                     {
                         switch(domain)
                         {
@@ -100,9 +101,9 @@ namespace Pvp
                         InsertListItem(Resources.Resources.infodialog_Current_Domain, s);
                         if (domain==DVD_DOMAIN.DVD_DOMAIN_Title)
                         {
-                            InsertListItem(Resources.Resources.infodialog_Current_Title, engine.CurrentTitle.ToString());
-                            InsertListItem(Resources.Resources.infodialog_Current_Chapter, engine.CurrentChapter.ToString());
-                            long duration=engine.GetDuration();
+                            InsertListItem(Resources.Resources.infodialog_Current_Title, mediaControl.CurrentTitle.ToString());
+                            InsertListItem(Resources.Resources.infodialog_Current_Chapter, mediaControl.CurrentChapter.ToString());
+                            long duration=mediaControl.GetDuration();
                             if (duration != 0)
                             {
                                 long second;
