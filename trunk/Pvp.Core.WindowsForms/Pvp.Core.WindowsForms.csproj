@@ -8,7 +8,7 @@
     <ProjectGuid>{DD243C13-EE02-49F5-949B-FAC91BE3220E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Pvp.Core</RootNamespace>
+    <RootNamespace>Pvp.Core.WindowsForms</RootNamespace>
     <AssemblyName>Pvp.Core.WindowsForms</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -47,15 +47,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MediaEngine\ImageCreator.cs" />
-    <Compile Include="MediaEngine\MediaWindow.cs" />
-    <Compile Include="MediaEngine\MediaWindowHost.cs">
+    <Compile Include="ImageCreator.cs" />
+    <Compile Include="InitSizeEventArgs.cs" />
+    <Compile Include="MediaControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="MediaWindow.cs" />
+    <Compile Include="MediaWindowHost.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="MediaEngine\MediaWindowHost.resx">
+    <EmbeddedResource Include="MediaWindowHost.resx">
       <DependentUpon>MediaWindowHost.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
@@ -66,7 +70,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="MediaEngine\Core\" />
+    <Folder Include="MediaEngine\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

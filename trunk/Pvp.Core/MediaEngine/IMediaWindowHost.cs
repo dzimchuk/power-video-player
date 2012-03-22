@@ -13,12 +13,5 @@ namespace Pvp.Core.MediaEngine
         /// </summary>
         /// <returns></returns>
         IMediaWindow GetMediaWindow();
-
-        /// <summary>
-        /// Returns the handle to the media window host.
-        /// The handle is used when the engine needs to calculate the media window's position
-        /// relative to its host.
-        /// </summary>
-        IntPtr Handle { get; }
     }
 }

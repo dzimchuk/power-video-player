@@ -34,16 +34,6 @@ namespace Pvp.Core.MediaEngine
 
         private IMediaWindow _mediaWindow;
         private readonly IMediaWindowHost _mediaWindowHost;
-
-        private const int DIVIDESIZE50 = 2;
-
-        private GDI.RECT _rcDest;   // video destination rectangle relative to the media window host
-        private GDI.RECT _rcDestMW; // video destination rectangle relative to the media window (i.e. top and left are always 0)
-        private AspectRatio _aspectRatio = AspectRatio.AR_ORIGINAL;
-        // Video Size stuff
-        private bool      _isFixed = true;		            //FIXED (true) of FREE (false)
-        private VideoSize _fixedSize = VideoSize.SIZE100;	//FIXED video size (SIZE100 or SIZE 200)
-        private int _divideSize = 1;
            
         /// <summary>
         /// Constructor.
@@ -64,11 +54,10 @@ namespace Pvp.Core.MediaEngine
         public event FailedStreamsHandler FailedStreamsAvailable;
         public event EventHandler<ErrorOccuredEventArgs> ErrorOccured;
         public event EventHandler ModifyMenu;
-        public event EventHandler<InitSizeEventArgs> InitSize;
+        public event EventHandler<CoreInitSizeEventArgs> InitSize;
         public event EventHandler<UserDecisionEventArgs> DvdParentalChange;
         public event EventHandler<UserDecisionEventArgs> PartialSuccess;
-        public event EventHandler<DestinationRectangleChangedEventArgs> DestinationRectangleChanged;
-        public event EventHandler Update;
+        public event EventHandler UpdateSuggested;
 
         #endregion
 
@@ -105,17 +94,7 @@ namespace Pvp.Core.MediaEngine
         #endregion
 
         #region Playback properties and methods
-        public AspectRatio AspectRatio
-        {
-            get { return _aspectRatio; }
-            set
-            {
-                _aspectRatio = value;
-                ResizeNormal();
-                InvalidateMediaWindow();
-            }
-        }
-
+        
         public int AudioStreams
         {
             get { return _filterGraph != null ? _filterGraph.nAudioStreams : 0; }
@@ -481,6 +460,12 @@ namespace Pvp.Core.MediaEngine
             return pBA.put_Volume(volume) == DsHlp.S_OK;
         }
 
+        public double Rate
+        {
+            get { return GetRate(); }
+            set { SetRate(value); }
+        }
+
         private const int VOLUME_RANGE = -5000;
         private int CalculateVolumeValue(double volume)
         {
@@ -535,69 +520,6 @@ namespace Pvp.Core.MediaEngine
 
                 _isMuted = value;
             }
-        }
-
-        public VideoSize GetVideoSize()
-        {
-            VideoSize ret = VideoSize.SIZE_FREE;
-            if (_isFixed)
-            {
-                switch (_fixedSize)
-                {
-                    case VideoSize.SIZE100:
-                        {
-                            ret = _divideSize == DIVIDESIZE50 ? VideoSize.SIZE50 : VideoSize.SIZE100;
-                            break;
-                        }
-                    case VideoSize.SIZE200:
-                        {
-                            ret = VideoSize.SIZE200;
-                            break;
-                        }
-                }
-            }
-            return ret;
-        }
-
-        public void SetVideoSize(VideoSize size, bool bInitSize)
-        {
-            switch (size)
-            {
-                case VideoSize.SIZE100:
-                    {
-                        _isFixed = true;
-                        _fixedSize = VideoSize.SIZE100;
-                        _divideSize = 1;
-                        break;
-                    }
-                case VideoSize.SIZE200:
-                    {
-                        _isFixed = true;
-                        _fixedSize = VideoSize.SIZE200;
-                        _divideSize = 1;
-                        break;
-                    }
-                case VideoSize.SIZE50:
-                    {
-                        _isFixed = true;
-                        _fixedSize = VideoSize.SIZE100;
-                        _divideSize = DIVIDESIZE50;
-                        break;
-                    }
-                default:
-                    {
-                        _isFixed = !_isFixed;
-                        break;
-                    }
-            }
-
-            if (bInitSize)
-                OnInitSize();
-        }
-
-        public void SetVideoSize(VideoSize size)
-        {
-            SetVideoSize(size, true);
         }
 
         public void GetCurrentImage(IImageCreator imageCreator)
@@ -673,7 +595,7 @@ namespace Pvp.Core.MediaEngine
                     _filterGraph.pRenderer is VMRWindowless ? ((VMRWindowless)_filterGraph.pRenderer).VMRWindowlessControl : null,
                     _filterGraph.pRenderer is VMR9Windowless ? ((VMR9Windowless)_filterGraph.pRenderer).VMRWindowlessControl : null,
                     _filterGraph.pRenderer is EVR ? ((EVR)_filterGraph.pRenderer).MFVideoDisplayControl : null);
-                OnInitSize();
+                OnInitSize(true, true);
                 IsMuted = IsMuted; // this resets the volume
                 if (_autoPlay)
                     return ResumeGraph();
@@ -988,8 +910,7 @@ namespace Pvp.Core.MediaEngine
                         _filterGraph.ulCurTitle != ulTitle)
                     {
                         _dvdBuilder.UpdateTitleInfo(_filterGraph);
-                        ResizeNormal(); // video size and aspect ratio might have changed when entering new title
-                        InvalidateMediaWindow();
+                        OnInitSize(false, true); // video size and aspect ratio might have changed when entering new title
                         OnModifyMenu(); // signal that a (context) menu may need to be updated
                     }
 
@@ -1184,6 +1105,18 @@ namespace Pvp.Core.MediaEngine
             _filterGraph.pDvdControl2.SelectRelativeButton(relativeButton);
         }
 
+        public void ActivateDVDMenuButtonAtPosition(GDI.POINT point)
+        {
+            if (IsMenuOn)
+                _filterGraph.pDvdControl2.ActivateAtPosition(point);
+        }
+
+        public void SelectDVDMenuButtonAtPosition(GDI.POINT point)
+        {
+            if (IsMenuOn)
+                _filterGraph.pDvdControl2.SelectAtPosition(point);
+        }
+
         #endregion
 
         #region Others
@@ -1244,13 +1177,7 @@ namespace Pvp.Core.MediaEngine
         #endregion
 
         #region Internal stuff
-
-        private void InvalidateMediaWindow()
-        {
-            if (_mediaWindow != null)
-                _mediaWindow.Invalidate();
-        }
-
+        
         private void CleanUpMediaWindow()
         {
             _mediaWindow.MessageReceived -= new EventHandler<MessageReceivedEventArgs>(_mediaWindow_MessageReceived);
@@ -1334,13 +1261,7 @@ namespace Pvp.Core.MediaEngine
         }
         #endregion
 
-        #region Resizing stuff
-        public void OnMediaWindowHostResized()
-        {
-            ResizeNormal();
-        }
-
-        protected virtual void OnInitSize()
+        protected virtual void OnInitSize(bool initial, bool suggestInvalidate)
         {
             if (_filterGraph != null)
             {
@@ -1349,134 +1270,10 @@ namespace Pvp.Core.MediaEngine
                     GDI.SIZE size = new GDI.SIZE();
                     size.cx = _filterGraph.rcSrc.right - _filterGraph.rcSrc.left;
                     size.cy = _filterGraph.rcSrc.bottom - _filterGraph.rcSrc.top;
-                    InitSize(this, new InitSizeEventArgs(size));
+                    InitSize(this, new CoreInitSizeEventArgs(size, _filterGraph.dAspectRatio, initial, suggestInvalidate));
                 }
-                ResizeNormal();
             }
         }
-
-        private void ResizeNormal()
-        {
-            if (_filterGraph == null)
-                return;
-
-            GDI.RECT rect;
-            WindowsManagement.GetClientRect(_mediaWindowHost.Handle, out rect);
-            int clientWidth = rect.right - rect.left;
-            int clientHeight = rect.bottom - rect.top;
-
-            double w = clientWidth;
-            double h = clientHeight;
-            double ratio = w / h;
-            double dAspectRatio;
-
-            switch (_aspectRatio)
-            {
-                case AspectRatio.AR_ORIGINAL:
-                    dAspectRatio = _filterGraph.dAspectRatio;
-                    break;
-                case AspectRatio.AR_16x9:
-                    dAspectRatio = 16.0 / 9.0;
-                    break;
-                case AspectRatio.AR_4x3:
-                    dAspectRatio = 4.0 / 3.0;
-                    break;
-                case AspectRatio.AR_47x20:
-                    dAspectRatio = 47.0 / 20.0;
-                    break;
-                default:
-                    {
-                        // free aspect ratio
-                        _rcDest.left = 0;
-                        _rcDest.top = 0;
-                        _rcDest.right = clientWidth;
-                        _rcDest.bottom = clientHeight;
-                        ApplyDestinationRect();
-                        return;
-                    }
-            }
-
-            int hor;
-            int vert;
-
-            if (_isFixed)
-            {
-                int fixedSize = (int)_fixedSize;
-                if (ratio >= dAspectRatio)
-                {
-                    vert = ((int)(_filterGraph.rcSrc.bottom * fixedSize / _divideSize)) - clientHeight;
-                    _rcDest.top = (vert >= 0) ? 0 : -vert / 2;
-                    _rcDest.bottom = (vert >= 0) ? clientHeight : _rcDest.top + ((int)(_filterGraph.rcSrc.bottom * fixedSize / _divideSize));
-                    h = _rcDest.bottom - _rcDest.top;
-                    w = h * dAspectRatio;
-                    hor = clientWidth - (int)w;
-                    _rcDest.left = (hor <= 0) ? 0 : hor / 2;
-                    _rcDest.right = _rcDest.left + (int)w;
-                }
-                else
-                {
-                    hor = ((int)(_filterGraph.rcSrc.right * fixedSize / _divideSize)) - clientWidth;
-                    // hor>=0 - client area is smaller than video hor size
-                    _rcDest.left = (hor >= 0) ? 0 : -hor / 2;
-                    _rcDest.right = (hor >= 0) ? clientWidth : _rcDest.left + ((int)(_filterGraph.rcSrc.right * fixedSize / _divideSize));
-                    w = _rcDest.right - _rcDest.left;
-                    h = w / dAspectRatio;
-                    vert = clientHeight - (int)h;
-                    _rcDest.top = (vert <= 0) ? 0 : vert / 2;
-                    _rcDest.bottom = _rcDest.top + (int)h;
-                }
-
-            }
-            else
-            {
-                if (ratio >= dAspectRatio)
-                {
-                    _rcDest.top = 0;
-                    _rcDest.bottom = clientHeight;
-                    h = _rcDest.bottom - _rcDest.top;
-                    w = h * dAspectRatio;
-                    hor = clientWidth - (int)w;
-                    _rcDest.left = (hor <= 0) ? 0 : hor / 2;
-                    _rcDest.right = _rcDest.left + (int)w;
-                }
-                else
-                {
-                    _rcDest.left = 0;
-                    _rcDest.right = clientWidth;
-                    w = _rcDest.right - _rcDest.left;
-                    h = w / dAspectRatio;
-                    vert = clientHeight - (int)h;
-                    _rcDest.top = (vert <= 0) ? 0 : vert / 2;
-                    _rcDest.bottom = _rcDest.top + (int)h;
-                }
-
-            }
-
-            ApplyDestinationRect();
-        }
-
-        private void ApplyDestinationRect()
-        {
-            // notify application of the new destination rectangle (relative to the media window host)
-            OnDestinationRectangleChanged(new DestinationRectangleChangedEventArgs(_rcDest));
-            
-            // move the media window to the new position
-            _mediaWindow.Move(ref _rcDest);
-            
-            // set the new rectangle on the renderer but relative to the media window;
-            // as we now always resize the media window to fit the destinaton rectangle
-            // we need to make sure Top and Left values are 0
-            _rcDestMW.right = _rcDest.right - _rcDest.left;
-            _rcDestMW.bottom = _rcDest.bottom - _rcDest.top;
-            _filterGraph.pRenderer.SetVideoPosition(ref _filterGraph.rcSrc, ref _rcDestMW);
-        }
-
-        protected virtual void OnDestinationRectangleChanged(DestinationRectangleChangedEventArgs args)
-        {
-            if (DestinationRectangleChanged != null)
-                DestinationRectangleChanged(this, args);
-        }
-        #endregion
 
         #region HandleGraphEvent
         private void HandleGraphEvent()
@@ -1562,8 +1359,7 @@ namespace Pvp.Core.MediaEngine
                                 _filterGraph.bMenuOn = false; // we are no longer in a menu
                                 _filterGraph.bShowMenuCalledFromTitle = false;
                                 _dvdBuilder.UpdateTitleInfo(_filterGraph);
-                                ResizeNormal(); // video size and aspect ratio might have changed when entering new title
-                                InvalidateMediaWindow();
+                                OnInitSize(false, true); // video size and aspect ratio might have changed when entering new title
                                 break;
                         } // end of domain change switch
                         _filterGraph.CurDomain = (DVD_DOMAIN)lParam1;
@@ -1701,49 +1497,17 @@ namespace Pvp.Core.MediaEngine
         #endregion
 
         #region MediaWindow 'hook'
-        private uint _previousMousePosition; // fix against spurious WM_MOUSEMOVE messages, see http://blogs.msdn.com/oldnewthing/archive/2003/10/01/55108.aspx#55109
+        
         private void _mediaWindow_MessageReceived(object sender, MessageReceivedEventArgs e)
         {
             switch (e.Msg)
             {
-                case (uint)WindowsMessages.WM_LBUTTONUP:
-                    if (IsMenuOn)
-                    {
-                        uint lParam = (uint)e.LParam;
-                        uint x = lParam & 0x0000FFFF;
-                        uint y = lParam & 0xFFFF0000;
-                        y >>= 16;
-
-                        GDI.POINT pt = new GDI.POINT();
-                        pt.x = (int)x;
-                        pt.y = (int)y;
-                        _filterGraph.pDvdControl2.ActivateAtPosition(pt);
-                    }
-                    break;
-                case (uint)WindowsMessages.WM_MOUSEMOVE:
-                    if ((uint)e.LParam != _previousMousePosition) // mouse was actually moved as its position has changed
-                    {
-                        _previousMousePosition = (uint)e.LParam;
-                        if (IsMenuOn)
-                        {
-                            uint lParam = (uint)e.LParam;
-                            uint x = lParam & 0x0000FFFF;
-                            uint y = lParam & 0xFFFF0000;
-                            y >>= 16;
-
-                            GDI.POINT pt = new GDI.POINT();
-                            pt.x = (int)x;
-                            pt.y = (int)y;
-                            _filterGraph.pDvdControl2.SelectAtPosition(pt);
-                        }
-                    }
-                    break;
                 default:
                     if (e.Msg == (uint)FilterGraph.UWM_GRAPH_NOTIFY)
                     {
                         HandleGraphEvent();
-                        if (Update != null)
-                            Update(this, EventArgs.Empty);
+                        if (UpdateSuggested != null)
+                            UpdateSuggested(this, EventArgs.Empty);
                     }
                     break;
             }
@@ -1757,6 +1521,14 @@ namespace Pvp.Core.MediaEngine
         {
             if (MediaWindowDisposed != null)
                 MediaWindowDisposed(this, args);
+        }
+        
+        public void SetVideoPosition(ref GDI.RECT rcDest)
+        {
+            if (_filterGraph != null)
+            {
+                _filterGraph.pRenderer.SetVideoPosition(ref _filterGraph.rcSrc, ref rcDest);
+            }
         }
     }
 }

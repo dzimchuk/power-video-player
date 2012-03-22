@@ -14,8 +14,8 @@ namespace Pvp.App.Composition
     {
         public override void Load()
         {
-            Bind<IMediaEngineProvider>().ToMethod(context => MediaEngineProvider.Instance);
-            Bind<IMediaEngineProviderSetter>().ToMethod(context => MediaEngineProvider.Instance);
+            Bind<IMediaEngineFacade>().ToMethod(context => MediaEngineFacade.Instance);
+            Bind<IMediaControlAcceptor>().ToMethod(context => MediaEngineFacade.Instance);
 
             Bind<IFileSelector>().To<FileSelector>();
             Bind<IDialogService>().To<DialogService>();

@@ -8,7 +8,7 @@
     <ProjectGuid>{E20389D6-73AD-410A-BB08-D4009B897E4A}</ProjectGuid>
     <OutputType>library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Pvp.Core.MediaEngine</RootNamespace>
+    <RootNamespace>Pvp.Core.Wpf</RootNamespace>
     <AssemblyName>Pvp.Core.Wpf</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
@@ -60,9 +60,9 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MediaControl.cs" />
     <Compile Include="MediaWindow.cs" />
     <Compile Include="MediaWindowHost.cs" />
-    <Compile Include="MediaWindowHwndHost.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

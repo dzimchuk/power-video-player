@@ -22,6 +22,7 @@ using Pvp.Core.MediaEngine;
 using Dzimchuk.AUI;
 using Dzimchuk.Common;
 using Pvp.Util;
+using Pvp.Core.WindowsForms;
 
 namespace Pvp
 {
@@ -40,7 +41,7 @@ namespace Pvp
             CreateAppMenu();
             PopulateContextMenu();
             HandleSystemTray();
-            engine.InitSize += new EventHandler<InitSizeEventArgs>(engine_InitSize);
+            mediaControl.InitSize += new EventHandler<InitSizeEventArgs>(engine_InitSize);
         }
 
         protected override void OnLoad(EventArgs e)
@@ -216,9 +217,9 @@ namespace Pvp
             dlg.TopMost = TopMost;
             dlg.Apply += new EventHandler(OnSettingsApply);
 
-            dlg.AutoPlay = engine.AutoPlay;
-            dlg.VideoRenderer = engine.PreferredVideoRenderer;
-            dlg.ShowLogo = mediaWindowHost.ShowLogo;
+            dlg.AutoPlay = mediaControl.AutoPlay;
+            dlg.VideoRenderer = mediaControl.PreferredVideoRenderer;
+            dlg.ShowLogo = mediaControl.ShowLogo;
             
             dlg.SystemTray = nicon.SystemTray;
             dlg.ShowTrayAlways = nicon.ShowTrayAlways;
@@ -242,8 +243,8 @@ namespace Pvp
             dlg.KeysTable = htKeys;
             dlg.MouseWheelAction = wheelAction;
 
-            dlg.UsePreferredFilters = engine.UsePreferredFilters;
-            dlg.UsePreferredFilters4DVD = engine.UsePreferredFilters4DVD;
+            // dlg.UsePreferredFilters = engine.UsePreferredFilters;
+            // dlg.UsePreferredFilters4DVD = engine.UsePreferredFilters4DVD;
             
             if (ShowMyDialog(dlg) == DialogResult.OK)
                 OnSettingsApply(dlg, EventArgs.Empty);
@@ -270,7 +271,7 @@ namespace Pvp
             bCenterWindow = props.Get<bool>("center_window", true);
             bTopMost = props.Get<bool>("top_most_window", false);
 
-            engine.AutoPlay = props.Get<bool>("auto_play", true);
+            mediaControl.AutoPlay = props.Get<bool>("auto_play", true);
 
             int nRenderer;
             bool bRendererSet = props.TryGetValue<int>("preferred_renderer", out nRenderer);
@@ -279,13 +280,13 @@ namespace Pvp
                 nRenderer = (int)MediaEngineServiceProvider.RecommendedRenderer;
             }
             int[] values = (int[])Enum.GetValues(typeof(Renderer));
-            engine.PreferredVideoRenderer = (nRenderer >= 0 && nRenderer <= values[values.Length-1]) 
+            mediaControl.PreferredVideoRenderer = (nRenderer >= 0 && nRenderer <= values[values.Length-1]) 
                 ? (Renderer) nRenderer : Renderer.VR;
 
-            mediaWindowHost.ShowLogo = props.Get<bool>("show_logo", true);
-            engine.Repeat = props.Get<bool>("repeat_on", false);
-            engine.UsePreferredFilters = props.Get<bool>("use_preferred_filters", false);
-            engine.UsePreferredFilters4DVD = props.Get<bool>("use_preferred_filters_4dvd", false);
+            mediaControl.ShowLogo = props.Get<bool>("show_logo", true);
+            mediaControl.Repeat = props.Get<bool>("repeat_on", false);
+            // engine.UsePreferredFilters = props.Get<bool>("use_preferred_filters", false);
+            // engine.UsePreferredFilters4DVD = props.Get<bool>("use_preferred_filters_4dvd", false);
 
             controlbar.Visible = props.Get<bool>("controlbar_on", true);
 
@@ -308,12 +309,12 @@ namespace Pvp
             props.Add("center_window", bCenterWindow);
             props.Add("top_most_window", bTopMost);
 
-            props.Add("auto_play", engine.AutoPlay);
-            props.Add("preferred_renderer", (int)engine.PreferredVideoRenderer);
-            props.Add("show_logo", mediaWindowHost.ShowLogo);
-            props.Add("repeat_on", engine.Repeat);
-            props.Add("use_preferred_filters", engine.UsePreferredFilters);
-            props.Add("use_preferred_filters_4dvd", engine.UsePreferredFilters4DVD);
+            props.Add("auto_play", mediaControl.AutoPlay);
+            props.Add("preferred_renderer", (int)mediaControl.PreferredVideoRenderer);
+            props.Add("show_logo", mediaControl.ShowLogo);
+            props.Add("repeat_on", mediaControl.Repeat);
+            // props.Add("use_preferred_filters", engine.UsePreferredFilters);
+            // props.Add("use_preferred_filters_4dvd", engine.UsePreferredFilters4DVD);
 
             props.Add("controlbar_on", bInit ? controlbar.Visible : true);
 
@@ -333,11 +334,11 @@ namespace Pvp
             htKeys = dlg.KeysTable;
             wheelAction = dlg.MouseWheelAction;
             
-            engine.AutoPlay = dlg.AutoPlay;
-            engine.PreferredVideoRenderer = dlg.VideoRenderer;
-            mediaWindowHost.ShowLogo = dlg.ShowLogo;
-            engine.UsePreferredFilters = dlg.UsePreferredFilters;
-            engine.UsePreferredFilters4DVD = dlg.UsePreferredFilters4DVD;
+            mediaControl.AutoPlay = dlg.AutoPlay;
+            mediaControl.PreferredVideoRenderer = dlg.VideoRenderer;
+            mediaControl.ShowLogo = dlg.ShowLogo;
+            // engine.UsePreferredFilters = dlg.UsePreferredFilters;
+            // engine.UsePreferredFilters4DVD = dlg.UsePreferredFilters4DVD;
 
             using (var manager = new MediaTypeManager())
             {
@@ -394,7 +395,7 @@ namespace Pvp
 
         private void engine_InitSize(object sender, InitSizeEventArgs e)
         {
-            VideoSize size = engine.GetVideoSize();
+            VideoSize size = mediaControl.VideoSize;
             int div = 1;
             if (size == VideoSize.SIZE50)
             {
@@ -402,14 +403,14 @@ namespace Pvp
                 div = 2;
             }
             if (WindowState != FormWindowState.Maximized && !bFullscreen
-                && size != VideoSize.SIZE_FREE && e.NewVideSize.cy != 0 && e.NewVideSize.cx != 0)
+                && size != VideoSize.SIZE_FREE && e.NewVideSize.Height != 0 && e.NewVideSize.Width != 0)
             {
                 Rectangle bounds = DesktopBounds;
-                Size client = mediaWindowHost.ClientSize;
+                Size client = mediaControl.ClientSize;
 
                 int nSize = (int)size;
-                int hor = ((int)(e.NewVideSize.cx * nSize / div)) - client.Width;
-                int vert = ((int)(e.NewVideSize.cy * nSize / div)) - client.Height;
+                int hor = ((int)(e.NewVideSize.Width * nSize / div)) - client.Width;
+                int vert = ((int)(e.NewVideSize.Height * nSize / div)) - client.Height;
 
                 bounds.Width += hor;
                 bounds.Height += vert;

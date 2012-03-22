@@ -101,19 +101,27 @@ namespace Pvp.Core.MediaEngine
         }
     }
 
-    public class InitSizeEventArgs : EventArgs
+    public class CoreInitSizeEventArgs : EventArgs
     {
         private GDI.SIZE _newSize;
+        private double _nativeAspectRatio;
 
-        public InitSizeEventArgs(GDI.SIZE newSize) : base()
+        private bool _initial;
+        private bool _suggestInvalidate;
+
+        public CoreInitSizeEventArgs(GDI.SIZE newSize, double nativeAspectRatio, bool initial, bool suggestInvalidate)
+            : base()
         {
             _newSize = newSize;
+            _nativeAspectRatio = nativeAspectRatio;
+            _initial = initial;
+            _suggestInvalidate = suggestInvalidate;
         }
 
-        public GDI.SIZE NewVideSize
-        {
-            get { return _newSize; }
-        }
+        public GDI.SIZE NewVideSize { get { return _newSize; } }
+        public double NativeAspectRatio { get { return _nativeAspectRatio; } }
+        public bool Initial { get { return _initial; } }
+        public bool InvalidateSuggested { get { return _suggestInvalidate; } }
     }
 
     public class DestinationRectangleChangedEventArgs : EventArgs

@@ -14,6 +14,7 @@ using System;
 using Pvp.Core.DirectShow;
 using Pvp.Core.MediaEngine.Description;
 using Pvp.Core.MediaEngine.GraphBuilders;
+using Pvp.Core.Native;
 
 namespace Pvp.Core.MediaEngine
 {
@@ -49,9 +50,14 @@ namespace Pvp.Core.MediaEngine
 
         /// <summary>
         /// Occurs when new video has been rendered by BuildGraph and indicates that
-        /// the application should resize to accomodate the new video frame.
+        /// the application should resize to accomodate the new video frame. In this case
+        /// CoreInitSizeEventArgs.Initial will be true.
+        /// 
+        /// This event is also raised when entering a new DVD domain and it indicates that 
+        /// the video size and aspect ratio might have changes. In this case CoreInitSizeEventArgs.Initial
+        /// will be false.
         /// </summary>
-        event EventHandler<InitSizeEventArgs> InitSize;
+        event EventHandler<CoreInitSizeEventArgs> InitSize;
 
         /// <summary>
         /// Occurs when a DVD playback enters another parental zone (level).
@@ -73,27 +79,11 @@ namespace Pvp.Core.MediaEngine
         event EventHandler<UserDecisionEventArgs> PartialSuccess;
 
         /// <summary>
-        /// Occurs when the MediaEngine has completed recalculating the new 
-        /// position and size of the video destination rectangle (i.e. the Media Window).
-        /// 
-        /// It occurs whenever ResizeNormal is called, for example, video size or 
-        /// aspect ratio is changed, or when the media window host was resized (in the 
-        /// latter case the application should notify the engine by calling OnMediaWindowHostResized).
-        /// 
-        /// The listener is responsible to draw the border around the destination
-        /// rectangle (Media Window). The new destination rectangle's postion and
-        /// size is provided with EventArgs.
-        /// 
-        /// The destination rectangle itself will be painted by DirectShow renderers.
-        /// </summary>
-        event EventHandler<DestinationRectangleChangedEventArgs> DestinationRectangleChanged;
-
-        /// <summary>
         /// Occurs when something has changed in the engine's state that an application may be
         /// interested in. No details are provided but it's good to update your user control
         /// states to correspond to the actual state of the engine.
         /// </summary>
-        event EventHandler Update;
+        event EventHandler UpdateSuggested;
 
         /// <summary>
         /// Occures when the engine disposes of the media window, that is, it should no longer be used.
@@ -120,7 +110,6 @@ namespace Pvp.Core.MediaEngine
 
         #region Playback properties and methods
 
-        AspectRatio AspectRatio { get; set; }
         int         AudioStreams { get; }
         int         CurrentAudioStream { get; set; }
         int         FilterCount { get; }
@@ -132,7 +121,10 @@ namespace Pvp.Core.MediaEngine
 
         string GetAudioStreamName(int nStream);
         string GetFilterName(int nFilterNum);
+
+        [Obsolete("Use Rate property instead.")]
         double GetRate();
+        [Obsolete("Use Rate property instead.")]
         void SetRate(double dRate);
 
         [Obsolete("Use Volume property instead.")]
@@ -146,15 +138,13 @@ namespace Pvp.Core.MediaEngine
         [Obsolete("Use Duration property instead.")]
         long GetDuration();
 
+        double Rate { get; set; }
+
         double Volume { get; set; }
         bool IsMuted { get; set; }
 
         TimeSpan CurrentPosition { get; set; }
         TimeSpan Duration { get; }
-
-        VideoSize GetVideoSize();
-        void SetVideoSize(VideoSize size);
-        void SetVideoSize(VideoSize size, bool bInitSize);
 
         /// <summary>
         /// Gets a snapshot of the current image that is being shown.
@@ -212,6 +202,18 @@ namespace Pvp.Core.MediaEngine
         void SelectDVDMenuButtonDown();
         void SelectDVDMenuButtonLeft();
         void SelectDVDMenuButtonRight();
+        /// <summary>
+        /// Activates the menu button under the mouse pointer position (if there is a button).
+        /// Call it when DVD menu is on (check IsMenuOn) and the user clicks anywhere on the video area.
+        /// </summary>
+        /// <param name="point">Point on the client window area (that is, relative to the upper left of the client area).</param>
+        void ActivateDVDMenuButtonAtPosition(GDI.POINT point);
+        /// <summary>
+        /// Highlights the menu button under the mouse pointer position (if there is a button).
+        /// Call it when DVD menu is on (check IsMenuOn) and the user moves the mouse over the video area.
+        /// </summary>
+        /// <param name="point">Point on the client window area (that is, relative to the upper left of the client area).</param>
+        void SelectDVDMenuButtonAtPosition(GDI.POINT point);
 
         #endregion
 
@@ -223,10 +225,11 @@ namespace Pvp.Core.MediaEngine
         void OnCultureChanged();
 
         /// <summary>
-        /// Application should call this method whenever the media window host window
-        /// has been resized so that the engine could perform necessary recalculations.
+        /// Sets a destination video rectangle relative to media window.
+        /// Applications should call this method when the media window is resized.
         /// </summary>
-        void OnMediaWindowHostResized();
+        /// <param name="rcDest">Destination video rectangle relative to media window.</param>
+        void SetVideoPosition(ref GDI.RECT rcDest);
 
         #endregion
     }

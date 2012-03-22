@@ -1,4 +1,16 @@
-﻿using System;
+﻿/* ****************************************************************************
+ *
+ * Copyright (c) Andrei Dzimchuk. All rights reserved.
+ *
+ * This software is subject to the Microsoft Public License (Ms-PL). 
+ * A copy of the license can be found in the license.htm file included 
+ * in this distribution.
+ *
+ * You must not remove this notice, or any other, from this software.
+ *
+ * ***************************************************************************/
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,11 +24,12 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Pvp.Core.Native;
+using Pvp.Core.MediaEngine;
 
-namespace Pvp.Core.MediaEngine
+namespace Pvp.Core.Wpf
 {
     [TemplatePart(Name = "PART_Border", Type = typeof(Border))]
-    public class MediaWindowHost : Control, IMediaWindowHost
+    public abstract class MediaWindowHost : Control, IMediaWindowHost
     {
         static MediaWindowHost()
         {
@@ -33,11 +46,14 @@ namespace Pvp.Core.MediaEngine
             DependencyProperty.Register("LogoMaxHeight", typeof(double), typeof(MediaWindowHost), new PropertyMetadata(double.PositiveInfinity));
 
         private Border _border;
-        private readonly IMediaEngine _engine;
-
-        private MediaWindowHwndHost _hwndHost;
+        private IMediaEngine _engine;
 
         public MediaWindowHost()
+        {
+            InitializeMediaEngine();
+        }
+
+        private void InitializeMediaEngine()
         {
             _engine = MediaEngineServiceProvider.GetMediaEngine(this);
             _engine.MediaWindowDisposed += delegate(object sender, EventArgs args)
@@ -45,6 +61,9 @@ namespace Pvp.Core.MediaEngine
                 SetMediaWindowState(false);
             };
         }
+
+
+        #region Public properties and methods
 
         public Brush LogoBrush
         {
@@ -64,6 +83,9 @@ namespace Pvp.Core.MediaEngine
             set { SetValue(LogoMaxHeightProperty, value); }
         }
 
+        #endregion
+        
+
         public override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
@@ -76,10 +98,10 @@ namespace Pvp.Core.MediaEngine
         {
             if (active)
             {
-                _hwndHost = new MediaWindowHwndHost();
-                _hwndHost.MessageHook += new System.Windows.Interop.HwndSourceHook(_hwndHost_MessageHook);
-                if (_border != null)
-                    _border.Child = _hwndHost;
+                //_hwndHost = new MediaWindowHwndHost();
+                //_hwndHost.MessageHook += new System.Windows.Interop.HwndSourceHook(_hwndHost_MessageHook);
+                //if (_border != null)
+                //    _border.Child = _hwndHost;
             }
             else
             {
@@ -106,39 +128,23 @@ namespace Pvp.Core.MediaEngine
                     _border.Child = rect;
                 }
 
-                if (_hwndHost != null)
-                {
-                    _hwndHost.MessageHook -= new System.Windows.Interop.HwndSourceHook(_hwndHost_MessageHook);
-                    _hwndHost.Dispose();
-                    _hwndHost = null;
-                }
+                //if (_hwndHost != null)
+                //{
+                //    _hwndHost.MessageHook -= new System.Windows.Interop.HwndSourceHook(_hwndHost_MessageHook);
+                //    _hwndHost.Dispose();
+                //    _hwndHost = null;
+                //}
             }
-        }
-
-        private IntPtr _hwndHost_MessageHook(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
-        {
-            handled = false;
-            if (msg == (int)WindowsMessages.WM_SIZE)
-            {
-                _engine.OnMediaWindowHostResized();
-                handled = true;
-            }
-
-            return IntPtr.Zero;
         }
 
         public IMediaWindow GetMediaWindow()
         {
             SetMediaWindowState(true);
-            return _hwndHost.MediaWindow;
+        //    return _hwndHost.MediaWindow;
+            throw new NotImplementedException();
         }
 
-        public IntPtr Handle
-        {
-            get { return _hwndHost.Handle; }
-        }
-
-        public IMediaEngine MediaEngine
+        protected IMediaEngine MediaEngine
         {
             get { return _engine; }
         }

@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Pvp.Core.MediaEngine;
+using Pvp.Core.Wpf;
 
 namespace Pvp.App
 {
-    internal interface IMediaEngineProvider
+    public interface IMediaControlAcceptor
     {
-        IMediaEngine MediaEngine { get; }
+        MediaControl MediaControl { set; }
     }
 }

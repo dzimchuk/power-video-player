@@ -11,6 +11,6 @@ namespace Pvp.App.Messaging
         VideoAreaDoubleClick,
         MainWindowClosing,
         SessionEnding,
-        MediaWindowHostCreated
+        MediaControlCreated
     }
 }

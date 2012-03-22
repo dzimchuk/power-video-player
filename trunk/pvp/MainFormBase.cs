@@ -27,6 +27,7 @@ using Pvp.Core.Native;
 using System.Xml;
 //using System.Xml.Schema;
 using System.Reflection;
+using Pvp.Core.WindowsForms;
 
 namespace Pvp
 {
@@ -40,11 +41,10 @@ namespace Pvp
         protected ControlBar controlbar = new ControlBar();
         protected Form controlbarHolder = new Form();
         protected NotifyIconEx nicon = new NotifyIconEx();
-        protected MediaWindowHost mediaWindowHost = new MediaWindowHost();
         protected ContextMenu contextMenu = new ContextMenu();
         protected MenuItemEx sep = new MenuItemEx("-");
 
-        protected IMediaEngine engine;
+        protected MediaControl mediaControl = new MediaControl();
                         
     //	bool bXsdOk;
         protected bool bInit = true;
@@ -84,13 +84,13 @@ namespace Pvp
             {
             }
             
-            mediaWindowHost.Parent = this;
-            mediaWindowHost.Dock = DockStyle.Fill;
+            mediaControl.Parent = this;
+            mediaControl.Dock = DockStyle.Fill;
             Bitmap logo = null;
             try
             {
                 logo = new Bitmap(GetType(), "logo.bmp");
-                mediaWindowHost.Logo = logo;
+                mediaControl.Logo = logo;
             }
             catch
             {
@@ -101,11 +101,10 @@ namespace Pvp
                     logo.Dispose();
             }
 
-            engine = mediaWindowHost.MediaEngine;
-            engine.DvdParentalChange += OnUserDecisionNeeded;
-            engine.PartialSuccess += OnUserDecisionNeeded;
+            mediaControl.DvdParentalChange += OnUserDecisionNeeded;
+            mediaControl.PartialSuccess += OnUserDecisionNeeded;
 
-            engine.ErrorOccured += delegate(object sender, ErrorOccuredEventArgs args)
+            mediaControl.ErrorOccured += delegate(object sender, ErrorOccuredEventArgs args)
             {
                 MessageBox.Show(args.Message, strProgName, MessageBoxButtons.OK, MessageBoxIcon.Stop);
             };
@@ -185,7 +184,7 @@ namespace Pvp
             base.OnCultureChanged();
             controlbar.UpdateToolTips();
             SetMenuItemsText();
-            engine.OnCultureChanged();
+            mediaControl.OnCultureChanged();
         }
 
         protected override void OnLoad(EventArgs e)
@@ -199,7 +198,7 @@ namespace Pvp
 
         protected override void OnClosed(EventArgs e)
         {
-            engine.ResetGraph();
+            mediaControl.ResetGraph();
             if (bFullscreen)
                 ToggleFullscreen();
             base.OnClosed (e);
@@ -253,9 +252,9 @@ namespace Pvp
                     else
                     {
                         // default settings
-                        engine.AutoPlay = true;
-                        mediaWindowHost.ShowLogo = true;
-                        engine.PreferredVideoRenderer = MediaEngineServiceProvider.RecommendedRenderer;
+                        mediaControl.AutoPlay = true;
+                        mediaControl.ShowLogo = true;
+                        mediaControl.PreferredVideoRenderer = MediaEngineServiceProvider.RecommendedRenderer;
                     }
                 }
                 else
@@ -482,8 +481,8 @@ namespace Pvp
             Border = false;
             TopMost = true;
 
-            nVideoSize = engine.GetVideoSize();
-            engine.SetVideoSize(VideoSize.SIZE_FREE, false);
+            nVideoSize = mediaControl.VideoSize;
+            mediaControl.VideoSize = VideoSize.SIZE_FREE;
 
             Rectangle rect = Screen.FromControl(this).Bounds;
             MaximumSize = rect.Size;
@@ -503,7 +502,7 @@ namespace Pvp
 
         void FullscreenOff()
         {
-            engine.SetVideoSize(nVideoSize, false);
+            mediaControl.VideoSize = nVideoSize;
             TopMost = bTopMost;
             MaximumSize = SystemInformation.WorkingArea.Size;
             DesktopBounds = rectNormal;

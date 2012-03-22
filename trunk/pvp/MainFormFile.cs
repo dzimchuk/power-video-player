@@ -37,7 +37,7 @@ namespace Pvp
         public MainFormFile()
         {
             CreateFileMenu();
-            engine.FailedStreamsAvailable += new FailedStreamsHandler(engine_FailedStreamsAvailable);
+            mediaControl.FailedStreamsAvailable += new FailedStreamsHandler(engine_FailedStreamsAvailable);
         }
         
         protected override void SetMenuItemsText()
@@ -154,8 +154,8 @@ namespace Pvp
         
         protected void OnFilePopup(object sender, EventArgs e)
         {
-            miClose.Enabled = engine.GraphState != GraphState.Reset;
-            miInfo.Enabled = engine.GraphState != GraphState.Reset;
+            miClose.Enabled = mediaControl.GraphState != GraphState.Reset;
+            miInfo.Enabled = mediaControl.GraphState != GraphState.Reset;
         }
 
         bool bShowingFileDialog;
@@ -206,12 +206,12 @@ namespace Pvp
     
         protected virtual void OnFileClose(object sender, EventArgs e)
         {
-            engine.ResetGraph();
+            mediaControl.ResetGraph();
         }
 
         protected virtual void OnFileInfo(object sender, EventArgs e)
         {
-            InfoDialog dlg = new InfoDialog(engine);
+            InfoDialog dlg = new InfoDialog(mediaControl);
             dlg.TopMost = TopMost;
             if (!Visible)
                 dlg.StartPosition = FormStartPosition.CenterScreen;
