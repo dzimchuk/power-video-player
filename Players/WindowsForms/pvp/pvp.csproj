@@ -124,6 +124,14 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AdvancedUI\AdvancedUI.csproj">
+      <Project>{8284DFC9-F996-4169-B947-96B36F3B27A1}</Project>
+      <Name>AdvancedUI</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\theme\theme.csproj">
+      <Project>{003E3233-557D-4170-9BFC-813A7A71DA49}</Project>
+      <Name>theme</Name>
+    </ProjectReference>
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
