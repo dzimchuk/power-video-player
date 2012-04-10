@@ -199,6 +199,7 @@
     <ClCompile Include="PresentEngine.cpp" />
     <ClCompile Include="Presenter.cpp" />
     <ClCompile Include="PvpPresentEngine.cpp" />
+    <ClCompile Include="PvpPresentEngineQueued.cpp" />
     <ClCompile Include="scheduler.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -214,6 +215,7 @@
     <ClInclude Include="Presenter.h" />
     <ClInclude Include="Pvp.h" />
     <ClInclude Include="PvpPresentEngine.h" />
+    <ClInclude Include="PvpPresentEngineQueued.h" />
     <ClInclude Include="scheduler.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

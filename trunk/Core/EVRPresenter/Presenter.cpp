@@ -1039,7 +1039,7 @@ EVRCustomPresenter::EVRCustomPresenter(HRESULT& hr) :
     m_nrcSource.bottom = 1;
     m_nrcSource.right = 1;
 
-    m_pD3DPresentEngine = new PvpPresentEngine(hr);
+    m_pD3DPresentEngine = new PvpPresentEngineQueued(hr);
     if (m_pD3DPresentEngine == NULL)
     {
         hr = E_OUTOFMEMORY;
@@ -2455,7 +2455,7 @@ HRESULT EVRCustomPresenter::GetBackBufferNoRef(IDirect3DSurface9 **ppSurface)
     // Make sure we at least return NULL
     *ppSurface = NULL;
 
-    hr = ((PvpPresentEngine*)m_pD3DPresentEngine)->GetBackBufferNoRef(ppSurface);
+    hr = ((PvpPresentEngineQueued*)m_pD3DPresentEngine)->GetBackBufferNoRef(ppSurface);
 
     return hr;
 }
