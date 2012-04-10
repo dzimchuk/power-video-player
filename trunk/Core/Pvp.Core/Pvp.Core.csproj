@@ -73,6 +73,10 @@
     <Compile Include="MediaEngine\MediaEngine.cs" />
     <Compile Include="MediaEngine\MediaEngineServiceProvider.cs" />
     <Compile Include="MediaEngine\MediaTypeManager.cs" />
+    <Compile Include="MediaEngine\Render\IEnhancedVideoRenderer.cs" />
+    <Compile Include="MediaEngine\Render\IVMR9Windowless.cs" />
+    <Compile Include="MediaEngine\Render\IVMRWindowless.cs" />
+    <Compile Include="Native\Com.cs" />
     <Compile Include="Native\GDI.cs" />
     <Compile Include="Native\NoCat.cs" />
     <Compile Include="Native\Shell.cs" />

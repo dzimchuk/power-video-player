@@ -10,21 +10,14 @@
  *
  * ***************************************************************************/
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
-using Pvp.Core.Native;
 using Pvp.Core.MediaEngine;
+using Pvp.Core.MediaEngine.Render;
+using System;
 
 namespace Pvp.Core.Wpf
 {
@@ -48,7 +41,11 @@ namespace Pvp.Core.Wpf
         private Border _border;
         private IMediaEngine _engine;
 
-        public MediaWindowHost()
+        private EVRRenderer _evrRenderer;
+        private MediaWindow _mediaWindow;
+        private PvpD3dImage _d3dImage;
+
+        protected MediaWindowHost()
         {
             InitializeMediaEngine();
         }
@@ -56,10 +53,7 @@ namespace Pvp.Core.Wpf
         private void InitializeMediaEngine()
         {
             _engine = MediaEngineServiceProvider.GetMediaEngine(this);
-            _engine.MediaWindowDisposed += delegate(object sender, EventArgs args)
-            {
-                SetMediaWindowState(false);
-            };
+            _engine.MediaWindowDisposed += (sender, args) => SetMediaWindowState(false);
         }
 
 
@@ -93,36 +87,45 @@ namespace Pvp.Core.Wpf
             _border = Template.FindName("PART_Border", this) as Border;
             SetMediaWindowState(false);
         }
-
+        
         private void SetMediaWindowState(bool active)
         {
             if (active)
             {
+                _mediaWindow = new MediaWindow();
+                _d3dImage = new PvpD3dImage((out IntPtr pSurface) => 
+                    {
+                        if (_evrRenderer != null && _evrRenderer.PvpPresenter != null)
+                        {
+                            return _evrRenderer.PvpPresenter.GetBackBufferNoRef(out pSurface);
+                        }
+                        else
+                        {
+                            pSurface = IntPtr.Zero;
+                            return -1;
+                        }
+                    });
+                if (_border != null)
+                    _border.Child = _d3dImage;
                 //_hwndHost = new MediaWindowHwndHost();
                 //_hwndHost.MessageHook += new System.Windows.Interop.HwndSourceHook(_hwndHost_MessageHook);
                 //if (_border != null)
                 //    _border.Child = _hwndHost;
+
             }
             else
             {
                 if (_border != null)
                 {
-                    Rectangle rect = new Rectangle();
-                    rect.StrokeThickness = 0.0;
+                    var rect = new Rectangle {StrokeThickness = 0.0};
 
-                    var binding = new Binding("LogoBrush");
-                    binding.Source = this;
-                    binding.Mode = BindingMode.OneWay;
+                    var binding = new Binding("LogoBrush") {Source = this, Mode = BindingMode.OneWay};
                     rect.SetBinding(Shape.FillProperty, binding);
 
-                    binding = new Binding("LogoMaxWidth");
-                    binding.Source = this;
-                    binding.Mode = BindingMode.OneWay;
+                    binding = new Binding("LogoMaxWidth") {Source = this, Mode = BindingMode.OneWay};
                     rect.SetBinding(FrameworkElement.MaxWidthProperty, binding);
 
-                    binding = new Binding("LogoMaxHeight");
-                    binding.Source = this;
-                    binding.Mode = BindingMode.OneWay;
+                    binding = new Binding("LogoMaxHeight") {Source = this, Mode = BindingMode.OneWay};
                     rect.SetBinding(FrameworkElement.MaxHeightProperty, binding);
 
                     _border.Child = rect;
@@ -134,19 +137,47 @@ namespace Pvp.Core.Wpf
                 //    _hwndHost.Dispose();
                 //    _hwndHost = null;
                 //}
+
+                if (_d3dImage != null)
+                {
+                    _d3dImage.Dispose();
+                    _d3dImage = null;
+                }
+
+                if (_mediaWindow != null)
+                {
+                    _mediaWindow.Dispose(); // it should have been already disposed by the engine
+                    _mediaWindow = null;
+                }
+
+                if (_evrRenderer != null)
+                {
+                    _evrRenderer.Dispose(); // it should have been already disposed by the engine
+                    _evrRenderer = null;
+                }
             }
         }
 
         public IMediaWindow GetMediaWindow()
         {
             SetMediaWindowState(true);
-        //    return _hwndHost.MediaWindow;
-            throw new NotImplementedException();
+            return _mediaWindow;
         }
 
         protected IMediaEngine MediaEngine
         {
             get { return _engine; }
+        }
+
+        protected RendererBase Renderer
+        {
+            get
+            {
+                if (_evrRenderer == null)
+                    _evrRenderer = new EVRRenderer();
+
+                return _evrRenderer;
+            }
         }
     }
 }

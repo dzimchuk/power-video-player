@@ -60,6 +60,8 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ClassFactory.cs" />
+    <Compile Include="EVRRenderer.cs" />
     <Compile Include="MediaControl.cs" />
     <Compile Include="MediaWindow.cs" />
     <Compile Include="MediaWindowHost.cs" />
@@ -67,6 +69,7 @@
       <SubType>Code</SubType>
     </Compile>
     <AppDesigner Include="Properties\" />
+    <Compile Include="PvpD3dImage.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Pvp.Core\Pvp.Core.csproj">

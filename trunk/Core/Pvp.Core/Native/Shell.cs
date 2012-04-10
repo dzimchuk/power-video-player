@@ -12,6 +12,7 @@
 
 using System;
 using System.Runtime.InteropServices;
+using System.Security;
 
 namespace Pvp.Core.Native
 {
@@ -126,7 +127,7 @@ namespace Pvp.Core.Native
 
         #region Interfaces
 
-        [ComVisible(true), ComImport,
+        [ComVisible(true), ComImport, SuppressUnmanagedCodeSecurity,
         GuidAttribute("4e530b0a-e611-4c77-a3ac-9031d022281b"),
         InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
         public interface IApplicationAssociationRegistration
@@ -161,7 +162,7 @@ namespace Pvp.Core.Native
             int ClearUserAssociations();
         }
 
-        [ComVisible(true), ComImport,
+        [ComVisible(true), ComImport, SuppressUnmanagedCodeSecurity,
         GuidAttribute("1f76a169-f994-40ac-8fc8-0959e8874710"),
         InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
         public interface IApplicationAssociationRegistrationUI

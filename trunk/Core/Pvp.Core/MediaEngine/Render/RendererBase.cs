@@ -18,14 +18,14 @@ using Pvp.Core.Native;
 
 namespace Pvp.Core.MediaEngine.Render
 {
-    internal abstract class RendererBase : IRenderer, IDisposable
+    public abstract class RendererBase : IRenderer, IDisposable
     {
         protected Renderer _renderer;
-        protected IBaseFilter pBaseFilter;
+        protected IBaseFilter BaseFilter;
         private bool _disposed = false;
         private bool _ready = false;
-        protected IGraphBuilder pGraphBuilder;
-        protected IntPtr hMediaWindow;
+        protected IGraphBuilder GraphBuilder;
+        protected IntPtr MediaWindowHandle;
         
         #region IRenderer Members
 
@@ -41,23 +41,23 @@ namespace Pvp.Core.MediaEngine.Render
 
         public void RemoveFromGraph()
         {
-            pGraphBuilder.RemoveFilter(pBaseFilter);
+            GraphBuilder.RemoveFilter(BaseFilter);
             Close();
         }
 
         public IPin GetInputPin()
         {
             IPin pPin = null;
-            if (pBaseFilter != null)
+            if (BaseFilter != null)
             {
                 // try unconnected pins first
-                pPin = DsUtils.GetPin(pBaseFilter, PinDirection.Input);
+                pPin = DsUtils.GetPin(BaseFilter, PinDirection.Input);
                 if (pPin == null)
                 {
                     // let's try connected pins
-                    if ((pPin = DsUtils.GetPin(pBaseFilter, PinDirection.Input, true)) != null)
+                    if ((pPin = DsUtils.GetPin(BaseFilter, PinDirection.Input, true)) != null)
                     {
-                        DsUtils.Disconnect(pGraphBuilder, pPin);
+                        DsUtils.Disconnect(GraphBuilder, pPin);
                     }
                 }
             }
@@ -68,12 +68,12 @@ namespace Pvp.Core.MediaEngine.Render
         {
             bool bRet = false;
             rendererInputPin = decoderOutPin = null;
-            if (pBaseFilter != null && (rendererInputPin = DsUtils.GetPin(pBaseFilter, PinDirection.Input, true)) != null)
+            if (BaseFilter != null && (rendererInputPin = DsUtils.GetPin(BaseFilter, PinDirection.Input, true)) != null)
             {
                 int hr = rendererInputPin.ConnectedTo(out decoderOutPin);
                 if (hr == DsHlp.S_OK)
                 {
-                    DsUtils.Disconnect(pGraphBuilder, rendererInputPin);
+                    DsUtils.Disconnect(GraphBuilder, rendererInputPin);
                     bRet = true;
                 }
                 else
@@ -86,7 +86,7 @@ namespace Pvp.Core.MediaEngine.Render
         }
 
         public abstract void SetVideoPosition(ref GDI.RECT rcSrc, ref GDI.RECT rcDest);
-        public abstract void GetNativeVideoSize(out int width, out int height, out int ARWidth, out int ARHeight);
+        public abstract void GetNativeVideoSize(out int width, out int height, out int arWidth, out int arHeight);
         public abstract bool GetCurrentImage(out BITMAPINFOHEADER header, out IntPtr dibFull, out IntPtr dibDataOnly);
 
         #endregion
@@ -123,21 +123,30 @@ namespace Pvp.Core.MediaEngine.Render
             }
         }
 
-        public static IRenderer AddRenderer(IGraphBuilder pGraphBuilder,
-                                            Renderer preferredVideoRenderer,
-                                            ThrowExceptionForHRPointer errorFunc,
-                                            IntPtr hMediaWindow)
+        internal static IRenderer AddRenderer(IGraphBuilder pGraphBuilder,
+                                              Renderer preferredVideoRenderer,
+                                              ThrowExceptionForHRPointer errorFunc,
+                                              IntPtr hMediaWindow)
         {
             return AddRenderer(pGraphBuilder, preferredVideoRenderer, errorFunc, hMediaWindow, true);
         }
         
-        public static IRenderer AddRenderer(IGraphBuilder pGraphBuilder, 
-                                            Renderer preferredVideoRenderer, 
-                                            ThrowExceptionForHRPointer errorFunc, 
-                                            IntPtr hMediaWindow,
-                                            bool fallBackOnVR)
+        internal static IRenderer AddRenderer(IGraphBuilder pGraphBuilder, 
+                                              Renderer preferredVideoRenderer, 
+                                              ThrowExceptionForHRPointer errorFunc, 
+                                              IntPtr hMediaWindow,
+                                              bool fallBackOnVR)
         {
             RendererBase renderer = GetRenderer(preferredVideoRenderer);
+            return AddRenderer(pGraphBuilder, renderer, errorFunc, hMediaWindow, fallBackOnVR);
+        }
+
+        internal static IRenderer AddRenderer(IGraphBuilder pGraphBuilder,
+                                              RendererBase renderer,
+                                              ThrowExceptionForHRPointer errorFunc,
+                                              IntPtr hMediaWindow,
+                                              bool fallBackOnVR)
+        {
             try
             {
                 bool bOk = renderer.InstantiateRenderer();
@@ -161,8 +170,8 @@ namespace Pvp.Core.MediaEngine.Render
                 if (!renderer.IsDelayedInitialize)
                     renderer.Initialize(pGraphBuilder, hMediaWindow);
 
-                renderer.pGraphBuilder = pGraphBuilder;
-                renderer.hMediaWindow = hMediaWindow;
+                renderer.GraphBuilder = pGraphBuilder;
+                renderer.MediaWindowHandle = hMediaWindow;
                 renderer._ready = true;
                 return renderer;
             }
@@ -173,10 +182,10 @@ namespace Pvp.Core.MediaEngine.Render
             }
         }
 
-        public static IRenderer AddRenderer(IDvdGraphBuilder pDVDGraphBuilder,
-                                            IGraphBuilder pGraphBuilder,
-                                            Renderer preferredVideoRenderer,
-                                            IntPtr hMediaWindow)
+        internal static IRenderer AddRenderer(IDvdGraphBuilder pDVDGraphBuilder,
+                                              IGraphBuilder pGraphBuilder,
+                                              Renderer preferredVideoRenderer,
+                                              IntPtr hMediaWindow)
         {
             // this methods will instruct DVDGraphBuilder to instantiate and use the preferred renderer; it will return a wrapper if it was successful
             // it will return null if:
@@ -190,16 +199,39 @@ namespace Pvp.Core.MediaEngine.Render
                 if (preferredVideoRenderer != Renderer.VR)
                 {
                     renderer = GetRenderer(preferredVideoRenderer);
-                    if (renderer.Instantiate(pDVDGraphBuilder, pGraphBuilder))
-                    {
-                        if (!renderer.IsDelayedInitialize)
-                            renderer.Initialize(pGraphBuilder, hMediaWindow);
+                    return AddRenderer(pDVDGraphBuilder, pGraphBuilder, renderer, hMediaWindow);
+                }
 
-                        renderer.pGraphBuilder = pGraphBuilder;
-                        renderer.hMediaWindow = hMediaWindow;
-                        renderer._ready = true;
-                        return renderer;
-                    }
+                return null;
+            }
+            finally
+            {
+                if (renderer != null && !renderer._ready)
+                    renderer.Close();
+            }
+        }
+
+        internal static IRenderer AddRenderer(IDvdGraphBuilder pDVDGraphBuilder,
+                                              IGraphBuilder pGraphBuilder,
+                                              RendererBase renderer,
+                                              IntPtr hMediaWindow)
+        {
+            // this methods will instruct DVDGraphBuilder to instantiate and use the specified renderer; it will return a wrapper if it was successful
+            // it will return null if there were errors instantiating the preferred renderer; 
+            // in this case the program should fall back on the default renderer by calling GetExistingRenderer after the graph is built
+            // it will throw an exception (originating from renderers' Initialize method) if initialization fails (similar behavior when adding renderers to non-DVD graphs)
+            
+            try
+            {
+                if (renderer.Instantiate(pDVDGraphBuilder, pGraphBuilder))
+                {
+                    if (!renderer.IsDelayedInitialize)
+                        renderer.Initialize(pGraphBuilder, hMediaWindow);
+
+                    renderer.GraphBuilder = pGraphBuilder;
+                    renderer.MediaWindowHandle = hMediaWindow;
+                    renderer._ready = true;
+                    return renderer;
                 }
 
                 return null;
@@ -249,7 +281,7 @@ namespace Pvp.Core.MediaEngine.Render
                                 // there is connected input pin of type 'video'; this looks like a renderer
                                 Marshal.ReleaseComObject(pPin);
                                 renderer = GetRenderer(Renderer.VR); // let's just default it VR
-                                renderer.pBaseFilter = pFilter;
+                                renderer.BaseFilter = pFilter;
                                 bFound = true;
                                 break;
                             }
@@ -271,7 +303,7 @@ namespace Pvp.Core.MediaEngine.Render
             return renderer;
         }
 
-        public static IRenderer GetExistingRenderer(IGraphBuilder pGraphBuilder, IntPtr hMediaWindow)
+        internal static IRenderer GetExistingRenderer(IGraphBuilder pGraphBuilder, IntPtr hMediaWindow)
         {
             // this method is to be called to create a wrapper for a renderer that is already in the graph (added by intelligent connect)
             // at the momemnt it is assumed that this is a Windowed Renderer (compatability assumption)
@@ -293,7 +325,7 @@ namespace Pvp.Core.MediaEngine.Render
                             renderer = GetRenderer(clsid);
                             if (renderer != null)
                             {
-                                renderer.pBaseFilter = pFilter;
+                                renderer.BaseFilter = pFilter;
                                 break;
                             }
                             else
@@ -315,8 +347,8 @@ namespace Pvp.Core.MediaEngine.Render
                 if (!renderer.IsDelayedInitialize)
                     renderer.Initialize(pGraphBuilder, hMediaWindow);
 
-                renderer.pGraphBuilder = pGraphBuilder;
-                renderer.hMediaWindow = hMediaWindow;
+                renderer.GraphBuilder = pGraphBuilder;
+                renderer.MediaWindowHandle = hMediaWindow;
                 renderer._ready = true;
                 return renderer;
             }
@@ -327,7 +359,7 @@ namespace Pvp.Core.MediaEngine.Render
             }
         }
 
-        public static IRenderer SubstituteRenderer(IGraphBuilder pGraphBuilder, IntPtr hMediaWindow, Renderer desiredRenderer)
+        internal static IRenderer SubstituteRenderer(IGraphBuilder pGraphBuilder, IntPtr hMediaWindow, Renderer desiredRenderer)
         {
             RendererBase existingRenderer = (RendererBase)GetExistingRenderer(pGraphBuilder, hMediaWindow);
             // existingRenderer is either VR or VMR windowed (default mode for VMR); VMR9 and EVR are never default renderers
@@ -394,14 +426,14 @@ namespace Pvp.Core.MediaEngine.Render
 
         protected virtual void CloseInterfaces()
         {
-            if (pBaseFilter != null)
+            if (BaseFilter != null)
             {
-                while (Marshal.ReleaseComObject(pBaseFilter) > 0) { }
-                pBaseFilter = null;
+                while (Marshal.ReleaseComObject(BaseFilter) > 0) { }
+                BaseFilter = null;
             }
 
-            pGraphBuilder = null;
-            hMediaWindow = IntPtr.Zero;
+            GraphBuilder = null;
+            MediaWindowHandle = IntPtr.Zero;
         }
 
         private void GetBaseFilter(IGraphBuilder pGraphBuilder)
@@ -418,7 +450,7 @@ namespace Pvp.Core.MediaEngine.Render
                     Guid clsid;
                     if (pFilter.GetClassID(out clsid) == DsHlp.S_OK && clsid == RendererID)
                     {
-                        pBaseFilter = pFilter;
+                        BaseFilter = pFilter;
                         break;
                     }
                     else
@@ -439,7 +471,7 @@ namespace Pvp.Core.MediaEngine.Render
             {
                 Marshal.FinalReleaseComObject(o); // pDvdGraphBuilder has some connection to the renderer already so it will be used when rendering the graph
                 GetBaseFilter(pGraphBuilder);
-                bRet = pBaseFilter != null;
+                bRet = BaseFilter != null;
             }
             return bRet;
         }
@@ -451,7 +483,7 @@ namespace Pvp.Core.MediaEngine.Render
             {
                 Type type = Type.GetTypeFromCLSID(RendererID, true);
                 comobj = Activator.CreateInstance(type);
-                pBaseFilter = (IBaseFilter)comobj;
+                BaseFilter = (IBaseFilter)comobj;
                 return true;
             }
             catch (Exception e)

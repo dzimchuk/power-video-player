@@ -195,6 +195,9 @@ namespace Pvp.Core.Native
         public static extern bool GetClientRect(IntPtr hWnd, out GDI.RECT lpRect);
 
         [DllImport("user32.dll")]
+        public static extern bool GetWindowRect(IntPtr hWnd, out GDI.RECT lpRect);
+
+        [DllImport("user32.dll")]
         public static extern bool InvalidateRect(IntPtr hWnd, ref GDI.RECT lpRect, bool bErase);
 
         [DllImport("user32.dll")]

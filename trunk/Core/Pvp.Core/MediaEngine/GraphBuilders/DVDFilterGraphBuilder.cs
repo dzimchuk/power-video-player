@@ -57,7 +57,7 @@ namespace Pvp.Core.MediaEngine.GraphBuilders
             string DiscPath = parameters.DiscPath;
             AM_DVD_GRAPH_FLAGS dwFlags = parameters.dwFlags;
             Func<string, bool> onPartialSuccessCallback = parameters.OnPartialSuccessCallback;
-            Renderer PreferredVideoRenderer = parameters.PreferredVideoRenderer;
+            Renderer preferredVideoRenderer = parameters.PreferredVideoRenderer;
                         
             // Create the DVD Graph Builder
             try
@@ -92,10 +92,20 @@ namespace Pvp.Core.MediaEngine.GraphBuilders
             pFilterGraph.pMediaEventEx.SetNotifyWindow(hMediaWindow, (int)FilterGraph.UWM_GRAPH_NOTIFY, IntPtr.Zero);
 
             // request desired renderer (may return null)            
-            pFilterGraph.pRenderer = RendererBase.AddRenderer(pFilterGraph.pDVDGraphBuilder,
-                                                              pFilterGraph.pGraphBuilder,
-                                                              PreferredVideoRenderer,
-                                                              hMediaWindow);
+            if (parameters.Renderer == null)
+            {
+                pFilterGraph.pRenderer = RendererBase.AddRenderer(pFilterGraph.pDVDGraphBuilder,
+                                                                  pFilterGraph.pGraphBuilder,
+                                                                  preferredVideoRenderer,
+                                                                  hMediaWindow);
+            }
+            else
+            {
+                pFilterGraph.pRenderer = RendererBase.AddRenderer(pFilterGraph.pDVDGraphBuilder,
+                                                                  pFilterGraph.pGraphBuilder,
+                                                                  parameters.Renderer,
+                                                                  hMediaWindow);
+            }
             
             // Build the Graph
             string str;

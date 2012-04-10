@@ -21,7 +21,7 @@ using Pvp.Core.MediaEngine.Description;
 
 namespace Pvp.Core.MediaEngine
 {
-    internal enum Error
+    public enum Error
     {
         Unknown,
         FilterGraphManager,

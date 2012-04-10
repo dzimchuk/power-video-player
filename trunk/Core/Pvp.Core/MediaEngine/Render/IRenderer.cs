@@ -21,7 +21,7 @@ namespace Pvp.Core.MediaEngine.Render
     /// <summary>
     /// Specifies the public contract of a video renderer.
     /// </summary>
-    internal interface IRenderer
+    public interface IRenderer
     {
         /// <summary>
         /// Gets the type of the video renderer represented by the current instance as a Renderer
@@ -46,9 +46,9 @@ namespace Pvp.Core.MediaEngine.Render
         /// </summary>
         /// <param name="width">Receives the horizontal size.</param>
         /// <param name="height">Receives the vertical size.</param>
-        /// <param name="ARWidth">Receives the horizontal aspect ratio value.</param>
-        /// <param name="ARHeight">Receives the vertical aspect ration value.</param>
-        void GetNativeVideoSize(out int width, out int height, out int ARWidth, out int ARHeight);
+        /// <param name="arWidth">Receives the horizontal aspect ratio value.</param>
+        /// <param name="arHeight">Receives the vertical aspect ration value.</param>
+        void GetNativeVideoSize(out int width, out int height, out int arWidth, out int arHeight);
         
         /// <summary>
         /// Gets the unconnected input pin of the renderer. If the pin was connected before it gets unconnected.

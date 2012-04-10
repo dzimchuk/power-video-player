@@ -153,11 +153,6 @@ namespace Pvp.Core.Wpf
             get { return MediaEngine.IsGraphSeekable; }
         }
 
-        public bool IsEVRCurrentlyInUse
-        {
-            get { return MediaEngine.IsEVRCurrentlyInUse; }
-        }
-
         public MediaInfo MediaInfo
         {
             get { return MediaEngine.MediaInfo; }
@@ -225,7 +220,7 @@ namespace Pvp.Core.Wpf
 
         public bool BuildGraph(string source, MediaSourceType mediaSourceType)
         {
-            return MediaEngine.BuildGraph(source, mediaSourceType);
+            return MediaEngine.BuildGraph(source, mediaSourceType, Renderer);
         }
 
         public bool PauseGraph()

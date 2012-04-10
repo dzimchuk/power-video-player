@@ -121,11 +121,6 @@ namespace Pvp.App.Service
             get { return _mediaControl.IsGraphSeekable; }
         }
 
-        public bool IsEVRCurrentlyInUse
-        {
-            get { return _mediaControl.IsEVRCurrentlyInUse; }
-        }
-
         public MediaInfo MediaInfo
         {
             get { return _mediaControl.MediaInfo; }

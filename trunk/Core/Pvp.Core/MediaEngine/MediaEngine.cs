@@ -197,12 +197,7 @@ namespace Pvp.Core.MediaEngine
                     return false;
             }
         }
-
-        public bool IsEVRCurrentlyInUse 
-        {
-            get { return _filterGraph != null && _filterGraph.pRenderer is EVR; }
-        }
-
+        
         public MediaInfo MediaInfo
         {
             get { return _filterGraph != null ? _filterGraph.info : null; }
@@ -569,18 +564,33 @@ namespace Pvp.Core.MediaEngine
         /// <param name="mediaWindow">An instance of the media window.
         /// </param>
         /// <param name="source">Filename.</param>
-        /// <param name="CurrentlyPlaying">One of the MediaSourceType.</param>
+        /// <param name="mediaSourceType">One of the MediaSourceType.</param>
         /// <returns></returns>
         public bool BuildGraph(string source, MediaSourceType mediaSourceType)
+        {
+            return BuildGraph(source, mediaSourceType, null);
+        }
+
+        /// <summary>
+        /// Render a new video using a custom renderer.
+        /// </summary>
+        /// <param name="mediaWindow">An instance of the media window.
+        /// </param>
+        /// <param name="source">Filename.</param>
+        /// <param name="mediaSourceType">One of the MediaSourceType.</param>
+        /// <param name="renderer">A custom renderer.</param>
+        /// <returns></returns>
+        public bool BuildGraph(string source, MediaSourceType mediaSourceType, RendererBase renderer)
         {
             ResetGraph();
 
             _mediaWindow = _mediaWindowHost.GetMediaWindow();
             _mediaWindow.MessageReceived += new EventHandler<MessageReceivedEventArgs>(_mediaWindow_MessageReceived);
-            
+
             _filterGraph = FilterGraphBuilder.BuildFilterGraph(source,
                                                                mediaSourceType,
                                                                _mediaWindow.Handle,
+                                                               renderer,
                                                                _preferredRenderer,
                                                                ReportError,
                                                                delegate(string message)
@@ -592,9 +602,9 @@ namespace Pvp.Core.MediaEngine
             if (_filterGraph != null)
             {
                 _mediaWindow.SetRendererInterfaces(
-                    _filterGraph.pRenderer is VMRWindowless ? ((VMRWindowless)_filterGraph.pRenderer).VMRWindowlessControl : null,
-                    _filterGraph.pRenderer is VMR9Windowless ? ((VMR9Windowless)_filterGraph.pRenderer).VMRWindowlessControl : null,
-                    _filterGraph.pRenderer is EVR ? ((EVR)_filterGraph.pRenderer).MFVideoDisplayControl : null);
+                    _filterGraph.pRenderer is IVMRWindowless ? ((IVMRWindowless)_filterGraph.pRenderer).VMRWindowlessControl : null,
+                    _filterGraph.pRenderer is IVMR9Windowless ? ((IVMR9Windowless)_filterGraph.pRenderer).VMRWindowlessControl : null,
+                    _filterGraph.pRenderer is IEnhancedVideoRenderer ? ((IEnhancedVideoRenderer)_filterGraph.pRenderer).MFVideoDisplayControl : null);
                 OnInitSize(true, true);
                 IsMuted = IsMuted; // this resets the volume
                 if (_autoPlay)

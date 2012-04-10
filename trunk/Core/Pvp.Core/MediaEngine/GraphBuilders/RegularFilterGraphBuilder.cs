@@ -51,7 +51,7 @@ namespace Pvp.Core.MediaEngine.GraphBuilders
             FilterGraph pFilterGraph = parameters.pFilterGraph;
             string source = parameters.source;
             IntPtr hMediaWindow = parameters.hMediaWindow;
-            Renderer PreferredVideoRenderer = parameters.PreferredVideoRenderer;
+            Renderer preferredVideoRenderer = parameters.PreferredVideoRenderer;
             
             // Create the filter graph manager
             try
@@ -91,8 +91,16 @@ namespace Pvp.Core.MediaEngine.GraphBuilders
             {
                 ThrowExceptionForHR(pFilterGraph, hrCode, error);
             };
+
+            if (parameters.Renderer == null)
+            {
+                pFilterGraph.pRenderer = RendererBase.AddRenderer(pFilterGraph.pGraphBuilder, preferredVideoRenderer, errorFunc, hMediaWindow);
+            }
+            else
+            {
+                pFilterGraph.pRenderer = RendererBase.AddRenderer(pFilterGraph.pGraphBuilder, parameters.Renderer, errorFunc, hMediaWindow, false);
+            }
             
-            pFilterGraph.pRenderer = RendererBase.AddRenderer(pFilterGraph.pGraphBuilder, PreferredVideoRenderer, errorFunc, hMediaWindow);
                         
             /*if (bUsePreferredFilters)
                 ManualBuildGraph(pFilterGraph);

@@ -15,6 +15,7 @@ using Pvp.Core.DirectShow;
 using Pvp.Core.MediaEngine.Description;
 using Pvp.Core.MediaEngine.GraphBuilders;
 using Pvp.Core.Native;
+using Pvp.Core.MediaEngine.Render;
 
 namespace Pvp.Core.MediaEngine
 {
@@ -115,7 +116,6 @@ namespace Pvp.Core.MediaEngine
         int         FilterCount { get; }
         GraphState  GraphState { get; }
         bool        IsGraphSeekable { get; }
-        bool        IsEVRCurrentlyInUse { get; }
         MediaInfo   MediaInfo { get; }
         SourceType  SourceType { get; }
 
@@ -161,6 +161,7 @@ namespace Pvp.Core.MediaEngine
         #region Playback control methods
 
         bool BuildGraph(string source, MediaSourceType mediaSourceType);
+        bool BuildGraph(string source, MediaSourceType mediaSourceType, RendererBase renderer);
         bool PauseGraph();
         void ResetGraph();
         bool ResumeGraph();
