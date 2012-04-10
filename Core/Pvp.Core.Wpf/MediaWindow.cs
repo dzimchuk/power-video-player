@@ -12,125 +12,124 @@
 
 using System;
 using System.Runtime.InteropServices;
-using System.Windows.Forms;
 using Pvp.Core.DirectShow;
 using Pvp.Core.MediaEngine;
 using Pvp.Core.Native;
 
 namespace Pvp.Core.Wpf
 {
-    internal class MediaWindow : NativeWindow, IMediaWindow
+    [ComVisible(true), ComImport,
+    InterfaceType(ComInterfaceType.InterfaceIsIUnknown),
+    Guid("DACEB68E-8716-41F5-85DC-7F5F5D97CC65")]
+    internal interface IMediaWindowManager
     {
-        #region Imported functions from nwnd.dll
+        [PreserveSig]
+        int GetMediaWindow(out IntPtr phwnd);
+    }
 
-        private static class NwndWrapper
-        {
-            [DllImport("nwnd.dll")]
-            public static extern IntPtr CreateMediaWindow(IntPtr hParent, int nWidth, int nHeight);
-
-            [DllImport("nwnd.dll")]
-            public static extern void SetRunning([MarshalAs(UnmanagedType.Bool)] bool bRunning,
-                IVMRWindowlessControl pVMR, IVMRWindowlessControl9 pVMR9, IMFVideoDisplayControl pEVR);
-
-            [DllImport("nwnd.dll")]
-            public static extern void SetLogo(IntPtr hLogo);
-
-            [DllImport("nwnd.dll")]
-            public static extern void IsShowLogo([MarshalAs(UnmanagedType.Bool)] bool bShow);
-
-            [DllImport("nwnd.dll")]
-            public static extern void InvalidateMediaWindow();
-        }
-
-        private static class Nwnd64Wrapper
-        {
-            [DllImport("nwnd64.dll")]
-            public static extern IntPtr CreateMediaWindow(IntPtr hParent, int nWidth, int nHeight);
-
-            [DllImport("nwnd64.dll")]
-            public static extern void SetRunning([MarshalAs(UnmanagedType.Bool)] bool bRunning,
-                IVMRWindowlessControl pVMR, IVMRWindowlessControl9 pVMR9, IMFVideoDisplayControl pEVR);
-
-            [DllImport("nwnd64.dll")]
-            public static extern void SetLogo(IntPtr hLogo);
-
-            [DllImport("nwnd64.dll")]
-            public static extern void IsShowLogo([MarshalAs(UnmanagedType.Bool)] bool bShow);
-
-            [DllImport("nwnd64.dll")]
-            public static extern void InvalidateMediaWindow();
-        }
-
-        private static IntPtr CreateMediaWindow(IntPtr hParent, int nWidth, int nHeight)
-        {
-            return IntPtr.Size == 8 ? Nwnd64Wrapper.CreateMediaWindow(hParent, nWidth, nHeight) : NwndWrapper.CreateMediaWindow(hParent, nWidth, nHeight);
-        }
-
-        private static void SetRunning(bool bRunning, IVMRWindowlessControl pVMR, IVMRWindowlessControl9 pVMR9, IMFVideoDisplayControl pEVR)
-        {
-            if (IntPtr.Size == 8)
-                Nwnd64Wrapper.SetRunning(bRunning, pVMR, pVMR9, pEVR);
-            else
-                NwndWrapper.SetRunning(bRunning, pVMR, pVMR9, pEVR);
-        }
-
-        public static void SetLogo(IntPtr hLogo)
-        {
-            if (IntPtr.Size == 8)
-                Nwnd64Wrapper.SetLogo(hLogo);
-            else
-                NwndWrapper.SetLogo(hLogo);
-        }
-
-        public static void IsShowLogo(bool bShow)
-        {
-            if (IntPtr.Size == 8)
-                Nwnd64Wrapper.IsShowLogo(bShow);
-            else
-                NwndWrapper.IsShowLogo(bShow);
-        }
-
-        public static void InvalidateMediaWindow()
-        {
-            if (IntPtr.Size == 8)
-                Nwnd64Wrapper.InvalidateMediaWindow();
-            else
-                NwndWrapper.InvalidateMediaWindow();
-        }
-
-        #endregion
-        
-        public MediaWindow(IntPtr hwndParent, int nWidth, int nHeight)
-        {
-            IntPtr hwnd = CreateMediaWindow(hwndParent, nWidth, nHeight);
-            AssignHandle(hwnd);
-        }
-        
-        protected override void WndProc(ref Message m)
-        {
-            if (MessageReceived != null)
-                MessageReceived(this, new MessageReceivedEventArgs(m.HWnd, (uint)m.Msg, m.WParam, m.LParam));
-            
-            base.WndProc(ref m);
-        }
-
+    internal class MediaWindow : IMediaWindow
+    {
         public event EventHandler<MessageReceivedEventArgs> MessageReceived;
+
+        private static Guid CLSID_MediaWindowManager = new Guid("6F6EF4A2-2B39-4050-9FD2-E24065299518");
+
+        private IMediaWindowManager _manager;
+        private IntPtr _hMediaWindow; // slight performance optimization
+
+        public MediaWindow()
+        {
+            Initialize();
+        }
+
+        private void Initialize()
+        {
+            object factoryObject = null;
+            object managerObject = null;
+            try
+            {
+                var hr = ClassFactory.GetClassFactory(ref CLSID_MediaWindowManager, ref ClassFactory.IID_ClassFactory, out factoryObject);
+                Marshal.ThrowExceptionForHR(hr);
+
+                var factory = (IClassFactory)factoryObject;
+
+                var iidMediaWindow = typeof(IMediaWindowManager).GUID;
+                hr = factory.CreateInstance(null, ref iidMediaWindow, out managerObject);
+                Marshal.ThrowExceptionForHR(hr);
+
+                _manager = (IMediaWindowManager) managerObject;
+                managerObject = null;
+
+                Marshal.ThrowExceptionForHR(_manager.GetMediaWindow(out _hMediaWindow));
+            }
+            finally
+            {
+                if (factoryObject != null)
+                {
+                    Marshal.FinalReleaseComObject(factoryObject);
+                }
+
+                if (managerObject != null)
+                {
+                    Marshal.FinalReleaseComObject(managerObject);
+                }
+            } 
+        }
+
+        public IntPtr Handle
+        {
+            get
+            {
+                if (_manager == null)
+                {
+                    throw new InvalidOperationException("MediaWindowManager has not been initialized.");
+                }
+
+                IntPtr hwnd;
+                Marshal.ThrowExceptionForHR(_manager.GetMediaWindow(out hwnd));
+                return hwnd;
+            }
+        }
 
         public void Invalidate()
         {
-            InvalidateMediaWindow();
         }
 
+        private GDI.RECT? _clientRect;
+        private GDI.RECT? _windowRect;
         public void Move(ref GDI.RECT rcDest)
         {
-            WindowsManagement.MoveWindow(Handle, rcDest.left, rcDest.top, rcDest.right - rcDest.left, rcDest.bottom - rcDest.top, true);
+            if (_clientRect == null)
+            {
+                GDI.RECT rect;
+                WindowsManagement.GetClientRect(_hMediaWindow, out rect);
+                _clientRect = rect;
+            }
+                
+            if (_windowRect == null)
+            {
+                GDI.RECT rect;
+                WindowsManagement.GetWindowRect(_hMediaWindow, out rect);
+                _windowRect = rect;
+            }
+
+            if ((_clientRect.Value.right - _clientRect.Value.left) != (rcDest.right - rcDest.left) ||
+                (_clientRect.Value.bottom - _clientRect.Value.top) != (rcDest.bottom - rcDest.top)) 
+            {
+                GDI.RECT rect;
+                rect.left = rect.top = 0;
+                rect.right = (rcDest.right - rcDest.left) + ((_windowRect.Value.right - _windowRect.Value.left) - (_clientRect.Value.right - _clientRect.Value.left));
+                rect.bottom = (rcDest.bottom - rcDest.top) + ((_windowRect.Value.bottom - _windowRect.Value.top) - (_clientRect.Value.bottom - _clientRect.Value.top));
+
+                if (WindowsManagement.MoveWindow(_hMediaWindow, rect.left, rect.top, rect.right, rect.bottom, false) != 0)
+                {
+                    _windowRect = rect;
+                    _clientRect = rcDest;
+                }
+            }
         }
 
-        public void SetRendererInterfaces(IVMRWindowlessControl VMRWindowlessControl, 
-                                          IVMRWindowlessControl9 VMRWindowlessControl9, 
-                                          IMFVideoDisplayControl MFVideoDisplayControl)
+        public void SetRendererInterfaces(IVMRWindowlessControl VMRWindowlessControl, IVMRWindowlessControl9 VMRWindowlessControl9, IMFVideoDisplayControl MFVideoDisplayControl)
         {
-            SetRunning(true, VMRWindowlessControl, VMRWindowlessControl9, MFVideoDisplayControl);
         }
 
         ~MediaWindow()
@@ -146,8 +145,11 @@ namespace Pvp.Core.Wpf
 
         private void Dispose(bool disposing)
         {
-            SetRunning(false, null, null, null);
-            DestroyHandle();
+            if (disposing && _manager != null)
+            {
+                Marshal.FinalReleaseComObject(_manager);
+                _manager = null;
+            }
         }
     }
 }

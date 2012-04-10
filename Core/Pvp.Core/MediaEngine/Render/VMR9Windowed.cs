@@ -38,7 +38,7 @@ namespace Pvp.Core.MediaEngine.Render
         protected override void AddToGraph(IGraphBuilder pGraphBuilder, ThrowExceptionForHRPointer errorFunc)
         {
             // add the VMR9 to the graph
-            int hr = pGraphBuilder.AddFilter(pBaseFilter, "VMR9 (Windowed)");
+            int hr = pGraphBuilder.AddFilter(BaseFilter, "VMR9 (Windowed)");
             errorFunc(hr, Error.AddVMR9);
         }
 
@@ -59,10 +59,10 @@ namespace Pvp.Core.MediaEngine.Render
             }
             else
             {
-                IVMRFilterConfig9 pVMRFilterConfig9 = (IVMRFilterConfig9)pBaseFilter; // will be released when pBaseFilter is released
+                IVMRFilterConfig9 pVMRFilterConfig9 = (IVMRFilterConfig9)BaseFilter; // will be released when pBaseFilter is released
                 pVMRFilterConfig9.SetNumberOfStreams(NUMBER_OF_STREAMS);
 
-                IVMRAspectRatioControl9 pVMRAspectRatioControl9 = (IVMRAspectRatioControl9)pBaseFilter;
+                IVMRAspectRatioControl9 pVMRAspectRatioControl9 = (IVMRAspectRatioControl9)BaseFilter;
                 pVMRAspectRatioControl9.SetAspectRatioMode(VMR9AspectRatioMode.VMR9ARMode_None);
 
                 _initialized = true;

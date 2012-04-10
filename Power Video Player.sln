@@ -33,9 +33,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "pvp", "Players\WindowsForms
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pvp.App", "Players\WPF\Pvp.App\Pvp.App.csproj", "{F3EDD60A-1420-47D9-85F6-6BA5BE8D1ACF}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EVRPresenter", "Core\EVRPresenter\EVRPresenter.vcxproj", "{93795BD8-0E1B-4D6C-B5F4-B49533E8C7E8}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 10
+		SccNumberOfProjects = 11
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs09
 		SccLocalPath0 = .
@@ -75,6 +77,10 @@ Global
 		SccProjectTopLevelParentUniqueName9 = Power\u0020Video\u0020Player.sln
 		SccProjectName9 = Players/WPF/Pvp.App
 		SccLocalPath9 = Players\\WPF\\Pvp.App
+		SccProjectUniqueName10 = Core\\EVRPresenter\\EVRPresenter.vcxproj
+		SccProjectTopLevelParentUniqueName10 = Power\u0020Video\u0020Player.sln
+		SccProjectName10 = Core/EVRPresenter
+		SccLocalPath10 = Core\\EVRPresenter
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -223,6 +229,22 @@ Global
 		{F3EDD60A-1420-47D9-85F6-6BA5BE8D1ACF}.Release|x64.ActiveCfg = Release|x86
 		{F3EDD60A-1420-47D9-85F6-6BA5BE8D1ACF}.Release|x86.ActiveCfg = Release|x86
 		{F3EDD60A-1420-47D9-85F6-6BA5BE8D1ACF}.Release|x86.Build.0 = Release|x86
+		{93795BD8-0E1B-4D6C-B5F4-B49533E8C7E8}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{93795BD8-0E1B-4D6C-B5F4-B49533E8C7E8}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{93795BD8-0E1B-4D6C-B5F4-B49533E8C7E8}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{93795BD8-0E1B-4D6C-B5F4-B49533E8C7E8}.Debug|Win32.ActiveCfg = Debug|Win32
+		{93795BD8-0E1B-4D6C-B5F4-B49533E8C7E8}.Debug|Win32.Build.0 = Debug|Win32
+		{93795BD8-0E1B-4D6C-B5F4-B49533E8C7E8}.Debug|x64.ActiveCfg = Debug|x64
+		{93795BD8-0E1B-4D6C-B5F4-B49533E8C7E8}.Debug|x64.Build.0 = Debug|x64
+		{93795BD8-0E1B-4D6C-B5F4-B49533E8C7E8}.Debug|x86.ActiveCfg = Debug|x64
+		{93795BD8-0E1B-4D6C-B5F4-B49533E8C7E8}.Release|Any CPU.ActiveCfg = Release|x64
+		{93795BD8-0E1B-4D6C-B5F4-B49533E8C7E8}.Release|Mixed Platforms.ActiveCfg = Release|x64
+		{93795BD8-0E1B-4D6C-B5F4-B49533E8C7E8}.Release|Mixed Platforms.Build.0 = Release|x64
+		{93795BD8-0E1B-4D6C-B5F4-B49533E8C7E8}.Release|Win32.ActiveCfg = Release|Win32
+		{93795BD8-0E1B-4D6C-B5F4-B49533E8C7E8}.Release|Win32.Build.0 = Release|Win32
+		{93795BD8-0E1B-4D6C-B5F4-B49533E8C7E8}.Release|x64.ActiveCfg = Release|x64
+		{93795BD8-0E1B-4D6C-B5F4-B49533E8C7E8}.Release|x64.Build.0 = Release|x64
+		{93795BD8-0E1B-4D6C-B5F4-B49533E8C7E8}.Release|x86.ActiveCfg = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -233,6 +255,7 @@ Global
 		{C2E6EE93-B834-4445-9AA2-28F6A6E23D8E} = {5F9B37B0-2053-4B4C-882C-C9E5A15F4154}
 		{DD243C13-EE02-49F5-949B-FAC91BE3220E} = {5F9B37B0-2053-4B4C-882C-C9E5A15F4154}
 		{E20389D6-73AD-410A-BB08-D4009B897E4A} = {5F9B37B0-2053-4B4C-882C-C9E5A15F4154}
+		{93795BD8-0E1B-4D6C-B5F4-B49533E8C7E8} = {5F9B37B0-2053-4B4C-882C-C9E5A15F4154}
 		{2644B5A3-A937-4B5E-B1DE-2D0950AD240B} = {487313E8-D8D4-4D41-905A-2C3687FBCFD1}
 		{AA66A153-3289-47A3-B86C-1B6C8B4A4610} = {487313E8-D8D4-4D41-905A-2C3687FBCFD1}
 		{8284DFC9-F996-4169-B947-96B36F3B27A1} = {2644B5A3-A937-4B5E-B1DE-2D0950AD240B}

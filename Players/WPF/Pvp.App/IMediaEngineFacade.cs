@@ -81,7 +81,6 @@ namespace Pvp.App
         int FilterCount { get; }
         GraphState GraphState { get; }
         bool IsGraphSeekable { get; }
-        bool IsEVRCurrentlyInUse { get; }
         MediaInfo MediaInfo { get; }
         SourceType SourceType { get; }
 

@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using Pvp.Core.DirectShow;
 using Pvp.Core.MediaEngine.Description;
+using Pvp.Core.MediaEngine.Render;
 
 namespace Pvp.Core.MediaEngine.GraphBuilders
 {
@@ -48,7 +49,7 @@ namespace Pvp.Core.MediaEngine.GraphBuilders
         }
     }
 
-    internal delegate void ThrowExceptionForHRPointer(int hr, Error error);
+    public delegate void ThrowExceptionForHRPointer(int hr, Error error);
     
     /// <summary>
     /// 
@@ -62,7 +63,8 @@ namespace Pvp.Core.MediaEngine.GraphBuilders
             public FilterGraph pFilterGraph;                // regular and dvd
             public string source;                           // regular
             public IntPtr hMediaWindow;                     // regular and dvd
-            public Renderer PreferredVideoRenderer;         // regular
+            public RendererBase Renderer;                   // regular and dvd
+            public Renderer PreferredVideoRenderer;         // regular and dvd
             
             public string DiscPath;                         // dvd
             public AM_DVD_GRAPH_FLAGS dwFlags;              // dvd
@@ -70,9 +72,10 @@ namespace Pvp.Core.MediaEngine.GraphBuilders
         }
         
         public static FilterGraph BuildFilterGraph(string source,
-                                                   MediaSourceType CurrentlyPlaying,
+                                                   MediaSourceType sourceType,
                                                    IntPtr hMediaWindow,
-                                                   Renderer PreferredVideoRenderer,
+                                                   RendererBase renderer,
+                                                   Renderer preferredVideoRenderer,
                                                    Action<string> onErrorCallback,
                                                    Func<string, bool> onPartialSuccessCallback)
         {
@@ -82,11 +85,11 @@ namespace Pvp.Core.MediaEngine.GraphBuilders
             {
                 Trace.GetTrace().TraceInformation(
                     String.Format("Start building filter graph. Source: {0}. WhatToPlay: {1}. PreferredVideoRenderer: {2}.",
-                    source, CurrentlyPlaying, PreferredVideoRenderer));
+                    source, sourceType, preferredVideoRenderer));
 
                 pFilterGraph = new FilterGraph();
                 FilterGraphBuilder pFilterGraphBuilder = GetFilterGraphBuilder(source,
-                                                                               CurrentlyPlaying,
+                                                                               sourceType,
                                                                                pFilterGraph);
                 if (pFilterGraphBuilder == null)
                 {
@@ -98,7 +101,8 @@ namespace Pvp.Core.MediaEngine.GraphBuilders
                 parameters.pFilterGraph = pFilterGraph;
                 parameters.source = source;
                 parameters.hMediaWindow = hMediaWindow;
-                parameters.PreferredVideoRenderer = PreferredVideoRenderer;
+                parameters.Renderer = renderer;
+                parameters.PreferredVideoRenderer = preferredVideoRenderer;
                 parameters.DiscPath = source;
                 parameters.dwFlags = AM_DVD_GRAPH_FLAGS.AM_DVD_HWDEC_PREFER;
                 parameters.OnPartialSuccessCallback = onPartialSuccessCallback;

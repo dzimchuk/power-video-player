@@ -11,8 +11,6 @@
  * ***************************************************************************/
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Runtime.InteropServices;
 using Pvp.Core.Native;
 
@@ -20,9 +18,14 @@ using Pvp.Core.Native;
  * MFVideoNormalizedRect
  * MFVideoAspectRatioMode
  * MFVideoRenderPrefs
+ * MFVP_MESSAGE_TYPE
+ * 
  * IMFGetService
  * IMFVideoDisplayControl
  * IEVRFilterConfig
+ * IMFVideoRenderer
+ * IMFClockStateSink
+ * IMFVideoPresenter
 */
 namespace Pvp.Core.DirectShow
 {
@@ -58,6 +61,19 @@ namespace Pvp.Core.DirectShow
         MFVideoRenderPrefs_AllowScaling            = 0x00000080,
         MFVideoRenderPrefs_Mask                    = 0x000000ff 
     }
+
+    [ComVisible(false)]
+    public enum MFVP_MESSAGE_TYPE
+    {
+        MFVP_MESSAGE_FLUSH = 0,
+        MFVP_MESSAGE_INVALIDATEMEDIATYPE = 0x1,
+        MFVP_MESSAGE_PROCESSINPUTNOTIFY  = 0x2,
+        MFVP_MESSAGE_BEGINSTREAMING      = 0x3,
+        MFVP_MESSAGE_ENDSTREAMING        = 0x4,
+        MFVP_MESSAGE_ENDOFSTREAM         = 0x5,
+        MFVP_MESSAGE_STEP                = 0x6,
+        MFVP_MESSAGE_CANCELSTEP          = 0x7
+    } 
     
     [ComVisible(true), ComImport,
     GuidAttribute("fa993888-4383-415a-a930-dd472a8cf6f7"),
@@ -157,5 +173,61 @@ namespace Pvp.Core.DirectShow
         
         [PreserveSig]
         int GetNumberOfStreams(out int pdwMaxStreams);
+    }
+
+    [ComVisible(true), ComImport,
+    Guid("DFDFD197-A9CA-43D8-B341-6AF3503792CD"),
+    InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    public interface IMFVideoRenderer
+    {
+        [PreserveSig]
+        int InitializeRenderer([In, MarshalAs(UnmanagedType.Interface)] object pVideoMixer, 
+                               [In, MarshalAs(UnmanagedType.Interface)] IMFVideoPresenter pVideoPresenter);
+    }
+
+    [ComVisible(true), ComImport,
+    InterfaceType(ComInterfaceType.InterfaceIsIUnknown),
+    Guid("F6696E82-74F7-4F3D-A178-8A5E09C3659F")]
+    public interface IMFClockStateSink
+    {
+        [PreserveSig]
+        int OnClockStart([In] long hnsSystemTime, [In] long llClockStartOffset);
+
+        [PreserveSig]
+        int OnClockStop([In] long hnsSystemTime);
+
+        [PreserveSig]
+        int OnClockPause([In] long hnsSystemTime);
+
+        [PreserveSig]
+        int OnClockRestart([In] long hnsSystemTime);
+
+        [PreserveSig]
+        int OnClockSetRate([In] long hnsSystemTime, [In] float flRate);
+    }
+
+    [ComVisible(true), ComImport,
+    InterfaceType(ComInterfaceType.InterfaceIsIUnknown),
+    Guid("29AFF080-182A-4A5D-AF3B-448F3A6346CB")]
+    public interface IMFVideoPresenter : IMFClockStateSink
+    {
+        #region IMFClockStateSink
+        [PreserveSig]
+        new void OnClockStart([In] long hnsSystemTime, [In] long llClockStartOffset);
+        [PreserveSig]
+        new void OnClockStop([In] long hnsSystemTime);
+        [PreserveSig]
+        new void OnClockPause([In] long hnsSystemTime);
+        [PreserveSig]
+        new void OnClockRestart([In] long hnsSystemTime);
+        [PreserveSig]
+        new void OnClockSetRate([In] long hnsSystemTime, [In] float flRate);
+        #endregion
+
+        [PreserveSig]
+        int ProcessMessage(MFVP_MESSAGE_TYPE eMessage, IntPtr ulParam);
+
+        [PreserveSig]
+        int GetCurrentMediaType(out IntPtr ppMediaType); // IMFVideoMediaType **ppMediaType
     }
 }

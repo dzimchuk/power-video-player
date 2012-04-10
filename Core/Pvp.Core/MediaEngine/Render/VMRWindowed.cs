@@ -36,7 +36,7 @@ namespace Pvp.Core.MediaEngine.Render
         protected override void AddToGraph(IGraphBuilder pGraphBuilder, ThrowExceptionForHRPointer errorFunc)
         {
             // add the VMR to the graph
-            int hr = pGraphBuilder.AddFilter(pBaseFilter, "VMR (Windowed)");
+            int hr = pGraphBuilder.AddFilter(BaseFilter, "VMR (Windowed)");
             errorFunc(hr, Error.AddVMR);
         }
 
@@ -45,7 +45,7 @@ namespace Pvp.Core.MediaEngine.Render
         {
             base.Initialize(pGraphBuilder, hMediaWindow);
 
-            IVMRAspectRatioControl pVMRAspectRatioControl = (IVMRAspectRatioControl)pBaseFilter; // will be released when we release IBaseFilter
+            IVMRAspectRatioControl pVMRAspectRatioControl = (IVMRAspectRatioControl)BaseFilter; // will be released when we release IBaseFilter
             pVMRAspectRatioControl.SetAspectRatioMode(VMR_ASPECT_RATIO_MODE.VMR_ARMODE_NONE);
         }
 

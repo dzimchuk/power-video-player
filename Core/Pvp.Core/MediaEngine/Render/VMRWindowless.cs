@@ -18,7 +18,7 @@ using Pvp.Core.Native;
 
 namespace Pvp.Core.MediaEngine.Render
 {
-    internal class VMRWindowless : RendererBase
+    internal class VMRWindowless : RendererBase, IVMRWindowless
     {
         private IVMRWindowlessControl pVMRWindowlessControl;
         private IVMRFilterConfig pVMRFilterConfig;
@@ -33,15 +33,15 @@ namespace Pvp.Core.MediaEngine.Render
             pVMRWindowlessControl.SetVideoPosition(/*ref rcSrc*/ IntPtr.Zero, ref rcDest);
         }
 
-        public override void GetNativeVideoSize(out int width, out int height, out int ARWidth, out int ARHeight)
+        public override void GetNativeVideoSize(out int width, out int height, out int arWidth, out int arHeight)
         {
-            pVMRWindowlessControl.GetNativeVideoSize(out width, out height, out ARWidth, out ARHeight);
+            pVMRWindowlessControl.GetNativeVideoSize(out width, out height, out arWidth, out arHeight);
         }
 
         protected override void AddToGraph(IGraphBuilder pGraphBuilder, ThrowExceptionForHRPointer errorFunc)
         {
             // add the VMR to the graph
-            int hr = pGraphBuilder.AddFilter(pBaseFilter, "VMR (Windowless)");
+            int hr = pGraphBuilder.AddFilter(BaseFilter, "VMR (Windowless)");
             errorFunc(hr, Error.AddVMR);
         }
 
@@ -50,9 +50,9 @@ namespace Pvp.Core.MediaEngine.Render
             // QUERY the VMR interfaces
             try
             {
-                pVMRFilterConfig = (IVMRFilterConfig)pBaseFilter;
+                pVMRFilterConfig = (IVMRFilterConfig)BaseFilter;
                 pVMRFilterConfig.SetRenderingMode(VMRMode.VMRMode_Windowless);
-                pVMRWindowlessControl = (IVMRWindowlessControl)pBaseFilter;
+                pVMRWindowlessControl = (IVMRWindowlessControl)BaseFilter;
                 pVMRWindowlessControl.SetVideoClippingWindow(hMediaWindow);
 
                 pVMRWindowlessControl.SetAspectRatioMode(VMR_ASPECT_RATIO_MODE.VMR_ARMODE_NONE);

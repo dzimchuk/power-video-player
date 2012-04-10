@@ -26,7 +26,7 @@ namespace Pvp.Core.MediaEngine.Render
         protected override void AddToGraph(IGraphBuilder pGraphBuilder, ThrowExceptionForHRPointer errorFunc)
         {
             // add the Video Renderer filter to the graph
-            int hr = pGraphBuilder.AddFilter(pBaseFilter, "Video Renderer");
+            int hr = pGraphBuilder.AddFilter(BaseFilter, "Video Renderer");
             errorFunc(hr, Error.AddVideoRenderer);
         }
 

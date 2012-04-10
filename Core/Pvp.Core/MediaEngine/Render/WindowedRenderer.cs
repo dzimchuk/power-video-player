@@ -20,39 +20,39 @@ namespace Pvp.Core.MediaEngine.Render
 {
     internal abstract class WindowedRenderer : RendererBase
     {
-        protected IVideoWindow pVideoWindow;
-        protected IBasicVideo2 pBasicVideo2;
+        protected IVideoWindow VideoWindow;
+        protected IBasicVideo2 BasicVideo2;
         private bool _initialized = false;
 
         protected override void Initialize(IGraphBuilder pGraphBuilder, IntPtr hMediaWindow)
         {
             try
             {
-                pBasicVideo2 = (IBasicVideo2)pGraphBuilder;
-                pVideoWindow = (IVideoWindow)pGraphBuilder;
+                BasicVideo2 = (IBasicVideo2)pGraphBuilder;
+                VideoWindow = (IVideoWindow)pGraphBuilder;
             }
             catch (Exception e)
             {
                 throw new FilterGraphBuilderException(Error.NecessaryInterfaces, e);
             }
 
-            pVideoWindow.put_Owner(hMediaWindow);
-            pVideoWindow.put_MessageDrain(hMediaWindow);
-            pVideoWindow.put_WindowStyle(WindowsManagement.WS_CHILD |
+            VideoWindow.put_Owner(hMediaWindow);
+            VideoWindow.put_MessageDrain(hMediaWindow);
+            VideoWindow.put_WindowStyle(WindowsManagement.WS_CHILD |
                 WindowsManagement.WS_CLIPSIBLINGS);
         }
 
         protected override void CloseInterfaces()
         {
-            if (pVideoWindow != null)
+            if (VideoWindow != null)
             {
-                pVideoWindow.put_Visible(DsHlp.OAFALSE);
-                pVideoWindow.put_MessageDrain(IntPtr.Zero);
-                pVideoWindow.put_Owner(IntPtr.Zero);
-                pVideoWindow = null;
+                VideoWindow.put_Visible(DsHlp.OAFALSE);
+                VideoWindow.put_MessageDrain(IntPtr.Zero);
+                VideoWindow.put_Owner(IntPtr.Zero);
+                VideoWindow = null;
             }
 
-            pBasicVideo2 = null; // both interfaces are going to be released when pGraphBuilder is released
+            BasicVideo2 = null; // both interfaces are going to be released when _pGraphBuilder is released
 
             base.CloseInterfaces(); // must be called to release the main pointer and all child interfaces (if any)
         }
@@ -66,36 +66,36 @@ namespace Pvp.Core.MediaEngine.Render
         {
             if (!_initialized)
             {
-                Initialize(pGraphBuilder, hMediaWindow);
+                Initialize(GraphBuilder, MediaWindowHandle);
                 _initialized = true;
             }
             
-            pVideoWindow.SetWindowPosition(rcDest.left, rcDest.top,
+            VideoWindow.SetWindowPosition(rcDest.left, rcDest.top,
                         rcDest.right - rcDest.left,
                         rcDest.bottom - rcDest.top);
-            pBasicVideo2.SetDefaultDestinationPosition();
+            BasicVideo2.SetDefaultDestinationPosition();
         }
 
-        public override void GetNativeVideoSize(out int width, out int height, out int ARWidth, out int ARHeight)
+        public override void GetNativeVideoSize(out int width, out int height, out int arWidth, out int arHeight)
         {
             if (!_initialized)
             {
-                Initialize(pGraphBuilder, hMediaWindow);
+                Initialize(GraphBuilder, MediaWindowHandle);
                 _initialized = true;
             }
             
-            pBasicVideo2.GetVideoSize(out width, out height);
-            pBasicVideo2.GetPreferredAspectRatio(out ARWidth, out ARHeight);
+            BasicVideo2.GetVideoSize(out width, out height);
+            BasicVideo2.GetPreferredAspectRatio(out arWidth, out arHeight);
         }
 
         public override bool GetCurrentImage(out BITMAPINFOHEADER header, out IntPtr dibFull, out IntPtr dibDataOnly)
         {
             int bufferSize = 0;
-            int hr = pBasicVideo2.GetCurrentImage(ref bufferSize, IntPtr.Zero); // get the required buffer size first
+            int hr = BasicVideo2.GetCurrentImage(ref bufferSize, IntPtr.Zero); // get the required buffer size first
             if (DsHlp.SUCCEEDED(hr))
             {
                 dibFull = Marshal.AllocCoTaskMem(bufferSize);
-                hr = pBasicVideo2.GetCurrentImage(ref bufferSize, dibFull); // actually get the image
+                hr = BasicVideo2.GetCurrentImage(ref bufferSize, dibFull); // actually get the image
                 if (DsHlp.SUCCEEDED(hr))
                 {
                     header = (BITMAPINFOHEADER)Marshal.PtrToStructure(dibFull, typeof(BITMAPINFOHEADER));

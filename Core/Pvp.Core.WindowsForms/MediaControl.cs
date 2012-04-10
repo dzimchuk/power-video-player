@@ -152,12 +152,7 @@ namespace Pvp.Core.WindowsForms
         {
             get { return MediaEngine.IsGraphSeekable; }
         }
-
-        public bool IsEVRCurrentlyInUse 
-        {
-            get { return MediaEngine.IsEVRCurrentlyInUse; }
-        }
-
+        
         public MediaInfo MediaInfo 
         {
             get { return MediaEngine.MediaInfo; }

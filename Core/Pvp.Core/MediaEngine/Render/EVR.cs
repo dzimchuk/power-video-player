@@ -18,7 +18,7 @@ using Pvp.Core.Native;
 
 namespace Pvp.Core.MediaEngine.Render
 {
-    internal class EVR : RendererBase
+    internal class EVR : RendererBase, IEnhancedVideoRenderer
     {
         private IMFVideoDisplayControl pMFVideoDisplayControl;
         private MFVideoNormalizedRect rcSrc;
@@ -51,20 +51,20 @@ namespace Pvp.Core.MediaEngine.Render
             pMFVideoDisplayControl.SetVideoPosition(ref this.rcSrc, ref this.rcDest);
         }
 
-        public override void GetNativeVideoSize(out int width, out int height, out int ARWidth, out int ARHeight)
+        public override void GetNativeVideoSize(out int width, out int height, out int arWidth, out int arHeight)
         {
             GDI.SIZE size = new GDI.SIZE(), ratio = new GDI.SIZE();
             pMFVideoDisplayControl.GetNativeVideoSize(ref size, ref ratio);
             width = size.cx;
             height = size.cy;
-            ARWidth = ratio.cx;
-            ARHeight = ratio.cy;
+            arWidth = ratio.cx;
+            arHeight = ratio.cy;
         }
 
         protected override void AddToGraph(IGraphBuilder pGraphBuilder, ThrowExceptionForHRPointer errorFunc)
         {
             // add the EVR to the graph
-            int hr = pGraphBuilder.AddFilter(pBaseFilter, "Enhanced Video Renderer");
+            int hr = pGraphBuilder.AddFilter(BaseFilter, "Enhanced Video Renderer");
             errorFunc(hr, Error.AddEVR);
         }
 
@@ -73,7 +73,7 @@ namespace Pvp.Core.MediaEngine.Render
             // QUERY the EVR interfaces
             try
             {
-                IMFGetService pMFGetService = (IMFGetService)pBaseFilter; // will be released when IBaseFilter is released
+                IMFGetService pMFGetService = (IMFGetService)BaseFilter; // will be released when IBaseFilter is released
                 object o;
                 Guid serviceId = ServiceID.EnhancedVideoRenderer;
                 Guid IID_IMFVideoDisplayControl = typeof(IMFVideoDisplayControl).GUID;
