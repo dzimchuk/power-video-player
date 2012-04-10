@@ -36,6 +36,9 @@
     <ClCompile Include="MediaWindowManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="PvpPresentEngineQueued.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="EVRPresenter.def">
@@ -71,6 +74,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MediaWindowManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PvpPresentEngineQueued.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
