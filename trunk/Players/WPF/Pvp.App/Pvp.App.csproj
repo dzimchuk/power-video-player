@@ -89,6 +89,7 @@
     <Compile Include="Controls\TimeSpanValueConverter.cs" />
     <Compile Include="IMediaControlAcceptor.cs" />
     <Compile Include="IMediaEngineFacade.cs" />
+    <Compile Include="Service\WindowHandleProvider.cs" />
     <Compile Include="Service\MediaEngineFacade.cs" />
     <Compile Include="Messaging\CommandMessage.cs" />
     <Compile Include="Messaging\Command.cs" />
@@ -102,14 +103,18 @@
     </Compile>
     <Compile Include="Service\DialogService.cs" />
     <Compile Include="Service\FileSelector.cs" />
+    <Compile Include="Util\BoundCommand.cs" />
     <Compile Include="Util\Extensions.cs" />
     <Compile Include="Util\SingleInstance.cs" />
     <Compile Include="ViewModelLocator.cs" />
     <Compile Include="ViewModel\ControlPanelViewModel.cs" />
+    <Compile Include="ViewModel\GenericRelayCommand.cs" />
     <Compile Include="ViewModel\IDialogService.cs" />
     <Compile Include="ViewModel\IFileSelector.cs" />
+    <Compile Include="ViewModel\IWindowHandleProvider.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
+    <Compile Include="View\BooleanToVisibilityValueConverter.cs" />
     <Compile Include="View\FullSceenPanelVisibilityValueConverter.cs" />
     <Compile Include="View\RegularControlPanelVisibilityValueConverter.cs" />
     <Compile Include="View\MainView.xaml.cs">

@@ -8,6 +8,7 @@
              xmlns:view="clr-namespace:Pvp.App.View"
              xmlns:res="clr-namespace:Pvp.App.Resources"
              xmlns:core="clr-namespace:Pvp.Core.Wpf;assembly=Pvp.Core.Wpf"
+             xmlns:util="clr-namespace:Pvp.App.Util"
              mc:Ignorable="d" 
              d:DesignHeight="350" d:DesignWidth="525"
              DataContext="{x:Static app:ViewModelLocator.MainViewModel}">
@@ -15,6 +16,7 @@
         
         <view:RegularControlPanelVisibilityValueConverter x:Key="RegularControlPanelVisibilityValueConverter" />
         <view:FullSceenPanelVisibilityValueConverter x:Key="FullSceenPanelVisibilityValueConverter" />
+        <view:BooleanToVisibilityValueConverter x:Key="BooleanToVisibilityValueConverter" />
         
         <ContextMenu x:Key="PvpContextMenu">
             <MenuItem Header="{x:Static res:Resources.mi_file}">
@@ -63,6 +65,18 @@
                 <MenuItem Header="{x:Static res:Resources.mi_volume_mute}" Command="{Binding Path=MuteCommand}" IsChecked="{Binding Path=IsMute}"/>
             </MenuItem>
             <Separator/>
+            <MenuItem Header="{x:Static res:Resources.mi_filters}" 
+                      Visibility="{Binding Path=ShowFiltersMenu, Converter={StaticResource BooleanToVisibilityValueConverter}}"
+                      ItemsSource="{Binding Path=Filters}">
+                <MenuItem.ItemTemplate>
+                    <DataTemplate>
+                        <MenuItem Header="{Binding Path=Title}"
+                                  Command="{Binding Path=Command}"
+                                  util:BoundCommand.Parameter="{Binding}"/>
+                    </DataTemplate>
+                </MenuItem.ItemTemplate>
+            </MenuItem>
+            <Separator Visibility="{Binding Path=ShowFiltersMenu, Converter={StaticResource BooleanToVisibilityValueConverter}}"/>
             <MenuItem Header="{x:Static res:Resources.mi_application}">
                 <MenuItem Header="{x:Static res:Resources.mi_controlbar}" Command="{Binding Path=ControlPanelVisibilityToggleCommand}" IsChecked="{Binding Path=IsControlPanelVisible}"/>
                 <Separator/>

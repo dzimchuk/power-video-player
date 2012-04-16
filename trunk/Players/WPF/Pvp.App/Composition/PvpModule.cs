@@ -19,6 +19,7 @@ namespace Pvp.App.Composition
 
             Bind<IFileSelector>().To<FileSelector>();
             Bind<IDialogService>().To<DialogService>();
+            Bind<IWindowHandleProvider>().To<WindowHandleProvider>();
 
             Bind<ViewModelBase>().To<MainWindowViewModel>().InSingletonScope().Named(ViewModelLocator.MainWindowViewModelName);
             Bind<ViewModelBase>().To<MainViewModel>().InSingletonScope().Named(ViewModelLocator.MainViewModelName);
