@@ -39,7 +39,16 @@ void PvpPresentEngine::PaintFrameWithGDI()
 
 HRESULT PvpPresentEngine::OnCreateVideoSamples(D3DPRESENT_PARAMETERS& pp)
 {
-    return S_OK; // we create our return surface in GetBackBufferNoRef
+    int hr = this->m_pDevice->CreateRenderTarget(pp.BackBufferWidth, 
+                                                 pp.BackBufferHeight, 
+                                                 pp.BackBufferFormat, 
+                                                 pp.MultiSampleType, 
+                                                 pp.MultiSampleQuality, 
+                                                 true, 
+                                                 &m_pReturnSurface, 
+                                                 NULL);
+
+    return hr;
 }
 
 HRESULT PvpPresentEngine::GetService(REFGUID guidService, REFIID riid, void** ppv)
@@ -95,69 +104,7 @@ HRESULT PvpPresentEngine::GetBackBufferNoRef(IDirect3DSurface9 **ppSurface)
 
 HRESULT PvpPresentEngine::PrepareReturnSurface()
 {
-    HRESULT hr = S_OK;
-
-    if (m_hwnd == NULL)
-    {
-        return MF_E_INVALIDREQUEST;
-    }
-    
-    if(!m_pReturnSurface)
-    {
-        D3DSURFACE_DESC desc;
-        
-        // Get the surface description
-        m_pRecentSurface->GetDesc(&desc);
-
-        // Create a surface the same size as our sample
-        hr = this->m_pDevice->CreateRenderTarget(desc.Width, 
-                                                 desc.Height, 
-                                                 desc.Format, 
-                                                 desc.MultiSampleType, 
-                                                 desc.MultiSampleQuality, 
-                                                 true, 
-                                                 &m_pReturnSurface, 
-                                                 NULL);
-        if(hr != S_OK)
-            goto done;
-    }
-    
-    if (m_pReturnSurface)
-    {
-        D3DSURFACE_DESC originalDesc;
-        // Get the surface description of this sample
-        m_pRecentSurface->GetDesc(&originalDesc);
-
-        D3DSURFACE_DESC renderDesc;
-        // Get the surface description of the render surface
-        m_pReturnSurface->GetDesc(&renderDesc);
-
-        // Compare the descriptions to make sure they match
-        if(originalDesc.Width != renderDesc.Width || 
-           originalDesc.Height != renderDesc.Height ||
-           originalDesc.Format != renderDesc.Format)
-        {
-            // Release the old render surface
-            SafeRelease(&m_pReturnSurface);
-            
-            // Create a new render surface that matches the size of this surface 
-            hr = this->m_pDevice->CreateRenderTarget(originalDesc.Width, 
-                                                     originalDesc.Height, 
-                                                     originalDesc.Format, 
-                                                     originalDesc.MultiSampleType, 
-                                                     originalDesc.MultiSampleQuality, 
-                                                     true, 
-                                                     &m_pReturnSurface, 
-                                                     NULL);
-        if(hr != S_OK)
-            goto done;
-        }
-    }
-
-    if(m_pReturnSurface)
-    {
-        // Copy the passed surface to our rendered surface
-        hr = D3DXLoadSurfaceFromSurface(m_pReturnSurface,
+    int hr = D3DXLoadSurfaceFromSurface(m_pReturnSurface,
                                         NULL,
                                         NULL,
                                         m_pRecentSurface,
@@ -165,9 +112,7 @@ HRESULT PvpPresentEngine::PrepareReturnSurface()
                                         NULL,
                                         D3DX_FILTER_NONE,
                                         0);
-    }
 
-done:
     return hr;
 }
 

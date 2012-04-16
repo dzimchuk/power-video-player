@@ -8,6 +8,7 @@ using System.Windows.Input;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using Pvp.App.Messaging;
+using System.Collections.ObjectModel;
 
 namespace Pvp.App.ViewModel
 {
@@ -18,6 +19,7 @@ namespace Pvp.App.ViewModel
 
         private readonly IFileSelector _fileSelector;
         private readonly IDialogService _dialogService;
+        private readonly IWindowHandleProvider _windowHandleProvider;
 
         private ICommand _openCommand;
         private ICommand _closeCommand;
@@ -34,12 +36,14 @@ namespace Pvp.App.ViewModel
         public MainViewModel(IMediaEngineFacade engine, 
                              ControlPanelViewModel controlViewModel,
                              IFileSelector fileSelector,
-                             IDialogService dialogService)
+                             IDialogService dialogService,
+                             IWindowHandleProvider windowHandleProvider)
         {
             _engine = engine;
             _controlViewModel = controlViewModel;
             _fileSelector = fileSelector;
             _dialogService = dialogService;
+            _windowHandleProvider = windowHandleProvider;
 
             Messenger.Default.Register<PropertyChangedMessageBase>(this, true, OnPropertyChanged);
             Messenger.Default.Register<EventMessage>(this, MessageTokens.App, true, OnEventMessage);
@@ -116,6 +120,7 @@ namespace Pvp.App.ViewModel
                                     _engine.PreferredVideoRenderer = MediaEngineServiceProvider.RecommendedRenderer;
 
                                     _engine.BuildGraph(filename, MediaSourceType.File);
+                                    UpdateMenu();
                                 }
                             }
                         );
@@ -136,6 +141,7 @@ namespace Pvp.App.ViewModel
                             () =>
                             {
                                 _engine.ResetGraph();
+                                UpdateMenu();
                             },
                             () =>
                             {
@@ -313,6 +319,71 @@ namespace Pvp.App.ViewModel
         private void OnUserDecisionNeeded(object sender, UserDecisionEventArgs e)
         {
             e.Accept = _dialogService.DisplayYesNoDialog(e.Message);
+        }
+
+        private void UpdateMenu()
+        {
+            UpdateFiltersMenu();
+        }
+
+        internal class NumberedCommand
+        {
+            public int Number { get; set; }
+            public string Title { get; set; }
+            public ICommand Command { get; set; }
+        }
+
+        private readonly ObservableCollection<NumberedCommand> _filters = new ObservableCollection<NumberedCommand>();
+        private void UpdateFiltersMenu()
+        {
+            if (_engine.GraphState == GraphState.Reset)
+            {
+                _filters.Clear();
+                ShowFiltersMenu = false;
+            }
+            else
+            {
+                var last = _engine.FilterCount;
+                if (last > 20)
+                    last = 20;
+
+                for (int i = 0; i < last; i++)
+                {
+                    _filters.Add(new NumberedCommand
+                        {
+                            Number = i,
+                            Title = _engine.GetFilterName(i),
+                            Command = new GenericRelayCommand<NumberedCommand>(
+                                nc =>
+                                {
+                                    if (nc != null)
+                                        _engine.DisplayFilterPropPage(_windowHandleProvider.Handle, nc.Number, true);
+                                },
+                                nc =>
+                                {
+                                    return nc != null ? _engine.DisplayFilterPropPage(_windowHandleProvider.Handle, nc.Number, false) : false;
+                                })
+                        });
+                }
+
+                ShowFiltersMenu = true;
+            }
+        }
+
+        private bool _showFiltersMenu;
+        public bool ShowFiltersMenu
+        {
+            get { return _showFiltersMenu; }
+            set
+            {
+                _showFiltersMenu = value;
+                RaisePropertyChanged("ShowFiltersMenu");
+            }
+        }
+
+        public ObservableCollection<NumberedCommand> Filters
+        {
+            get { return _filters; }
         }
     }
 }
