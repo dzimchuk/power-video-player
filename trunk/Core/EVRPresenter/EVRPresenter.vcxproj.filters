@@ -39,6 +39,9 @@
     <ClCompile Include="PvpPresentEngineQueued.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="PvpPresentEngine2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="EVRPresenter.def">
@@ -77,6 +80,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="PvpPresentEngineQueued.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PvpPresentEngine2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

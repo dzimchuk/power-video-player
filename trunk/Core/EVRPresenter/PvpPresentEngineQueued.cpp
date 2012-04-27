@@ -46,11 +46,11 @@ void PvpPresentEngineQueued::PaintFrameWithGDI()
 {
 }
 
-HRESULT PvpPresentEngineQueued::OnCreateVideoSamples(D3DPRESENT_PARAMETERS& pp)
+HRESULT PvpPresentEngineQueued::OnCreateVideoSamples(D3DPRESENT_PARAMETERS& pp, int bufferCount)
 {
     HRESULT hr = S_OK;
 
-    for(int i = 0; i < 4; i++)
+    for(int i = 0; i < bufferCount; i++)
     {
         IDirect3DSurface9 *pSurface = NULL;
         int hr = this->m_pDevice->CreateRenderTarget(pp.BackBufferWidth, 
@@ -87,9 +87,27 @@ HRESULT PvpPresentEngineQueued::OnCreateVideoSamples(D3DPRESENT_PARAMETERS& pp)
     return hr;
 }
 
+HRESULT PvpPresentEngineQueued::HasNewSurfaceArrived(BOOL *newSurfaceArrived)
+{
+    IDirect3DSurface9 *pSurface = NULL;
+    if (m_RenderedSurfaces.Dequeue(&pSurface) == S_OK)
+    {
+        m_RenderedSurfaces.PutBack(pSurface);
+        pSurface->Release();
+        *newSurfaceArrived = TRUE;
+    }
+    else
+    {
+        *newSurfaceArrived = FALSE;
+    }
+
+    return S_OK;
+}
+
 HRESULT PvpPresentEngineQueued::GetBackBufferNoRef(IDirect3DSurface9 **ppSurface)
 {
     HRESULT hr = S_OK;
+    *ppSurface = NULL;
 
     EnterCriticalSection(&m_ObjectLock); // to safely release and possibly re-create resources
 
@@ -107,10 +125,13 @@ HRESULT PvpPresentEngineQueued::GetBackBufferNoRef(IDirect3DSurface9 **ppSurface
 
         m_AvailableSurfaces.Queue(pSurface);
         pSurface->Release();
-    }
 
-    *ppSurface = m_pReturnSurface;
-    
+        if (SUCCEEDED(hr))
+        {
+            *ppSurface = m_pReturnSurface;
+        }
+    }
+        
     LeaveCriticalSection(&m_ObjectLock);
 
     return hr;

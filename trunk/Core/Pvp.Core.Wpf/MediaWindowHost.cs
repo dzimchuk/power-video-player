@@ -42,6 +42,7 @@ namespace Pvp.Core.Wpf
         private IMediaEngine _engine;
 
         private EVRRenderer _evrRenderer;
+        private IPvpPresenterHook _pvpPresenterHook;
         private MediaWindow _mediaWindow;
         private PvpD3dImage _d3dImage;
 
@@ -93,19 +94,7 @@ namespace Pvp.Core.Wpf
             if (active)
             {
                 _mediaWindow = new MediaWindow();
-                _d3dImage = new PvpD3dImage((out IntPtr pSurface) => 
-                    {
-                        if (_evrRenderer != null && _evrRenderer.PvpPresenter != null)
-                        {
-                            return _evrRenderer.PvpPresenter.GetBackBufferNoRef(out pSurface);
-                        }
-                        else
-                        {
-                            pSurface = IntPtr.Zero;
-                            return -1;
-                        }
-                    });
-                if (_border != null)
+                if (_border != null && _d3dImage != null)
                     _border.Child = _d3dImage;
                 //_hwndHost = new MediaWindowHwndHost();
                 //_hwndHost.MessageHook += new System.Windows.Interop.HwndSourceHook(_hwndHost_MessageHook);
@@ -138,10 +127,10 @@ namespace Pvp.Core.Wpf
                 //    _hwndHost = null;
                 //}
 
-                if (_d3dImage != null)
+                if (_pvpPresenterHook != null)
                 {
-                    _d3dImage.Dispose();
-                    _d3dImage = null;
+                    _pvpPresenterHook.Dispose();
+                    _pvpPresenterHook = null;
                 }
 
                 if (_mediaWindow != null)
@@ -174,7 +163,11 @@ namespace Pvp.Core.Wpf
             get
             {
                 if (_evrRenderer == null)
-                    _evrRenderer = new EVRRenderer();
+                {
+                    _d3dImage = new PvpD3dImage();
+                    _pvpPresenterHook = PvpPresenterFactory.GetPvpPresenter(_d3dImage.D3dImage);
+                    _evrRenderer = new EVRRenderer(_pvpPresenterHook);
+                }
 
                 return _evrRenderer;
             }

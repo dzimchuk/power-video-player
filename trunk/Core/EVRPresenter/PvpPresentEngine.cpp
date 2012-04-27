@@ -17,6 +17,7 @@ void PvpPresentEngine::OnReleaseResources()
 {
     SafeRelease(&m_pReturnSurface);
     SafeRelease(&m_pRecentSurface);
+    m_bNewSurfaceArrived = FALSE;
 }
 
 HRESULT PvpPresentEngine::PresentSwapChain(IDirect3DSwapChain9* pSwapChain, IDirect3DSurface9* pSurface)
@@ -37,7 +38,7 @@ void PvpPresentEngine::PaintFrameWithGDI()
 {
 }
 
-HRESULT PvpPresentEngine::OnCreateVideoSamples(D3DPRESENT_PARAMETERS& pp)
+HRESULT PvpPresentEngine::OnCreateVideoSamples(D3DPRESENT_PARAMETERS& pp, int bufferCount)
 {
     int hr = this->m_pDevice->CreateRenderTarget(pp.BackBufferWidth, 
                                                  pp.BackBufferHeight, 
@@ -81,30 +82,26 @@ done:
     return hr;
 }
 
+HRESULT PvpPresentEngine::HasNewSurfaceArrived(BOOL *newSurfaceArrived)
+{
+    EnterCriticalSection(&m_ObjectLock);
+
+    *newSurfaceArrived = m_bNewSurfaceArrived;
+
+    LeaveCriticalSection(&m_ObjectLock);
+    return S_OK;
+}
+
 HRESULT PvpPresentEngine::GetBackBufferNoRef(IDirect3DSurface9 **ppSurface)
 {
     EnterCriticalSection(&m_ObjectLock);
 
     HRESULT hr = S_OK;
+    *ppSurface = NULL;
 
     if (m_bNewSurfaceArrived && m_pRecentSurface != NULL)
     {
-        hr = PrepareReturnSurface();
-        m_bNewSurfaceArrived = FALSE;
-    }
-
-    if (m_pReturnSurface != NULL)
-    {
-        *ppSurface = m_pReturnSurface;
-    }
-
-    LeaveCriticalSection(&m_ObjectLock);
-    return hr;
-}
-
-HRESULT PvpPresentEngine::PrepareReturnSurface()
-{
-    int hr = D3DXLoadSurfaceFromSurface(m_pReturnSurface,
+        hr = D3DXLoadSurfaceFromSurface(m_pReturnSurface,
                                         NULL,
                                         NULL,
                                         m_pRecentSurface,
@@ -113,8 +110,18 @@ HRESULT PvpPresentEngine::PrepareReturnSurface()
                                         D3DX_FILTER_NONE,
                                         0);
 
+        m_bNewSurfaceArrived = FALSE;
+
+        if (SUCCEEDED(hr))
+        {
+            *ppSurface = m_pReturnSurface;
+        }
+    }
+
+    LeaveCriticalSection(&m_ObjectLock);
     return hr;
 }
+
 
 
 
