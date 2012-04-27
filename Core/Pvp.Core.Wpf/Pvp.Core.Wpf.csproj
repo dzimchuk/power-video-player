@@ -62,6 +62,7 @@
   <ItemGroup>
     <Compile Include="ClassFactory.cs" />
     <Compile Include="EVRRenderer.cs" />
+    <Compile Include="IPvpPresenterHook.cs" />
     <Compile Include="MediaControl.cs" />
     <Compile Include="MediaWindow.cs" />
     <Compile Include="MediaWindowHost.cs" />
@@ -70,6 +71,9 @@
     </Compile>
     <AppDesigner Include="Properties\" />
     <Compile Include="PvpD3dImage.cs" />
+    <Compile Include="PvpPresenter.cs" />
+    <Compile Include="PvpPresenter2.cs" />
+    <Compile Include="PvpPresenterFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Pvp.Core\Pvp.Core.csproj">

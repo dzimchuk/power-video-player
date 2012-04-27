@@ -70,6 +70,7 @@ void DllRelease();
 #include "Pvp.h"
 #include "PvpPresentEngine.h"
 #include "PvpPresentEngineQueued.h"
+#include "PvpPresentEngine2.h"
 #include "Presenter.h"
 #include "MediaWindowManager.h"
 

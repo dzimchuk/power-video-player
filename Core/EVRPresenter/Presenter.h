@@ -148,7 +148,9 @@ class EVRCustomPresenter :
     public IMFGetService,
     public IMFTopologyServiceLookupClient,
     public IMFVideoDisplayControl,
-    public IPvpPresenter
+    public IPvpPresenter,
+    public IPvpPresenter2,
+    public IPvpPresenterConfig
 {
 
 public:
@@ -205,6 +207,13 @@ public:
 
     // IPvpPresenter methods
     STDMETHOD(GetBackBufferNoRef)(IDirect3DSurface9 **ppSurface);
+    STDMETHOD(HasNewSurfaceArrived)(BOOL *newSurfaceArrived);
+
+    // IPvpPresenter2 methods
+    STDMETHOD(RegisterCallback)(IPvpPresenterCallback *pCallback);
+
+    // IPvpPresenterConfig methods
+    STDMETHOD(SetBufferCount)(int bufferCount);
 
 protected:
     EVRCustomPresenter(HRESULT& hr);
@@ -329,6 +338,9 @@ protected:
     IMFTransform                *m_pMixer;               // The mixer.
     IMediaEventSink             *m_pMediaEventSink;      // The EVR's event-sink interface.
     IMFMediaType                *m_pMediaType;           // Output media type
+
+private:
+    int m_BufferCount;
 };
 
 inline HRESULT EvrPresenter_CreateInstance(REFIID riid, void **ppv)

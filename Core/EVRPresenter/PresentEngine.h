@@ -57,7 +57,7 @@ public:
     HRESULT SetDestinationRect(const RECT& rcDest);
     RECT    GetDestinationRect() const { return m_rcDestRect; };
 
-    HRESULT CreateVideoSamples(IMFMediaType *pFormat, VideoSampleList& videoSampleQueue);
+    HRESULT CreateVideoSamples(IMFMediaType *pFormat, VideoSampleList& videoSampleQueue, int bufferCount);
     void    ReleaseResources();
 
     HRESULT CheckDeviceState(DeviceState *pState);
@@ -73,7 +73,7 @@ protected:
     HRESULT UpdateDestRect();
 
     // A derived class can override these handlers to allocate any additional D3D resources.
-    virtual HRESULT OnCreateVideoSamples(D3DPRESENT_PARAMETERS& pp) { return S_OK; }
+    virtual HRESULT OnCreateVideoSamples(D3DPRESENT_PARAMETERS& pp, int bufferCount) { return S_OK; }
     virtual void    OnReleaseResources() { }
 
     virtual HRESULT PresentSwapChain(IDirect3DSwapChain9* pSwapChain, IDirect3DSurface9* pSurface);

@@ -344,8 +344,8 @@ namespace Pvp.App.ViewModel
             else
             {
                 var last = _engine.FilterCount;
-                if (last > 20)
-                    last = 20;
+                if (last > 15)
+                    last = 15;
 
                 for (int i = 0; i < last; i++)
                 {

@@ -20,6 +20,9 @@
 // Default frame rate.
 const MFRatio g_DefaultFrameRate = { 30, 1 };
 
+// Default presenter buffer count
+const int DEFAULT_PRESENTER_BUFFER_COUNT = 3;
+
 // Function declarations.
 RECT    CorrectAspectRatio(const RECT& src, const MFRatio& srcPAR, const MFRatio& destPAR);
 BOOL    AreMediaTypesEqual(IMFMediaType *pType1, IMFMediaType *pType2);
@@ -114,6 +117,8 @@ HRESULT EVRCustomPresenter::QueryInterface(REFIID riid, void ** ppv)
         QITABENT(EVRCustomPresenter, IMFTopologyServiceLookupClient),
         QITABENT(EVRCustomPresenter, IMFVideoDisplayControl),
         QITABENT(EVRCustomPresenter, IPvpPresenter),
+        QITABENT(EVRCustomPresenter, IPvpPresenter2),
+        QITABENT(EVRCustomPresenter, IPvpPresenterConfig),
         { 0 }
     };
     return QISearch(this, qit, riid, ppv);
@@ -1025,7 +1030,8 @@ EVRCustomPresenter::EVRCustomPresenter(HRESULT& hr) :
     m_bPrerolled(FALSE),
     m_fRate(1.0f),
     m_TokenCounter(0),
-    m_SampleFreeCB(this, &EVRCustomPresenter::OnSampleFree)
+    m_SampleFreeCB(this, &EVRCustomPresenter::OnSampleFree),
+    m_BufferCount(DEFAULT_PRESENTER_BUFFER_COUNT)
 {
     DllAddRef();
 
@@ -1039,7 +1045,8 @@ EVRCustomPresenter::EVRCustomPresenter(HRESULT& hr) :
     m_nrcSource.bottom = 1;
     m_nrcSource.right = 1;
 
-    m_pD3DPresentEngine = new PvpPresentEngine(hr);
+    m_pD3DPresentEngine = new PvpPresentEngine2(hr);
+    // m_pD3DPresentEngine = new PvpPresentEngineQueued(hr);
     if (m_pD3DPresentEngine == NULL)
     {
         hr = E_OUTOFMEMORY;
@@ -1769,7 +1776,7 @@ HRESULT EVRCustomPresenter::SetMediaType(IMFMediaType *pMediaType)
     // Initialize the presenter engine with the new media type.
     // The presenter engine allocates the samples.
 
-    hr = m_pD3DPresentEngine->CreateVideoSamples(pMediaType, sampleQueue);
+    hr = m_pD3DPresentEngine->CreateVideoSamples(pMediaType, sampleQueue, m_BufferCount);
     if (FAILED(hr))
     {
         goto done;
@@ -2442,6 +2449,19 @@ float EVRCustomPresenter::GetMaxRate(BOOL bThin)
 // IPvpPresenter methods
 //
 ///////////////////////////////////////////////////////////////////////////////
+HRESULT EVRCustomPresenter::HasNewSurfaceArrived(BOOL *newSurfaceArrived)
+{
+    if (newSurfaceArrived == NULL)
+    {
+        return E_POINTER;
+    }
+
+    *newSurfaceArrived = FALSE;
+
+    HRESULT hr = ((PvpPresentEngineQueued*)m_pD3DPresentEngine)->HasNewSurfaceArrived(newSurfaceArrived);
+
+    return hr;
+}
 
 HRESULT EVRCustomPresenter::GetBackBufferNoRef(IDirect3DSurface9 **ppSurface)
 {
@@ -2455,8 +2475,52 @@ HRESULT EVRCustomPresenter::GetBackBufferNoRef(IDirect3DSurface9 **ppSurface)
     // Make sure we at least return NULL
     *ppSurface = NULL;
 
-    hr = ((PvpPresentEngine*)m_pD3DPresentEngine)->GetBackBufferNoRef(ppSurface);
+    //hr = ((PvpPresentEngineQueued*)m_pD3DPresentEngine)->GetBackBufferNoRef(ppSurface);
+    hr = ((PvpPresentEngine2*)m_pD3DPresentEngine)->GetBackBufferNoRef(ppSurface);
 
+    return hr;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// IPvpPresenter2 methods
+//
+///////////////////////////////////////////////////////////////////////////////
+
+HRESULT EVRCustomPresenter::RegisterCallback(IPvpPresenterCallback *pCallback)
+{
+    HRESULT hr = S_OK;
+
+    if (pCallback == NULL)
+    {
+        hr = E_POINTER;
+    }
+    else
+    {
+        hr = ((PvpPresentEngine2*)m_pD3DPresentEngine)->RegisterCallback(pCallback);
+    }
+    
+    return hr;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// IPvpPresenterConfig methods
+//
+///////////////////////////////////////////////////////////////////////////////
+
+HRESULT EVRCustomPresenter::SetBufferCount(int bufferCount)
+{
+    HRESULT hr = S_OK;
+    if (bufferCount > 0 && bufferCount < 9)
+    {
+        m_BufferCount = bufferCount;
+    }
+    else
+    {
+        hr = E_FAIL;
+    }
+    
     return hr;
 }
 

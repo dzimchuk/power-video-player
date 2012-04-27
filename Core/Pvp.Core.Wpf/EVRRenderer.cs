@@ -10,32 +10,34 @@ namespace Pvp.Core.Wpf
 {
     [ComVisible(true), ComImport,
     InterfaceType(ComInterfaceType.InterfaceIsIUnknown),
-    Guid("8F911837-FF4A-4C38-87F8-02EC6B05785A")]
-    internal interface IPvpPresenter
+    Guid("B3C97321-2C16-457D-AEBC-8AFA7BC9CE4A")]
+    internal interface IPvpPresenterConfig
     {
         [PreserveSig]
-        int GetBackBufferNoRef(out IntPtr pSurface);
+        int SetBufferCount(int bufferCount);
     }
 
     internal class EVRRenderer : RendererBase, IEnhancedVideoRenderer
     {
+        private const int PRESENTER_BUFFER_COUNT = 4;
         private static Guid CLSID_CustomEVRPresenter = new Guid("4C536A77-7D8B-4F92-ACCA-27F84912B393");
 
         private IMFVideoDisplayControl _pMFVideoDisplayControl;
-        private IPvpPresenter _pvpPresenter;
+        private IPvpPresenterConfig _pvpPresenterConfig;
+        
         private MFVideoNormalizedRect _rcSrc;
         private GDI.RECT _rcDest;
 
-        public EVRRenderer()
+        private readonly IPvpPresenterHook _pvpPresenterHook;
+        
+        public EVRRenderer(IPvpPresenterHook pvpPresenterHook)
         {
+            _pvpPresenterHook = pvpPresenterHook;
             _renderer = Renderer.EVR;
 
-            _rcSrc = new MFVideoNormalizedRect();
-            _rcSrc.left = _rcSrc.top = 0.0f;
-            _rcSrc.right = _rcSrc.bottom = 1.0f;
+            _rcSrc = new MFVideoNormalizedRect { left = _rcSrc.top = 0.0f, right = _rcSrc.bottom = 1.0f };
 
-            _rcDest = new GDI.RECT();
-            _rcDest.left = _rcDest.top = 0;
+            _rcDest = new GDI.RECT { left = _rcDest.top = 0 };
         }
 
         public override void SetVideoPosition(ref GDI.RECT rcSrc, ref GDI.RECT rcDest)
@@ -50,7 +52,7 @@ namespace Pvp.Core.Wpf
             // EVR's default destination rectangle is {0, 0, 0, 0} so we need to adjust it to {0, 0, width, height}
             _rcDest.right = rcDest.right - rcDest.left;
             _rcDest.bottom = rcDest.bottom - rcDest.top;
-            _pMFVideoDisplayControl.SetVideoPosition(ref this._rcSrc, ref this._rcDest);
+            _pMFVideoDisplayControl.SetVideoPosition(ref _rcSrc, ref _rcDest);
         }
 
         public override void GetNativeVideoSize(out int width, out int height, out int arWidth, out int arHeight)
@@ -119,12 +121,20 @@ namespace Pvp.Core.Wpf
                 _pMFVideoDisplayControl.SetVideoWindow(hMediaWindow);
                 _pMFVideoDisplayControl.SetAspectRatioMode(MFVideoAspectRatioMode.MFVideoARMode_None);
 
-                _pvpPresenter = (IPvpPresenter) presenterObject;
+                _pvpPresenterConfig = (IPvpPresenterConfig)presenterObject;
+                _pvpPresenterConfig.SetBufferCount(PRESENTER_BUFFER_COUNT);
 
-                // as EVR requests IMFVideoDisplayControl from the presenter and our custom presenter implements IPvpPresenter
-                // so presenterObject and _pMFVideoDisplayControl point to the same RCW
+                _pvpPresenterHook.HookUp(presenterObject);
+
+                // as EVR requests IMFVideoDisplayControl from the presenter and our custom presenter implements IPvpPresenter and IPvpPresenterConfig
+                // presenterObject and _pMFVideoDisplayControl point to the same RCW
 
                 presenterObject = null; // we will release the presenter when releasing _pMFVideoDisplayControl
+            }
+            catch
+            {
+                _pMFVideoDisplayControl = null;
+                _pvpPresenterConfig = null;
             }
             finally
             {
@@ -167,16 +177,12 @@ namespace Pvp.Core.Wpf
             {
                 _pMFVideoDisplayControl.SetVideoWindow(IntPtr.Zero);
                 Marshal.FinalReleaseComObject(_pMFVideoDisplayControl);
+
                 _pMFVideoDisplayControl = null;
-                _pvpPresenter = null;
+                _pvpPresenterConfig = null;
             }
 
             base.CloseInterfaces(); // release pBaseFilter
-        }
-
-        public IPvpPresenter PvpPresenter
-        {
-            get { return _pvpPresenter; }
         }
     }
 }

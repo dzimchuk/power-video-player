@@ -14,8 +14,6 @@
 
 #include "EVRPresenter.h"
 
-const DWORD PRESENTER_BUFFER_COUNT = 3;
-
 HRESULT FindAdapter(IDirect3D9 *pD3D9, HMONITOR hMonitor, UINT *puAdapterID);
 HRESULT GetFourCC(IMFMediaType *pType, DWORD *pFourCC);
 
@@ -217,7 +215,8 @@ HRESULT D3DPresentEngine::SetDestinationRect(const RECT& rcDest)
 
 HRESULT D3DPresentEngine::CreateVideoSamples(
     IMFMediaType *pFormat,
-    VideoSampleList& videoSampleQueue
+    VideoSampleList& videoSampleQueue,
+    int bufferCount
     )
 {
     if (m_hwnd == NULL)
@@ -250,7 +249,7 @@ HRESULT D3DPresentEngine::CreateVideoSamples(
     UpdateDestRect();
 
     // Create the video samples.
-    for (int i = 0; i < PRESENTER_BUFFER_COUNT; i++)
+    for (int i = 0; i < bufferCount; i++)
     {
         // Create a new swap chain.
         hr = m_pDevice->CreateAdditionalSwapChain(&pp, &pSwapChain);
@@ -287,7 +286,7 @@ HRESULT D3DPresentEngine::CreateVideoSamples(
     }
 
     // Let the derived class create any additional D3D resources that it needs.
-    hr = OnCreateVideoSamples(pp);
+    hr = OnCreateVideoSamples(pp, bufferCount);
 
 done:
     if (FAILED(hr))
