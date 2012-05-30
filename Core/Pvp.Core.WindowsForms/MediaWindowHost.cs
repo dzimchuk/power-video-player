@@ -9,18 +9,16 @@
  * You must not remove this notice, or any other, from this software.
  *
  * ***************************************************************************/
-
 using System;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using Pvp.Core.Native;
 using Pvp.Core.MediaEngine;
+using Pvp.Core.Nwnd;
 
 namespace Pvp.Core.WindowsForms
 {
-    public delegate void ContextMenuHandler(Point ptScreen);
-
     /// <summary>
     /// A control that hosts a media window.
     /// </summary>
@@ -29,20 +27,20 @@ namespace Pvp.Core.WindowsForms
         /// <summary> 
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.Container components = null;
+        private System.ComponentModel.Container _components = null;
 
-        public event EventHandler MW_DoubleClick;
-        public event EventHandler MW_Click;
-        public event ContextMenuHandler MW_ContextMenu;
-        public event EventHandler MW_MouseEnter;
-        public event EventHandler MW_MouseLeave;
-        public event EventHandler MW_MouseMove;
+        public event EventHandler MWDoubleClick;
+        public event EventHandler MWClick;
+        public event ContextMenuHandler MWContextMenu;
+        public event EventHandler MWMouseEnter;
+        public event EventHandler MWMouseLeave;
+        public event EventHandler MWMouseMove;
 
         private MediaWindow _mediaWindow;
         private IMediaEngine _engine;
         private bool _showLogo;
 
-        private MediaWindowHandler _mwHandler;
+        private readonly MediaWindowHandler _mwHandler;
         private bool _mouseOnWindow;
 
         private GDI.RECT _rcClient;
@@ -65,13 +63,13 @@ namespace Pvp.Core.WindowsForms
             private bool _doubleClick; // fix for extra mouse up message we want to discard
             private bool _trackingContextMenu; // fix for additional WM_CONTEXTMENU from MediaWindow when it's already sent by nwnd
             private uint _previousMousePosition; // fix against spurious WM_MOUSEMOVE messages, see http://blogs.msdn.com/oldnewthing/archive/2003/10/01/55108.aspx#55109
-            MediaWindowHost _mwh;
-            IMediaWindowHost _host;
+            readonly MediaWindowHost _mwh;
+            readonly IMediaWindowHost _host;
 
             public MediaWindowHandler(MediaWindowHost mwh)
             {
                 _mwh = mwh;
-                _host = (IMediaWindowHost)mwh;
+                _host = mwh;
             }
 
             public void HandleMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam)
@@ -80,15 +78,15 @@ namespace Pvp.Core.WindowsForms
                 {
                     case (uint)WindowsMessages.WM_LBUTTONDBLCLK:
                         _doubleClick = true;
-                        if (_mwh.MW_DoubleClick != null)
-                            _mwh.MW_DoubleClick(_mwh, EventArgs.Empty);
+                        if (_mwh.MWDoubleClick != null)
+                            _mwh.MWDoubleClick(_mwh, EventArgs.Empty);
                         break;
                     case (uint)WindowsMessages.WM_CONTEXTMENU:
                         if (!_trackingContextMenu)
                         {
                             _trackingContextMenu = true;
-                            if (_mwh.MW_ContextMenu != null)
-                                _mwh.MW_ContextMenu(Cursor.Position);
+                            if (_mwh.MWContextMenu != null)
+                                _mwh.MWContextMenu(Cursor.Position);
                         }
                         else
                             _trackingContextMenu = false;
@@ -109,8 +107,8 @@ namespace Pvp.Core.WindowsForms
                                 _mwh._engine.ActivateDVDMenuButtonAtPosition(pt);
                             }
 
-                            if (!_mwh._engine.IsMenuOn && !_doubleClick && _mwh.MW_Click != null)
-                                _mwh.MW_Click(_mwh, EventArgs.Empty);
+                            if (!_mwh._engine.IsMenuOn && !_doubleClick && _mwh.MWClick != null)
+                                _mwh.MWClick(_mwh, EventArgs.Empty);
                             _doubleClick = false;
                         }
                         break;
@@ -144,18 +142,18 @@ namespace Pvp.Core.WindowsForms
 
                                 WindowsManagement._TrackMouseEvent(ref tme);
                                 _mwh._mouseOnWindow = true;
-                                if (_mwh.MW_MouseEnter != null)
-                                    _mwh.MW_MouseEnter(_mwh, EventArgs.Empty);
+                                if (_mwh.MWMouseEnter != null)
+                                    _mwh.MWMouseEnter(_mwh, EventArgs.Empty);
                             }
 
-                            if (_mwh.MW_MouseMove != null)
-                                _mwh.MW_MouseMove(_mwh, EventArgs.Empty);
+                            if (_mwh.MWMouseMove != null)
+                                _mwh.MWMouseMove(_mwh, EventArgs.Empty);
                         }
                         break;
                     case (uint)WindowsMessages.WM_MOUSELEAVE:
                         _mwh._mouseOnWindow = false;
-                        if (_mwh.MW_MouseLeave != null)
-                            _mwh.MW_MouseLeave(_mwh, EventArgs.Empty);
+                        if (_mwh.MWMouseLeave != null)
+                            _mwh.MWMouseLeave(_mwh, EventArgs.Empty);
                         break;
                 }
             }
@@ -235,8 +233,13 @@ namespace Pvp.Core.WindowsForms
 
         private void CreateMediaWindow()
         {
-            _mediaWindow = new MediaWindow(Handle, Width, Height);
+            _mediaWindow = new MediaWindow(Handle, 0, 0, Width, Height, 
+                WindowsManagement.WS_VISIBLE | WindowsManagement.WS_CHILD | WindowsManagement.WS_CLIPSIBLINGS);
             _mediaWindow.MessageReceived += new EventHandler<MessageReceivedEventArgs>(_mediaWindow_MessageReceived);
+
+            if (_bitmap != null)
+                _mediaWindow.SetLogo(_bitmap.GetHbitmap()); // creates new GDI bitmap object that will be destroyed in media window's destructor
+            _mediaWindow.ShowLogo(_showLogo);
         }
 
         private void InvalidateMediaWindow()
@@ -287,10 +290,13 @@ namespace Pvp.Core.WindowsForms
         {
             if (disposing)
             {
-                if (components != null)
+                if (_components != null)
                 {
-                    components.Dispose();
+                    _components.Dispose();
                 }
+
+                if (_bitmap != null)
+                    _bitmap.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -302,7 +308,7 @@ namespace Pvp.Core.WindowsForms
         /// </summary>
         private void InitializeComponent()
         {
-            components = new System.ComponentModel.Container();
+            _components = new System.ComponentModel.Container();
         }
         #endregion
 
@@ -536,17 +542,16 @@ namespace Pvp.Core.WindowsForms
             get { return _showLogo; }
             set
             {
-                _showLogo = value;
-                MediaWindow.IsShowLogo(value);
-                MediaWindow.InvalidateMediaWindow();
+                _showLogo = value;              
             }
         }
 
+        Bitmap _bitmap;
         public Bitmap Logo
         {
             set
-            { 
-                MediaWindow.SetLogo(value.GetHbitmap());
+            {
+                _bitmap = value;
             }
         }
 

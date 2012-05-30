@@ -1,10 +1,10 @@
 ﻿using System;
-using Pvp.Core.MediaEngine;
-using Pvp.Core.MediaEngine.Render;
-using Pvp.Core.DirectShow;
-using Pvp.Core.MediaEngine.GraphBuilders;
-using Pvp.Core.Native;
 using System.Runtime.InteropServices;
+using Pvp.Core.DirectShow;
+using Pvp.Core.MediaEngine;
+using Pvp.Core.MediaEngine.GraphBuilders;
+using Pvp.Core.MediaEngine.Render;
+using Pvp.Core.Native;
 
 namespace Pvp.Core.Wpf
 {
@@ -45,7 +45,6 @@ namespace Pvp.Core.Wpf
             // in EVR default source rectangle is {0.0, 0.0, 1.0, 1.0}, these are so-called normalized coordinates
             // however VMR, VMR9 and PVP consider the source rectangle as the video size
             // so we will just pass the default one to display the whole video frame
-
             // When we set video frame to be less than our windows EVR starts flickering in the surrounding areas, looks like some old content from
             // back buffers is being drawn
             // To overcme this issue we set our media window (nwnd) to be of the size of the video we want to show, in other words EVR should paint the whole window area
@@ -97,7 +96,7 @@ namespace Pvp.Core.Wpf
             object presenterObject = null;
             try
             {
-                int hr = ClassFactory.GetClassFactory(ref CLSID_CustomEVRPresenter, ref ClassFactory.IID_ClassFactory, out factoryObject);
+                int hr = ClassFactory.GetEvrPresenterClassFactory(ref CLSID_CustomEVRPresenter, ref ClassFactory.IID_ClassFactory, out factoryObject);
                 Marshal.ThrowExceptionForHR(hr);
 
                 IClassFactory factory = (IClassFactory)factoryObject;
@@ -148,7 +147,10 @@ namespace Pvp.Core.Wpf
 
         protected override Guid RendererID
         {
-            get { return Clsid.EnhancedVideoRenderer; }
+            get
+            {
+                return Clsid.EnhancedVideoRenderer;
+            }
         }
 
         protected override void HandleInstantiationError(Exception e)
@@ -158,17 +160,26 @@ namespace Pvp.Core.Wpf
 
         protected override bool IsDelayedInitialize
         {
-            get { return false; }
+            get
+            {
+                return false;
+            }
         }
 
         protected override Guid IID_4DVDGraphInstantiation
         {
-            get { return typeof(IEVRFilterConfig).GUID; }
+            get
+            {
+                return typeof(IEVRFilterConfig).GUID;
+            }
         }
 
         public IMFVideoDisplayControl MFVideoDisplayControl
         {
-            get { return _pMFVideoDisplayControl; }
+            get
+            {
+                return _pMFVideoDisplayControl;
+            }
         }
 
         protected override void CloseInterfaces()

@@ -85,14 +85,14 @@ namespace Pvp
             CreateControlsMenu();
             NormalizeShortcuts();
 
-            mediaControl.MW_DoubleClick += new EventHandler(OnFullscreen);
-            mediaControl.MW_ContextMenu += new ContextMenuHandler(OnContextMenu);
-            mediaControl.MW_Click += new EventHandler(engine_MW_Click);
+            mediaControl.MWDoubleClick += new EventHandler(OnFullscreen);
+            mediaControl.MWContextMenu += new ContextMenuHandler(OnContextMenu);
+            mediaControl.MWClick += new EventHandler(engine_MW_Click);
             mediaControl.UpdateSuggested += new EventHandler(engine_Update);
             mediaControl.ModifyMenu += new EventHandler(engine_ModifyMenu);
 
-            mediaControl.MW_MouseMove += new EventHandler(engine_MW_MouseMove);
-            mediaControl.MW_MouseLeave += new EventHandler(engine_MW_MouseLeave);
+            mediaControl.MWMouseMove += new EventHandler(engine_MW_MouseMove);
+            mediaControl.MWMouseLeave += new EventHandler(engine_MW_MouseLeave);
                         
             nicon.BeforeShowMenu += new EventHandler(OnBeforeShowMenu);
             nicon.AfterShowMenu += new EventHandler(OnAfterShowMenu);

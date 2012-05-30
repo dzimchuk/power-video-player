@@ -220,7 +220,9 @@ namespace Pvp.Core.Native
         public const int MF_CHECKED        = 0x00000008;
                
         public const int GWL_STYLE = -16;
-        
+
+        public const int WS_OVERLAPPED = 0x00000000;
+        public const int WS_POPUP = -2147483648; // 0x80000000
         public const int WS_VISIBLE = 0x10000000;
         public const int WS_CHILD = 0x40000000;
         public const int WS_CLIPSIBLINGS = 0x04000000;
