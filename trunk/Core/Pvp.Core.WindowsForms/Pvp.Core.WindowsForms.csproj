@@ -47,12 +47,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ContextMenuHandler.cs" />
     <Compile Include="ImageCreator.cs" />
     <Compile Include="InitSizeEventArgs.cs" />
     <Compile Include="MediaControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="MediaWindow.cs" />
     <Compile Include="MediaWindowHost.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -64,6 +64,10 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Pvp.Core.Nwnd\Pvp.Core.Nwnd.csproj">
+      <Project>{DB2AB12A-C478-422F-9CBB-4E19E79B3453}</Project>
+      <Name>Pvp.Core.Nwnd</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Pvp.Core\Pvp.Core.csproj">
       <Project>{C2E6EE93-B834-4445-9AA2-28F6A6E23D8E}</Project>
       <Name>Pvp.Core</Name>

@@ -11,27 +11,163 @@
  * ***************************************************************************/
 
 #include "stdafx.h"
-#include <dshow.h> 
-#include <d3d9.h>
-#include <vmr9.h>
-#include <evr.h>
 
-#pragma comment(lib, "quartz.lib")
+#include <initguid.h>
+
+#include "Uuid.h"
 
 HINSTANCE g_hinstThisDll = NULL;        // Our DLL's module handle
-HWND g_hWnd = NULL;
-HWND g_hParent = NULL;
-TCHAR szWindowClass[] = _T("PVP Media Window");
 
-BOOL bRunning = FALSE;
-BOOL bShowLogo = FALSE;
-HBITMAP hLogo = NULL;
-IVMRWindowlessControl *pVMRWindowlessControl = NULL;
-IVMRWindowlessControl9 *pVMRWindowlessControl9 = NULL;
-IMFVideoDisplayControl *pMFVideoDisplayControl = NULL;
+HRESULT RegisterObject(
+    HMODULE hModule,
+    const GUID& guid,
+    const TCHAR *pszDescription,
+    const TCHAR *pszThreadingModel
+    );
 
-LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
-void OnPaint(HDC hDC);
+HRESULT UnregisterObject(const GUID& guid);
+
+
+// Friendly name for COM registration.
+wchar_t const g_sFriendlyName[] = L"PVP Native Window";
+
+
+// Module Ref count
+long g_cRefModule = 0;
+
+// Handle to the DLL's module
+HMODULE g_hModule = NULL;
+
+void DllAddRef()
+{
+    InterlockedIncrement(&g_cRefModule);
+}
+
+void DllRelease()
+{
+    InterlockedDecrement(&g_cRefModule);
+}
+
+HINSTANCE GetDllInstanceHandle()
+{
+    return g_hinstThisDll;
+}
+
+//
+// IClassFactory implementation
+//
+
+typedef HRESULT (*PFNCREATEINSTANCE)(REFIID riid, void **ppvObject);
+struct CLASS_OBJECT_INIT
+{
+    const CLSID *pClsid;
+    PFNCREATEINSTANCE pfnCreate;
+};
+
+// Classes supported by this module:
+const CLASS_OBJECT_INIT c_rgClassObjectInit[] =
+{
+    { &CLSID_MediaWindowManager, MediaWindowManager_CreateInstance },
+};
+
+class CClassFactory : public IClassFactory
+{
+public:
+
+    static HRESULT CreateInstance(
+        REFCLSID clsid,                                 // The CLSID of the object to create (from DllGetClassObject)
+        const CLASS_OBJECT_INIT *pClassObjectInits,     // Array of class factory data.
+        size_t cClassObjectInits,                       // Number of elements in the array.
+        REFIID riid,                                    // The IID of the interface to retrieve (from DllGetClassObject)
+        void **ppv                                      // Receives a pointer to the interface.
+        )
+    {
+        *ppv = NULL;
+
+        HRESULT hr = CLASS_E_CLASSNOTAVAILABLE;
+
+        for (size_t i = 0; i < cClassObjectInits; i++)
+        {
+            if (clsid == *pClassObjectInits[i].pClsid)
+            {
+                IClassFactory *pClassFactory = new (std::nothrow) CClassFactory(pClassObjectInits[i].pfnCreate);
+
+                if (pClassFactory)
+                {
+                    hr = pClassFactory->QueryInterface(riid, ppv);
+                    pClassFactory->Release();
+                }
+                else
+                {
+                    hr = E_OUTOFMEMORY;
+                }
+                break; // match found
+            }
+        }
+        return hr;
+    }
+
+    // IUnknown methods
+    IFACEMETHODIMP QueryInterface(REFIID riid, void ** ppv)
+    {
+        static const QITAB qit[] =
+        {
+            QITABENT(CClassFactory, IClassFactory),
+            { 0 }
+        };
+        return QISearch(this, qit, riid, ppv);
+    }
+
+    IFACEMETHODIMP_(ULONG) AddRef()
+    {
+        return InterlockedIncrement(&m_cRef);
+    }
+
+    IFACEMETHODIMP_(ULONG) Release()
+    {
+        long cRef = InterlockedDecrement(&m_cRef);
+        if (cRef == 0)
+        {
+            delete this;
+        }
+        return cRef;
+    }
+
+    // IClassFactory methods
+
+    IFACEMETHODIMP CreateInstance(IUnknown *punkOuter, REFIID riid, void **ppv)
+    {
+        return punkOuter ? CLASS_E_NOAGGREGATION : m_pfnCreate(riid, ppv);
+    }
+
+    IFACEMETHODIMP LockServer(BOOL fLock)
+    {
+        if (fLock)
+        {
+            DllAddRef();
+        }
+        else
+        {
+            DllRelease();
+        }
+        return S_OK;
+    }
+
+private:
+
+    CClassFactory(PFNCREATEINSTANCE pfnCreate) : m_cRef(1), m_pfnCreate(pfnCreate)
+    {
+        DllAddRef();
+    }
+
+    ~CClassFactory()
+    {
+        DllRelease();
+    }
+
+    long m_cRef;
+    PFNCREATEINSTANCE m_pfnCreate;
+};
 
 BOOL APIENTRY DllMain( HANDLE hModule, 
                        DWORD  ul_reason_for_call, 
@@ -47,178 +183,174 @@ BOOL APIENTRY DllMain( HANDLE hModule,
         // our DLL.
         DisableThreadLibraryCalls((HMODULE) hModule); 
     }
-    else if (ul_reason_for_call==DLL_PROCESS_DETACH)
-    {
-        if (hLogo != NULL)
-            DeleteObject(hLogo);
-    }
     return TRUE;
 }
 
-extern "C" __declspec(dllexport) HWND __stdcall CreateMediaWindow(HWND hParent, int nWidth, int nHeight)
+STDAPI DllCanUnloadNow()
 {
-    WNDCLASSEX wcex;
-    wcex.cbSize = sizeof(WNDCLASSEX); 
-    wcex.style			= CS_HREDRAW | CS_VREDRAW | CS_DBLCLKS;
-    wcex.lpfnWndProc	= (WNDPROC)WndProc;
-    wcex.cbClsExtra		= 0;
-    wcex.cbWndExtra		= 0;
-    wcex.hInstance		= g_hinstThisDll;
-    wcex.hIcon			= NULL;
-    wcex.hCursor		= LoadCursor(NULL, IDC_ARROW);
-    wcex.hbrBackground	= NULL;
-    wcex.lpszMenuName	= NULL;
-    wcex.lpszClassName	= szWindowClass;
-    wcex.hIconSm		= NULL;
-
-    RegisterClassEx(&wcex);
-
-    g_hParent = hParent;
-    g_hWnd = CreateWindow(szWindowClass, NULL, WS_VISIBLE | WS_CHILD | WS_CLIPSIBLINGS, 
-                    0, 0, nWidth, nHeight, hParent, (HMENU)0x16161616, g_hinstThisDll, NULL);
-    return g_hWnd;
+    return (g_cRefModule == 0) ? S_OK : S_FALSE;
 }
 
-extern "C" __declspec(dllexport) void __stdcall SetRunning(BOOL running, 
-                                                           IVMRWindowlessControl* pVMR, 
-                                                           IVMRWindowlessControl9* pVMR9,
-                                                           IMFVideoDisplayControl* pEVR)
+STDAPI DllGetClassObject(REFCLSID clsid, REFIID riid, void **ppv)
 {
-    pVMRWindowlessControl = pVMR;
-    pVMRWindowlessControl9 = pVMR9;
-    pMFVideoDisplayControl = pEVR;
-    bRunning = running;
+    return CClassFactory::CreateInstance(clsid, c_rgClassObjectInit, ARRAYSIZE(c_rgClassObjectInit), riid, ppv);
 }
 
-extern "C" __declspec(dllexport) void __stdcall InvalidateMediaWindow()
+STDAPI DllRegisterServer()
 {
-    if (g_hWnd != NULL)
+    HRESULT hr;
+
+    // Register the MFT's CLSID as a COM object.
+    hr = RegisterObject(g_hModule, CLSID_MediaWindowManager, g_sFriendlyName, TEXT("Both"));
+
+    return hr;
+}
+
+STDAPI DllUnregisterServer()
+{
+    // Unregister the CLSID
+    UnregisterObject(CLSID_MediaWindowManager);
+
+    return S_OK;
+}
+
+
+
+
+// Converts a CLSID into a string with the form "CLSID\{clsid}"
+HRESULT CreateObjectKeyName(const GUID& guid, TCHAR *sName, DWORD cchMax)
+{
+    // convert CLSID uuid to string
+    OLECHAR szCLSID[CHARS_IN_GUID];
+    HRESULT hr = StringFromGUID2(guid, szCLSID, CHARS_IN_GUID);
+    if (SUCCEEDED(hr))
     {
-        RECT rcClient;
-        GetClientRect(g_hWnd, &rcClient);
-        InvalidateRect(g_hWnd, &rcClient, FALSE);
+        // Create a string of the form "CLSID\{clsid}"
+        hr = StringCchPrintf(sName, cchMax, TEXT("Software\\Classes\\CLSID\\%ls"), szCLSID);
     }
+    return hr;
 }
 
-extern "C" __declspec(dllexport) void __stdcall SetLogo(HBITMAP logo)
+// Creates a registry key (if needed) and sets the default value of the key
+HRESULT CreateRegKeyAndValue(
+    HKEY hKey,
+    PCWSTR pszSubKeyName,
+    PCWSTR pszValueName,
+    PCWSTR pszData,
+    PHKEY phkResult
+    )
 {
-    if (hLogo != NULL)
-        DeleteObject(hLogo);
-    hLogo = logo;
-    InvalidateMediaWindow();
-}
+    *phkResult = NULL;
 
-extern "C" __declspec(dllexport) void __stdcall IsShowLogo(BOOL show)
-{
-    bShowLogo = show;
-}
+    LONG lRet = RegCreateKeyEx(
+        hKey, pszSubKeyName,
+        0,  NULL, REG_OPTION_NON_VOLATILE,
+        KEY_ALL_ACCESS, NULL, phkResult, NULL);
 
-LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
-{
-    PAINTSTRUCT ps;
-    HDC hDC; 
-
-    switch (message) 
+    if (lRet == ERROR_SUCCESS)
     {
-    case WM_PAINT:
-        hDC = BeginPaint(hWnd, &ps);
-        OnPaint(hDC);
-        EndPaint(hWnd, &ps);
-        break;
-    case WM_ERASEBKGND:
-        return 1;
-    case WM_DISPLAYCHANGE:
-        if (bRunning)
+        lRet = RegSetValueExW(
+            (*phkResult),
+            pszValueName, 0, REG_SZ,
+            (LPBYTE) pszData,
+            ((DWORD) wcslen(pszData) + 1) * sizeof(WCHAR)
+            );
+
+        if (lRet != ERROR_SUCCESS)
         {
-            if (pVMRWindowlessControl != NULL)
-                pVMRWindowlessControl->DisplayModeChanged();
-            else if (pVMRWindowlessControl9 != NULL)
-                pVMRWindowlessControl9->DisplayModeChanged();
-            break;
+            RegCloseKey(*phkResult);
         }
-    default:
-        return DefWindowProc(hWnd, message, wParam, lParam);
     }
-    return 0;
+
+    return HRESULT_FROM_WIN32(lRet);
 }
 
-void OnPaint(HDC hDC)
+// Creates the registry entries for a COM object.
+
+HRESULT RegisterObject(
+    HMODULE hModule,
+    const GUID& guid,
+    const TCHAR *pszDescription,
+    const TCHAR *pszThreadingModel
+    )
 {
-    RECT rcClient;
-    GetClientRect(g_hWnd, &rcClient);
-    
-    if (bRunning) 
+    HKEY hKey = NULL;
+    HKEY hSubkey = NULL;
+
+    TCHAR achTemp[MAX_PATH];
+
+    // Create the name of the key from the object's CLSID
+    HRESULT hr = CreateObjectKeyName(guid, achTemp, MAX_PATH);
+
+    // Create the new key.
+    if (SUCCEEDED(hr))
     {
-        if (pMFVideoDisplayControl != NULL)
-            pMFVideoDisplayControl->RepaintVideo();
-        else if (pVMRWindowlessControl != NULL)
-            pVMRWindowlessControl->RepaintVideo(g_hWnd, hDC);
-        else if (pVMRWindowlessControl9 != NULL)
-            pVMRWindowlessControl9->RepaintVideo(g_hWnd, hDC);
+        hr = CreateRegKeyAndValue(
+            HKEY_LOCAL_MACHINE,
+            achTemp,
+            NULL,
+            pszDescription,
+            &hKey
+            );
     }
-    else if (bShowLogo && hLogo != NULL)
+
+    if (SUCCEEDED(hr))
     {
-        HDC memDC = CreateCompatibleDC(hDC);
-        BITMAP bmpLogo;
-        GetObject(hLogo, sizeof(BITMAP), &bmpLogo);
-        HBITMAP hPrevBitmap = (HBITMAP)SelectObject(memDC, hLogo);
-        
-        RECT rcLogo;
-        
-        double w=bmpLogo.bmWidth;
-        double h=bmpLogo.bmHeight;
-        double aspectratio=w/h;
-        w=rcClient.right;
-        h=rcClient.bottom;
-        double ratio=w/h;
+        (void)GetModuleFileName(hModule, achTemp, MAX_PATH);
 
-        LONG hor, vert;
-        if (ratio>=aspectratio)
-        {
-            vert = bmpLogo.bmHeight-rcClient.bottom;
-            rcLogo.top= (vert>=0) ? 0 : -vert/2;
-            rcLogo.bottom= (vert>=0) ? rcClient.bottom : rcLogo.top+bmpLogo.bmHeight;
-            h=rcLogo.bottom-rcLogo.top;
-            w=h*aspectratio;
-            hor = rcClient.right - (LONG) w;
-            rcLogo.left= (hor<=0) ? 0 : hor/2;
-            rcLogo.right= rcLogo.left+(LONG) w;
-        }
-        else
-        {
-            hor  = bmpLogo.bmWidth-rcClient.right;
-            // hor>=0 - client area is smaller than logo hor size
-            rcLogo.left= (hor>=0) ? 0 : -hor/2;
-            rcLogo.right= (hor>=0) ? rcClient.right : rcLogo.left+bmpLogo.bmWidth;
-            w=rcLogo.right-rcLogo.left;
-            h=w/aspectratio;
-            vert=rcClient.bottom - (LONG) h;
-            rcLogo.top= (vert<=0) ? 0 : vert/2;
-            rcLogo.bottom= rcLogo.top+(LONG) h;
-        }
-
-        StretchBlt(hDC, rcLogo.left, rcLogo.top, rcLogo.right-rcLogo.left, 
-                rcLogo.bottom-rcLogo.top, memDC, 0, 0, 
-                bmpLogo.bmWidth, bmpLogo.bmHeight, SRCCOPY);
-        
-        SelectObject(memDC, hPrevBitmap);
-        DeleteDC(memDC);
-
-        HRGN rgnClient = CreateRectRgnIndirect(&rcClient); 
-        HRGN rgnLogo  = CreateRectRgnIndirect(&rcLogo);  
-        CombineRgn(rgnClient, rgnClient, rgnLogo, RGN_DIFF);  
-        
-        HBRUSH hbr = CreateSolidBrush(RGB(0,0,0)); 
-        FillRgn(hDC, rgnClient, hbr); 
-
-        DeleteObject(hbr); 
-        DeleteObject(rgnClient); 
-        DeleteObject(rgnLogo); 
+        hr = HRESULT_FROM_WIN32(GetLastError());
     }
-    else
+
+    // Create the "InprocServer32" subkey
+    if (SUCCEEDED(hr))
     {
-        HBRUSH hbr = CreateSolidBrush(RGB(0,0,0));
-        FillRect(hDC, &rcClient, hbr);
-        DeleteObject(hbr);
+        hr = CreateRegKeyAndValue(
+            hKey,
+            L"InProcServer32",
+            NULL,
+            achTemp,
+            &hSubkey
+            );
+
+        RegCloseKey(hSubkey);
     }
+
+    // Add a new value to the subkey, for "ThreadingModel" = <threading model>
+    if (SUCCEEDED(hr))
+    {
+        hr = CreateRegKeyAndValue(
+            hKey,
+            L"InProcServer32",
+            L"ThreadingModel",
+            pszThreadingModel,
+            &hSubkey
+            );
+
+        RegCloseKey(hSubkey);
+    }
+
+    // close hkeys
+
+    RegCloseKey(hKey);
+
+    return hr;
+}
+
+// Deletes the registry entries for a COM object.
+
+HRESULT UnregisterObject(const GUID& guid)
+{
+    TCHAR achTemp[MAX_PATH];
+
+    HRESULT hr = CreateObjectKeyName(guid, achTemp, MAX_PATH);
+
+    if (SUCCEEDED(hr))
+    {
+        // Delete the key recursively.
+        /*LONG lRes = RegDeleteTree(HKEY_LOCAL_MACHINE, achTemp);
+
+        hr = HRESULT_FROM_WIN32(lRes);*/
+    }
+
+    return hr;
 }

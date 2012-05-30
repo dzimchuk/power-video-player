@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Windows.Media;
 using System.Windows;
 using Pvp.Core.Native;
@@ -27,7 +25,20 @@ namespace Pvp.App.Util
                                              out int pixelX,
                                              out int pixelY)
         {
-            Matrix matrix = PresentationSource.FromVisual(visual).CompositionTarget.TransformToDevice;
+            Matrix matrix;
+            var source = PresentationSource.FromVisual(visual);
+            if (source != null)
+            {    
+                matrix = source.CompositionTarget.TransformToDevice;
+            }
+            else
+            {
+                using (var src = new HwndSource(new HwndSourceParameters()))
+                {
+                    matrix = src.CompositionTarget.TransformToDevice;
+                }
+            }
+
             pixelX = (int)(matrix.M11 * unitX);
             pixelY = (int)(matrix.M22 * unitY);
         }
@@ -47,7 +58,20 @@ namespace Pvp.App.Util
                                                out double unitX,
                                                out double unitY)
         {
-            Matrix matrix = PresentationSource.FromVisual(visual).CompositionTarget.TransformFromDevice;
+            Matrix matrix;
+            var source = PresentationSource.FromVisual(visual);
+            if (source != null)
+            {
+                matrix = source.CompositionTarget.TransformFromDevice;
+            }
+            else
+            {
+                using (var src = new HwndSource(new HwndSourceParameters()))
+                {
+                    matrix = src.CompositionTarget.TransformFromDevice;
+                }
+            }
+
             unitX = pixelX * matrix.M11;
             unitY = pixelY * matrix.M22;
         }

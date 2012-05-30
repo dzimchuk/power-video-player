@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Windows.Media;
-using System.Windows.Interop;
-using System.Windows;
 using System.Security;
+using System.Windows;
+using System.Windows.Interop;
+using System.Windows.Media;
 
 namespace Pvp.Core.Wpf
 {
@@ -81,10 +80,8 @@ namespace Pvp.Core.Wpf
                 }
 
                 _lastRender = args.RenderingTime;
-
                 //System.Diagnostics.Debug.WriteLine("{0} : Repaint: {1}", args.RenderingTime, newSurfaceArrived);
             }
         }
-
     }
 }

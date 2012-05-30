@@ -1,23 +1,21 @@
 ﻿/* ****************************************************************************
- *
- * Copyright (c) Andrei Dzimchuk. All rights reserved.
- *
- * This software is subject to the Microsoft Public License (Ms-PL). 
- * A copy of the license can be found in the license.htm file included 
- * in this distribution.
- *
- * You must not remove this notice, or any other, from this software.
- *
- * ***************************************************************************/
+*
+* Copyright (c) Andrei Dzimchuk. All rights reserved.
+*
+* This software is subject to the Microsoft Public License (Ms-PL). 
+* A copy of the license can be found in the license.htm file included 
+* in this distribution.
+*
+* You must not remove this notice, or any other, from this software.
+*
+* ***************************************************************************/
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using Pvp.Core.MediaEngine.GraphBuilders;
+using Pvp.Core.DirectShow;
 using Pvp.Core.MediaEngine;
 using Pvp.Core.MediaEngine.Description;
-using Pvp.Core.DirectShow;
+using Pvp.Core.MediaEngine.GraphBuilders;
 
 namespace Pvp.Core.Wpf
 {
@@ -27,7 +25,6 @@ namespace Pvp.Core.Wpf
     public class MediaControl : MediaWindowHost
     {
         #region Events
-
         /// <summary>
         /// Indicates that there is at least one unrendered stream.
         /// Details on failed streams are provided as a list of StreamInfo objects.
@@ -39,8 +36,14 @@ namespace Pvp.Core.Wpf
         /// </summary>
         public event FailedStreamsHandler FailedStreamsAvailable
         {
-            add { MediaEngine.FailedStreamsAvailable += value; }
-            remove { MediaEngine.FailedStreamsAvailable -= value; }
+            add
+            {
+                MediaEngine.FailedStreamsAvailable += value;
+            }
+            remove
+            {
+                MediaEngine.FailedStreamsAvailable -= value;
+            }
         }
 
         /// <summary>
@@ -49,8 +52,14 @@ namespace Pvp.Core.Wpf
         /// </summary>
         public event EventHandler<ErrorOccuredEventArgs> ErrorOccured
         {
-            add { MediaEngine.ErrorOccured += value; }
-            remove { MediaEngine.ErrorOccured -= value; }
+            add
+            {
+                MediaEngine.ErrorOccured += value;
+            }
+            remove
+            {
+                MediaEngine.ErrorOccured -= value;
+            }
         }
 
         /// <summary>
@@ -59,8 +68,14 @@ namespace Pvp.Core.Wpf
         /// </summary>
         public event EventHandler ModifyMenu
         {
-            add { MediaEngine.ModifyMenu += value; }
-            remove { MediaEngine.ModifyMenu -= value; }
+            add
+            {
+                MediaEngine.ModifyMenu += value;
+            }
+            remove
+            {
+                MediaEngine.ModifyMenu -= value;
+            }
         }
 
         /// <summary>
@@ -72,8 +87,14 @@ namespace Pvp.Core.Wpf
         /// </summary>
         public event EventHandler<UserDecisionEventArgs> DvdParentalChange
         {
-            add { MediaEngine.DvdParentalChange += value; }
-            remove { MediaEngine.DvdParentalChange -= value; }
+            add
+            {
+                MediaEngine.DvdParentalChange += value;
+            }
+            remove
+            {
+                MediaEngine.DvdParentalChange -= value;
+            }
         }
 
         /// <summary>
@@ -86,8 +107,14 @@ namespace Pvp.Core.Wpf
         /// </summary>
         public event EventHandler<UserDecisionEventArgs> PartialSuccess
         {
-            add { MediaEngine.PartialSuccess += value; }
-            remove { MediaEngine.PartialSuccess -= value; }
+            add
+            {
+                MediaEngine.PartialSuccess += value;
+            }
+            remove
+            {
+                MediaEngine.PartialSuccess -= value;
+            }
         }
 
         /// <summary>
@@ -97,8 +124,14 @@ namespace Pvp.Core.Wpf
         /// </summary>
         public event EventHandler UpdateSuggested
         {
-            add { MediaEngine.UpdateSuggested += value; }
-            remove { MediaEngine.UpdateSuggested -= value; }
+            add
+            {
+                MediaEngine.UpdateSuggested += value;
+            }
+            remove
+            {
+                MediaEngine.UpdateSuggested -= value;
+            }
         }
 
         #endregion
@@ -107,20 +140,38 @@ namespace Pvp.Core.Wpf
 
         public bool AutoPlay
         {
-            get { return MediaEngine.AutoPlay; }
-            set { MediaEngine.AutoPlay = value; }
+            get
+            {
+                return MediaEngine.AutoPlay;
+            }
+            set
+            {
+                MediaEngine.AutoPlay = value;
+            }
         }
 
         public bool Repeat
         {
-            get { return MediaEngine.Repeat; }
-            set { MediaEngine.Repeat = value; }
+            get
+            {
+                return MediaEngine.Repeat;
+            }
+            set
+            {
+                MediaEngine.Repeat = value;
+            }
         }
 
         public Renderer PreferredVideoRenderer
         {
-            get { return MediaEngine.PreferredVideoRenderer; }
-            set { MediaEngine.PreferredVideoRenderer = value; }
+            get
+            {
+                return MediaEngine.PreferredVideoRenderer;
+            }
+            set
+            {
+                MediaEngine.PreferredVideoRenderer = value;
+            }
         }
 
         #endregion
@@ -129,38 +180,62 @@ namespace Pvp.Core.Wpf
 
         public int AudioStreams
         {
-            get { return MediaEngine.AudioStreams; }
+            get
+            {
+                return MediaEngine.AudioStreams;
+            }
         }
 
         public int CurrentAudioStream
         {
-            get { return MediaEngine.CurrentAudioStream; }
-            set { MediaEngine.CurrentAudioStream = value; }
+            get
+            {
+                return MediaEngine.CurrentAudioStream;
+            }
+            set
+            {
+                MediaEngine.CurrentAudioStream = value;
+            }
         }
 
         public int FilterCount
         {
-            get { return MediaEngine.FilterCount; }
+            get
+            {
+                return MediaEngine.FilterCount;
+            }
         }
 
         public GraphState GraphState
         {
-            get { return MediaEngine.GraphState; }
+            get
+            {
+                return MediaEngine.GraphState;
+            }
         }
 
         public bool IsGraphSeekable
         {
-            get { return MediaEngine.IsGraphSeekable; }
+            get
+            {
+                return MediaEngine.IsGraphSeekable;
+            }
         }
 
         public MediaInfo MediaInfo
         {
-            get { return MediaEngine.MediaInfo; }
+            get
+            {
+                return MediaEngine.MediaInfo;
+            }
         }
 
         public SourceType SourceType
         {
-            get { return MediaEngine.SourceType; }
+            get
+            {
+                return MediaEngine.SourceType;
+            }
         }
 
         public string GetAudioStreamName(int nStream)
@@ -175,31 +250,58 @@ namespace Pvp.Core.Wpf
 
         public double Rate
         {
-            get { return MediaEngine.Rate; }
-            set { MediaEngine.Rate = value; }
+            get
+            {
+                return MediaEngine.Rate;
+            }
+            set
+            {
+                MediaEngine.Rate = value;
+            }
         }
         
         public double Volume
         {
-            get { return MediaEngine.Volume; }
-            set { MediaEngine.Volume = value; }
+            get
+            {
+                return MediaEngine.Volume;
+            }
+            set
+            {
+                MediaEngine.Volume = value;
+            }
         }
 
         public bool IsMuted
         {
-            get { return MediaEngine.IsMuted; }
-            set { MediaEngine.IsMuted = value; }
+            get
+            {
+                return MediaEngine.IsMuted;
+            }
+            set
+            {
+                MediaEngine.IsMuted = value;
+            }
         }
 
         public TimeSpan CurrentPosition
         {
-            get { return MediaEngine.CurrentPosition; }
-            set { MediaEngine.CurrentPosition = value; }
+            get
+            {
+                return MediaEngine.CurrentPosition;
+            }
+            set
+            {
+                MediaEngine.CurrentPosition = value;
+            }
         }
 
         public TimeSpan Duration
         {
-            get { return MediaEngine.Duration; }
+            get
+            {
+                return MediaEngine.Duration;
+            }
         }
 
         /// <summary>
@@ -220,7 +322,7 @@ namespace Pvp.Core.Wpf
 
         public bool BuildGraph(string source, MediaSourceType mediaSourceType)
         {
-            return MediaEngine.BuildGraph(source, mediaSourceType, Renderer);
+            return MediaEngine.BuildGraph(source, mediaSourceType);
         }
 
         public bool PauseGraph()
@@ -249,54 +351,90 @@ namespace Pvp.Core.Wpf
 
         public int AnglesAvailable
         {
-            get { return MediaEngine.AnglesAvailable; }
+            get
+            {
+                return MediaEngine.AnglesAvailable;
+            }
         }
 
         public int CurrentAngle
         {
-            get { return MediaEngine.CurrentAngle; }
-            set { MediaEngine.CurrentAngle = value; }
+            get
+            {
+                return MediaEngine.CurrentAngle;
+            }
+            set
+            {
+                MediaEngine.CurrentAngle = value;
+            }
         }
 
         public int CurrentChapter
         {
-            get { return MediaEngine.CurrentChapter; }
+            get
+            {
+                return MediaEngine.CurrentChapter;
+            }
         }
 
         public int CurrentSubpictureStream
         {
-            get { return MediaEngine.CurrentSubpictureStream; }
-            set { MediaEngine.CurrentSubpictureStream = value; }
+            get
+            {
+                return MediaEngine.CurrentSubpictureStream;
+            }
+            set
+            {
+                MediaEngine.CurrentSubpictureStream = value;
+            }
         }
 
         public int CurrentTitle
         {
-            get { return MediaEngine.CurrentTitle; }
+            get
+            {
+                return MediaEngine.CurrentTitle;
+            }
         }
 
         public bool IsMenuOn
         {
-            get { return MediaEngine.IsMenuOn; }
+            get
+            {
+                return MediaEngine.IsMenuOn;
+            }
         }
 
         public int MenuLangCount
         {
-            get { return MediaEngine.MenuLangCount; }
+            get
+            {
+                return MediaEngine.MenuLangCount;
+            }
         }
 
         public int NumberOfSubpictureStreams
         {
-            get { return MediaEngine.NumberOfSubpictureStreams; }
+            get
+            {
+                return MediaEngine.NumberOfSubpictureStreams;
+            }
         }
 
         public int NumberOfTitles
         {
-            get { return MediaEngine.NumberOfTitles; }
+            get
+            {
+                return MediaEngine.NumberOfTitles;
+            }
         }
 
         public VALID_UOP_FLAG UOPS
         {
-            get { return MediaEngine.UOPS; }
+            get
+            {
+                return MediaEngine.UOPS;
+            }
         }
 
         public bool EnableSubpicture(bool bEnable)
@@ -387,7 +525,6 @@ namespace Pvp.Core.Wpf
         {
             MediaEngine.OnCultureChanged();
         }
-
         #endregion
     }
 }

@@ -95,11 +95,6 @@ namespace Pvp
             catch
             {
             }
-            finally
-            {
-                if (logo != null)
-                    logo.Dispose();
-            }
 
             mediaControl.DvdParentalChange += OnUserDecisionNeeded;
             mediaControl.PartialSuccess += OnUserDecisionNeeded;

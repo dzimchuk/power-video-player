@@ -1,14 +1,14 @@
 ﻿/* ****************************************************************************
- *
- * Copyright (c) Andrei Dzimchuk. All rights reserved.
- *
- * This software is subject to the Microsoft Public License (Ms-PL). 
- * A copy of the license can be found in the license.htm file included 
- * in this distribution.
- *
- * You must not remove this notice, or any other, from this software.
- *
- * ***************************************************************************/
+*
+* Copyright (c) Andrei Dzimchuk. All rights reserved.
+*
+* This software is subject to the Microsoft Public License (Ms-PL). 
+* A copy of the license can be found in the license.htm file included 
+* in this distribution.
+*
+* You must not remove this notice, or any other, from this software.
+*
+* ***************************************************************************/
 
 using System;
 using System.Runtime.InteropServices;
@@ -18,25 +18,16 @@ using Pvp.Core.Native;
 
 namespace Pvp.Core.Wpf
 {
-    [ComVisible(true), ComImport,
-    InterfaceType(ComInterfaceType.InterfaceIsIUnknown),
-    Guid("DACEB68E-8716-41F5-85DC-7F5F5D97CC65")]
-    internal interface IMediaWindowManager
-    {
-        [PreserveSig]
-        int GetMediaWindow(out IntPtr phwnd);
-    }
-
-    internal class MediaWindow : IMediaWindow
+    internal class MediaWindow2 : IMediaWindow
     {
         public event EventHandler<MessageReceivedEventArgs> MessageReceived;
 
         private static Guid CLSID_MediaWindowManager = new Guid("6F6EF4A2-2B39-4050-9FD2-E24065299518");
 
-        private IMediaWindowManager _manager;
+        private IEvrPresenterMediaWindowManager _manager;
         private IntPtr _hMediaWindow; // slight performance optimization
 
-        public MediaWindow()
+        public MediaWindow2()
         {
             Initialize();
         }
@@ -47,16 +38,16 @@ namespace Pvp.Core.Wpf
             object managerObject = null;
             try
             {
-                var hr = ClassFactory.GetClassFactory(ref CLSID_MediaWindowManager, ref ClassFactory.IID_ClassFactory, out factoryObject);
+                var hr = ClassFactory.GetEvrPresenterClassFactory(ref CLSID_MediaWindowManager, ref ClassFactory.IID_ClassFactory, out factoryObject);
                 Marshal.ThrowExceptionForHR(hr);
 
                 var factory = (IClassFactory)factoryObject;
 
-                var iidMediaWindow = typeof(IMediaWindowManager).GUID;
+                var iidMediaWindow = typeof(IEvrPresenterMediaWindowManager).GUID;
                 hr = factory.CreateInstance(null, ref iidMediaWindow, out managerObject);
                 Marshal.ThrowExceptionForHR(hr);
 
-                _manager = (IMediaWindowManager) managerObject;
+                _manager = (IEvrPresenterMediaWindowManager) managerObject;
                 managerObject = null;
 
                 Marshal.ThrowExceptionForHR(_manager.GetMediaWindow(out _hMediaWindow));
@@ -72,7 +63,7 @@ namespace Pvp.Core.Wpf
                 {
                     Marshal.FinalReleaseComObject(managerObject);
                 }
-            } 
+            }
         }
 
         public IntPtr Handle
@@ -132,7 +123,7 @@ namespace Pvp.Core.Wpf
         {
         }
 
-        ~MediaWindow()
+        ~MediaWindow2()
         {
             Dispose(false);
         }
