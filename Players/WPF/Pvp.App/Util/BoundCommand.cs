@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Controls.Primitives;
@@ -19,7 +17,7 @@ namespace Pvp.App.Util
     {
         public static object GetParameter(DependencyObject obj)
         {
-            return (object)obj.GetValue(ParameterProperty);
+            return obj.GetValue(ParameterProperty);
         }
 
         public static void SetParameter(DependencyObject obj, object value)

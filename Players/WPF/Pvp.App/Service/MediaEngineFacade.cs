@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Pvp.Core.MediaEngine;
 using Pvp.Core.Wpf;
 using Pvp.Core.MediaEngine.GraphBuilders;
@@ -89,6 +87,18 @@ namespace Pvp.App.Service
         {
             get { return _mediaControl.PreferredVideoRenderer; }
             set { _mediaControl.PreferredVideoRenderer = value; }
+        }
+
+        public VideoSize VideoSize
+        {
+            get { return _mediaControl.VideoSize; }
+            set { _mediaControl.VideoSize = value; }
+        }
+
+        public AspectRatio AspectRatio
+        {
+            get { return _mediaControl.AspectRatio; }
+            set { _mediaControl.AspectRatio = value; }
         }
 
         #endregion

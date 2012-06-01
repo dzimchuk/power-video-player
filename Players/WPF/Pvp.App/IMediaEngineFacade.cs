@@ -71,6 +71,9 @@ namespace Pvp.App
         bool Repeat { get; set; }
         Renderer PreferredVideoRenderer { get; set; }
 
+        VideoSize VideoSize { get; set; }
+        AspectRatio AspectRatio { get; set; }
+
         #endregion
 
 
