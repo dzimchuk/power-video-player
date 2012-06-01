@@ -89,6 +89,7 @@
     <Compile Include="Controls\TimeSpanValueConverter.cs" />
     <Compile Include="IMediaControlAcceptor.cs" />
     <Compile Include="IMediaEngineFacade.cs" />
+    <Compile Include="Messaging\DragDropMessage.cs" />
     <Compile Include="Service\WindowHandleProvider.cs" />
     <Compile Include="Service\MediaEngineFacade.cs" />
     <Compile Include="Messaging\CommandMessage.cs" />
@@ -114,12 +115,19 @@
     <Compile Include="ViewModel\IWindowHandleProvider.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
+    <Compile Include="View\AspectRatioToBooleanValueConverter.cs" />
     <Compile Include="View\BooleanToVisibilityValueConverter.cs" />
+    <Compile Include="View\DoubleToBooleanValueConverter.cs" />
     <Compile Include="View\FullSceenPanelVisibilityValueConverter.cs" />
+    <Compile Include="View\FullScreenControlPanelWindow.xaml.cs">
+      <DependentUpon>FullScreenControlPanelWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\PercentToStringValueConverter.cs" />
     <Compile Include="View\RegularControlPanelVisibilityValueConverter.cs" />
     <Compile Include="View\MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\VideoSizeToBooleanValueConverter.cs" />
     <Page Include="logo.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -128,6 +136,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
       <ContainsDesignTimeResources>true</ContainsDesignTimeResources>
+    </Page>
+    <Page Include="View\FullScreenControlPanelWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

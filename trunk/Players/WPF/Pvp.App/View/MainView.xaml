@@ -8,15 +8,21 @@
              xmlns:view="clr-namespace:Pvp.App.View"
              xmlns:res="clr-namespace:Pvp.App.Resources"
              xmlns:core="clr-namespace:Pvp.Core.Wpf;assembly=Pvp.Core.Wpf"
+             xmlns:engine="clr-namespace:Pvp.Core.MediaEngine;assembly=Pvp.Core"
              xmlns:util="clr-namespace:Pvp.App.Util"
              mc:Ignorable="d" 
              d:DesignHeight="350" d:DesignWidth="525"
-             DataContext="{x:Static app:ViewModelLocator.MainViewModel}">
+             DataContext="{x:Static app:ViewModelLocator.MainViewModel}"
+             core:MediaControl.MWDoubleClick="_mediaControl_MWDoubleClick"
+             core:MediaControl.MWContextMenu="_mediaControl_MWContextMenu">
     <UserControl.Resources>
         
         <view:RegularControlPanelVisibilityValueConverter x:Key="RegularControlPanelVisibilityValueConverter" />
-        <view:FullSceenPanelVisibilityValueConverter x:Key="FullSceenPanelVisibilityValueConverter" />
         <view:BooleanToVisibilityValueConverter x:Key="BooleanToVisibilityValueConverter" />
+        <view:PercentToStringValueConverter x:Key="PercentToStringValueConverter" />
+        <view:VideoSizeToBooleanValueConverter x:Key="VideoSizeToBooleanValueConverter" />
+        <view:AspectRatioToBooleanValueConverter x:Key="AspectRatioToBooleanValueConverter" />
+        <view:DoubleToBooleanValueConverter x:Key="DoubleToBooleanValueConverter" />
         
         <ContextMenu x:Key="PvpContextMenu">
             <MenuItem Header="{x:Static res:Resources.mi_file}">
@@ -36,28 +42,55 @@
             <MenuItem Header="{x:Static res:Resources.mi_fullscreen}" Command="{Binding Path=FullScreenCommand}" IsChecked="{Binding Path=IsFullScreen}"/>
             <Separator/>
             <MenuItem Header="{x:Static res:Resources.mi_video_size}">
-                <MenuItem Header="50 %"/>
-                <MenuItem Header="100 %"/>
-                <MenuItem Header="200 %"/>
+                <MenuItem Header="{Binding MenuItemName, Converter={StaticResource PercentToStringValueConverter}, ConverterParameter='0.5'}" 
+                          IsCheckable="True"
+                          IsChecked="{Binding VideoSize, Mode=TwoWay, Converter={StaticResource VideoSizeToBooleanValueConverter}, ConverterParameter='{x:Static engine:VideoSize.SIZE50}'}"/>
+                <MenuItem Header="{Binding MenuItemName, Converter={StaticResource PercentToStringValueConverter}, ConverterParameter='1'}" 
+                          IsCheckable="True"
+                          IsChecked="{Binding VideoSize, Mode=TwoWay, Converter={StaticResource VideoSizeToBooleanValueConverter}, ConverterParameter='{x:Static engine:VideoSize.SIZE100}'}"/>
+                <MenuItem Header="{Binding MenuItemName, Converter={StaticResource PercentToStringValueConverter}, ConverterParameter='2'}" 
+                          IsCheckable="True"
+                          IsChecked="{Binding VideoSize, Mode=TwoWay, Converter={StaticResource VideoSizeToBooleanValueConverter}, ConverterParameter='{x:Static engine:VideoSize.SIZE200}'}"/>
                 <Separator/>
-                <MenuItem Header="{x:Static res:Resources.mi_video_size_free}"/>
+                <MenuItem Header="{x:Static res:Resources.mi_video_size_free}" 
+                          IsCheckable="True"
+                          IsChecked="{Binding VideoSize, Mode=TwoWay, Converter={StaticResource VideoSizeToBooleanValueConverter}, ConverterParameter='{x:Static engine:VideoSize.SIZE_FREE}'}"/>
             </MenuItem>
             <MenuItem Header="{x:Static res:Resources.mi_aspect_ratio}">
-                <MenuItem Header="{x:Static res:Resources.mi_aspect_ratio_original}"/>
+                <MenuItem Header="{x:Static res:Resources.mi_aspect_ratio_original}"
+                          IsCheckable="True"
+                          IsChecked="{Binding AspectRatio, Mode=TwoWay, Converter={StaticResource AspectRatioToBooleanValueConverter}, ConverterParameter='{x:Static engine:AspectRatio.AR_ORIGINAL}'}" />
                 <Separator/>
-                <MenuItem Header="4:3"/>
-                <MenuItem Header="16:9"/>
-                <MenuItem Header="47:20"/>
+                <MenuItem Header="4:3" IsCheckable="True" IsChecked="{Binding AspectRatio, Mode=TwoWay, Converter={StaticResource AspectRatioToBooleanValueConverter}, ConverterParameter='{x:Static engine:AspectRatio.AR_4x3}'}" />
+                <MenuItem Header="16:9" IsCheckable="True" IsChecked="{Binding AspectRatio, Mode=TwoWay, Converter={StaticResource AspectRatioToBooleanValueConverter}, ConverterParameter='{x:Static engine:AspectRatio.AR_16x9}'}" />
+                <MenuItem Header="47:20" IsCheckable="True" IsChecked="{Binding AspectRatio, Mode=TwoWay, Converter={StaticResource AspectRatioToBooleanValueConverter}, ConverterParameter='{x:Static engine:AspectRatio.AR_47x20}'}" />
+                <MenuItem Header="1:1" IsCheckable="True" IsChecked="{Binding AspectRatio, Mode=TwoWay, Converter={StaticResource AspectRatioToBooleanValueConverter}, ConverterParameter='{x:Static engine:AspectRatio.AR_1x1}'}" />
+                <MenuItem Header="5:4" IsCheckable="True" IsChecked="{Binding AspectRatio, Mode=TwoWay, Converter={StaticResource AspectRatioToBooleanValueConverter}, ConverterParameter='{x:Static engine:AspectRatio.AR_5x4}'}" />
+                <MenuItem Header="16:10" IsCheckable="True" IsChecked="{Binding AspectRatio, Mode=TwoWay, Converter={StaticResource AspectRatioToBooleanValueConverter}, ConverterParameter='{x:Static engine:AspectRatio.AR_16x10}'}" />
                 <Separator/>
-                <MenuItem Header="{x:Static res:Resources.mi_aspect_ratio_free}"/>
+                <MenuItem Header="{x:Static res:Resources.mi_aspect_ratio_free}"
+                          IsCheckable="True"
+                          IsChecked="{Binding AspectRatio, Mode=TwoWay, Converter={StaticResource AspectRatioToBooleanValueConverter}, ConverterParameter='{x:Static engine:AspectRatio.AR_FREE}'}" />
             </MenuItem>
-            <MenuItem Header="{x:Static res:Resources.mi_playrate}">
-                <MenuItem Header="50 %"/>
-                <MenuItem Header="75 %"/>
-                <MenuItem Header="100 %"/>
-                <MenuItem Header="125 %"/>
-                <MenuItem Header="150 %"/>
-                <MenuItem Header="200 %"/>
+            <MenuItem Header="{x:Static res:Resources.mi_playrate}" IsEnabled="{Binding PlayRateChangePossible}">
+                <MenuItem Header="{Binding MenuItemName, Converter={StaticResource PercentToStringValueConverter}, ConverterParameter='0.5'}"
+                          IsCheckable="True"
+                          IsChecked="{Binding PlayRate, Mode=TwoWay, Converter={StaticResource DoubleToBooleanValueConverter}, ConverterParameter='0.5'}"/>
+                <MenuItem Header="{Binding MenuItemName, Converter={StaticResource PercentToStringValueConverter}, ConverterParameter='0.75'}"
+                          IsCheckable="True"
+                          IsChecked="{Binding PlayRate, Mode=TwoWay, Converter={StaticResource DoubleToBooleanValueConverter}, ConverterParameter='0.75'}"/>
+                <MenuItem Header="{Binding MenuItemName, Converter={StaticResource PercentToStringValueConverter}, ConverterParameter='1.0'}"
+                          IsCheckable="True"
+                          IsChecked="{Binding PlayRate, Mode=TwoWay, Converter={StaticResource DoubleToBooleanValueConverter}, ConverterParameter='1.0'}"/>
+                <MenuItem Header="{Binding MenuItemName, Converter={StaticResource PercentToStringValueConverter}, ConverterParameter='1.25'}"
+                          IsCheckable="True"
+                          IsChecked="{Binding PlayRate, Mode=TwoWay, Converter={StaticResource DoubleToBooleanValueConverter}, ConverterParameter='1.25'}"/>
+                <MenuItem Header="{Binding MenuItemName, Converter={StaticResource PercentToStringValueConverter}, ConverterParameter='1.5'}"
+                          IsCheckable="True"
+                          IsChecked="{Binding PlayRate, Mode=TwoWay, Converter={StaticResource DoubleToBooleanValueConverter}, ConverterParameter='1.5'}"/>
+                <MenuItem Header="{Binding MenuItemName, Converter={StaticResource PercentToStringValueConverter}, ConverterParameter='2.0'}"
+                          IsCheckable="True"
+                          IsChecked="{Binding PlayRate, Mode=TwoWay, Converter={StaticResource DoubleToBooleanValueConverter}, ConverterParameter='2.0'}"/>
             </MenuItem>
             <MenuItem Header="{x:Static res:Resources.mi_volume}">
                 <MenuItem Header="{x:Static res:Resources.mi_volume_up}"/>
@@ -99,37 +132,11 @@
         </Grid.RowDefinitions>
 
         <core:MediaControl x:Name="_mediaControl" Grid.Row="0" BorderThickness="0" Background="Black" 
-                           LogoBrush="{StaticResource Logo}" LogoMaxHeight="160">
-            <core:MediaControl.ContextMenu>
+                           LogoBrush="{StaticResource Logo}" LogoMaxHeight="160" ContextMenu="{StaticResource PvpContextMenu}">
+            <!--<core:MediaControl.ContextMenu>
                 <StaticResource ResourceKey="PvpContextMenu"/>
-            </core:MediaControl.ContextMenu>
+            </core:MediaControl.ContextMenu>-->
         </core:MediaControl>
-
-        <ctrls:FullScreenControlPanel  Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Bottom"
-                                       DataContext="{Binding Path=ControlViewModel, Mode=OneTime}"
-                                       Style="{DynamicResource FullScreenControlPanelStyle}"
-                                       PlayCommand="{Binding Path=PlayCommand}"
-                                       PauseCommand="{Binding Path=PauseCommand}"
-                                       StopCommand="{Binding Path=StopCommand}"
-                                       ForwardCommand="{Binding Path=ForwardCommand}"
-                                       BackwardCommand="{Binding Path=BackwardCommand}"
-                                       ToEndCommand="{Binding Path=ToEndCommand}"
-                                       ToBeginingCommand="{Binding Path=ToBeginingCommand}"
-                                       RepeatCommand="{Binding Path=RepeatCommand}"
-                                       MuteCommand="{Binding Path=MuteCommand}"
-                                       VolumeCommand="{Binding Path=VolumeCommand}"
-                                       SeekCommand="{Binding Path=SeekCommand}"
-                                       Duration="{Binding Path=Duration}"
-                                       CurrentPosition="{Binding Path=CurrentPosition}"
-                                       IsRepeat="{Binding Path=IsRepeat}"
-                                       IsMute="{Binding Path=IsMute}">
-            <ctrls:FullScreenControlPanel.Visibility>
-                <MultiBinding Converter="{StaticResource FullSceenPanelVisibilityValueConverter}">
-                    <Binding Path="IsFullScreen"/>
-                    <Binding Path="IsControlPanelVisible"/>
-                </MultiBinding>
-            </ctrls:FullScreenControlPanel.Visibility>
-        </ctrls:FullScreenControlPanel>
 
         <ctrls:RegularControlPanel Grid.Row="1"
                                        DataContext="{Binding Path=ControlViewModel, Mode=OneTime}"

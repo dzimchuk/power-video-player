@@ -15,6 +15,7 @@ using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Shapes;
@@ -349,11 +350,6 @@ namespace Pvp.Core.Wpf
 
                 handled = true;
             }
-            else
-            {
-                if (_mwHandler != null)
-                    _mwHandler.HandleMessage(hwnd, (uint)msg, wParam, lParam);
-            }
 
             return IntPtr.Zero;
         }
@@ -415,6 +411,15 @@ namespace Pvp.Core.Wpf
                     break;
                 case AspectRatio.AR_47x20:
                     dAspectRatio = 47.0 / 20.0;
+                    break;
+                case AspectRatio.AR_1x1:
+                    dAspectRatio = 1.0;
+                    break;
+                case AspectRatio.AR_5x4:
+                    dAspectRatio = 5.0 / 4.0;
+                    break;
+                case AspectRatio.AR_16x10:
+                    dAspectRatio = 16.0 / 10.0;
                     break;
                 default:
                     {
@@ -496,7 +501,6 @@ namespace Pvp.Core.Wpf
         private class MediaWindowHandler
         {
             private bool _doubleClick; // fix for extra mouse up message we want to discard
-            private bool _trackingContextMenu; // fix for additional WM_CONTEXTMENU from MediaWindow when it's already sent by nwnd
             private uint _previousMousePosition; // fix against spurious WM_MOUSEMOVE messages, see http://blogs.msdn.com/oldnewthing/archive/2003/10/01/55108.aspx#55109
             private readonly MediaWindowHost _mwh;
             private readonly IMediaWindowHost _host;
@@ -518,10 +522,7 @@ namespace Pvp.Core.Wpf
                         _mwh.RaiseEvent(new RoutedEventArgs(MWDoubleClickEvent));
                         break;
                     case (uint)WindowsMessages.WM_CONTEXTMENU:
-                        if (!_trackingContextMenu)
                         {
-                            _trackingContextMenu = true;
-
                             GDI.POINT pt;
                             NoCat.GetCursorPos(out pt);
 
@@ -532,8 +533,6 @@ namespace Pvp.Core.Wpf
                             args.RoutedEvent = MWContextMenuEvent;
                             _mwh.RaiseEvent(args);
                         }
-                        else
-                            _trackingContextMenu = false;
                         break;
                     case (uint)WindowsMessages.WM_LBUTTONUP:
                         {
@@ -596,33 +595,69 @@ namespace Pvp.Core.Wpf
                         _mouseOnWindow = false;
                         _mwh.RaiseEvent(new RoutedEventArgs(MWMouseLeaveEvent));
                         break;
+                    case (uint)WindowsMessages.WM_KEYDOWN:
+                        if (_mwh.MediaEngine.IsMenuOn)
+                        {
+                            var code = wParam.ToInt32();
+                            Key? key = null;
+                            switch(code)
+                            {
+                            	case 0x0D:
+                                    key = Key.Enter;
+                                    break;
+                                case 0x25:
+                                    key = Key.Left;
+                                    break;
+                                case 0x26:
+                                    key = Key.Up;
+                                    break;
+                                case 0x27:
+                                    key = Key.Right;
+                                    break;
+                                case 0x28:
+                                    key = Key.Down;
+                                    break;
+                            }
+
+                            if (key.HasValue)
+                                HandleKey(key.Value);
+                        }
+                        break;
+                }
+            }
+
+            public void HandleKey(Key key)
+            {
+                if (_mwh.MediaEngine.IsMenuOn)
+                {
+                    switch(key)
+                    {
+                        case Key.Enter:
+                            _mwh.MediaEngine.ActivateSelectedDVDMenuButton();
+                            break;
+                        case Key.Left:
+                            _mwh.MediaEngine.SelectDVDMenuButtonLeft();
+                            break;
+                        case Key.Right:
+                            _mwh.MediaEngine.SelectDVDMenuButtonRight();
+                            break;
+                        case Key.Up:
+                            _mwh.MediaEngine.SelectDVDMenuButtonUp();
+                            break;
+                        case Key.Down:
+                            _mwh.MediaEngine.SelectDVDMenuButtonDown();
+                            break;
+                    }
                 }
             }
         }
 
-        //private void OnParentKeyDown(object sender, KeyEventArgs e)
-        //{
-        //    if (_engine.IsMenuOn)
-        //    {
-        //        switch (e.KeyCode)
-        //        {
-        //            case Keys.Enter:
-        //                _engine.ActivateSelectedDVDMenuButton();
-        //                break;
-        //            case Keys.Left:
-        //                _engine.SelectDVDMenuButtonLeft();
-        //                break;
-        //            case Keys.Right:
-        //                _engine.SelectDVDMenuButtonRight();
-        //                break;
-        //            case Keys.Up:
-        //                _engine.SelectDVDMenuButtonUp();
-        //                break;
-        //            case Keys.Down:
-        //                _engine.SelectDVDMenuButtonDown();
-        //                break;
-        //        }
-        //    }
-        //}
+        protected override void OnKeyDown(System.Windows.Input.KeyEventArgs e)
+        {
+            base.OnKeyDown(e);
+
+            if (_mwHandler != null)
+                _mwHandler.HandleKey(e.Key);
+        }
     }
 }

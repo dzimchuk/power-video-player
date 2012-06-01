@@ -1,16 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Windows.Controls.Primitives;
 using Pvp.App.Messaging;
 using Pvp.App.Util;
@@ -347,6 +340,27 @@ namespace Pvp.App.View
             if (button != null)
             {
                 button.ToolTip = res.Resources.captionbar_close;
+            }
+        }
+
+        protected override void OnDragEnter(DragEventArgs e)
+        {
+            base.OnDragEnter(e);
+
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+                e.Effects = DragDropEffects.Copy;
+            else
+                e.Effects = DragDropEffects.None;
+        }
+
+        protected override void OnDrop(DragEventArgs e)
+        {
+            base.OnDrop(e);
+
+            var filenames = e.Data.GetData(DataFormats.FileDrop) as string[];
+            if (filenames != null && filenames.Any())
+            {
+                Messenger.Default.Send(new DragDropMessage(filenames.First()));
             }
         }
     }

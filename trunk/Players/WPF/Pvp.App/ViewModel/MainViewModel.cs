@@ -1,14 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using GalaSoft.MvvmLight;
-using Pvp.Core.MediaEngine;
+using System.Collections.ObjectModel;
 using System.Windows.Input;
+using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using Pvp.App.Messaging;
-using System.Collections.ObjectModel;
+using Pvp.Core.MediaEngine;
 
 namespace Pvp.App.ViewModel
 {
@@ -47,6 +45,7 @@ namespace Pvp.App.ViewModel
 
             Messenger.Default.Register<PropertyChangedMessageBase>(this, true, OnPropertyChanged);
             Messenger.Default.Register<EventMessage>(this, MessageTokens.App, true, OnEventMessage);
+            Messenger.Default.Register<DragDropMessage>(this, true, OnDragDrop);
 
             FlipControlPanelVisibility(); // TODO: read it from settings
         }
@@ -110,23 +109,28 @@ namespace Pvp.App.ViewModel
                 {
                     _openCommand = new RelayCommand
                         (
-                            () =>
-                            {
-                                var filename = _fileSelector.SelectFile("Video Files (*.avi;*.divx;*.mpg;*.mpeg;*.asf;*.wmv;*.mov;*.qt;*.vob;*.dat;*.mkv;*.flv;*.mp4;*.3gp;*.3g2;*.m1v;*.m2v)|" +
+                        () =>
+                        {
+                            var filename = _fileSelector.SelectFile("Video Files (*.avi;*.divx;*.mpg;*.mpeg;*.asf;*.wmv;*.mov;*.qt;*.vob;*.dat;*.mkv;*.flv;*.mp4;*.3gp;*.3g2;*.m1v;*.m2v)|" +
                                                                         "*.avi;*.divx;*.mpg;*.mpeg;*.asf;*.wmv;*.mov;*.qt;*.vob;*.dat;*.mkv;*.flv;*.mp4;*.3gp;*.3g2;*.m1v;*.m2v|All Files (*.*)|*.*");
-                                if (!string.IsNullOrEmpty(filename))
-                                {
-                                    // TODO set video renderer somewhere else
-                                    _engine.PreferredVideoRenderer = MediaEngineServiceProvider.RecommendedRenderer;
-
-                                    _engine.BuildGraph(filename, MediaSourceType.File);
-                                    UpdateMenu();
-                                }
-                            }
+                            PlayFile(filename);
+                        }
                         );
                 }
 
                 return _openCommand;
+            }
+        }
+  
+        private void PlayFile(string filename)
+        {
+            if (!string.IsNullOrEmpty(filename))
+            {
+                // TODO set video renderer somewhere else
+                _engine.PreferredVideoRenderer = MediaEngineServiceProvider.RecommendedRenderer;
+
+                _engine.BuildGraph(filename, MediaSourceType.File);
+                UpdateMenu();
             }
         }
 
@@ -274,6 +278,46 @@ namespace Pvp.App.ViewModel
             }
         }
 
+        public VideoSize VideoSize
+        {
+            get { return _engine.VideoSize; }
+            set 
+            { 
+                _engine.VideoSize = value;
+                RaisePropertyChanged("VideoSize");
+            }
+        }
+
+        public AspectRatio AspectRatio
+        {
+            get { return _engine.AspectRatio; }
+            set
+            {
+                _engine.AspectRatio = value;
+                RaisePropertyChanged("AspectRatio");
+            }
+        }
+
+        public double PlayRate
+        {
+            get { return _engine.Rate; }
+            set
+            {
+                _engine.Rate = value;
+                RaisePropertyChanged("PlayRate");
+            }
+        }
+
+        public bool PlayRateChangePossible
+        {
+            get { return _engine.IsGraphSeekable; }
+        }
+
+        public string MenuItemName
+        {
+            get { return null; }
+        }
+
         private void FlipFullScreen(bool sendNotification)
         {
             IsFullScreen = !IsFullScreen;
@@ -281,6 +325,11 @@ namespace Pvp.App.ViewModel
             {
                 Messenger.Default.Send(new PropertyChangedMessage<bool>(this, !IsFullScreen, IsFullScreen, "IsFullScreen"));
             }
+        }
+
+        private void OnDragDrop(DragDropMessage message)
+        {
+            PlayFile(message.Content);
         }
 
         private void OnPropertyChanged(PropertyChangedMessageBase message)
@@ -324,6 +373,8 @@ namespace Pvp.App.ViewModel
         private void UpdateMenu()
         {
             UpdateFiltersMenu();
+
+            RaisePropertyChanged("PlayRateChangePossible");
         }
 
         internal class NumberedCommand

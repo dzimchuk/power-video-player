@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using GalaSoft.MvvmLight;
 using Pvp.Core.MediaEngine;
 using System.Windows.Input;
