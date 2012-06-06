@@ -14,9 +14,11 @@
              d:DesignHeight="350" d:DesignWidth="525"
              DataContext="{x:Static app:ViewModelLocator.MainViewModel}"
              core:MediaControl.MWDoubleClick="_mediaControl_MWDoubleClick"
-             core:MediaControl.MWContextMenu="_mediaControl_MWContextMenu">
+             core:MediaControl.MWContextMenu="_mediaControl_MWContextMenu"
+             core:MediaControl.MWMouseMove="_mediaControl_MWMouseMove">
     <UserControl.Resources>
-        
+
+        <view:FullSceenPanelVisibilityValueConverter x:Key="FullSceenPanelVisibilityValueConverter" />
         <view:RegularControlPanelVisibilityValueConverter x:Key="RegularControlPanelVisibilityValueConverter" />
         <view:BooleanToVisibilityValueConverter x:Key="BooleanToVisibilityValueConverter" />
         <view:PercentToStringValueConverter x:Key="PercentToStringValueConverter" />
@@ -137,6 +139,43 @@
                 <StaticResource ResourceKey="PvpContextMenu"/>
             </core:MediaControl.ContextMenu>-->
         </core:MediaControl>
+        
+        <Popup IsOpen="{Binding IsFullScreen}" PlacementTarget="{Binding ElementName=_mediaControl}" 
+               x:Name="_fullScreenPanelHolder" Placement="Custom" CustomPopupPlacementCallback="fullscreenPlacementCallback"
+               Width="{Binding ElementName=_mediaControl, Path=ActualWidth}" AllowsTransparency="True">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <ctrls:FullScreenControlPanel Grid.Row="0" x:Name="_fullScreenControlPanel"
+                                       HorizontalAlignment="Stretch" VerticalAlignment="Bottom"
+                                       DataContext="{Binding Path=ControlViewModel, Mode=OneTime}"
+                                       Style="{DynamicResource FullScreenControlPanelStyle}"
+                                       PlayCommand="{Binding Path=PlayCommand}"
+                                       PauseCommand="{Binding Path=PauseCommand}"
+                                       StopCommand="{Binding Path=StopCommand}"
+                                       ForwardCommand="{Binding Path=ForwardCommand}"
+                                       BackwardCommand="{Binding Path=BackwardCommand}"
+                                       ToEndCommand="{Binding Path=ToEndCommand}"
+                                       ToBeginingCommand="{Binding Path=ToBeginingCommand}"
+                                       RepeatCommand="{Binding Path=RepeatCommand}"
+                                       MuteCommand="{Binding Path=MuteCommand}"
+                                       VolumeCommand="{Binding Path=VolumeCommand}"
+                                       SeekCommand="{Binding Path=SeekCommand}"
+                                       Duration="{Binding Path=Duration}"
+                                       CurrentPosition="{Binding Path=CurrentPosition}"
+                                       IsRepeat="{Binding Path=IsRepeat}"
+                                       IsMute="{Binding Path=IsMute}">
+                    <ctrls:FullScreenControlPanel.Visibility>
+                        <MultiBinding Converter="{StaticResource FullSceenPanelVisibilityValueConverter}">
+                            <Binding Path="IsFullScreen"/>
+                            <Binding Path="IsControlPanelVisible"/>
+                        </MultiBinding>
+                    </ctrls:FullScreenControlPanel.Visibility>
+                </ctrls:FullScreenControlPanel>
+            </Grid>
+        </Popup>
 
         <ctrls:RegularControlPanel Grid.Row="1"
                                        DataContext="{Binding Path=ControlViewModel, Mode=OneTime}"

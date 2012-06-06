@@ -119,9 +119,6 @@
     <Compile Include="View\BooleanToVisibilityValueConverter.cs" />
     <Compile Include="View\DoubleToBooleanValueConverter.cs" />
     <Compile Include="View\FullSceenPanelVisibilityValueConverter.cs" />
-    <Compile Include="View\FullScreenControlPanelWindow.xaml.cs">
-      <DependentUpon>FullScreenControlPanelWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="View\PercentToStringValueConverter.cs" />
     <Compile Include="View\RegularControlPanelVisibilityValueConverter.cs" />
     <Compile Include="View\MainView.xaml.cs">
@@ -136,10 +133,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
       <ContainsDesignTimeResources>true</ContainsDesignTimeResources>
-    </Page>
-    <Page Include="View\FullScreenControlPanelWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

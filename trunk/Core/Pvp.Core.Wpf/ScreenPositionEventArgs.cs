@@ -4,11 +4,11 @@ using System.Windows;
 
 namespace Pvp.Core.Wpf
 {
-    public class MWContextMenuEventArgs : RoutedEventArgs
+    public class ScreenPositionEventArgs : RoutedEventArgs
     {
         private readonly Point _screenPosition;
 
-        public MWContextMenuEventArgs(Point screenPosition)
+        public ScreenPositionEventArgs(Point screenPosition)
         {
             _screenPosition = screenPosition;
         }
