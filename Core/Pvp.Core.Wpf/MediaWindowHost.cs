@@ -58,7 +58,7 @@ namespace Pvp.Core.Wpf
             typeof(RoutedEventHandler), typeof(MediaWindowHost));
   
         public static readonly RoutedEvent MWMouseMoveEvent = EventManager.RegisterRoutedEvent("MWMouseMove", RoutingStrategy.Bubble,
-            typeof(RoutedEventHandler), typeof(MediaWindowHost));
+            typeof(MWMouseMoveEventHandler), typeof(MediaWindowHost));
 
         public static readonly RoutedEvent InitSizeEvent = EventManager.RegisterRoutedEvent("InitSize", RoutingStrategy.Bubble,
             typeof(InitSizeEventHandler), typeof(MediaWindowHost));
@@ -264,8 +264,8 @@ namespace Pvp.Core.Wpf
             add { AddHandler(MWMouseLeaveEvent, value); }
             remove { RemoveHandler(MWMouseLeaveEvent, value); }
         }
-  
-        public event RoutedEventHandler MWMouseMove
+
+        public event MWMouseMoveEventHandler MWMouseMove
         {
             add { AddHandler(MWMouseMoveEvent, value); }
             remove { RemoveHandler(MWMouseMoveEvent, value); }
@@ -523,13 +523,7 @@ namespace Pvp.Core.Wpf
                         break;
                     case (uint)WindowsMessages.WM_CONTEXTMENU:
                         {
-                            GDI.POINT pt;
-                            NoCat.GetCursorPos(out pt);
-
-                            var matrix = _mwh.GetTargetMatrix();
-                            var screenPosition = matrix.Transform(new Point(pt.x, pt.y));
-
-                            var args = new MWContextMenuEventArgs(screenPosition);
+                            var args = CreateScreenPositionEventArgs();
                             args.RoutedEvent = MWContextMenuEvent;
                             _mwh.RaiseEvent(args);
                         }
@@ -588,7 +582,9 @@ namespace Pvp.Core.Wpf
                                 _mwh.RaiseEvent(new RoutedEventArgs(MWMouseEnterEvent));
                             }
 
-                            _mwh.RaiseEvent(new RoutedEventArgs(MWMouseMoveEvent));
+                            var args = CreateScreenPositionEventArgs();
+                            args.RoutedEvent = MWMouseMoveEvent;
+                            _mwh.RaiseEvent(args);
                         }
                         break;
                     case (uint)WindowsMessages.WM_MOUSELEAVE:
@@ -625,7 +621,7 @@ namespace Pvp.Core.Wpf
                         break;
                 }
             }
-
+  
             public void HandleKey(Key key)
             {
                 if (_mwh.MediaEngine.IsMenuOn)
@@ -649,6 +645,17 @@ namespace Pvp.Core.Wpf
                             break;
                     }
                 }
+            }
+  
+            private ScreenPositionEventArgs CreateScreenPositionEventArgs()
+            {
+                GDI.POINT pt;
+                NoCat.GetCursorPos(out pt);
+
+                var matrix = _mwh.GetTargetMatrix();
+                var screenPosition = matrix.Transform(new Point(pt.x, pt.y));
+
+                return new ScreenPositionEventArgs(screenPosition);
             }
         }
 
