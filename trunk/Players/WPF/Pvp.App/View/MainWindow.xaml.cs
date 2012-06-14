@@ -183,7 +183,7 @@ namespace Pvp.App.View
         {
             base.OnClosing(e);
 
-            Messenger.Default.Send(new EventMessage(Event.MainWindowClosing), MessageTokens.App);
+            Messenger.Default.Send(new EventMessage(Event.MainWindowClosing));
         }
 
         public override void OnApplyTemplate()
@@ -221,7 +221,7 @@ namespace Pvp.App.View
                 {
                     if (e.ClickCount == 2)
                     {
-                        Messenger.Default.Send(new EventMessage(Event.TitleBarDoubleClick), MessageTokens.UI);
+                        Messenger.Default.Send(new EventMessage(Event.TitleBarDoubleClick));
                     }
                     else if (!IsMaximized && !IsFullScreen)
                     {
@@ -264,7 +264,7 @@ namespace Pvp.App.View
                 {
                     if (e.ClickCount == 2)
                     {
-                        Messenger.Default.Send(new EventMessage(Event.VideoAreaDoubleClick), MessageTokens.UI);
+                        Messenger.Default.Send(new EventMessage(Event.VideoAreaDoubleClick));
                     }
                 };
             }

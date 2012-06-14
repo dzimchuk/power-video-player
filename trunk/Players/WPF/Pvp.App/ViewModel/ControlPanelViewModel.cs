@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using GalaSoft.MvvmLight;
+using Pvp.App.Messaging;
 using Pvp.Core.MediaEngine;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Command;
@@ -8,7 +9,7 @@ using GalaSoft.MvvmLight.Messaging;
 
 namespace Pvp.App.ViewModel
 {
-    internal class ControlPanelViewModel : ViewModelBase
+    internal class ControlPanelViewModel : ViewModelBase, IDurationProvider
     {
         private readonly IMediaEngineFacade _engine;
 
@@ -21,21 +22,31 @@ namespace Pvp.App.ViewModel
         private ICommand _toBeginingCommand;
         private ICommand _repeatCommand;
         private ICommand _muteCommand;
-        private ICommand _volumeCommand;
-        private ICommand _seekCommand;
+        private ICommand _volumeUpCommand;
+        private ICommand _volumeDownCommand;
 
         private bool _isFullScreen;
         private bool _isRepeat;
         private bool _isMute;
+
         private TimeSpan _duration;
         private TimeSpan _currentPosition;
+        private readonly TimeSpan _seekStep = TimeSpan.FromSeconds(5);
+
         private bool _isControlPanelVisible;
+
+        private double _volume = 0.8;
+        private const double VolumeStep = 0.04;
+
+        private bool _isInPlayingMode;
+        private bool _engineReady;
 
         public ControlPanelViewModel(IMediaEngineFacade engine)
         {
             _engine = engine;
 
             Messenger.Default.Register<PropertyChangedMessageBase>(this, true, OnPropertyChanged);
+            Messenger.Default.Register<EventMessage>(this, true, OnEventMessage);
         }
 
         public bool IsFullScreen
@@ -82,14 +93,40 @@ namespace Pvp.App.ViewModel
         {
             if (message.Sender != this)
             {
-                if (message.PropertyName == "IsFullScreen")
+                var booleanNotificationMessage = message as PropertyChangedMessage<bool>;
+
+                if (booleanNotificationMessage != null)
                 {
-                    IsFullScreen = !IsFullScreen;
+                    if (booleanNotificationMessage.PropertyName == "IsFullScreen")
+                    {
+                        IsFullScreen = booleanNotificationMessage.NewValue;
+                    }
+                    else if (booleanNotificationMessage.PropertyName == "IsControlPanelVisible")
+                    {
+                        IsControlPanelVisible = booleanNotificationMessage.NewValue;
+                    }
+                    else if (booleanNotificationMessage.PropertyName == "IsInPlayingMode")
+                    {
+                        IsInPlayingMode = booleanNotificationMessage.NewValue;
+                    }
                 }
-                else if (message.PropertyName == "IsControlPanelVisible")
-                {
-                    IsControlPanelVisible = !IsControlPanelVisible;
-                }
+            }
+        }
+
+        private void OnEventMessage(EventMessage message)
+        {
+            if (message.Content == Event.StateRefreshSuggested)
+            {
+                Duration = _engine.Duration;
+
+                _updatingCurrentPosition = true;
+                CurrentPosition = _engine.CurrentPosition;
+                _updatingCurrentPosition = false;
+            }
+            else if (message.Content == Event.MediaControlCreated)
+            {
+                _engineReady = true;
+                _engine.Volume = Volume;
             }
         }
 
@@ -98,18 +135,61 @@ namespace Pvp.App.ViewModel
             get { return _duration; }
             set
             {
-                _duration = value;
-                RaisePropertyChanged("Duration");
+                if (_duration != value)
+                {
+                    _duration = value;
+                    RaisePropertyChanged("Duration");
+                }
             }
         }
 
+        private bool _updatingCurrentPosition;
         public TimeSpan CurrentPosition
         {
             get { return _currentPosition; }
             set
             {
-                _currentPosition = value;
-                RaisePropertyChanged("CurrentPosition");
+                if (_currentPosition != value)
+                {
+                    _currentPosition = value;
+                    if (_updatingCurrentPosition)
+                    {
+                        RaisePropertyChanged("CurrentPosition");
+                    }
+                    else
+                    {
+                        if (_engine.IsGraphSeekable)
+                        {
+                            _engine.CurrentPosition = value;
+                        }
+                    }
+                }
+            }
+        }
+
+        private bool _updatingVolume;
+        public double Volume
+        {
+            get { return _volume; }
+            set 
+            { 
+                _volume = value;
+                _engine.Volume = value;
+
+                if (_updatingVolume)
+                {
+                	RaisePropertyChanged("Volume");
+                }
+            }
+        }
+
+        public bool IsInPlayingMode
+        {
+            get { return _isInPlayingMode; }
+            set 
+            { 
+                _isInPlayingMode = value;
+                RaisePropertyChanged("IsInPlayingMode");
             }
         }
 
@@ -151,8 +231,7 @@ namespace Pvp.App.ViewModel
                             },
                             () =>
                             {
-                                GraphState state = _engine.GraphState;
-                                return state == GraphState.Running;
+                                return _engine.GraphState == GraphState.Running;
                             }
                         );
                 }
@@ -185,6 +264,18 @@ namespace Pvp.App.ViewModel
             }
         }
 
+        private void Seek(TimeSpan position)
+        {
+            if (_engine.IsGraphSeekable)
+            {
+                _engine.CurrentPosition = position;
+
+                _updatingCurrentPosition = true;
+                CurrentPosition = position;
+                _updatingCurrentPosition = false;
+            }
+        }
+
         public ICommand ForwardCommand
         {
             get
@@ -195,11 +286,16 @@ namespace Pvp.App.ViewModel
                         (
                             () =>
                             {
+                                var position = CurrentPosition.Add(_seekStep);
+                                var duration = Duration;
+                                if (position > duration)
+                                    position = duration;
 
+                                Seek(position);
                             },
                             () =>
                             {
-                                return true;
+                                return _engineReady && _engine.IsGraphSeekable;
                             }
                         );
                 }
@@ -218,11 +314,15 @@ namespace Pvp.App.ViewModel
                         (
                             () =>
                             {
+                                var position = CurrentPosition.Subtract(_seekStep);
+                                if (position < TimeSpan.Zero)
+                                    position = TimeSpan.Zero;
 
+                                Seek(position);
                             },
                             () =>
                             {
-                                return true;
+                                return _engineReady && _engine.IsGraphSeekable;
                             }
                         );
                 }
@@ -241,11 +341,12 @@ namespace Pvp.App.ViewModel
                         (
                             () =>
                             {
-
+                                Seek(Duration.Subtract(TimeSpan.FromMilliseconds(200)));
+                                _engine.PauseGraph();
                             },
                             () =>
                             {
-                                return true;
+                                return _engineReady && _engine.IsGraphSeekable;
                             }
                         );
                 }
@@ -264,11 +365,11 @@ namespace Pvp.App.ViewModel
                         (
                             () =>
                             {
-
+                                Seek(TimeSpan.Zero);
                             },
                             () =>
                             {
-                                return true;
+                                return _engineReady && _engine.IsGraphSeekable;
                             }
                         );
                 }
@@ -294,7 +395,6 @@ namespace Pvp.App.ViewModel
                             },
                             () =>
                             {
-                                GraphState state = _engine.GraphState;
                                 return true;
                             }
                         );
@@ -314,6 +414,8 @@ namespace Pvp.App.ViewModel
                         (
                             () =>
                             {
+                                _engine.IsMuted = !IsMute;
+
                                 IsMute = !IsMute;
                                 Messenger.Default.Send(new PropertyChangedMessage<bool>(this, !IsMute, IsMute, "IsMute"));
                             },
@@ -328,49 +430,62 @@ namespace Pvp.App.ViewModel
             }
         }
 
-        public ICommand VolumeCommand
+        private void ChangeVolume(double value)
+        {
+            var volume = Volume + value;
+            if (volume > 1.0)
+                volume = 1.0;
+            else if (volume < 0.0)
+                volume = 0.0;
+
+            _updatingVolume = true;
+            Volume = volume;
+            _updatingVolume = false;
+        }
+
+        public ICommand VolumeUpCommand
         {
             get
             {
-                if (_volumeCommand == null)
+                if (_volumeUpCommand == null)
                 {
-                    _volumeCommand = new RelayCommand
+                    _volumeUpCommand = new RelayCommand
                         (
                             () =>
                             {
-
+                                ChangeVolume(VolumeStep);
                             },
                             () =>
                             {
-                                return true;
+                                return _volume < 1.0;
                             }
                         );
                 }
 
-                return _volumeCommand;
+                return _volumeUpCommand;
             }
         }
 
-        public ICommand SeekCommand
+        public ICommand VolumeDownCommand
         {
             get
             {
-                if (_seekCommand == null)
+                if (_volumeDownCommand == null)
                 {
-                    _seekCommand = new RelayCommand
+                    _volumeDownCommand = new RelayCommand
                         (
                             () =>
                             {
-
+                                ChangeVolume(-VolumeStep);
                             },
                             () =>
                             {
-                                return true;
+                                return _volume > 0.0;
                             }
                         );
                 }
 
-                return _seekCommand;
+                return _volumeDownCommand;
             }
         }
     }

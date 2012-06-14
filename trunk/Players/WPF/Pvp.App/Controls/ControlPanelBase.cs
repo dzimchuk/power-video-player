@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Windows.Controls;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Data;
 using System.Windows.Controls.Primitives;
-using res=Pvp.App.Resources;
+using res = Pvp.App.Resources;
 
 namespace Pvp.App.Controls
 {
@@ -80,18 +78,6 @@ namespace Pvp.App.Controls
                                         typeof(ControlPanelBase),
                                         new PropertyMetadata((ICommand)null));
 
-        public static readonly DependencyProperty SeekCommandProperty =
-            DependencyProperty.Register("SeekCommand",
-                                        typeof(ICommand),
-                                        typeof(ControlPanelBase),
-                                        new PropertyMetadata((ICommand)null));
-
-        public static readonly DependencyProperty VolumeCommandProperty =
-            DependencyProperty.Register("VolumeCommand",
-                                        typeof(ICommand),
-                                        typeof(ControlPanelBase),
-                                        new PropertyMetadata((ICommand)null));
-
         public static readonly DependencyProperty DurationProperty =
             DependencyProperty.Register("Duration",
                                         typeof(TimeSpan),
@@ -115,137 +101,65 @@ namespace Pvp.App.Controls
                                         typeof(bool),
                                         typeof(ControlPanelBase),
                                         new PropertyMetadata(false));
+
+        public static readonly DependencyProperty IsInPlayingModeProperty =
+            DependencyProperty.Register("IsInPlayingMode", typeof(bool), typeof(ControlPanelBase), new PropertyMetadata(false));
+
+        public static readonly DependencyProperty VolumeProperty =
+            DependencyProperty.Register("Volume", typeof(double), typeof(ControlPanelBase), new PropertyMetadata(0D));
         
         public ICommand PlayCommand
         {
-            get
-            {
-                return (ICommand)GetValue(PlayCommandProperty);
-            }
-            set
-            {
-                SetValue(PlayCommandProperty, value);
-            }
+            get { return (ICommand)GetValue(PlayCommandProperty); }
+            set { SetValue(PlayCommandProperty, value); }
         }
 
         public ICommand PauseCommand
         {
-            get
-            {
-                return (ICommand)GetValue(PauseCommandProperty);
-            }
-            set
-            {
-                SetValue(PauseCommandProperty, value);
-            }
+            get { return (ICommand)GetValue(PauseCommandProperty); }
+            set { SetValue(PauseCommandProperty, value); }
         }
 
         public ICommand StopCommand
         {
-            get
-            {
-                return (ICommand)GetValue(StopCommandProperty);
-            }
-            set
-            {
-                SetValue(StopCommandProperty, value);
-            }
+            get { return (ICommand)GetValue(StopCommandProperty); }
+            set { SetValue(StopCommandProperty, value); }
         }
 
         public ICommand ForwardCommand
         {
-            get
-            {
-                return (ICommand)GetValue(ForwardCommandProperty);
-            }
-            set
-            {
-                SetValue(ForwardCommandProperty, value);
-            }
+            get { return (ICommand)GetValue(ForwardCommandProperty); }
+            set { SetValue(ForwardCommandProperty, value); }
         }
 
         public ICommand BackwardCommand
         {
-            get
-            {
-                return (ICommand)GetValue(BackwardCommandProperty);
-            }
-            set
-            {
-                SetValue(BackwardCommandProperty, value);
-            }
+            get { return (ICommand)GetValue(BackwardCommandProperty); }
+            set { SetValue(BackwardCommandProperty, value); }
         }
 
         public ICommand ToEndCommand
         {
-            get
-            {
-                return (ICommand)GetValue(ToEndCommandProperty);
-            }
-            set
-            {
-                SetValue(ToEndCommandProperty, value);
-            }
+            get { return (ICommand)GetValue(ToEndCommandProperty); }
+            set { SetValue(ToEndCommandProperty, value); }
         }
 
         public ICommand ToBeginingCommand
         {
-            get
-            {
-                return (ICommand)GetValue(ToBeginingCommandProperty);
-            }
-            set
-            {
-                SetValue(ToBeginingCommandProperty, value);
-            }
+            get { return (ICommand)GetValue(ToBeginingCommandProperty); }
+            set { SetValue(ToBeginingCommandProperty, value); }
         }
 
         public ICommand RepeatCommand
         {
-            get
-            {
-                return (ICommand)GetValue(RepeatCommandProperty);
-            }
-            set
-            {
-                SetValue(RepeatCommandProperty, value);
-            }
+            get { return (ICommand)GetValue(RepeatCommandProperty); }
+            set { SetValue(RepeatCommandProperty, value); }
         }
 
         public ICommand MuteCommand
         {
-            get
-            {
-                return (ICommand)GetValue(MuteCommandProperty);
-            }
-            set
-            {
-                SetValue(MuteCommandProperty, value);
-            }
-        }
-
-        public ICommand SeekCommand
-        {
-            get
-            {
-                return (ICommand)GetValue(SeekCommandProperty);
-            }
-            set
-            {
-                SetValue(SeekCommandProperty, value);
-            }
-        }
-
-        public ICommand VolumeCommand
-        {
-            get
-            {
-                return (ICommand)GetValue(VolumeCommandProperty);
-            }
-            set
-            {
-                SetValue(VolumeCommandProperty, value);
-            }
+            get { return (ICommand)GetValue(MuteCommandProperty); }
+            set { SetValue(MuteCommandProperty, value); }
         }
 
         public TimeSpan Duration
@@ -260,6 +174,12 @@ namespace Pvp.App.Controls
             set { SetValue(CurrentPositionProperty, value); }
         }
 
+        public double Volume
+        {
+            get { return (double)GetValue(VolumeProperty); }
+            set { SetValue(VolumeProperty, value); }
+        }
+
         public bool IsRepeat
         {
             get { return (bool)GetValue(IsRepeatProperty); }
@@ -270,6 +190,12 @@ namespace Pvp.App.Controls
         {
             get { return (bool)GetValue(IsMuteProperty); }
             set { SetValue(IsMuteProperty, value); }
+        }
+
+        public bool IsInPlayingMode
+        {
+            get { return (bool)GetValue(IsInPlayingModeProperty); }
+            set { SetValue(IsInPlayingModeProperty, value); }
         }
 
         public override void OnApplyTemplate()
@@ -370,19 +296,32 @@ namespace Pvp.App.Controls
             var seekSlider = Template.FindName("PART_SeekSlider", this) as CommandSlider;
             if (seekSlider != null)
             {
-                Binding binding = new Binding("SeekCommand");
+                seekSlider.Minimum = 0.0;
+                seekSlider.Maximum = 1.0;
+
+                var binding = new Binding("IsInPlayingMode");
                 binding.Source = this;
                 binding.Mode = BindingMode.OneWay;
-                seekSlider.SetBinding(CommandSlider.CommandProperty, binding);
+                seekSlider.SetBinding(UIElement.IsEnabledProperty, binding);
+                
+                binding = new Binding("CurrentPosition");
+                binding.Source = this;
+                binding.Mode = BindingMode.TwoWay;
+                binding.Converter = new TimeSpanToDoubleValueConverter();
+                binding.ConverterParameter = DataContext;
+                seekSlider.SetBinding(Slider.ValueProperty, binding);
             }
 
             var volumeSlider = Template.FindName("PART_VolumeSlider", this) as CommandSlider;
             if (volumeSlider != null)
             {
-                Binding binding = new Binding("VolumeCommand");
+                volumeSlider.Minimum = 0.0;
+                volumeSlider.Maximum = 1.0;
+
+                var binding = new Binding("Volume");
                 binding.Source = this;
-                binding.Mode = BindingMode.OneWay;
-                volumeSlider.SetBinding(CommandSlider.CommandProperty, binding);
+                binding.Mode = BindingMode.TwoWay;
+                volumeSlider.SetBinding(Slider.ValueProperty, binding);
             }
 
             var currentPosition = Template.FindName("PART_CurrentPosition", this) as TextBlock;
@@ -391,7 +330,7 @@ namespace Pvp.App.Controls
                 Binding binding = new Binding("CurrentPosition");
                 binding.Source = this;
                 binding.Mode = BindingMode.OneWay;
-                binding.Converter = new TimeSpanValueConverter();
+                binding.Converter = new TimeSpanToStringValueConverter();
                 currentPosition.SetBinding(TextBlock.TextProperty, binding);
             }
 
@@ -401,7 +340,7 @@ namespace Pvp.App.Controls
                 Binding binding = new Binding("Duration");
                 binding.Source = this;
                 binding.Mode = BindingMode.OneWay;
-                binding.Converter = new TimeSpanValueConverter();
+                binding.Converter = new TimeSpanToStringValueConverter();
                 duration.SetBinding(TextBlock.TextProperty, binding);
             }
 
