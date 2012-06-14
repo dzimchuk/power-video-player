@@ -3,6 +3,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using System.Windows.Threading;
 using Pvp.App.Composition;
 using GalaSoft.MvvmLight.Messaging;
 using Pvp.App.Messaging;
@@ -15,6 +16,8 @@ namespace Pvp.App.View
     /// </summary>
     public partial class MainView : UserControl
     {
+        private readonly DispatcherTimer _timer;
+
         public MainView()
         {
             InitializeComponent();
@@ -22,7 +25,17 @@ namespace Pvp.App.View
             var acceptor = (IMediaControlAcceptor)DependencyResolver.Current.Resolve<IMediaControlAcceptor>();
             acceptor.MediaControl = _mediaControl;
 
-            Messenger.Default.Send<EventMessage>(new EventMessage(Event.MediaControlCreated), MessageTokens.App);
+            Messenger.Default.Send<EventMessage>(new EventMessage(Event.MediaControlCreated));
+
+            _timer = new DispatcherTimer();
+            _timer.Interval = TimeSpan.FromMilliseconds(500);
+            _timer.Tick += new EventHandler(_timer_Tick);
+            _timer.Start();
+        }
+
+        private void _timer_Tick(object sender, EventArgs e)
+        {
+            Messenger.Default.Send(new EventMessage(Event.DispatcherTimerTick));
         }
 
         private void _mediaControl_MWContextMenu(object sender, ScreenPositionEventArgs args)
@@ -36,7 +49,7 @@ namespace Pvp.App.View
   
         private void _mediaControl_MWDoubleClick(object sender, RoutedEventArgs e)
         {
-            Messenger.Default.Send(new EventMessage(Event.VideoAreaDoubleClick), MessageTokens.UI);
+            Messenger.Default.Send(new EventMessage(Event.VideoAreaDoubleClick));
         }
   
         public void _mediaControl_MWMouseMove(object sender, ScreenPositionEventArgs e)

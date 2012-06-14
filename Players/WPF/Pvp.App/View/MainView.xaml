@@ -95,8 +95,8 @@
                           IsChecked="{Binding PlayRate, Mode=TwoWay, Converter={StaticResource DoubleToBooleanValueConverter}, ConverterParameter='2.0'}"/>
             </MenuItem>
             <MenuItem Header="{x:Static res:Resources.mi_volume}">
-                <MenuItem Header="{x:Static res:Resources.mi_volume_up}"/>
-                <MenuItem Header="{x:Static res:Resources.mi_volume_down}"/>
+                <MenuItem Header="{x:Static res:Resources.mi_volume_up}" Command="{Binding Path=VolumeUpCommand}"/>
+                <MenuItem Header="{x:Static res:Resources.mi_volume_down}" Command="{Binding Path=VolumeDownCommand}"/>
                 <MenuItem Header="{x:Static res:Resources.mi_volume_mute}" Command="{Binding Path=MuteCommand}" IsChecked="{Binding Path=IsMute}"/>
             </MenuItem>
             <Separator/>
@@ -161,12 +161,12 @@
                                        ToBeginingCommand="{Binding Path=ToBeginingCommand}"
                                        RepeatCommand="{Binding Path=RepeatCommand}"
                                        MuteCommand="{Binding Path=MuteCommand}"
-                                       VolumeCommand="{Binding Path=VolumeCommand}"
-                                       SeekCommand="{Binding Path=SeekCommand}"
-                                       Duration="{Binding Path=Duration}"
-                                       CurrentPosition="{Binding Path=CurrentPosition}"
+                                       Volume="{Binding Path=Volume, Mode=TwoWay}"
+                                       Duration="{Binding Path=Duration, Mode=OneWay}"
+                                       CurrentPosition="{Binding Path=CurrentPosition, Mode=TwoWay}"
                                        IsRepeat="{Binding Path=IsRepeat}"
-                                       IsMute="{Binding Path=IsMute}">
+                                       IsMute="{Binding Path=IsMute}"
+                                       IsInPlayingMode="{Binding Path=IsInPlayingMode}">
                     <ctrls:FullScreenControlPanel.Visibility>
                         <MultiBinding Converter="{StaticResource FullSceenPanelVisibilityValueConverter}">
                             <Binding Path="IsFullScreen"/>
@@ -190,12 +190,12 @@
                                        ToBeginingCommand="{Binding Path=ToBeginingCommand}"
                                        RepeatCommand="{Binding Path=RepeatCommand}"
                                        MuteCommand="{Binding Path=MuteCommand}"
-                                       VolumeCommand="{Binding Path=VolumeCommand}"
-                                       SeekCommand="{Binding Path=SeekCommand}"
-                                       Duration="{Binding Path=Duration}"
-                                       CurrentPosition="{Binding Path=CurrentPosition}"
+                                       Volume="{Binding Path=Volume, Mode=TwoWay}"
+                                       Duration="{Binding Path=Duration, Mode=OneWay}"
+                                       CurrentPosition="{Binding Path=CurrentPosition, Mode=TwoWay}"
                                        IsRepeat="{Binding Path=IsRepeat}"
-                                       IsMute="{Binding Path=IsMute}">
+                                       IsMute="{Binding Path=IsMute}"
+                                       IsInPlayingMode="{Binding Path=IsInPlayingMode}">
             <ctrls:RegularControlPanel.Visibility>
                 <MultiBinding Converter="{StaticResource RegularControlPanelVisibilityValueConverter}">
                     <Binding Path="IsFullScreen"/>

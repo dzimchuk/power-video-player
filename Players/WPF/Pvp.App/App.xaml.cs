@@ -53,7 +53,7 @@ namespace Pvp.App
         {
             base.OnSessionEnding(e);
 
-            Messenger.Default.Send(new EventMessage(Event.SessionEnding), MessageTokens.App);
+            Messenger.Default.Send(new EventMessage(Event.SessionEnding));
         }
     }
 }

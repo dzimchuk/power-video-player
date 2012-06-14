@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Pvp.App.Messaging
 {
@@ -11,6 +9,8 @@ namespace Pvp.App.Messaging
         VideoAreaDoubleClick,
         MainWindowClosing,
         SessionEnding,
-        MediaControlCreated
+        MediaControlCreated,
+        StateRefreshSuggested,
+        DispatcherTimerTick
     }
 }

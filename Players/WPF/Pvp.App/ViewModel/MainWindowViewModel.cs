@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using GalaSoft.MvvmLight;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Command;
@@ -22,7 +20,7 @@ namespace Pvp.App.ViewModel
 
         public MainWindowViewModel()
         {
-            Messenger.Default.Register<EventMessage>(this, MessageTokens.UI, OnUIEvent);
+            Messenger.Default.Register<EventMessage>(this, OnUIEvent);
             Messenger.Default.Register<PropertyChangedMessageBase>(this, true, OnPropertyChanged);
         }
 

@@ -31,11 +31,13 @@ namespace Pvp.App.ViewModel
         private bool _isMute;
         private bool _isControlPanelVisible;
         
-        public MainViewModel(IMediaEngineFacade engine, 
-                             ControlPanelViewModel controlViewModel,
-                             IFileSelector fileSelector,
-                             IDialogService dialogService,
-                             IWindowHandleProvider windowHandleProvider)
+        private bool _isInPlayingMode;
+
+        public MainViewModel(IMediaEngineFacade engine,
+            ControlPanelViewModel controlViewModel,
+            IFileSelector fileSelector,
+            IDialogService dialogService,
+            IWindowHandleProvider windowHandleProvider)
         {
             _engine = engine;
             _controlViewModel = controlViewModel;
@@ -44,7 +46,7 @@ namespace Pvp.App.ViewModel
             _windowHandleProvider = windowHandleProvider;
 
             Messenger.Default.Register<PropertyChangedMessageBase>(this, true, OnPropertyChanged);
-            Messenger.Default.Register<EventMessage>(this, MessageTokens.App, true, OnEventMessage);
+            Messenger.Default.Register<EventMessage>(this, true, OnEventMessage);
             Messenger.Default.Register<DragDropMessage>(this, true, OnDragDrop);
 
             FlipControlPanelVisibility(); // TODO: read it from settings
@@ -130,7 +132,7 @@ namespace Pvp.App.ViewModel
                 _engine.PreferredVideoRenderer = MediaEngineServiceProvider.RecommendedRenderer;
 
                 _engine.BuildGraph(filename, MediaSourceType.File);
-                UpdateMenu();
+                UpdateState();
             }
         }
 
@@ -145,7 +147,7 @@ namespace Pvp.App.ViewModel
                             () =>
                             {
                                 _engine.ResetGraph();
-                                UpdateMenu();
+                                UpdateState();
                             },
                             () =>
                             {
@@ -240,42 +242,37 @@ namespace Pvp.App.ViewModel
 
         public ICommand PlayCommand
         {
-            get
-            {
-                return ControlViewModel.PlayCommand;
-            }
+            get { return ControlViewModel.PlayCommand; }
         }
 
         public ICommand PauseCommand
         {
-            get
-            {
-                return ControlViewModel.PauseCommand;
-            }
+            get { return ControlViewModel.PauseCommand; }
         }
 
         public ICommand StopCommand
         {
-            get
-            {
-                return ControlViewModel.StopCommand;
-            }
+            get { return ControlViewModel.StopCommand; }
         }
 
         public ICommand RepeatCommand
         {
-            get
-            {
-                return ControlViewModel.RepeatCommand;
-            }
+            get { return ControlViewModel.RepeatCommand; }
         }
 
         public ICommand MuteCommand
         {
-            get
-            {
-                return ControlViewModel.MuteCommand;
-            }
+            get { return ControlViewModel.MuteCommand; }
+        }
+
+        public ICommand VolumeUpCommand
+        {
+            get { return ControlViewModel.VolumeUpCommand; }
+        }
+
+        public ICommand VolumeDownCommand
+        {
+            get { return ControlViewModel.VolumeDownCommand; }
         }
 
         public VideoSize VideoSize
@@ -327,6 +324,12 @@ namespace Pvp.App.ViewModel
             }
         }
 
+        private void NotifyOnPlayingModeChanged()
+        {
+            _isInPlayingMode = _engine.GraphState != GraphState.Reset;
+            Messenger.Default.Send(new PropertyChangedMessage<bool>(this, !_isInPlayingMode, _isInPlayingMode, "IsInPlayingMode"));
+        }
+
         private void OnDragDrop(DragDropMessage message)
         {
             PlayFile(message.Content);
@@ -363,6 +366,13 @@ namespace Pvp.App.ViewModel
                 _engine.DvdParentalChange += OnUserDecisionNeeded;
                 _engine.PartialSuccess += OnUserDecisionNeeded;
             }
+            else if (message.Content == Event.DispatcherTimerTick)
+            {
+                if (_isInPlayingMode)
+                {
+                    Messenger.Default.Send(new EventMessage(Event.StateRefreshSuggested));
+                }
+            }
         }
 
         private void OnUserDecisionNeeded(object sender, UserDecisionEventArgs e)
@@ -370,11 +380,18 @@ namespace Pvp.App.ViewModel
             e.Accept = _dialogService.DisplayYesNoDialog(e.Message);
         }
 
+        private void UpdateState()
+        {
+            UpdateMenu();
+            RaisePropertyChanged("PlayRateChangePossible");
+            NotifyOnPlayingModeChanged();
+
+            Messenger.Default.Send(new EventMessage(Event.StateRefreshSuggested));
+        }
+
         private void UpdateMenu()
         {
             UpdateFiltersMenu();
-
-            RaisePropertyChanged("PlayRateChangePossible");
         }
 
         internal class NumberedCommand

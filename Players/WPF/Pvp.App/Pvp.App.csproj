@@ -81,12 +81,14 @@
     <Compile Include="Controls\CommandSlider.cs" />
     <Compile Include="Controls\ControlPanelBase.cs" />
     <Compile Include="Controls\FullScreenControlPanel.cs" />
+    <Compile Include="ViewModel\IDurationProvider.cs" />
     <Compile Include="Controls\RegularControlPanel.cs" />
     <Compile Include="Composition\DependencyResolver.cs" />
     <Compile Include="Composition\IDependencyResolver.cs" />
     <Compile Include="Composition\NinjectDependencyResolver.cs" />
     <Compile Include="Composition\PvpModule.cs" />
-    <Compile Include="Controls\TimeSpanValueConverter.cs" />
+    <Compile Include="Controls\TimeSpanToDoubleValueConverter.cs" />
+    <Compile Include="Controls\TimeSpanToStringValueConverter.cs" />
     <Compile Include="IMediaControlAcceptor.cs" />
     <Compile Include="IMediaEngineFacade.cs" />
     <Compile Include="Messaging\DragDropMessage.cs" />
@@ -94,7 +96,6 @@
     <Compile Include="Service\MediaEngineFacade.cs" />
     <Compile Include="Messaging\CommandMessage.cs" />
     <Compile Include="Messaging\Command.cs" />
-    <Compile Include="Messaging\MessageTokens.cs" />
     <Compile Include="Messaging\Event.cs" />
     <Compile Include="Messaging\EventMessage.cs" />
     <Compile Include="Resources\Resources.Designer.cs">
