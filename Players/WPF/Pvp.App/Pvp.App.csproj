@@ -81,6 +81,12 @@
     <Compile Include="Controls\CommandSlider.cs" />
     <Compile Include="Controls\ControlPanelBase.cs" />
     <Compile Include="Controls\FullScreenControlPanel.cs" />
+    <Compile Include="Controls\WrapBreakPanel.cs" />
+    <Compile Include="Service\DriveInfo.cs" />
+    <Compile Include="Service\DriveService.cs" />
+    <Compile Include="ViewModel\CDRomCommand.cs" />
+    <Compile Include="ViewModel\IDriveInfo.cs" />
+    <Compile Include="ViewModel\IDriveService.cs" />
     <Compile Include="ViewModel\IDurationProvider.cs" />
     <Compile Include="Controls\RegularControlPanel.cs" />
     <Compile Include="Composition\DependencyResolver.cs" />
@@ -116,6 +122,8 @@
     <Compile Include="ViewModel\IWindowHandleProvider.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
+    <Compile Include="ViewModel\NumberedCommand.cs" />
+    <Compile Include="ViewModel\TitleChapterCommand.cs" />
     <Compile Include="View\AspectRatioToBooleanValueConverter.cs" />
     <Compile Include="View\BooleanToVisibilityValueConverter.cs" />
     <Compile Include="View\DoubleToBooleanValueConverter.cs" />
@@ -125,6 +133,7 @@
     <Compile Include="View\MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\TitleChapterTemplateSelector.cs" />
     <Compile Include="View\VideoSizeToBooleanValueConverter.cs" />
     <Page Include="logo.xaml">
       <Generator>MSBuild:Compile</Generator>

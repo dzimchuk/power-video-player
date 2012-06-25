@@ -85,5 +85,10 @@ namespace Pvp.App.View
                 }
             }
         }
+
+        private void ContextMenu_Opened(object sender, RoutedEventArgs e)
+        {
+            Messenger.Default.Send(new EventMessage(Event.ContextMenuOpened));
+        }
     }
 }
