@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.ObjectModel;
+using System.Text;
+using System.Threading;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using Pvp.App.Messaging;
+using Pvp.Core.DirectShow;
 using Pvp.Core.MediaEngine;
 
 namespace Pvp.App.ViewModel
@@ -18,6 +21,7 @@ namespace Pvp.App.ViewModel
         private readonly IFileSelector _fileSelector;
         private readonly IDialogService _dialogService;
         private readonly IWindowHandleProvider _windowHandleProvider;
+        private readonly IDriveService _driveService;
 
         private ICommand _openCommand;
         private ICommand _closeCommand;
@@ -37,17 +41,21 @@ namespace Pvp.App.ViewModel
             ControlPanelViewModel controlViewModel,
             IFileSelector fileSelector,
             IDialogService dialogService,
-            IWindowHandleProvider windowHandleProvider)
+            IWindowHandleProvider windowHandleProvider,
+            IDriveService driveService)
         {
             _engine = engine;
             _controlViewModel = controlViewModel;
             _fileSelector = fileSelector;
             _dialogService = dialogService;
             _windowHandleProvider = windowHandleProvider;
+            _driveService = driveService;
 
             Messenger.Default.Register<PropertyChangedMessageBase>(this, true, OnPropertyChanged);
             Messenger.Default.Register<EventMessage>(this, true, OnEventMessage);
             Messenger.Default.Register<DragDropMessage>(this, true, OnDragDrop);
+
+            PopulateCDRomMenu();
 
             FlipControlPanelVisibility(); // TODO: read it from settings
         }
@@ -132,6 +140,19 @@ namespace Pvp.App.ViewModel
                 _engine.PreferredVideoRenderer = MediaEngineServiceProvider.RecommendedRenderer;
 
                 _engine.BuildGraph(filename, MediaSourceType.File);
+                UpdateState();
+            }
+        }
+
+        private void PlayDvd(string driveName)
+        {
+            if (!string.IsNullOrEmpty(driveName))
+            {
+                // TODO set video renderer somewhere else
+                _engine.PreferredVideoRenderer = MediaEngineServiceProvider.RecommendedRenderer;
+
+                string source = driveName + "Video_ts";
+                _engine.BuildGraph(source, MediaSourceType.Dvd);
                 UpdateState();
             }
         }
@@ -365,13 +386,75 @@ namespace Pvp.App.ViewModel
 
                 _engine.DvdParentalChange += OnUserDecisionNeeded;
                 _engine.PartialSuccess += OnUserDecisionNeeded;
+                _engine.ModifyMenu += _engine_ModifyMenu;
             }
             else if (message.Content == Event.DispatcherTimerTick)
             {
                 if (_isInPlayingMode)
                 {
                     Messenger.Default.Send(new EventMessage(Event.StateRefreshSuggested));
+
+                    UpdateMenusCheckedStatus();
                 }
+            }
+            else if (message.Content == Event.ContextMenuOpened)
+            {
+            	ScanCDRomDrives();
+            }
+        }
+  
+        private void UpdateMenusCheckedStatus()
+        {
+            var dvdAngle = _engine.CurrentAngle;
+            foreach (var item in _dvdAngles)
+            {
+                bool toBeChecked = item.Number == dvdAngle;
+                if (item.IsChecked != toBeChecked)
+                    item.IsChecked = toBeChecked;
+            }
+
+            var subpictureStream = _engine.CurrentSubpictureStream;
+            foreach (var item in _dvdSubpictureStreams)
+            {
+                bool toBeChecked = false;
+                if (item.Number == -1)
+                {
+                    toBeChecked = _engine.IsSubpictureEnabled();
+                }
+                else
+                {
+                    toBeChecked = item.Number == subpictureStream;
+                }
+
+                if (item.IsChecked != toBeChecked)
+                    item.IsChecked = toBeChecked;
+            }
+
+            var audioStream = _engine.CurrentAudioStream;
+            foreach (var item in _audioStreams)
+            {
+                bool toBeChecked = item.Number == audioStream;
+                if (item.IsChecked != toBeChecked)
+                    item.IsChecked = toBeChecked;
+            }
+
+            var title = _engine.CurrentTitle;
+            var chapter = _engine.CurrentChapter;
+            foreach (var item in _dvdChapters)
+            {
+            	CheckTitleChaperMenuItem(item, title, chapter);
+            }
+        }
+
+        private void CheckTitleChaperMenuItem(TitleChapterCommand item, int currentTitle, int currentChapter)
+        {
+            bool toBeChecked = item.SubItems.Any() ? item.Title == currentTitle : (item.Title == currentTitle && item.Chapter == currentChapter);
+            if (item.IsChecked != toBeChecked)
+                item.IsChecked = toBeChecked;
+
+            foreach (var subItem in item.SubItems)
+            {
+                CheckTitleChaperMenuItem(subItem, currentTitle, currentChapter);
             }
         }
 
@@ -388,26 +471,91 @@ namespace Pvp.App.ViewModel
 
             Messenger.Default.Send(new EventMessage(Event.StateRefreshSuggested));
         }
+        
+        private readonly ObservableCollection<CDRomCommand> _cdRomMenuItems = new ObservableCollection<CDRomCommand>();
+        public ObservableCollection<CDRomCommand> CDRomMenuItems
+        {
+            get { return _cdRomMenuItems; }
+        }
+
+        private void PopulateCDRomMenu()
+        {
+            var command = new RelayCommand<CDRomCommand>(
+                d =>
+                {
+                    if (d != null)
+                    {
+                    	PlayDvd(d.DriveInfo.Name);
+                    }
+                },
+                d =>
+                {
+                    return d != null ? d.IsEnabled : false;
+                });
+
+        	var drives = _driveService.GetAvailableCDRomDrives();
+            foreach (var drive in drives)
+            {
+                _cdRomMenuItems.Add(new CDRomCommand(SynchronizationContext.Current)
+                {
+                    DriveInfo = drive,
+                    Title = drive.Name,
+                    Command = command
+                });
+            }
+        }
+
+        private void ScanCDRomDrives()
+        {
+            ThreadPool.QueueUserWorkItem(state =>
+            {
+                var builder = new StringBuilder();
+
+                foreach (var item in _cdRomMenuItems)
+                {
+                    item.IsEnabled = false;
+                    builder.Append(item.DriveInfo.Name);
+                    try
+                    {
+                        if (item.DriveInfo.IsReady)
+                        {
+                        	builder.Append(item.DriveInfo.VolumeLabel);
+
+                            item.Title = builder.ToString();
+                            item.IsEnabled = true;
+                        }
+                    }
+                    catch {}
+
+                    item.Title = builder.ToString();
+                    builder.Remove(0, builder.Length);
+                }
+            });
+        }
 
         private void UpdateMenu()
         {
             UpdateFiltersMenu();
+            UpdateDvdMenu();
+            UpdateDvdMenuLanguagesMenu();
+            UpdateDvdAnglesMenu();
+            UpdateDvdSubpictureStreamsMenu();
+            UpdateAudioStreamsMenu();
+            UpdateDvdChaptersMenu();
         }
 
-        internal class NumberedCommand
+        private void _engine_ModifyMenu(object sender, EventArgs e)
         {
-            public int Number { get; set; }
-            public string Title { get; set; }
-            public ICommand Command { get; set; }
+            UpdateMenu();
         }
-
-        private readonly ObservableCollection<NumberedCommand> _filters = new ObservableCollection<NumberedCommand>();
+                
         private void UpdateFiltersMenu()
         {
+            _filters.Clear();
+
             if (_engine.GraphState == GraphState.Reset)
             {
-                _filters.Clear();
-                ShowFiltersMenu = false;
+                FiltersMenuVisible = false;
             }
             else
             {
@@ -415,43 +563,487 @@ namespace Pvp.App.ViewModel
                 if (last > 15)
                     last = 15;
 
+                var command = new GenericRelayCommand<NumberedCommand>(
+                    nc =>
+                    {
+                        if (nc != null)
+                            _engine.DisplayFilterPropPage(_windowHandleProvider.Handle, nc.Number, true);
+                    },
+                    nc =>
+                    {
+                        return nc != null ? _engine.DisplayFilterPropPage(_windowHandleProvider.Handle, nc.Number, false) : false;
+                    });
+
                 for (int i = 0; i < last; i++)
                 {
-                    _filters.Add(new NumberedCommand
-                        {
-                            Number = i,
-                            Title = _engine.GetFilterName(i),
-                            Command = new GenericRelayCommand<NumberedCommand>(
-                                nc =>
-                                {
-                                    if (nc != null)
-                                        _engine.DisplayFilterPropPage(_windowHandleProvider.Handle, nc.Number, true);
-                                },
-                                nc =>
-                                {
-                                    return nc != null ? _engine.DisplayFilterPropPage(_windowHandleProvider.Handle, nc.Number, false) : false;
-                                })
-                        });
+                    _filters.Add(new NumberedCommand { Number = i, Title = _engine.GetFilterName(i), Command = command });
                 }
 
-                ShowFiltersMenu = true;
+                FiltersMenuVisible = true;
             }
         }
 
-        private bool _showFiltersMenu;
-        public bool ShowFiltersMenu
+        private bool _filtersMenuVisible;
+        public bool FiltersMenuVisible
         {
-            get { return _showFiltersMenu; }
+            get { return _filtersMenuVisible; }
             set
             {
-                _showFiltersMenu = value;
-                RaisePropertyChanged("ShowFiltersMenu");
+                _filtersMenuVisible = value;
+                RaisePropertyChanged("FiltersMenuVisible");
             }
         }
 
+        private readonly ObservableCollection<NumberedCommand> _filters = new ObservableCollection<NumberedCommand>();
         public ObservableCollection<NumberedCommand> Filters
         {
             get { return _filters; }
+        }
+
+        private bool _dvdMenuVisible;
+        public bool DvdMenuVisible
+        {
+            get { return _dvdMenuVisible; }
+            set
+            {
+                _dvdMenuVisible = value;
+                RaisePropertyChanged("DvdMenuVisible");
+            }
+        }
+
+        private readonly ObservableCollection<NumberedCommand> _dvdMenuItems = new ObservableCollection<NumberedCommand>();
+        public ObservableCollection<NumberedCommand> DvdMenuItems
+        {
+            get { return _dvdMenuItems; }
+        }
+
+        private void UpdateDvdMenu()
+        {
+        	_dvdMenuItems.Clear();
+            DvdMenuVisible = false;
+
+            if (_engine.SourceType == SourceType.DVD)
+            {
+                var command = new GenericRelayCommand<NumberedCommand>(
+                    nc =>
+                    {
+                        if (nc != null)
+                        {
+                            _engine.ShowMenu((DVD_MENU_ID)nc.Number);
+                        }
+                    },
+                    nc =>
+                    {
+                        var enabled = false;
+
+                        if (nc != null)
+                        {
+                            VALID_UOP_FLAG uops = _engine.UOPS;
+                            DVD_MENU_ID id = (DVD_MENU_ID)nc.Number;
+                            switch (id)
+                            {
+                                case DVD_MENU_ID.DVD_MENU_Title:
+                                    enabled = (uops & VALID_UOP_FLAG.UOP_FLAG_ShowMenu_Title) == 0;
+                                    break;
+                                case DVD_MENU_ID.DVD_MENU_Root:
+                                    enabled = (uops & VALID_UOP_FLAG.UOP_FLAG_ShowMenu_Root) == 0;
+                                    break;
+                                case DVD_MENU_ID.DVD_MENU_Subpicture:
+                                    enabled = (uops & VALID_UOP_FLAG.UOP_FLAG_ShowMenu_SubPic) == 0;
+                                    break;
+                                case DVD_MENU_ID.DVD_MENU_Audio:
+                                    enabled = (uops & VALID_UOP_FLAG.UOP_FLAG_ShowMenu_Audio) == 0;
+                                    break;
+                                case DVD_MENU_ID.DVD_MENU_Angle:
+                                    enabled = (uops & VALID_UOP_FLAG.UOP_FLAG_ShowMenu_Angle) == 0;
+                                    break;
+                                case DVD_MENU_ID.DVD_MENU_Chapter:
+                                    enabled = (uops & VALID_UOP_FLAG.UOP_FLAG_ShowMenu_Chapter) == 0;
+                                    break;
+                            }
+                        }
+
+                        return enabled;
+                    });
+
+                _dvdMenuItems.Add(new NumberedCommand
+                {
+                    Title = Resources.Resources.mi_title_menu,
+                    Command = command,
+                    Number = (int)DVD_MENU_ID.DVD_MENU_Title
+                });
+
+                _dvdMenuItems.Add(new NumberedCommand
+                {
+                    Title = Resources.Resources.mi_root_menu,
+                    Command = command,
+                    Number = (int)DVD_MENU_ID.DVD_MENU_Root
+                });
+
+                _dvdMenuItems.Add(new NumberedCommand
+                {
+                    Title = Resources.Resources.mi_subpicture_menu,
+                    Command = command,
+                    Number = (int)DVD_MENU_ID.DVD_MENU_Subpicture
+                });
+
+                _dvdMenuItems.Add(new NumberedCommand
+                {
+                    Title = Resources.Resources.mi_audio_menu,
+                    Command = command,
+                    Number = (int)DVD_MENU_ID.DVD_MENU_Audio
+                });
+
+                _dvdMenuItems.Add(new NumberedCommand
+                {
+                    Title = Resources.Resources.mi_angle_menu,
+                    Command = command,
+                    Number = (int)DVD_MENU_ID.DVD_MENU_Angle
+                });
+
+                _dvdMenuItems.Add(new NumberedCommand
+                {
+                    Title = Resources.Resources.mi_chapter_menu,
+                    Command = command,
+                    Number = (int)DVD_MENU_ID.DVD_MENU_Chapter
+                });
+
+                DvdMenuVisible = true;
+            }
+        }
+
+        private ICommand _dvdResumeCommand;
+        public ICommand DvdResumeCommand
+        {
+            get
+            {
+                if (_dvdResumeCommand == null)
+                {
+                    _dvdResumeCommand = new RelayCommand(
+                        () =>
+                        {
+                            _engine.ResumeDVD();
+                        },
+                        () =>
+                        {
+                            return _engine.IsResumeDVDEnabled();
+                        });
+                }
+
+                return _dvdResumeCommand;
+            }
+        }
+
+        private void UpdateDvdMenuLanguagesMenu()
+        {
+            _dvdMenuLanguages.Clear();
+            DvdMenuLanguagesMenuVisible = false;
+
+            if (_engine.GraphState != GraphState.Reset)
+            {
+                var nLang = _engine.MenuLangCount;
+
+                if (nLang > 0)
+                {
+                    if (nLang > 10)
+                        nLang = 10;
+
+                    var command = new GenericRelayCommand<NumberedCommand>(
+                        nc =>
+                        {
+                            if (nc != null)
+                                _engine.SetMenuLang(nc.Number);
+                        },
+                        nc =>
+                        {
+                            return nc != null ? _engine.MenuLangCount > 1 : false;
+                        });
+
+                    for (int i = 0; i < nLang; i++)
+                    {
+                        _dvdMenuLanguages.Add(new NumberedCommand { Number = i, Title = _engine.GetMenuLangName(i), Command = command });
+                    }
+
+                    DvdMenuLanguagesMenuVisible = true;
+                }
+            }
+        }
+
+        private bool _dvdMenuLanguagesMenuVisible;
+        public bool DvdMenuLanguagesMenuVisible
+        {
+            get { return _dvdMenuLanguagesMenuVisible; }
+            set
+            {
+                _dvdMenuLanguagesMenuVisible = value;
+                RaisePropertyChanged("DvdMenuLanguagesMenuVisible");
+            }
+        }
+
+        private readonly ObservableCollection<NumberedCommand> _dvdMenuLanguages = new ObservableCollection<NumberedCommand>();
+        public ObservableCollection<NumberedCommand> DvdMenuLanguages
+        {
+            get { return _dvdMenuLanguages; }
+        }
+
+        private void UpdateDvdAnglesMenu()
+        {
+            _dvdAngles.Clear();
+            DvdAnglesMenuVisible = false;
+
+            if (_engine.GraphState != GraphState.Reset)
+            {
+                int ulAngles = _engine.AnglesAvailable;
+
+                if (ulAngles > 1)
+                {
+                    var command = new GenericRelayCommand<NumberedCommand>(
+                        nc =>
+                        {
+                            if (nc != null)
+                                _engine.CurrentAngle = nc.Number;
+                        },
+                        nc =>
+                        {
+                            return nc != null ? (_engine.UOPS & VALID_UOP_FLAG.UOP_FLAG_Select_Angle) == 0 : false;
+                        });
+
+                    for (int i = 0; i < ulAngles; i++)
+                    {
+                        _dvdAngles.Add(new NumberedCommand { Number = i + 1, Title = string.Format(Resources.Resources.mi_angle_format, i + 1), Command = command });
+                    }
+
+                    DvdAnglesMenuVisible = true;
+                }
+            }
+        }
+
+        private bool _dvdAnglesMenuVisible;
+        public bool DvdAnglesMenuVisible
+        {
+            get { return _dvdAnglesMenuVisible; }
+            set
+            {
+                _dvdAnglesMenuVisible = value;
+                RaisePropertyChanged("DvdAnglesMenuVisible");
+            }
+        }
+
+        private readonly ObservableCollection<NumberedCommand> _dvdAngles = new ObservableCollection<NumberedCommand>();
+        public ObservableCollection<NumberedCommand> DvdAngles
+        {
+            get { return _dvdAngles; }
+        }
+
+        private void UpdateDvdSubpictureStreamsMenu()
+        {
+            _dvdSubpictureStreams.Clear();
+            DvdSubpictureStreamsMenuVisible = false;
+
+            if (_engine.GraphState != GraphState.Reset)
+            {
+                int nStreams = _engine.NumberOfSubpictureStreams;
+
+                if (nStreams > 0)
+                {
+                    var command = new GenericRelayCommand<NumberedCommand>(
+                        nc =>
+                        {
+                            if (nc != null)
+                            {
+                                if (nc.Number == -1)
+                                {
+                                    _engine.EnableSubpicture(!_engine.IsSubpictureEnabled());
+                                }
+                                else
+                                {
+                                    _engine.CurrentSubpictureStream = nc.Number;
+                                }
+                            }
+                        },
+                        nc =>
+                        {
+                            var enabled = false;
+                            if (nc != null)
+                            {
+                                if (nc.Number == -1)
+                                {
+                                    enabled = (_engine.UOPS & VALID_UOP_FLAG.UOP_FLAG_Select_SubPic_Stream) == 0;
+                                }
+                                else
+                                {
+                                    enabled = (_engine.UOPS & VALID_UOP_FLAG.UOP_FLAG_Select_SubPic_Stream) == 0 &&
+                                        _engine.IsSubpictureStreamEnabled(nc.Number);
+                                }
+                            }
+
+                            return enabled;
+                        });
+
+                    _dvdSubpictureStreams.Add(new NumberedCommand { Number = -1, Title = Resources.Resources.mi_display_subpictures, Command = command });
+                    for (int i = 0; i < nStreams; i++)
+                    {
+                        _dvdSubpictureStreams.Add(new NumberedCommand { Number = i, Title = _engine.GetSubpictureStreamName(i), Command = command });
+                    }
+
+                    DvdSubpictureStreamsMenuVisible = true;
+                }
+            }
+        }
+
+        private bool _dvdSubpictureStreamsMenuVisible;
+        public bool DvdSubpictureStreamsMenuVisible
+        {
+            get { return _dvdSubpictureStreamsMenuVisible; }
+            set
+            {
+                _dvdSubpictureStreamsMenuVisible = value;
+                RaisePropertyChanged("DvdSubpictureStreamsMenuVisible");
+            }
+        }
+
+        private readonly ObservableCollection<NumberedCommand> _dvdSubpictureStreams = new ObservableCollection<NumberedCommand>();
+        public ObservableCollection<NumberedCommand> DvdSubpictureStreams
+        {
+            get { return _dvdSubpictureStreams; }
+        }
+
+        private void UpdateAudioStreamsMenu()
+        {
+            _audioStreams.Clear();
+            AudioStreamsMenuVisible = false;
+
+            if (_engine.GraphState != GraphState.Reset)
+            {
+                int nStreams = _engine.AudioStreams;
+
+                if (nStreams > 0)
+                {
+                    var command = new GenericRelayCommand<NumberedCommand>(
+                        nc =>
+                        {
+                            if (nc != null)
+                                _engine.CurrentAudioStream = nc.Number;
+                        },
+                        nc =>
+                        {
+                            return nc != null ? 
+                                    (_engine.IsAudioStreamEnabled(nc.Number)) && (_engine.UOPS & VALID_UOP_FLAG.UOP_FLAG_Select_Audio_Stream) == 0 
+                                    : 
+                                    false;
+                        });
+
+                    if (nStreams > 8)
+                        nStreams = 8;
+
+                    for (int i = 0; i < nStreams; i++)
+                    {
+                        _audioStreams.Add(new NumberedCommand { Number = i, Title = _engine.GetAudioStreamName(i), Command = command });
+                    }
+
+                    AudioStreamsMenuVisible = true;
+                }
+            }
+        }
+
+        private bool _audioStreamsMenuVisible;
+        public bool AudioStreamsMenuVisible
+        {
+            get { return _audioStreamsMenuVisible; }
+            set
+            {
+                _audioStreamsMenuVisible = value;
+                RaisePropertyChanged("AudioStreamsMenuVisible");
+            }
+        }
+
+        private readonly ObservableCollection<NumberedCommand> _audioStreams = new ObservableCollection<NumberedCommand>();
+        public ObservableCollection<NumberedCommand> AudioStreams
+        {
+            get { return _audioStreams; }
+        }
+
+        private void UpdateDvdChaptersMenu()
+        {
+            _dvdChapters.Clear();
+            DvdChaptersMenuVisible = false;
+
+            if (_engine.GraphState != GraphState.Reset)
+            {
+                int ulTitles = _engine.NumberOfTitles;
+
+                if (ulTitles > 0)
+                {
+                    var command = new GenericRelayCommand<TitleChapterCommand>(
+                        tc =>
+                        {
+                            if (tc != null)
+                                _engine.GoTo(tc.Title, tc.Chapter);
+                        },
+                        tc =>
+                        {
+                            return tc != null ?
+                                    (_engine.UOPS & VALID_UOP_FLAG.UOP_FLAG_Play_Chapter) == 0
+                                    :
+                                    false;
+                        });
+
+                    if (ulTitles == 1)
+                    {
+                    	int nChapters = _engine.GetNumChapters(1);
+                        for (int i = 1; i <= nChapters; i++)
+                        {
+                            _dvdChapters.Add(new TitleChapterCommand
+                            {
+                                Title = 1,
+                                Chapter = i,
+                                Command = command,
+                                DisplayName = string.Format(Resources.Resources.mi_chapter_format, i)
+                            });
+                        }
+                    }
+                    else
+                    {
+                        for (int title = 1; title <= ulTitles; title++)
+                        {
+                            var titleItem = new TitleChapterCommand { Title = title, DisplayName = string.Format(Resources.Resources.mi_title_format, title) };
+                            
+                            int nChapters = _engine.GetNumChapters(title);
+                            for (int i = 1; i <= nChapters; i++)
+                            {
+                                titleItem.SubItems.Add(new TitleChapterCommand
+                                {
+                                    Title = title,
+                                    Chapter = i,
+                                    Command = command,
+                                    DisplayName = string.Format(Resources.Resources.mi_chapter_format, i)
+                                });
+                            }
+
+                            _dvdChapters.Add(titleItem);
+                        }
+                    }
+
+                    DvdChaptersMenuVisible = true;
+                }
+            }
+        }
+
+        private bool _dvdChaptersMenuVisible;
+        public bool DvdChaptersMenuVisible
+        {
+            get { return _dvdChaptersMenuVisible; }
+            set
+            {
+                _dvdChaptersMenuVisible = value;
+                RaisePropertyChanged("DvdChaptersMenuVisible");
+            }
+        }
+
+        private readonly ObservableCollection<TitleChapterCommand> _dvdChapters = new ObservableCollection<TitleChapterCommand>();
+        public ObservableCollection<TitleChapterCommand> DvdChapters
+        {
+            get { return _dvdChapters; }
         }
     }
 }

@@ -11,6 +11,7 @@ namespace Pvp.App.Messaging
         SessionEnding,
         MediaControlCreated,
         StateRefreshSuggested,
-        DispatcherTimerTick
+        DispatcherTimerTick,
+        ContextMenuOpened
     }
 }
