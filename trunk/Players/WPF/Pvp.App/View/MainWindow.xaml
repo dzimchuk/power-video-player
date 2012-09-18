@@ -9,5 +9,5 @@
         DataContext="{x:Static app:ViewModelLocator.MainWindowViewModel}"
         Style="{DynamicResource MainWindowStyle}"
         AllowDrop="True">
-    <view:MainView />
+    <view:MainView x:Name="_mainView" />
 </Window>

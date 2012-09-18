@@ -8,8 +8,10 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using Pvp.App.Messaging;
+using Pvp.App.ViewModel.Settings;
 using Pvp.Core.DirectShow;
 using Pvp.Core.MediaEngine;
+using Pvp.Core.Wpf;
 
 namespace Pvp.App.ViewModel
 {
@@ -22,6 +24,7 @@ namespace Pvp.App.ViewModel
         private readonly IDialogService _dialogService;
         private readonly IWindowHandleProvider _windowHandleProvider;
         private readonly IDriveService _driveService;
+        private readonly ISettingsProvider _settingsProvider;
 
         private ICommand _openCommand;
         private ICommand _closeCommand;
@@ -30,6 +33,8 @@ namespace Pvp.App.ViewModel
         private ICommand _exitCommand;
         private ICommand _controlPanelVisibilityToggleCommand;
 
+        private ICommand _settingsCommand;
+
         private bool _isFullScreen;
         private bool _isRepeat;
         private bool _isMute;
@@ -37,12 +42,18 @@ namespace Pvp.App.ViewModel
         
         private bool _isInPlayingMode;
 
+        private bool _showLogo;
+        private bool _autoPlay;
+
+        private Tuple<double, double> _videoSize;
+
         public MainViewModel(IMediaEngineFacade engine,
             ControlPanelViewModel controlViewModel,
             IFileSelector fileSelector,
             IDialogService dialogService,
             IWindowHandleProvider windowHandleProvider,
-            IDriveService driveService)
+            IDriveService driveService,
+            ISettingsProvider settingsProvider)
         {
             _engine = engine;
             _controlViewModel = controlViewModel;
@@ -50,14 +61,37 @@ namespace Pvp.App.ViewModel
             _dialogService = dialogService;
             _windowHandleProvider = windowHandleProvider;
             _driveService = driveService;
+            _settingsProvider = settingsProvider;
+
+            _settingsProvider.SettingChanged += _settingsProvider_SettingChanged;
+            ReadSettings();
 
             Messenger.Default.Register<PropertyChangedMessageBase>(this, true, OnPropertyChanged);
             Messenger.Default.Register<EventMessage>(this, true, OnEventMessage);
             Messenger.Default.Register<DragDropMessage>(this, true, OnDragDrop);
 
             PopulateCDRomMenu();
+        }
 
-            FlipControlPanelVisibility(); // TODO: read it from settings
+        private void _settingsProvider_SettingChanged(object sender, SettingChangeEventArgs e)
+        {
+            if (e.SettingName.Equals("ShowLogo", StringComparison.InvariantCultureIgnoreCase))
+            {
+                ShowLogo = _settingsProvider.Get("ShowLogo", true);
+            }
+            else if (e.SettingName.Equals("AutoPlay", StringComparison.InvariantCultureIgnoreCase))
+            {
+                AutoPlay = _settingsProvider.Get("AutoPlay", true);
+            }
+        }
+
+        private void ReadSettings()
+        {
+            _showLogo = _settingsProvider.Get("ShowLogo", true);
+            _autoPlay = _settingsProvider.Get("AutoPlay", true);
+
+            _isControlPanelVisible = !_settingsProvider.Get("ControlPanelVisible", true);
+            FlipControlPanelVisibility();
         }
 
         public ControlPanelViewModel ControlViewModel
@@ -109,6 +143,9 @@ namespace Pvp.App.ViewModel
         {
             IsControlPanelVisible = !IsControlPanelVisible;
             Messenger.Default.Send(new PropertyChangedMessage<bool>(this, !IsControlPanelVisible, IsControlPanelVisible, "IsControlPanelVisible"));
+
+            _settingsProvider.Set("ControlPanelVisible", IsControlPanelVisible);
+            _settingsProvider.Save();
         }
 
         public ICommand OpenCommand
@@ -300,8 +337,18 @@ namespace Pvp.App.ViewModel
         {
             get { return _engine.VideoSize; }
             set 
-            { 
+            {
+                if (_engine.VideoSize == value)
+                    return;
+
+                if (_videoSize != null)
+                {
+                    Messenger.Default.Send(new EventMessage(Event.MainWindowResizeSuggested,
+                                                            new MainWindowResizeSuggestedEventArgs(value, _videoSize.Item1, _videoSize.Item2)));
+                }
+
                 _engine.VideoSize = value;
+
                 RaisePropertyChanged("VideoSize");
             }
         }
@@ -336,12 +383,23 @@ namespace Pvp.App.ViewModel
             get { return null; }
         }
 
+        private VideoSize _previousVideoSize;
         private void FlipFullScreen(bool sendNotification)
         {
             IsFullScreen = !IsFullScreen;
             if (sendNotification)
             {
                 Messenger.Default.Send(new PropertyChangedMessage<bool>(this, !IsFullScreen, IsFullScreen, "IsFullScreen"));
+            }
+
+            if (IsFullScreen)
+            {
+                _previousVideoSize = _engine.VideoSize;
+                _engine.VideoSize = VideoSize.SIZE_FREE;
+            }
+            else
+            {
+                _engine.VideoSize = _previousVideoSize;
             }
         }
 
@@ -387,6 +445,8 @@ namespace Pvp.App.ViewModel
                 _engine.DvdParentalChange += OnUserDecisionNeeded;
                 _engine.PartialSuccess += OnUserDecisionNeeded;
                 _engine.ModifyMenu += _engine_ModifyMenu;
+
+                _previousVideoSize = VideoSize;
             }
             else if (message.Content == Event.DispatcherTimerTick)
             {
@@ -401,6 +461,14 @@ namespace Pvp.App.ViewModel
             {
             	ScanCDRomDrives();
             }
+            else if (message.Content == Event.InitSize)
+            {
+                var args = (InitSizeEventArgs)message.EventArgs;
+                if (args.NewVideoSize.Width > 0.0 && args.NewVideoSize.Height > 0.0)
+                {
+                    _videoSize = new Tuple<double, double>(args.NewVideoSize.Width, args.NewVideoSize.Height);
+                }
+            }
         }
   
         private void UpdateMenusCheckedStatus()
@@ -408,9 +476,7 @@ namespace Pvp.App.ViewModel
             var dvdAngle = _engine.CurrentAngle;
             foreach (var item in _dvdAngles)
             {
-                bool toBeChecked = item.Number == dvdAngle;
-                if (item.IsChecked != toBeChecked)
-                    item.IsChecked = toBeChecked;
+                item.IsChecked = item.Number == dvdAngle;
             }
 
             var subpictureStream = _engine.CurrentSubpictureStream;
@@ -426,16 +492,13 @@ namespace Pvp.App.ViewModel
                     toBeChecked = item.Number == subpictureStream;
                 }
 
-                if (item.IsChecked != toBeChecked)
-                    item.IsChecked = toBeChecked;
+                item.IsChecked = toBeChecked;
             }
 
             var audioStream = _engine.CurrentAudioStream;
             foreach (var item in _audioStreams)
             {
-                bool toBeChecked = item.Number == audioStream;
-                if (item.IsChecked != toBeChecked)
-                    item.IsChecked = toBeChecked;
+                item.IsChecked = item.Number == audioStream;
             }
 
             var title = _engine.CurrentTitle;
@@ -449,8 +512,7 @@ namespace Pvp.App.ViewModel
         private void CheckTitleChaperMenuItem(TitleChapterCommand item, int currentTitle, int currentChapter)
         {
             bool toBeChecked = item.SubItems.Any() ? item.Title == currentTitle : (item.Title == currentTitle && item.Chapter == currentChapter);
-            if (item.IsChecked != toBeChecked)
-                item.IsChecked = toBeChecked;
+            item.IsChecked = toBeChecked;
 
             foreach (var subItem in item.SubItems)
             {
@@ -465,6 +527,11 @@ namespace Pvp.App.ViewModel
 
         private void UpdateState()
         {
+            if (_engine.GraphState == GraphState.Reset)
+            {
+                _videoSize = null;
+            }
+            
             UpdateMenu();
             RaisePropertyChanged("PlayRateChangePossible");
             NotifyOnPlayingModeChanged();
@@ -1041,9 +1108,49 @@ namespace Pvp.App.ViewModel
         }
 
         private readonly ObservableCollection<TitleChapterCommand> _dvdChapters = new ObservableCollection<TitleChapterCommand>();
+
         public ObservableCollection<TitleChapterCommand> DvdChapters
         {
             get { return _dvdChapters; }
+        }
+
+        public ICommand SettingsCommand
+        {
+            get
+            {
+                if (_settingsCommand == null)
+                {
+                    _settingsCommand = new RelayCommand(
+                        () =>
+                        {
+                            _dialogService.DisplaySettingsDialog();
+                        });
+                }
+
+                return _settingsCommand;
+            }
+        }
+
+        public bool ShowLogo
+        {
+            get { return _showLogo; }
+            set
+            {
+                if (value.Equals(_showLogo)) return;
+                _showLogo = value;
+                RaisePropertyChanged("ShowLogo");
+            }
+        }
+
+        public bool AutoPlay
+        {
+            get { return _autoPlay; }
+            set
+            {
+                if (value.Equals(_autoPlay)) return;
+                _autoPlay = value;
+                RaisePropertyChanged("AutoPlay");
+            }
         }
     }
 }

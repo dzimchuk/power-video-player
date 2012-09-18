@@ -16,6 +16,7 @@ using Pvp.Core.DirectShow;
 using Pvp.Core.MediaEngine;
 using Pvp.Core.MediaEngine.Description;
 using Pvp.Core.MediaEngine.GraphBuilders;
+using System.Windows;
 
 namespace Pvp.Core.Wpf
 {
@@ -138,16 +139,20 @@ namespace Pvp.Core.Wpf
 
         #region General properties (preferences)
 
+        public static readonly DependencyProperty AutoPlayProperty =
+            DependencyProperty.Register("AutoPlay", typeof(bool), typeof(MediaControl), 
+            new PropertyMetadata(default(bool), new PropertyChangedCallback(OnAutoPlayChanged)));
+
+        private static void OnAutoPlayChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var me = (MediaControl)d;
+            me.MediaEngine.AutoPlay = (bool)e.NewValue;
+        }
+
         public bool AutoPlay
         {
-            get
-            {
-                return MediaEngine.AutoPlay;
-            }
-            set
-            {
-                MediaEngine.AutoPlay = value;
-            }
+            get { return (bool)GetValue(AutoPlayProperty); }
+            set { SetValue(AutoPlayProperty, value); }
         }
 
         public bool Repeat

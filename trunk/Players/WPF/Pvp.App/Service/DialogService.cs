@@ -1,14 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using Pvp.App.ViewModel;
 using System.Windows;
+using Pvp.App.View;
+using Pvp.App.ViewModel;
 
 namespace Pvp.App.Service
 {
     internal class DialogService : IDialogService
     {
+        public void DisplaySettingsDialog()
+        {
+            var dlg = new SettingsWindow();
+            dlg.Owner = Application.Current.MainWindow;
+            dlg.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+
+            dlg.ShowDialog();
+        }
+
         public void DisplayMessage(string message)
         {
             MessageBox.Show(message, Resources.Resources.program_name, MessageBoxButton.OK, MessageBoxImage.Information);

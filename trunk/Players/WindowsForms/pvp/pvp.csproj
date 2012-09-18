@@ -258,11 +258,21 @@
     <Compile Include="InfoDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MainForm.cs" />
-    <Compile Include="MainFormBase.cs" />
-    <Compile Include="MainFormControls.cs" />
-    <Compile Include="MainFormFile.cs" />
-    <Compile Include="MainFormSettings.cs" />
+    <Compile Include="MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MainFormBase.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MainFormControls.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MainFormFile.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MainFormSettings.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="PropertyBag.cs" />
     <Compile Include="Resources\Resources.Designer.cs">
       <AutoGen>True</AutoGen>

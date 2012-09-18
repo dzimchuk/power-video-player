@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Pvp.App.ViewModel
 {
@@ -11,5 +9,7 @@ namespace Pvp.App.ViewModel
         void DisplayWarning(string message);
         void DisplayError(string message);
         bool DisplayYesNoDialog(string message);
+
+        void DisplaySettingsDialog();
     }
 }
