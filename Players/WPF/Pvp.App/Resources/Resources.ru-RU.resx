@@ -573,4 +573,37 @@
   <data name="controlbar_volume" xml:space="preserve">
     <value>Громкость</value>
   </data>
+  <data name="apply" xml:space="preserve">
+    <value>Применить</value>
+  </data>
+  <data name="cancel" xml:space="preserve">
+    <value>Отмена</value>
+  </data>
+  <data name="settings_caption" xml:space="preserve">
+    <value>Настройки</value>
+  </data>
+  <data name="settings_general_caption" xml:space="preserve">
+    <value>Общие</value>
+  </data>
+  <data name="settings_general_autoplay" xml:space="preserve">
+    <value>Автоматически проигрывать файл</value>
+  </data>
+  <data name="settings_general_center_window" xml:space="preserve">
+    <value>Размещать окно проигрывателя по центру экрана</value>
+  </data>
+  <data name="settings_general_player_options" xml:space="preserve">
+    <value>Настройки проигрывателя</value>
+  </data>
+  <data name="settings_general_remember_volume" xml:space="preserve">
+    <value>Запоминать уровень громкости</value>
+  </data>
+  <data name="settings_general_show_logo" xml:space="preserve">
+    <value>Показывать логотип</value>
+  </data>
+  <data name="settings_general_start_fullscreen" xml:space="preserve">
+    <value>Запуск в режиме 'на весь экран'</value>
+  </data>
+  <data name="settings_general_topmost" xml:space="preserve">
+    <value>Размещать окно проигрывателя поверх других окон</value>
+  </data>
 </root>

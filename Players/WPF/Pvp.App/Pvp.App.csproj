@@ -82,8 +82,14 @@
     <Compile Include="Controls\ControlPanelBase.cs" />
     <Compile Include="Controls\FullScreenControlPanel.cs" />
     <Compile Include="Controls\WrapBreakPanel.cs" />
+    <Compile Include="Messaging\MainWindowResizeSuggestedEventArgs.cs" />
+    <Compile Include="Messaging\ResizeMainWindowCommandMessage.cs" />
     <Compile Include="Service\DriveInfo.cs" />
     <Compile Include="Service\DriveService.cs" />
+    <Compile Include="ViewModel\Extensions.cs" />
+    <Compile Include="ViewModel\Settings\SettingChangeEventArgs.cs" />
+    <Compile Include="Service\SettingsProvider.cs" />
+    <Compile Include="Util\PropertyBag.cs" />
     <Compile Include="ViewModel\CDRomCommand.cs" />
     <Compile Include="ViewModel\IDriveInfo.cs" />
     <Compile Include="ViewModel\IDriveService.cs" />
@@ -123,15 +129,26 @@
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
     <Compile Include="ViewModel\NumberedCommand.cs" />
+    <Compile Include="ViewModel\Settings\FileTypesSettingsViewModel.cs" />
+    <Compile Include="ViewModel\Settings\FiltersSettingsViewModel.cs" />
+    <Compile Include="ViewModel\Settings\GeneralSettingsViewModel.cs" />
+    <Compile Include="ViewModel\Settings\ISettingsProvider.cs" />
+    <Compile Include="ViewModel\Settings\KeyboardMouseSettingsViewModel.cs" />
+    <Compile Include="ViewModel\Settings\SettingsViewModel.cs" />
+    <Compile Include="ViewModel\Settings\VideoSettingsViewModel.cs" />
     <Compile Include="ViewModel\TitleChapterCommand.cs" />
     <Compile Include="View\AspectRatioToBooleanValueConverter.cs" />
     <Compile Include="View\BooleanToVisibilityValueConverter.cs" />
+    <Compile Include="View\BooleanToWindowStartupLocationValueConverter.cs" />
     <Compile Include="View\DoubleToBooleanValueConverter.cs" />
     <Compile Include="View\FullSceenPanelVisibilityValueConverter.cs" />
     <Compile Include="View\PercentToStringValueConverter.cs" />
     <Compile Include="View\RegularControlPanelVisibilityValueConverter.cs" />
     <Compile Include="View\MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\SettingsWindow.xaml.cs">
+      <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\TitleChapterTemplateSelector.cs" />
     <Compile Include="View\VideoSizeToBooleanValueConverter.cs" />
@@ -169,6 +186,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\MainView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\SettingsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

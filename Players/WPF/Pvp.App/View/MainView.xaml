@@ -186,7 +186,7 @@
                     <MenuItem Header="{x:Static res:Resources.mi_app_lang_default}"/>
                     <MenuItem Header="{x:Static res:Resources.mi_app_lang_russian}"/>
                 </MenuItem>
-                <MenuItem Header="{x:Static res:Resources.mi_preferences}"/>
+                <MenuItem Header="{x:Static res:Resources.mi_preferences}" Command="{Binding Path=SettingsCommand}"/>
                 <MenuItem Header="{x:Static res:Resources.mi_about}"/>
             </MenuItem>
             <MenuItem Header="{x:Static res:Resources.mi_exit}" Command="{Binding Path=ExitCommand}"/>
@@ -201,7 +201,8 @@
         </Grid.RowDefinitions>
 
         <core:MediaControl x:Name="_mediaControl" Grid.Row="0" BorderThickness="0" Background="Black" 
-                           LogoBrush="{StaticResource Logo}" LogoMaxHeight="160" ContextMenu="{StaticResource PvpContextMenu}">
+                           LogoBrush="{StaticResource Logo}" LogoMaxHeight="160" ContextMenu="{StaticResource PvpContextMenu}"
+                           LogoVisible="{Binding ShowLogo}" AutoPlay="{Binding AutoPlay}" InitSize="_mediaControl_InitSize">
             <!--<core:MediaControl.ContextMenu>
                 <StaticResource ResourceKey="PvpContextMenu"/>
             </core:MediaControl.ContextMenu>-->

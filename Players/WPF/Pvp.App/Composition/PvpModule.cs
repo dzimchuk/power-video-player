@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using Ninject.Modules;
-using Pvp.Core.MediaEngine;
 using GalaSoft.MvvmLight;
-using Pvp.App.ViewModel;
+using Ninject.Modules;
 using Pvp.App.Service;
+using Pvp.App.ViewModel;
+using Pvp.App.ViewModel.Settings;
 
 namespace Pvp.App.Composition
 {
@@ -21,10 +19,13 @@ namespace Pvp.App.Composition
             Bind<IDialogService>().To<DialogService>();
             Bind<IWindowHandleProvider>().To<WindowHandleProvider>();
             Bind<IDriveService>().To<DriveService>();
+            Bind<ISettingsProvider>().To<SettingsProvider>().InSingletonScope();
 
             Bind<ViewModelBase>().To<MainWindowViewModel>().InSingletonScope().Named(ViewModelLocator.MainWindowViewModelName);
             Bind<ViewModelBase>().To<MainViewModel>().InSingletonScope().Named(ViewModelLocator.MainViewModelName);
             Bind<ControlPanelViewModel>().ToSelf().InSingletonScope();
+
+            Bind<ViewModelBase>().To<SettingsViewModel>().Named(ViewModelLocator.SettingsViewModelName);
         }
     }
 }

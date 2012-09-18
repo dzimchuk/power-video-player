@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using GalaSoft.MvvmLight;
 using Pvp.App.Composition;
-using GalaSoft.MvvmLight;
 
 namespace Pvp.App
 {
-    internal class ViewModelLocator
+    internal static class ViewModelLocator
     {
         internal const string MainViewModelName = "MainViewModel";
         internal const string MainWindowViewModelName = "MainWindowViewModel";
+        internal const string SettingsViewModelName = "SettingsViewModelName";
 
         static ViewModelLocator()
         {
@@ -31,6 +28,11 @@ namespace Pvp.App
             {
                 return (ViewModelBase)DependencyResolver.Current.Resolve<ViewModelBase>(MainWindowViewModelName);
             }
+        }
+
+        public static ViewModelBase SettingsViewModel
+        {
+            get { return (ViewModelBase)DependencyResolver.Current.Resolve<ViewModelBase>(SettingsViewModelName); }
         }
     }
 }

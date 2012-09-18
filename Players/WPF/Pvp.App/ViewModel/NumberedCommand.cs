@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+using System;
 using System.ComponentModel;
 using System.Windows.Input;
 
@@ -15,10 +15,13 @@ namespace Pvp.App.ViewModel
         public bool IsChecked
         {
             get { return _isChecked; }
-            set 
-            { 
-                _isChecked = value;
-                RaiseOnPropertyChanged("IsChecked");
+            set
+            {
+                if (_isChecked != value)
+                {
+                    _isChecked = value;
+                    RaiseOnPropertyChanged("IsChecked");
+                }
             }
         }
 

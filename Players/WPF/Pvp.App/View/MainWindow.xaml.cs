@@ -44,6 +44,10 @@ namespace Pvp.App.View
                                         typeof(MainWindow),
                                         new PropertyMetadata(false, new PropertyChangedCallback(IsMinimizedChanged)));
 
+        public static readonly DependencyProperty StartupLocationProperty =
+            DependencyProperty.Register("StartupLocation", typeof(WindowStartupLocation), typeof(MainWindow), 
+            new PropertyMetadata(default(WindowStartupLocation), new PropertyChangedCallback(StartupLocationChanged)));
+
         private enum WindowResizeMode
         {
             None,
@@ -63,6 +67,7 @@ namespace Pvp.App.View
             _resizeMode = WindowResizeMode.None;
 
             Messenger.Default.Register<CommandMessage>(this, OnCommand);
+            Messenger.Default.Register<ResizeMainWindowCommandMessage>(this, OnResizeMainWindowCommand);
 
             Binding binding = new Binding("IsMaximized");
             binding.Source = DataContext;
@@ -78,15 +83,17 @@ namespace Pvp.App.View
             binding.Source = DataContext;
             binding.Mode = BindingMode.OneWay;
             this.SetBinding(IsFullScreenProperty, binding);
-        }
 
-        protected override void OnActivated(EventArgs e)
-        {
-            base.OnActivated(e);
+            binding = new Binding("TopMost");
+            binding.Source = DataContext;
+            binding.Mode = BindingMode.OneWay;
+            this.SetBinding(TopmostProperty, binding);
 
-            double x, y;
-            this.TransformFromPixels(16, 16, out x, out y);
-            Console.WriteLine();
+            binding = new Binding("CenterWindow");
+            binding.Source = DataContext;
+            binding.Mode = BindingMode.OneWay;
+            binding.Converter = new BooleanToWindowStartupLocationValueConverter();
+            this.SetBinding(StartupLocationProperty, binding);
         }
 
         private static void IsFullScreenChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -137,6 +144,20 @@ namespace Pvp.App.View
             }
         }
 
+        private static void StartupLocationChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var win = (MainWindow)d;
+            var location = (WindowStartupLocation)e.NewValue;
+
+            win.WindowStartupLocation = location;
+        }
+
+        public WindowStartupLocation StartupLocation
+        {
+            get { return (WindowStartupLocation)GetValue(StartupLocationProperty); }
+            set { SetValue(StartupLocationProperty, value); }
+        }
+
         public bool IsFullScreen
         {
             get
@@ -176,7 +197,54 @@ namespace Pvp.App.View
         private void OnCommand(CommandMessage message)
         {
             if (message.Content == Command.ApplicationClose)
+            {
                 Close();
+            }
+        }
+
+        private void OnResizeMainWindowCommand(ResizeMainWindowCommandMessage resizeMessage)
+        {
+            if (!IsMaximized && !IsMinimized && !IsFullScreen)
+            {
+                ResizeMainWindow(resizeMessage);
+            }
+        }
+
+        private void ResizeMainWindow(ResizeMainWindowCommandMessage resizeMessage)
+        {
+            var left = Left;
+            var top = Top;
+            var width = ActualWidth;
+            var height = ActualHeight;
+            var move = false;
+
+            if (resizeMessage.Size != null && resizeMessage.Coefficient.HasValue)
+            {
+                var mediaControlSize = _mainView.MediaControlSize;
+
+                var hor = resizeMessage.Size.Item1 * resizeMessage.Coefficient.Value - mediaControlSize.Width;
+                var ver = resizeMessage.Size.Item2 * resizeMessage.Coefficient.Value - mediaControlSize.Height;
+
+                width += hor;
+                height += ver;
+
+                move = true;
+            }
+
+            if (resizeMessage.CenterWindow)
+            {
+                var workArea = SystemParameters.WorkArea;
+
+                left = width < workArea.Width ? (workArea.Width - width) / 2 : workArea.Left;
+                top = height < workArea.Height ? (workArea.Height - height) / 2 : workArea.Top;
+
+                move = true;
+            }
+
+            if (move)
+            {
+                this.MoveWindow(left, top, width, height);
+            }
         }
 
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e)

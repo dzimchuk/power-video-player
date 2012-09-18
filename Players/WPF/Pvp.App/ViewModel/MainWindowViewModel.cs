@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Linq;
-using GalaSoft.MvvmLight;
 using System.Windows.Input;
+using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
-using Pvp.App.Messaging;
 using GalaSoft.MvvmLight.Messaging;
+using Pvp.App.Messaging;
+using Pvp.App.ViewModel.Settings;
+using Pvp.Core.MediaEngine;
+using Pvp.Core.Wpf;
 
 namespace Pvp.App.ViewModel
 {
@@ -14,14 +17,65 @@ namespace Pvp.App.ViewModel
         private bool _isMaximized;
         private bool _isMinimized;
 
+        private bool _topMost;
+        private bool _centerWindow;
+
         private ICommand _minimizeCommand;
         private ICommand _maximizeCommand;
         private ICommand _closeCommand;
 
-        public MainWindowViewModel()
+        private readonly ISettingsProvider _settingsProvider;
+        private readonly IMediaEngineFacade _engine;
+
+        public MainWindowViewModel(ISettingsProvider settingsProvider, IMediaEngineFacade engine)
         {
-            Messenger.Default.Register<EventMessage>(this, OnUIEvent);
+            _settingsProvider = settingsProvider;
+            _engine = engine;
+            _settingsProvider.SettingChanged += _settingsProvider_SettingChanged;
+
+            ReadSettings();
+
+            Messenger.Default.Register<EventMessage>(this, OnEvent);
             Messenger.Default.Register<PropertyChangedMessageBase>(this, true, OnPropertyChanged);
+        }
+
+        private void _settingsProvider_SettingChanged(object sender, SettingChangeEventArgs e)
+        {
+            if (e.SettingName.Equals("TopMost", StringComparison.InvariantCultureIgnoreCase))
+            {
+            	TopMost = _settingsProvider.Get("TopMost", false);
+            }
+            else if (e.SettingName.Equals("CenterWindow", StringComparison.InvariantCultureIgnoreCase))
+            {
+                CenterWindow = _settingsProvider.Get("CenterWindow", true);
+            }
+        }
+
+        private void ReadSettings()
+        {
+            _topMost = _settingsProvider.Get("TopMost", false);
+            _centerWindow = _settingsProvider.Get("CenterWindow", true);
+        }
+
+        public bool TopMost
+        {
+            get { return _topMost; }
+            set
+            {
+                _topMost = value;
+                RaisePropertyChanged("TopMost");
+            }
+        }
+
+        public bool CenterWindow
+        {
+            get { return _centerWindow; }
+            set
+            {
+                if (value.Equals(_centerWindow)) return;
+                _centerWindow = value;
+                RaisePropertyChanged("CenterWindow");
+            }
         }
 
         public bool IsFullScreen
@@ -129,7 +183,7 @@ namespace Pvp.App.ViewModel
             }
         }
 
-        private void OnUIEvent(EventMessage message)
+        private void OnEvent(EventMessage message)
         {
             if (message.Content == Event.TitleBarDoubleClick)
             {
@@ -139,6 +193,24 @@ namespace Pvp.App.ViewModel
             {
                 FlipFullScreen(true);
             }
+            else if (message.Content == Event.InitSize)
+            {
+                var args = (InitSizeEventArgs)message.EventArgs;
+                if (args.NewVideoSize.Width > 0.0 && args.NewVideoSize.Height > 0.0)
+                {
+                    RaiseResizeMainWindowEvent(_engine.VideoSize, args.NewVideoSize.Width, args.NewVideoSize.Height);
+                }
+            }
+            else if (message.Content == Event.MainWindowResizeSuggested)
+            {
+                var args = (MainWindowResizeSuggestedEventArgs)message.EventArgs;
+                RaiseResizeMainWindowEvent(args.VideoSize, args.Width, args.Height);
+            }
+        }
+
+        private void RaiseResizeMainWindowEvent(VideoSize videoSize, double width, double height)
+        {
+            videoSize.RaiseResizeMainWindowEvent(new Tuple<double, double>(width, height), _centerWindow);
         }
 
         private void FlipMaximized()
@@ -153,6 +225,8 @@ namespace Pvp.App.ViewModel
             {
                 Messenger.Default.Send(new PropertyChangedMessage<bool>(this, !IsFullScreen, IsFullScreen, "IsFullScreen"));
             }
+
+        //    TopMost = IsFullScreen || _settingsProvider.Get("TopMost", false);
         }
 
         private void OnPropertyChanged(PropertyChangedMessageBase message)

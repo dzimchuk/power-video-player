@@ -12,6 +12,8 @@ namespace Pvp.App.Messaging
         MediaControlCreated,
         StateRefreshSuggested,
         DispatcherTimerTick,
-        ContextMenuOpened
+        ContextMenuOpened,
+        InitSize,
+        MainWindowResizeSuggested
     }
 }

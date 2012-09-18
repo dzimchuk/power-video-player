@@ -5,6 +5,8 @@ namespace Pvp.App.Messaging
 {
     internal enum Command
     {
-        ApplicationClose
+        ApplicationClose,
+        SettingsWindowClose,
+        ResizeMainWindow
     }
 }

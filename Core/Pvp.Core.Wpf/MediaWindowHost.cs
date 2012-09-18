@@ -41,7 +41,10 @@ namespace Pvp.Core.Wpf
   
         public static readonly DependencyProperty LogoMaxHeightProperty =
             DependencyProperty.Register("LogoMaxHeight", typeof(double), typeof(MediaWindowHost), new PropertyMetadata(double.PositiveInfinity));
-  
+
+        public static readonly DependencyProperty LogoVisibleProperty =
+            DependencyProperty.Register("LogoVisible", typeof(bool), typeof(MediaWindowHost), new PropertyMetadata(default(bool)));                        
+
         public static readonly RoutedEvent MWContextMenuEvent = EventManager.RegisterRoutedEvent("MWContextMenu", RoutingStrategy.Bubble,
             typeof(MWContextMenuEventHandler), typeof(MediaWindowHost));
   
@@ -163,6 +166,12 @@ namespace Pvp.Core.Wpf
         {
             get { return (double)GetValue(LogoMaxHeightProperty); }
             set { SetValue(LogoMaxHeightProperty, value); }
+        }
+
+        public bool LogoVisible
+        {
+            get { return (bool)GetValue(LogoVisibleProperty); }
+            set { SetValue(LogoVisibleProperty, value); }
         }
 
         public AspectRatio AspectRatio
@@ -314,6 +323,9 @@ namespace Pvp.Core.Wpf
 
                     binding = new Binding("LogoMaxHeight") { Source = this, Mode = BindingMode.OneWay };
                     rect.SetBinding(FrameworkElement.MaxHeightProperty, binding);
+
+                    binding = new Binding("LogoVisible") { Source = this, Mode = BindingMode.OneWay, Converter = new BooleanToVisibilityConverter() };
+                    rect.SetBinding(VisibilityProperty, binding);
 
                     _border.Child = rect;
                 }

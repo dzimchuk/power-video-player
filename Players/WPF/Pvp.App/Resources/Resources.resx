@@ -573,4 +573,37 @@
   <data name="controlbar_volume" xml:space="preserve">
     <value>Volume</value>
   </data>
+  <data name="apply" xml:space="preserve">
+    <value>Apply</value>
+  </data>
+  <data name="cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="settings_caption" xml:space="preserve">
+    <value>Preferences</value>
+  </data>
+  <data name="settings_general_caption" xml:space="preserve">
+    <value>General</value>
+  </data>
+  <data name="settings_general_autoplay" xml:space="preserve">
+    <value>Automatically play a loaded file</value>
+  </data>
+  <data name="settings_general_center_window" xml:space="preserve">
+    <value>Center window</value>
+  </data>
+  <data name="settings_general_player_options" xml:space="preserve">
+    <value>Player options</value>
+  </data>
+  <data name="settings_general_remember_volume" xml:space="preserve">
+    <value>Remember volume</value>
+  </data>
+  <data name="settings_general_show_logo" xml:space="preserve">
+    <value>Show logo when file is loaded</value>
+  </data>
+  <data name="settings_general_start_fullscreen" xml:space="preserve">
+    <value>Start in full screen mode</value>
+  </data>
+  <data name="settings_general_topmost" xml:space="preserve">
+    <value>Always on top</value>
+  </data>
 </root>

@@ -90,5 +90,15 @@ namespace Pvp.App.View
         {
             Messenger.Default.Send(new EventMessage(Event.ContextMenuOpened));
         }
+
+        private void _mediaControl_InitSize(object sender, InitSizeEventArgs arg)
+        {
+            Messenger.Default.Send(new EventMessage(Event.InitSize, arg));
+        }
+
+        public Size MediaControlSize
+        {
+            get { return new Size(_mediaControl.ActualWidth, _mediaControl.ActualHeight); }
+        }
     }
 }

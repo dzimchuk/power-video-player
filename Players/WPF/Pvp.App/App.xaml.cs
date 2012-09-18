@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
 using System.Linq;
 using System.Windows;
 using Pvp.App.Composition;
@@ -24,20 +21,20 @@ namespace Pvp.App
         {
             base.OnStartup(e);
 
-            SingleInstance si = new SingleInstance(_appGuid);
-            si.ArgsRecieved += new SingleInstance.ArgsHandler(si_ArgsRecieved);
+            var si = new SingleInstance(_appGuid);
+            si.ArgsRecieved += si_ArgsRecieved;
             si.Run(() =>
             {
                 SetUpDependencies();
                 new MainWindow().Show();
-                return this.MainWindow;
+                return MainWindow;
             }, e.Args);
         }
 
         private void si_ArgsRecieved(string[] args)
         {
             if (args.Length > 0)
-                this.MainWindow.Content += string.Format("Recieved args: {0}\n", args.Aggregate((all, arg) => all += (" " + arg)));
+                MainWindow.Content += string.Format("Recieved args: {0}\n", args.Aggregate((all, arg) => all += (" " + arg)));
         }
 
         private void SetUpDependencies()
