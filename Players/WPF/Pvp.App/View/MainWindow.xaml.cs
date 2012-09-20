@@ -5,6 +5,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Controls.Primitives;
+using System.Windows.Interop;
 using Pvp.App.Messaging;
 using Pvp.App.Util;
 using res = Pvp.App.Resources;
@@ -31,7 +32,7 @@ namespace Pvp.App.View
                                         typeof(bool),
                                         typeof(MainWindow),
                                         new PropertyMetadata(false, new PropertyChangedCallback(IsFullScreenChanged)));
-
+        
         public static readonly DependencyProperty IsMaximizedProperty =
             DependencyProperty.Register("IsMaximized",
                                         typeof(bool),
@@ -58,7 +59,7 @@ namespace Pvp.App.View
         private const int EXTRA_GAP = 5;
         private WindowResizeMode _resizeMode;
         private Rect _restoreBounds;
-        private Rect _preFullScreenBounds;
+        private Rect? _preFullScreenBounds;
 
         public MainWindow()
         {
@@ -99,7 +100,20 @@ namespace Pvp.App.View
         private static void IsFullScreenChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var win = (MainWindow)d;
-            if ((bool)e.NewValue)
+
+            var helper = new WindowInteropHelper(win);
+            if (helper.Handle == IntPtr.Zero)
+            {
+                win._fullScreenChangePending = (bool)e.NewValue;
+                return;
+            }
+
+            SetFullScreen(win, (bool)e.NewValue);
+        }
+
+        private static void SetFullScreen(MainWindow win, bool isFullScreen)
+        {
+            if (isFullScreen)
             {
                 win._preFullScreenBounds = win.RestoreBounds;
 
@@ -107,8 +121,21 @@ namespace Pvp.App.View
             }
             else
             {
-                var bounds = win._preFullScreenBounds;
-                win.MoveWindow(bounds.Left, bounds.Top, bounds.Width, bounds.Height);
+                if (win._preFullScreenBounds.HasValue)
+                {
+                    var bounds = win._preFullScreenBounds.Value;
+                    win.MoveWindow(bounds.Left, bounds.Top, bounds.Width, bounds.Height);
+                }
+            }
+        }
+
+        private bool? _fullScreenChangePending;
+        protected override void OnSourceInitialized(EventArgs e)
+        {
+            base.OnSourceInitialized(e);
+            if (_fullScreenChangePending.HasValue)
+            {
+                SetFullScreen(this, _fullScreenChangePending.Value);
             }
         }
 

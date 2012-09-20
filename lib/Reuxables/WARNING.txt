@@ -1,0 +1,12 @@
+REUXABLES
+www.nukeation.com
+------------------
+
+In accordance with the End-User License Agreement supplied with this product:
+
+- You must distribute only compiled versions of the ResourceDictionary (.XAML) files, either as compiled resource or compiled external DLL.
+- You must not publish or distribute (online or otherwise) the source code (in part or whole) of the ResourceDictionary files.
+
+Failure to comply with these rules will result in copyright infringement and will be followed up with civil and/or criminal prosecution.
+
+For further information, email info@nukeation.com

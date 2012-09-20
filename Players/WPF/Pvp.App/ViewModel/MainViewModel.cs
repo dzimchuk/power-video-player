@@ -44,6 +44,7 @@ namespace Pvp.App.ViewModel
 
         private bool _showLogo;
         private bool _autoPlay;
+        private bool _startFullScreen;
 
         private Tuple<double, double> _videoSize;
 
@@ -92,6 +93,8 @@ namespace Pvp.App.ViewModel
 
             _isControlPanelVisible = !_settingsProvider.Get("ControlPanelVisible", true);
             FlipControlPanelVisibility();
+
+            _startFullScreen = _settingsProvider.Get("StartFullScreen", false);
         }
 
         public ControlPanelViewModel ControlViewModel
@@ -447,6 +450,11 @@ namespace Pvp.App.ViewModel
                 _engine.ModifyMenu += _engine_ModifyMenu;
 
                 _previousVideoSize = VideoSize;
+
+                if (_startFullScreen && !IsFullScreen)
+                {
+                    FlipFullScreen(true);
+                }
             }
             else if (message.Content == Event.DispatcherTimerTick)
             {
@@ -1108,7 +1116,7 @@ namespace Pvp.App.ViewModel
         }
 
         private readonly ObservableCollection<TitleChapterCommand> _dvdChapters = new ObservableCollection<TitleChapterCommand>();
-
+        
         public ObservableCollection<TitleChapterCommand> DvdChapters
         {
             get { return _dvdChapters; }
