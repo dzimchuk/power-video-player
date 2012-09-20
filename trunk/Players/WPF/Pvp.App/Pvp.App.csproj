@@ -90,7 +90,9 @@
     <Compile Include="Messaging\ResizeMainWindowCommandMessage.cs" />
     <Compile Include="Service\DriveInfo.cs" />
     <Compile Include="Service\DriveService.cs" />
+    <Compile Include="Util\WindowCustomizer.cs" />
     <Compile Include="ViewModel\Extensions.cs" />
+    <Compile Include="ViewModel\Settings\ISettingsViewModel.cs" />
     <Compile Include="ViewModel\Settings\SettingChangeEventArgs.cs" />
     <Compile Include="Service\SettingsProvider.cs" />
     <Compile Include="Util\PropertyBag.cs" />

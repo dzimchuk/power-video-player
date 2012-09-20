@@ -3,7 +3,7 @@ using GalaSoft.MvvmLight;
 
 namespace Pvp.App.ViewModel.Settings
 {
-    internal class GeneralSettingsViewModel : ViewModelBase
+    internal class GeneralSettingsViewModel : ViewModelBase, ISettingsViewModel
     {
         private readonly ISettingsProvider _settingsProvider;
 
@@ -22,12 +22,42 @@ namespace Pvp.App.ViewModel.Settings
         
         private void Load()
         {
-            _startFullScreen = _settingsProvider.Get("StartFullScreen", false);
-            _autoPlay = _settingsProvider.Get("AutoPlay", true);
-            _rememberVolume = _settingsProvider.Get("RememberVolume", true);
-            _centerWindow = _settingsProvider.Get("CenterWindow", true);
-            _showLogo = _settingsProvider.Get("ShowLogo", true);
-            _topMost = _settingsProvider.Get("TopMost", false);
+            _startFullScreen = StartFullScreenOriginal;
+            _autoPlay = AutoPlayOriginal;
+            _rememberVolume = RememberVolumeOriginal;
+            _centerWindow = CenterWindowOriginal;
+            _showLogo = ShowLogoOriginal;
+            _topMost = TopMostOriginal;
+        }
+
+        private bool TopMostOriginal
+        {
+            get { return _settingsProvider.Get("TopMost", false); }
+        }
+
+        private bool ShowLogoOriginal
+        {
+            get { return _settingsProvider.Get("ShowLogo", true); }
+        }
+
+        private bool CenterWindowOriginal
+        {
+            get { return _settingsProvider.Get("CenterWindow", true); }
+        }
+
+        private bool RememberVolumeOriginal
+        {
+            get { return _settingsProvider.Get("RememberVolume", true); }
+        }
+
+        private bool AutoPlayOriginal
+        {
+            get { return _settingsProvider.Get("AutoPlay", true); }
+        }
+
+        private bool StartFullScreenOriginal
+        {
+            get { return _settingsProvider.Get("StartFullScreen", false); }
         }
 
         public void Persist()
@@ -97,6 +127,16 @@ namespace Pvp.App.ViewModel.Settings
             {
                 _autoPlay = value;
                 RaisePropertyChanged("AutoPlay");
+            }
+        }
+
+        public bool AnyChanges
+        {
+            get
+            {
+                return _autoPlay != AutoPlayOriginal || _centerWindow != CenterWindowOriginal
+                       || _rememberVolume != RememberVolumeOriginal || _showLogo != ShowLogoOriginal 
+                       || _startFullScreen != StartFullScreenOriginal || _topMost != TopMostOriginal;
             }
         }
     }
