@@ -5,6 +5,7 @@
     xmlns:ee="http://schemas.microsoft.com/expression/2010/effects"
     xmlns:ctrls="clr-namespace:Pvp.App.Controls">
     <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/ReuxablesLegacy;component/metal.xaml" />
         <ResourceDictionary Source="Templates.xaml" />
         <ResourceDictionary Source="MainWindowTemplate.xaml" />
     </ResourceDictionary.MergedDictionaries>

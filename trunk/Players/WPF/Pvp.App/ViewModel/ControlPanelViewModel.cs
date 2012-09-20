@@ -2,6 +2,7 @@
 using System.Linq;
 using GalaSoft.MvvmLight;
 using Pvp.App.Messaging;
+using Pvp.App.ViewModel.Settings;
 using Pvp.Core.MediaEngine;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Command;
@@ -12,6 +13,7 @@ namespace Pvp.App.ViewModel
     internal class ControlPanelViewModel : ViewModelBase, IDurationProvider
     {
         private readonly IMediaEngineFacade _engine;
+        private readonly ISettingsProvider _settingsProvider;
 
         private ICommand _playCommand;
         private ICommand _pauseCommand;
@@ -41,9 +43,10 @@ namespace Pvp.App.ViewModel
         private bool _isInPlayingMode;
         private bool _engineReady;
 
-        public ControlPanelViewModel(IMediaEngineFacade engine)
+        public ControlPanelViewModel(IMediaEngineFacade engine, ISettingsProvider settingsProvider)
         {
             _engine = engine;
+            _settingsProvider = settingsProvider;
 
             Messenger.Default.Register<PropertyChangedMessageBase>(this, true, OnPropertyChanged);
             Messenger.Default.Register<EventMessage>(this, true, OnEventMessage);
@@ -126,7 +129,31 @@ namespace Pvp.App.ViewModel
             else if (message.Content == Event.MediaControlCreated)
             {
                 _engineReady = true;
-                _engine.Volume = Volume;
+
+                if (_settingsProvider.Get("RememberVolume", true))
+                {
+                    var volume = _settingsProvider.Get("Volume", _volume);
+                    ChangeVolume(volume - _volume);
+
+                    if (_settingsProvider.Get("IsMute", false))
+                    {
+                        ToggleMute();
+                    }
+                }
+                else
+                {
+                    ChangeVolume(0);
+                }
+            }
+            else if (message.Content == Event.MainWindowClosing)
+            {
+                if (_settingsProvider.Get("RememberVolume", true))
+                {
+                    _settingsProvider.Set("Volume", _volume);
+                    _settingsProvider.Set("IsMute", _isMute);
+
+                    _settingsProvider.Save();
+                }
             }
         }
 
@@ -414,10 +441,7 @@ namespace Pvp.App.ViewModel
                         (
                             () =>
                             {
-                                _engine.IsMuted = !IsMute;
-
-                                IsMute = !IsMute;
-                                Messenger.Default.Send(new PropertyChangedMessage<bool>(this, !IsMute, IsMute, "IsMute"));
+                                ToggleMute();
                             },
                             () =>
                             {
@@ -430,9 +454,17 @@ namespace Pvp.App.ViewModel
             }
         }
 
-        private void ChangeVolume(double value)
+        private void ToggleMute()
         {
-            var volume = Volume + value;
+            _engine.IsMuted = !IsMute;
+
+            IsMute = !IsMute;
+            Messenger.Default.Send(new PropertyChangedMessage<bool>(this, !IsMute, IsMute, "IsMute"));
+        }
+
+        private void ChangeVolume(double delta)
+        {
+            var volume = Volume + delta;
             if (volume > 1.0)
                 volume = 1.0;
             else if (volume < 0.0)

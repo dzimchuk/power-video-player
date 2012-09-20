@@ -54,6 +54,10 @@
     <Reference Include="Ninject">
       <HintPath>..\..\..\packages\Ninject.2.2.1.4\lib\net40-Client\Ninject.dll</HintPath>
     </Reference>
+    <Reference Include="ReuxablesLegacy, Version=3.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\lib\Reuxables\ReuxablesLegacy.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Runtime.Remoting" />
