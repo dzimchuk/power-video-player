@@ -3,7 +3,7 @@ using GalaSoft.MvvmLight;
 
 namespace Pvp.App.ViewModel.Settings
 {
-    internal class VideoSettingsViewModel : ViewModelBase
+    internal class VideoSettingsViewModel : ViewModelBase, ISettingsViewModel
     {
         private readonly ISettingsProvider _settingsProvider;
 
@@ -22,5 +22,7 @@ namespace Pvp.App.ViewModel.Settings
         {
 
         }
+
+        public bool AnyChanges { get; private set; }
     }
 }

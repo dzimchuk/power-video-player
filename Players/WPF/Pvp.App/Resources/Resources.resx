@@ -606,4 +606,7 @@
   <data name="settings_general_topmost" xml:space="preserve">
     <value>Always on top</value>
   </data>
+  <data name="settings_video_caption" xml:space="preserve">
+    <value>Video</value>
+  </data>
 </root>

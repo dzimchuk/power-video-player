@@ -220,6 +220,7 @@ namespace Pvp.Core.Native
         public const int MF_CHECKED        = 0x00000008;
                
         public const int GWL_STYLE = -16;
+        public const int GWL_EXSTYLE = -20;
 
         public const int WS_OVERLAPPED = 0x00000000;
         public const int WS_POPUP = -2147483648; // 0x80000000
@@ -229,6 +230,8 @@ namespace Pvp.Core.Native
         public const int WS_SYSMENU = 0x00080000;
         public const int WS_MINIMIZEBOX = 0x00020000;
         public const int WS_MAXIMIZEBOX = 0x00010000;
+
+        public const int WS_EX_DLGMODALFRAME = 0x0001;
 
         public const int WPF_ASYNCWINDOWPLACEMENT = 0x0004;
         public const int WPF_RESTORETOMAXIMIZED = 0x0002;

@@ -8,7 +8,7 @@ using Pvp.App.Messaging;
 
 namespace Pvp.App.ViewModel.Settings
 {
-    internal class SettingsViewModel : ViewModelBase
+    internal class SettingsViewModel : ViewModelBase, ISettingsViewModel
     {
         private readonly FileTypesSettingsViewModel _fileTypesSettingsViewModel;
         private readonly KeyboardMouseSettingsViewModel _keyboardMouseSettingsViewModel;
@@ -47,7 +47,7 @@ namespace Pvp.App.ViewModel.Settings
 
         private void OnAnyPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            _changesAvailable = true;
+            _changesAvailable = AnyChanges;
         }
 
         public GeneralSettingsViewModel GeneralSettingsViewModel
@@ -143,6 +143,16 @@ namespace Pvp.App.ViewModel.Settings
 
             	_settingsProvider.Save();
                 _changesAvailable = false;
+            }
+        }
+
+        public bool AnyChanges
+        {
+            get
+            {
+                return _generalSettingsViewModel.AnyChanges || _videoSettingsViewModel.AnyChanges ||
+                       _filtersSettingsViewModel.AnyChanges || _keyboardMouseSettingsViewModel.AnyChanges || 
+                       _fileTypesSettingsViewModel.AnyChanges;
             }
         }
     }

@@ -606,4 +606,7 @@
   <data name="settings_general_topmost" xml:space="preserve">
     <value>Размещать окно проигрывателя поверх других окон</value>
   </data>
+  <data name="settings_video_caption" xml:space="preserve">
+    <value>Видео</value>
+  </data>
 </root>

@@ -3,9 +3,12 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:app="clr-namespace:Pvp.App"
         xmlns:res="clr-namespace:Pvp.App.Resources"
+        xmlns:util="clr-namespace:Pvp.App.Util"
         Title="{x:Static res:Resources.settings_caption}" Height="400" Width="600"
         DataContext="{x:Static app:ViewModelLocator.SettingsViewModel}"
-        Loaded="window_Loaded">
+        Loaded="window_Loaded"
+        ResizeMode="NoResize"
+        util:WindowCustomizer.ShowIcon="False">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
@@ -36,6 +39,12 @@
                         </StackPanel>
                     </GroupBox>
                 </Grid>
+            </TabItem>
+            
+            <TabItem Header="{x:Static res:Resources.settings_video_caption}" DataContext="{Binding VideoSettingsViewModel}">
+                <StackPanel>
+                    
+                </StackPanel>
             </TabItem>
         </TabControl>
         
