@@ -4,11 +4,18 @@
         xmlns:app="clr-namespace:Pvp.App"
         xmlns:res="clr-namespace:Pvp.App.Resources"
         xmlns:util="clr-namespace:Pvp.App.Util"
+        xmlns:view="clr-namespace:Pvp.App.View"
+        xmlns:engine="clr-namespace:Pvp.Core.MediaEngine;assembly=Pvp.Core"
         Title="{x:Static res:Resources.settings_caption}" Height="400" Width="600"
         DataContext="{x:Static app:ViewModelLocator.SettingsViewModel}"
         Loaded="window_Loaded"
         ResizeMode="NoResize"
         util:WindowCustomizer.ShowIcon="False">
+    
+    <Window.Resources>
+        <view:RendererToBooleanValueConverter x:Key="RendererConverter" />
+    </Window.Resources>
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
@@ -43,7 +50,23 @@
             
             <TabItem Header="{x:Static res:Resources.settings_video_caption}" DataContext="{Binding VideoSettingsViewModel}">
                 <StackPanel>
-                    
+                    <GroupBox Header="{x:Static res:Resources.settings_video_renderer}" Margin="5">
+                        <StackPanel>
+                            <CheckBox Content="{x:Static res:Resources.settings_video_vr}" 
+                                      IsChecked="{Binding Renderer, Mode=TwoWay, Converter={StaticResource RendererConverter}, ConverterParameter='{x:Static engine:Renderer.VR}'}" Margin="8,8,8,4" />
+                            <CheckBox Content="{x:Static res:Resources.settings_video_vmr}" 
+                                      IsChecked="{Binding Renderer, Mode=TwoWay, Converter={StaticResource RendererConverter}, ConverterParameter='{x:Static engine:Renderer.VMR_Windowless}'}" Margin="8,3,8,4" />
+                            <CheckBox Content="{x:Static res:Resources.settings_video_vmr_windowed}" 
+                                      IsChecked="{Binding Renderer, Mode=TwoWay, Converter={StaticResource RendererConverter}, ConverterParameter='{x:Static engine:Renderer.VMR_Windowed}'}" Margin="8,3,8,4" />
+                            <CheckBox Content="{x:Static res:Resources.settings_video_vmr9}" 
+                                      IsChecked="{Binding Renderer, Mode=TwoWay, Converter={StaticResource RendererConverter}, ConverterParameter='{x:Static engine:Renderer.VMR9_Windowless}'}" Margin="8,3,8,4" />
+                            <CheckBox Content="{x:Static res:Resources.settings_video_vmr9_windowed}" 
+                                      IsChecked="{Binding Renderer, Mode=TwoWay, Converter={StaticResource RendererConverter}, ConverterParameter='{x:Static engine:Renderer.VMR9_Windowed}'}" Margin="8,3,8,4" />
+                            <CheckBox Content="{x:Static res:Resources.settings_video_evr}" 
+                                      IsChecked="{Binding Renderer, Mode=TwoWay, Converter={StaticResource RendererConverter}, ConverterParameter='{x:Static engine:Renderer.EVR}'}" Margin="8,3,8,6" />
+                            <Button Content="{x:Static res:Resources.settings_video_recommended}" Command="{Binding RecommendedRendererCommand}" Margin="5" Padding="10,1,10,1" HorizontalAlignment="Right" />
+                        </StackPanel>
+                    </GroupBox>
                 </StackPanel>
             </TabItem>
         </TabControl>

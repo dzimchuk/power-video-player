@@ -1528,6 +1528,78 @@ namespace Pvp.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enhanced Video Renderer.
+        /// </summary>
+        public static string settings_video_evr {
+            get {
+                return ResourceManager.GetString("settings_video_evr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Recommended.
+        /// </summary>
+        public static string settings_video_recommended {
+            get {
+                return ResourceManager.GetString("settings_video_recommended", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Preferred Video Renderer.
+        /// </summary>
+        public static string settings_video_renderer {
+            get {
+                return ResourceManager.GetString("settings_video_renderer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Video Mixing Renderer.
+        /// </summary>
+        public static string settings_video_vmr {
+            get {
+                return ResourceManager.GetString("settings_video_vmr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Video Mixing Renderer (Windowed).
+        /// </summary>
+        public static string settings_video_vmr_windowed {
+            get {
+                return ResourceManager.GetString("settings_video_vmr_windowed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Video Mixing Renderer 9.
+        /// </summary>
+        public static string settings_video_vmr9 {
+            get {
+                return ResourceManager.GetString("settings_video_vmr9", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Video Mixing Renderer 9 (Windowed).
+        /// </summary>
+        public static string settings_video_vmr9_windowed {
+            get {
+                return ResourceManager.GetString("settings_video_vmr9_windowed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Video Renderer.
+        /// </summary>
+        public static string settings_video_vr {
+            get {
+                return ResourceManager.GetString("settings_video_vr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You have altered the &quot;System Tray&quot; option.{0}You need to restart the application for the changes to take effect..
         /// </summary>
         public static string systray_warning_format {
