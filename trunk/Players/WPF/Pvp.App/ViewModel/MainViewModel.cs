@@ -171,13 +171,17 @@ namespace Pvp.App.ViewModel
                 return _openCommand;
             }
         }
+
+        private Renderer PreferredVideoRenderer
+        {
+            get { return _settingsProvider.Get("Renderer", MediaEngineServiceProvider.RecommendedRenderer); }
+        }
   
         private void PlayFile(string filename)
         {
             if (!string.IsNullOrEmpty(filename))
             {
-                // TODO set video renderer somewhere else
-                _engine.PreferredVideoRenderer = MediaEngineServiceProvider.RecommendedRenderer;
+                _engine.PreferredVideoRenderer = PreferredVideoRenderer;
 
                 _engine.BuildGraph(filename, MediaSourceType.File);
                 UpdateState();
@@ -188,8 +192,7 @@ namespace Pvp.App.ViewModel
         {
             if (!string.IsNullOrEmpty(driveName))
             {
-                // TODO set video renderer somewhere else
-                _engine.PreferredVideoRenderer = MediaEngineServiceProvider.RecommendedRenderer;
+                _engine.PreferredVideoRenderer = PreferredVideoRenderer;
 
                 string source = driveName + "Video_ts";
                 _engine.BuildGraph(source, MediaSourceType.Dvd);

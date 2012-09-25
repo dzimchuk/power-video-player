@@ -609,4 +609,28 @@
   <data name="settings_video_caption" xml:space="preserve">
     <value>Video</value>
   </data>
+  <data name="settings_video_evr" xml:space="preserve">
+    <value>Enhanced Video Renderer</value>
+  </data>
+  <data name="settings_video_recommended" xml:space="preserve">
+    <value>Recommended</value>
+  </data>
+  <data name="settings_video_renderer" xml:space="preserve">
+    <value>Preferred Video Renderer</value>
+  </data>
+  <data name="settings_video_vmr" xml:space="preserve">
+    <value>Video Mixing Renderer</value>
+  </data>
+  <data name="settings_video_vmr9" xml:space="preserve">
+    <value>Video Mixing Renderer 9</value>
+  </data>
+  <data name="settings_video_vmr9_windowed" xml:space="preserve">
+    <value>Video Mixing Renderer 9 (Windowed)</value>
+  </data>
+  <data name="settings_video_vmr_windowed" xml:space="preserve">
+    <value>Video Mixing Renderer (Windowed)</value>
+  </data>
+  <data name="settings_video_vr" xml:space="preserve">
+    <value>Video Renderer</value>
+  </data>
 </root>
