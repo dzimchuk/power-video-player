@@ -633,4 +633,37 @@
   <data name="settings_video_vr" xml:space="preserve">
     <value>Video Renderer</value>
   </data>
+  <data name="settings_general_button_choose" xml:space="preserve">
+    <value>Choose</value>
+  </data>
+  <data name="settings_general_screenshots_folder" xml:space="preserve">
+    <value>Screenshots folder</value>
+  </data>
+  <data name="folder_select_dialog_caption" xml:space="preserve">
+    <value>Select a folder</value>
+  </data>
+  <data name="settings_keyboard_caption" xml:space="preserve">
+    <value>Keyboard/Mouse</value>
+  </data>
+  <data name="enter_key_message" xml:space="preserve">
+    <value>Please, press desired key combination:</value>
+  </data>
+  <data name="settings_keyboard_clear" xml:space="preserve">
+    <value>Clear</value>
+  </data>
+  <data name="settings_keyboard_clear_all" xml:space="preserve">
+    <value>Clear All</value>
+  </data>
+  <data name="settings_keyboard_defaults" xml:space="preserve">
+    <value>Default</value>
+  </data>
+  <data name="settings_keyboard_mousewheel_action" xml:space="preserve">
+    <value>Mouse Wheel:</value>
+  </data>
+  <data name="settings_mousewheel_action_seek" xml:space="preserve">
+    <value>Seek</value>
+  </data>
+  <data name="settings_mousewheel_action_volume" xml:space="preserve">
+    <value>Sound volume</value>
+  </data>
 </root>

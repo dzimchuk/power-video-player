@@ -8,6 +8,7 @@ namespace Pvp.App
         internal const string MainViewModelName = "MainViewModel";
         internal const string MainWindowViewModelName = "MainWindowViewModel";
         internal const string SettingsViewModelName = "SettingsViewModelName";
+        internal const string EnterKeyViewModelName = "EnterKeyViewModelName";
 
         static ViewModelLocator()
         {
@@ -33,6 +34,11 @@ namespace Pvp.App
         public static ViewModelBase SettingsViewModel
         {
             get { return (ViewModelBase)DependencyResolver.Current.Resolve<ViewModelBase>(SettingsViewModelName); }
+        }
+
+        public static ViewModelBase EnterKeyViewModel
+        {
+            get { return (ViewModelBase)DependencyResolver.Current.Resolve<ViewModelBase>(EnterKeyViewModelName); }
         }
     }
 }

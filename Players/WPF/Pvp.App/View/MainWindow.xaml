@@ -4,10 +4,18 @@
         xmlns:res="clr-namespace:Pvp.App.Resources"
         xmlns:view="clr-namespace:Pvp.App.View"
         xmlns:app="clr-namespace:Pvp.App"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+        xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Extras.WPF4"
         Title="{x:Static res:Resources.program_name}" Height="350" Width="525"
         MinHeight="150" MinWidth="480"
         DataContext="{x:Static app:ViewModelLocator.MainWindowViewModel}"
         Style="{DynamicResource MainWindowStyle}"
         AllowDrop="True">
     <view:MainView x:Name="_mainView" />
+
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="KeyDown">
+            <cmd:EventToCommand Command="{Binding KeyDownCommand}" PassEventArgsToCommand="True" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
 </Window>

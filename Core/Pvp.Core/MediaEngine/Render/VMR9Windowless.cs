@@ -86,7 +86,7 @@ namespace Pvp.Core.MediaEngine.Render
 
         protected override void HandleInstantiationError(Exception e)
         {
-            Trace.GetTrace().TraceWarning("Failed to instantiate VMR9.");
+            TraceSink.GetTraceSink().TraceWarning("Failed to instantiate VMR9.");
         }
 
         public IVMRWindowlessControl9 VMRWindowlessControl

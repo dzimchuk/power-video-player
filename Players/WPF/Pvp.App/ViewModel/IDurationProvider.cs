@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Pvp.App.ViewModel
 {
-    internal interface IDurationProvider
+    public interface IDurationProvider
     {
         TimeSpan Duration { get; }
     }

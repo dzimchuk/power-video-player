@@ -3,8 +3,9 @@ using System.Linq;
 
 namespace Pvp.App.ViewModel
 {
-    public interface IWindowHandleProvider
+    public enum MouseWheelAction
     {
-        IntPtr Handle { get; }
+        Volume,
+        Seek
     }
 }

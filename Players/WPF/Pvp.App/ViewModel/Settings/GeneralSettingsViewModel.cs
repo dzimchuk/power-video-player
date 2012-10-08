@@ -1,11 +1,14 @@
 using System;
+using System.Windows.Input;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
 
 namespace Pvp.App.ViewModel.Settings
 {
     internal class GeneralSettingsViewModel : ViewModelBase, ISettingsViewModel
     {
         private readonly ISettingsProvider _settingsProvider;
+        private readonly IFileSelector _fileSelector;
 
         private bool _startFullScreen;
         private bool _autoPlay;
@@ -13,10 +16,14 @@ namespace Pvp.App.ViewModel.Settings
         private bool _centerWindow;
         private bool _showLogo;
         private bool _topMost;
+        private string _screenshotsFolder;
 
-        public GeneralSettingsViewModel(ISettingsProvider settingsProvider)
+        private ICommand _chooseFolderCommand;
+
+        public GeneralSettingsViewModel(ISettingsProvider settingsProvider, IFileSelector fileSelector)
         {
             _settingsProvider = settingsProvider;
+            _fileSelector = fileSelector;
             Load();
         }
         
@@ -28,6 +35,7 @@ namespace Pvp.App.ViewModel.Settings
             _centerWindow = CenterWindowOriginal;
             _showLogo = ShowLogoOriginal;
             _topMost = TopMostOriginal;
+            _screenshotsFolder = ScreenshotsFolderOriginal;
         }
 
         private bool TopMostOriginal
@@ -60,6 +68,11 @@ namespace Pvp.App.ViewModel.Settings
             get { return _settingsProvider.Get("StartFullScreen", false); }
         }
 
+        private string ScreenshotsFolderOriginal
+        {
+            get { return _settingsProvider.Get("ScreenshotsFolder", DefaultSettings.SreenshotsFolder); }
+        }
+
         public void Persist()
         {
         	_settingsProvider.Set("StartFullScreen", _startFullScreen);
@@ -68,6 +81,7 @@ namespace Pvp.App.ViewModel.Settings
             _settingsProvider.Set("CenterWindow", _centerWindow);
             _settingsProvider.Set("ShowLogo", _showLogo);
             _settingsProvider.Set("TopMost", _topMost);
+            _settingsProvider.Set("ScreenshotsFolder", _screenshotsFolder);
         }
 
         public bool StartFullScreen
@@ -130,13 +144,46 @@ namespace Pvp.App.ViewModel.Settings
             }
         }
 
+        public string ScreenshotsFolder
+        {
+            get { return _screenshotsFolder; }
+            set
+            {
+                if (value == _screenshotsFolder) return;
+                _screenshotsFolder = value;
+                RaisePropertyChanged("ScreenshotsFolder");
+            }
+        }
+
+        public ICommand ChooseFolderCommand
+        {
+            get
+            {
+                if (_chooseFolderCommand == null)
+                {
+                    _chooseFolderCommand = new RelayCommand(
+                        () =>
+                            {
+                                var folder = _fileSelector.SelectFolder(_screenshotsFolder);
+                                if (!string.IsNullOrEmpty(folder))
+                                {
+                                    ScreenshotsFolder = folder;
+                                }
+                            });
+                }
+
+                return _chooseFolderCommand;
+            }
+        }
+
         public bool AnyChanges
         {
             get
             {
                 return _autoPlay != AutoPlayOriginal || _centerWindow != CenterWindowOriginal
                        || _rememberVolume != RememberVolumeOriginal || _showLogo != ShowLogoOriginal 
-                       || _startFullScreen != StartFullScreenOriginal || _topMost != TopMostOriginal;
+                       || _startFullScreen != StartFullScreenOriginal || _topMost != TopMostOriginal
+                       || (!string.IsNullOrEmpty(_screenshotsFolder) && !string.IsNullOrEmpty(ScreenshotsFolderOriginal) && !_screenshotsFolder.Equals(ScreenshotsFolderOriginal));
             }
         }
     }

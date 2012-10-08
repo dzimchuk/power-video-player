@@ -7,6 +7,7 @@ namespace Pvp.App.Messaging
     {
         ApplicationClose,
         SettingsWindowClose,
+        EnterKeyWindowClose,
         ResizeMainWindow
     }
 }

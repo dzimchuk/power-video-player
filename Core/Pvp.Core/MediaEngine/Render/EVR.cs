@@ -96,7 +96,7 @@ namespace Pvp.Core.MediaEngine.Render
 
         protected override void HandleInstantiationError(Exception e)
         {
-            Trace.GetTrace().TraceWarning("Failed to instantiate EVR.");
+            TraceSink.GetTraceSink().TraceWarning("Failed to instantiate EVR.");
         }
 
         protected override bool IsDelayedInitialize

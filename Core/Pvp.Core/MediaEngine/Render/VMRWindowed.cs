@@ -30,7 +30,7 @@ namespace Pvp.Core.MediaEngine.Render
 
         protected override void HandleInstantiationError(Exception e)
         {
-            Trace.GetTrace().TraceWarning("Failed to instantiate VMR.");
+            TraceSink.GetTraceSink().TraceWarning("Failed to instantiate VMR.");
         }
 
         protected override void AddToGraph(IGraphBuilder pGraphBuilder, ThrowExceptionForHRPointer errorFunc)

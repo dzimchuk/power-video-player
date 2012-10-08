@@ -6,6 +6,7 @@
         xmlns:util="clr-namespace:Pvp.App.Util"
         xmlns:view="clr-namespace:Pvp.App.View"
         xmlns:engine="clr-namespace:Pvp.Core.MediaEngine;assembly=Pvp.Core"
+        xmlns:vm="clr-namespace:Pvp.App.ViewModel"
         Title="{x:Static res:Resources.settings_caption}" Height="400" Width="600"
         DataContext="{x:Static app:ViewModelLocator.SettingsViewModel}"
         Loaded="window_Loaded"
@@ -14,6 +15,7 @@
     
     <Window.Resources>
         <view:RendererToBooleanValueConverter x:Key="RendererConverter" />
+        <view:MouseWheelActionToBooleanConverter x:Key="MouseWheelActionToBooleanConverter" />
     </Window.Resources>
     
     <Grid>
@@ -22,10 +24,11 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         
-        <TabControl TabStripPlacement="Left" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <TabControl TabStripPlacement="Top" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
             <TabItem Header="{x:Static res:Resources.settings_general_caption}" DataContext="{Binding GeneralSettingsViewModel}">
                 <Grid>
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
                     
@@ -45,6 +48,19 @@
                                       IsChecked="{Binding TopMost, Mode=TwoWay}" Margin="8,3,8,6" />
                         </StackPanel>
                     </GroupBox>
+                    <GroupBox Grid.Row="1" Header="{x:Static res:Resources.settings_general_screenshots_folder}" Margin="5">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBox Text="{Binding ScreenshotsFolder, Mode=TwoWay}" HorizontalAlignment="Stretch" Margin="5" />
+                            <Button Command="{Binding ChooseFolderCommand}" Grid.Column="1" 
+                                    Content="{x:Static res:Resources.settings_general_button_choose}"
+                                    Margin="5" Padding="10,2,10,2"/>
+                        </Grid>
+                    </GroupBox>
                 </Grid>
             </TabItem>
             
@@ -52,29 +68,64 @@
                 <StackPanel>
                     <GroupBox Header="{x:Static res:Resources.settings_video_renderer}" Margin="5">
                         <StackPanel>
-                            <CheckBox Content="{x:Static res:Resources.settings_video_vr}" 
+                            <RadioButton Content="{x:Static res:Resources.settings_video_vr}" 
                                       IsChecked="{Binding Renderer, Mode=TwoWay, Converter={StaticResource RendererConverter}, ConverterParameter='{x:Static engine:Renderer.VR}'}" Margin="8,8,8,4" />
-                            <CheckBox Content="{x:Static res:Resources.settings_video_vmr}" 
+                            <RadioButton Content="{x:Static res:Resources.settings_video_vmr}" 
                                       IsChecked="{Binding Renderer, Mode=TwoWay, Converter={StaticResource RendererConverter}, ConverterParameter='{x:Static engine:Renderer.VMR_Windowless}'}" Margin="8,3,8,4" />
-                            <CheckBox Content="{x:Static res:Resources.settings_video_vmr_windowed}" 
+                            <RadioButton Content="{x:Static res:Resources.settings_video_vmr_windowed}" 
                                       IsChecked="{Binding Renderer, Mode=TwoWay, Converter={StaticResource RendererConverter}, ConverterParameter='{x:Static engine:Renderer.VMR_Windowed}'}" Margin="8,3,8,4" />
-                            <CheckBox Content="{x:Static res:Resources.settings_video_vmr9}" 
+                            <RadioButton Content="{x:Static res:Resources.settings_video_vmr9}" 
                                       IsChecked="{Binding Renderer, Mode=TwoWay, Converter={StaticResource RendererConverter}, ConverterParameter='{x:Static engine:Renderer.VMR9_Windowless}'}" Margin="8,3,8,4" />
-                            <CheckBox Content="{x:Static res:Resources.settings_video_vmr9_windowed}" 
+                            <RadioButton Content="{x:Static res:Resources.settings_video_vmr9_windowed}" 
                                       IsChecked="{Binding Renderer, Mode=TwoWay, Converter={StaticResource RendererConverter}, ConverterParameter='{x:Static engine:Renderer.VMR9_Windowed}'}" Margin="8,3,8,4" />
-                            <CheckBox Content="{x:Static res:Resources.settings_video_evr}" 
+                            <RadioButton Content="{x:Static res:Resources.settings_video_evr}" 
                                       IsChecked="{Binding Renderer, Mode=TwoWay, Converter={StaticResource RendererConverter}, ConverterParameter='{x:Static engine:Renderer.EVR}'}" Margin="8,3,8,6" />
-                            <Button Content="{x:Static res:Resources.settings_video_recommended}" Command="{Binding RecommendedRendererCommand}" Margin="5" Padding="10,1,10,1" HorizontalAlignment="Right" />
+                            <Button Content="{x:Static res:Resources.settings_video_recommended}" 
+                                    Command="{Binding RecommendedRendererCommand}" 
+                                    Margin="5" Padding="10,2,10,2" HorizontalAlignment="Right" />
                         </StackPanel>
                     </GroupBox>
                 </StackPanel>
             </TabItem>
+
+            <TabItem Header="{x:Static res:Resources.settings_keyboard_caption}" DataContext="{Binding KeyboardMouseSettingsViewModel}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    
+                    <StackPanel Grid.Column="1">
+                        <Button Content="{x:Static res:Resources.settings_keyboard_clear}" 
+                                Command="{Binding ClearCommand}" Margin="5" Padding="10,2,10,2"/>
+                        <Button Content="{x:Static res:Resources.settings_keyboard_clear_all}" 
+                                Command="{Binding ClearAllCommand}" Margin="5" Padding="10,2,10,2"/>
+                        <Button Content="{x:Static res:Resources.settings_keyboard_defaults}" 
+                                Command="{Binding DefaultsCommand}" Margin="5" Padding="10,2,10,2"/>
+                    </StackPanel>
+                    
+                    <GroupBox Grid.Row="1" Header="{x:Static res:Resources.settings_keyboard_mousewheel_action}" Margin="5">
+                        <StackPanel>
+                            <RadioButton  Content="{x:Static res:Resources.settings_mousewheel_action_volume}"
+                                      IsChecked="{Binding MouseWheelAction, Mode=TwoWay, Converter={StaticResource MouseWheelActionToBooleanConverter}, ConverterParameter='{x:Static vm:MouseWheelAction.Volume}'}"
+                                      Margin="8,8,8,4"/>
+                            <RadioButton  Content="{x:Static res:Resources.settings_mousewheel_action_seek}"
+                                      IsChecked="{Binding MouseWheelAction, Mode=TwoWay, Converter={StaticResource MouseWheelActionToBooleanConverter}, ConverterParameter='{x:Static vm:MouseWheelAction.Seek}'}"
+                                      Margin="8,3,8,6"/>
+                        </StackPanel>
+                    </GroupBox>
+                </Grid>
+            </TabItem>
         </TabControl>
         
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button IsDefault="True" Content="{x:Static res:Resources.ok}" Command="{Binding OkCommand}" Margin="5" Padding="10,1,10,1" x:Name="_btnOk" />
-            <Button IsCancel="True" Content="{x:Static res:Resources.cancel}" Command="{Binding CancelCommand}" Margin="5" Padding="10,1,10,1" x:Name="_btnCancel" />
-            <Button Content="{x:Static res:Resources.apply}" Command="{Binding ApplyCommand}" Margin="5" Padding="10,1,10,1" x:Name="_btnApply" />
+            <Button IsDefault="True" Content="{x:Static res:Resources.ok}" Command="{Binding OkCommand}" Margin="5" Padding="10,2,10,2" x:Name="_btnOk" />
+            <Button IsCancel="True" Content="{x:Static res:Resources.cancel}" Command="{Binding CancelCommand}" Margin="5" Padding="10,2,10,2" x:Name="_btnCancel" />
+            <Button Content="{x:Static res:Resources.apply}" Command="{Binding ApplyCommand}" Margin="5" Padding="10,2,10,2" x:Name="_btnApply" />
         </StackPanel>
     </Grid>
 </Window>

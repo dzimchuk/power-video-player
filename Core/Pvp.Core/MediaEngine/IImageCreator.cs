@@ -26,5 +26,16 @@ namespace Pvp.Core.MediaEngine
         /// <param name="header">BITMAPINFOHEADER structure containing metadata.</param>
         /// <param name="bytes">Pointer to the bitmap data excluding BITMAPINFOHEADER</param>
         void CreateImage(ref BITMAPINFOHEADER header, IntPtr bytes);
+
+        /// <summary>
+        /// Saves an image.
+        /// </summary>
+        /// <param name="filename"></param>
+        void Save(string filename);
+
+        /// <summary>
+        /// True if an image has been created.
+        /// </summary>
+        bool Created { get; }
     }
 }
