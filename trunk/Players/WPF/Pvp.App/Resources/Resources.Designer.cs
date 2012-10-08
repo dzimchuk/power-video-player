@@ -241,6 +241,15 @@ namespace Pvp.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please, press desired key combination:.
+        /// </summary>
+        public static string enter_key_message {
+            get {
+                return ResourceManager.GetString("enter_key_message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to .3g2 - 3GPP2.
         /// </summary>
         public static string file_type_3g2 {
@@ -408,6 +417,15 @@ namespace Pvp.App.Resources {
         public static string file_type_wmv {
             get {
                 return ResourceManager.GetString("file_type_wmv", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select a folder.
+        /// </summary>
+        public static string folder_select_dialog_caption {
+            get {
+                return ResourceManager.GetString("folder_select_dialog_caption", resourceCulture);
             }
         }
         
@@ -1456,6 +1474,15 @@ namespace Pvp.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Choose.
+        /// </summary>
+        public static string settings_general_button_choose {
+            get {
+                return ResourceManager.GetString("settings_general_button_choose", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to General.
         /// </summary>
         public static string settings_general_caption {
@@ -1492,6 +1519,15 @@ namespace Pvp.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Screenshots folder.
+        /// </summary>
+        public static string settings_general_screenshots_folder {
+            get {
+                return ResourceManager.GetString("settings_general_screenshots_folder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Show logo when file is loaded.
         /// </summary>
         public static string settings_general_show_logo {
@@ -1515,6 +1551,69 @@ namespace Pvp.App.Resources {
         public static string settings_general_topmost {
             get {
                 return ResourceManager.GetString("settings_general_topmost", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Keyboard/Mouse.
+        /// </summary>
+        public static string settings_keyboard_caption {
+            get {
+                return ResourceManager.GetString("settings_keyboard_caption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Clear.
+        /// </summary>
+        public static string settings_keyboard_clear {
+            get {
+                return ResourceManager.GetString("settings_keyboard_clear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Clear All.
+        /// </summary>
+        public static string settings_keyboard_clear_all {
+            get {
+                return ResourceManager.GetString("settings_keyboard_clear_all", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Default.
+        /// </summary>
+        public static string settings_keyboard_defaults {
+            get {
+                return ResourceManager.GetString("settings_keyboard_defaults", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mouse Wheel:.
+        /// </summary>
+        public static string settings_keyboard_mousewheel_action {
+            get {
+                return ResourceManager.GetString("settings_keyboard_mousewheel_action", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Seek.
+        /// </summary>
+        public static string settings_mousewheel_action_seek {
+            get {
+                return ResourceManager.GetString("settings_mousewheel_action_seek", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sound volume.
+        /// </summary>
+        public static string settings_mousewheel_action_volume {
+            get {
+                return ResourceManager.GetString("settings_mousewheel_action_volume", resourceCulture);
             }
         }
         

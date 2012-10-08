@@ -1334,7 +1334,7 @@ namespace Pvp
             }
             catch (Exception ex)
             {
-                Trace.GetTrace().TraceError("Error creating a screenshot: " + ex.Message);
+                TraceSink.GetTraceSink().TraceError("Error creating a screenshot: " + ex.Message);
             }
         }
 
@@ -1354,7 +1354,7 @@ namespace Pvp
             }
             catch(Exception e)
             {
-                Trace.GetTrace().TraceError("Error saving a screenshot: " + e.Message);
+                TraceSink.GetTraceSink().TraceError("Error saving a screenshot: " + e.Message);
             }
             finally
             {

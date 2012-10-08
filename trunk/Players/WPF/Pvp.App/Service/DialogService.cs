@@ -8,10 +8,24 @@ namespace Pvp.App.Service
 {
     internal class DialogService : IDialogService
     {
+        private SettingsWindow _settingsDalog;
+
         public void DisplaySettingsDialog()
         {
-            var dlg = new SettingsWindow();
-            dlg.Owner = Application.Current.MainWindow;
+            _settingsDalog = new SettingsWindow();
+            _settingsDalog.Owner = Application.Current.MainWindow;
+            _settingsDalog.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+
+            _settingsDalog.ShowDialog();
+            _settingsDalog = null;
+
+            Application.Current.MainWindow.Activate();
+        }
+
+        public void ShowEnterKeyWindow()
+        {
+            var dlg = new EnterKeyWindow();
+            dlg.Owner = _settingsDalog ?? Application.Current.MainWindow;
             dlg.WindowStartupLocation = WindowStartupLocation.CenterOwner;
 
             dlg.ShowDialog();

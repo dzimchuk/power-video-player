@@ -125,9 +125,9 @@ namespace Pvp
         private const string traceSwitchName = "PVPTraceSwitch";
         private void SetUpTrace()
         {
-            Trace.Listeners.Clear();
+            TraceSink.Listeners.Clear();
             System.Diagnostics.TraceSwitch traceSwitch = new System.Diagnostics.TraceSwitch(traceSwitchName, traceSwitchName);
-            Trace.GetTrace().TraceSwitch = traceSwitch;
+            TraceSink.GetTraceSink().TraceSwitch = traceSwitch;
 
             IsolatedStorageFilePermission perm =
                 new IsolatedStorageFilePermission(PermissionState.Unrestricted);
@@ -157,7 +157,7 @@ namespace Pvp
                         FileShare.Read, storage);
                 }
 
-                Trace.Listeners.Add(new System.Diagnostics.TextWriterTraceListener(stream));
+                TraceSink.Listeners.Add(new System.Diagnostics.TextWriterTraceListener(stream));
                 stream = null;
             }
             catch
@@ -188,7 +188,7 @@ namespace Pvp
                 Close();
             base.OnLoad (e);
             SetMenuItemsText();
-            Trace.GetTrace().TraceInformation("PVP started.");
+            TraceSink.GetTraceSink().TraceInformation("PVP started.");
         }
 
         protected override void OnClosed(EventArgs e)
@@ -198,7 +198,7 @@ namespace Pvp
                 ToggleFullscreen();
             base.OnClosed (e);
             LoadSaveSettings(false);
-            Trace.GetTrace().TraceInformation("PVP closed.");
+            TraceSink.GetTraceSink().TraceInformation("PVP closed.");
         }
 
         protected override void OnResize(EventArgs e)

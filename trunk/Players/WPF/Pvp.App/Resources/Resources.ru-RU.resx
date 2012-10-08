@@ -633,4 +633,37 @@
   <data name="settings_video_vr" xml:space="preserve">
     <value>Video Renderer</value>
   </data>
+  <data name="settings_general_button_choose" xml:space="preserve">
+    <value>Выбрать</value>
+  </data>
+  <data name="settings_general_screenshots_folder" xml:space="preserve">
+    <value>Папка для сохранения скриншотов</value>
+  </data>
+  <data name="folder_select_dialog_caption" xml:space="preserve">
+    <value>Обзор папок</value>
+  </data>
+  <data name="settings_keyboard_caption" xml:space="preserve">
+    <value>Клавиатура/Мышь</value>
+  </data>
+  <data name="enter_key_message" xml:space="preserve">
+    <value>Пожалуйста, введите желаемую комбинацию клавиш:</value>
+  </data>
+  <data name="settings_keyboard_clear" xml:space="preserve">
+    <value>Убрать</value>
+  </data>
+  <data name="settings_keyboard_clear_all" xml:space="preserve">
+    <value>Убрать все</value>
+  </data>
+  <data name="settings_keyboard_defaults" xml:space="preserve">
+    <value>По умолчанию</value>
+  </data>
+  <data name="settings_keyboard_mousewheel_action" xml:space="preserve">
+    <value>Команда, выполняемая колесиком мыши:</value>
+  </data>
+  <data name="settings_mousewheel_action_seek" xml:space="preserve">
+    <value>Поиск</value>
+  </data>
+  <data name="settings_mousewheel_action_volume" xml:space="preserve">
+    <value>Изменение громкости</value>
+  </data>
 </root>

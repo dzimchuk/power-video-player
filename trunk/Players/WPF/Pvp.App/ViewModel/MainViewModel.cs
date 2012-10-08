@@ -1,8 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Collections.ObjectModel;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
@@ -25,6 +29,7 @@ namespace Pvp.App.ViewModel
         private readonly IWindowHandleProvider _windowHandleProvider;
         private readonly IDriveService _driveService;
         private readonly ISettingsProvider _settingsProvider;
+        private readonly IImageCreaterFactory _imageCreaterFactory;
 
         private ICommand _openCommand;
         private ICommand _closeCommand;
@@ -34,6 +39,10 @@ namespace Pvp.App.ViewModel
         private ICommand _controlPanelVisibilityToggleCommand;
 
         private ICommand _settingsCommand;
+        private ICommand _videoSizeCommand;
+        private ICommand _aspectRatioCommand;
+        private ICommand _aboutCommand;
+        private ICommand _screenshotsCommand;
 
         private bool _isFullScreen;
         private bool _isRepeat;
@@ -47,6 +56,7 @@ namespace Pvp.App.ViewModel
         private bool _startFullScreen;
 
         private Tuple<double, double> _videoSize;
+        private Dictionary<string, ICommand> _commandBag;
 
         public MainViewModel(IMediaEngineFacade engine,
             ControlPanelViewModel controlViewModel,
@@ -54,7 +64,8 @@ namespace Pvp.App.ViewModel
             IDialogService dialogService,
             IWindowHandleProvider windowHandleProvider,
             IDriveService driveService,
-            ISettingsProvider settingsProvider)
+            ISettingsProvider settingsProvider, 
+            IImageCreaterFactory imageCreaterFactory)
         {
             _engine = engine;
             _controlViewModel = controlViewModel;
@@ -63,6 +74,7 @@ namespace Pvp.App.ViewModel
             _windowHandleProvider = windowHandleProvider;
             _driveService = driveService;
             _settingsProvider = settingsProvider;
+            _imageCreaterFactory = imageCreaterFactory;
 
             _settingsProvider.SettingChanged += _settingsProvider_SettingChanged;
             ReadSettings();
@@ -72,6 +84,7 @@ namespace Pvp.App.ViewModel
             Messenger.Default.Register<DragDropMessage>(this, true, OnDragDrop);
 
             PopulateCDRomMenu();
+            PackUpCommandBag();
         }
 
         private void _settingsProvider_SettingChanged(object sender, SettingChangeEventArgs e)
@@ -1133,9 +1146,11 @@ namespace Pvp.App.ViewModel
                 {
                     _settingsCommand = new RelayCommand(
                         () =>
-                        {
-                            _dialogService.DisplaySettingsDialog();
-                        });
+                            {
+                                Messenger.Default.Send(new EventMessage(Event.SettingsDialogActivated));
+                                _dialogService.DisplaySettingsDialog();
+                                Messenger.Default.Send(new EventMessage(Event.SettingsDialogDeactivated));
+                            });
                 }
 
                 return _settingsCommand;
@@ -1161,6 +1176,231 @@ namespace Pvp.App.ViewModel
                 if (value.Equals(_autoPlay)) return;
                 _autoPlay = value;
                 RaisePropertyChanged("AutoPlay");
+            }
+        }
+
+        private void TakeScreenshot()
+        {
+            if (_engine.GraphState == GraphState.Reset)
+                return;
+
+            IImageCreator imageCreator = _imageCreaterFactory.GetNew();
+            var goodToGo = false;
+            try
+            {
+                _engine.GetCurrentImage(imageCreator);
+                goodToGo = imageCreator.Created;
+            }
+            catch (Exception e)
+            {
+                TraceSink.GetTraceSink().TraceError(string.Format("Error creating a screenshot: {0}", e));
+            }
+
+            if (goodToGo)
+            {
+                Task.Factory.StartNew(SaveScreenshot, imageCreator).ContinueWith(prevTask =>
+                                                                                {
+                                                                                    var disposable = imageCreator as IDisposable;
+                                                                                    if (disposable != null)
+                                                                                        disposable.Dispose();
+                                                                                });
+            }
+        }
+
+        private readonly object _screenshotsSyncRoot = new object();
+        private void SaveScreenshot(object state)
+        {
+            IImageCreator imageCreator = state as IImageCreator;
+            if (imageCreator == null)
+                return;
+
+            try
+            {
+                lock (_screenshotsSyncRoot)
+                {
+                    imageCreator.Save(GetNewScreenshotName());
+                }
+            }
+            catch (Exception e)
+            {
+                TraceSink.GetTraceSink().TraceError(string.Format("Error saving a screenshot: {0}", e));
+            }
+        }
+
+        private const string SCREENSHOT_NAME_FORMAT = "pvp_screenshot_{0}.jpg";
+        private readonly Regex _regexScrnshotName = new Regex(@"pvp_screenshot_(?<index>\d+).jpg");
+        private string GetNewScreenshotName()
+        {
+            string dir = _settingsProvider.Get("ScreenshotsFolder", DefaultSettings.SreenshotsFolder);
+            if (!Directory.Exists(dir))
+                dir = DefaultSettings.SreenshotsFolder;
+            string[] files = Directory.GetFiles(dir, "*.jpg", SearchOption.TopDirectoryOnly);
+            int index = 0;
+            foreach (string file in files)
+            {
+                Match m = _regexScrnshotName.Match(file);
+                if (m.Success)
+                {
+                    int i;
+                    if (Int32.TryParse(m.Groups["index"].Value, out i))
+                    {
+                        if (i >= index)
+                            index = ++i;
+                    }
+                }
+            }
+
+            return Path.Combine(dir, string.Format(SCREENSHOT_NAME_FORMAT, index));
+        }
+
+        private void PackUpCommandBag()
+        {
+            _commandBag = new Dictionary<string, ICommand>();
+
+            _commandBag.Add(CommandConstants.Open, OpenCommand);
+            _commandBag.Add(CommandConstants.Close, CloseCommand);
+            _commandBag.Add(CommandConstants.Info, InfoCommand);
+
+            _commandBag.Add(CommandConstants.Play, _controlViewModel.PlayCommand);
+            _commandBag.Add(CommandConstants.Pause, _controlViewModel.PauseCommand);
+            _commandBag.Add(CommandConstants.Stop, _controlViewModel.StopCommand);
+            _commandBag.Add(CommandConstants.Repeat, _controlViewModel.RepeatCommand);
+            _commandBag.Add(CommandConstants.FullScreen, FullScreenCommand);
+
+            _commandBag.Add(CommandConstants.Back, _controlViewModel.BackwardCommand);
+            _commandBag.Add(CommandConstants.Forth, _controlViewModel.ForwardCommand);
+
+            _commandBag.Add(CommandConstants.VideoSize50, VideoSizeCommand);
+            _commandBag.Add(CommandConstants.VideoSize100, VideoSizeCommand);
+            _commandBag.Add(CommandConstants.VideoSize200, VideoSizeCommand);
+            _commandBag.Add(CommandConstants.VideoSizeFree, VideoSizeCommand);
+
+            _commandBag.Add(CommandConstants.AspectRatioOriginal, AspectRatioCommand);
+            _commandBag.Add(CommandConstants.AspectRatio4X3, AspectRatioCommand);
+            _commandBag.Add(CommandConstants.AspectRatio16X9, AspectRatioCommand);
+            _commandBag.Add(CommandConstants.AspectRatio47X20, AspectRatioCommand);
+            _commandBag.Add(CommandConstants.AspectRatio1X1, AspectRatioCommand);
+            _commandBag.Add(CommandConstants.AspectRatio5X4, AspectRatioCommand);
+            _commandBag.Add(CommandConstants.AspectRatio16X10, AspectRatioCommand);
+            _commandBag.Add(CommandConstants.AspectRatioFree, AspectRatioCommand);
+
+            _commandBag.Add(CommandConstants.VolumeUp, _controlViewModel.VolumeUpCommand);
+            _commandBag.Add(CommandConstants.VolumeDown, _controlViewModel.VolumeDownCommand);
+            _commandBag.Add(CommandConstants.Mute, _controlViewModel.MuteCommand);
+
+            _commandBag.Add(CommandConstants.TaskScreenshot, ScreenshotsCommand);
+            _commandBag.Add(CommandConstants.Settings, SettingsCommand);
+            _commandBag.Add(CommandConstants.About, AboutCommand);
+            _commandBag.Add(CommandConstants.Exit, ExitCommand);
+        }
+
+        private void ExecuteCommand(string commandName)
+        {
+            ICommand command;
+            if (_commandBag.TryGetValue(commandName, out command))
+            {
+                if (command.CanExecute(commandName))
+                {
+                    command.Execute(commandName);
+                }
+            }
+        }
+
+        private ICommand VideoSizeCommand
+        {
+            get
+            {
+                if (_videoSizeCommand == null)
+                {
+                    _videoSizeCommand = new RelayCommand<string>(commandName =>
+                    {
+                        switch(commandName)
+                        {
+                            case CommandConstants.VideoSize50:
+                                VideoSize = VideoSize.SIZE50;
+                                break;
+                            case CommandConstants.VideoSize100:
+                                VideoSize = VideoSize.SIZE100;
+                                break;
+                            case CommandConstants.VideoSize200:
+                                VideoSize = VideoSize.SIZE200;
+                                break;
+                            case CommandConstants.VideoSizeFree:
+                                VideoSize = VideoSize.SIZE_FREE;
+                                break;
+                        }
+                    });
+                }
+
+                return _videoSizeCommand;
+            }
+        }
+
+        private ICommand AspectRatioCommand
+        {
+            get
+            {
+                if (_aspectRatioCommand == null)
+                {
+                    _aspectRatioCommand = new RelayCommand<string>(commandName =>
+                    {
+                        switch(commandName)
+                        {
+                            case CommandConstants.AspectRatioOriginal:
+                                AspectRatio = AspectRatio.AR_ORIGINAL;
+                                break;
+                            case CommandConstants.AspectRatio4X3:
+                                AspectRatio = AspectRatio.AR_4x3;
+                                break;
+                            case CommandConstants.AspectRatio16X9:
+                                AspectRatio = AspectRatio.AR_16x9;
+                                break;
+                            case CommandConstants.AspectRatio47X20:
+                                AspectRatio = AspectRatio.AR_47x20;
+                                break;
+                            case CommandConstants.AspectRatio1X1:
+                                AspectRatio = AspectRatio.AR_1x1;
+                                break;
+                            case CommandConstants.AspectRatio5X4:
+                                AspectRatio = AspectRatio.AR_5x4;
+                                break;
+                            case CommandConstants.AspectRatio16X10:
+                                AspectRatio = AspectRatio.AR_16x10;
+                                break;
+                            case CommandConstants.AspectRatioFree:
+                                AspectRatio = AspectRatio.AR_FREE;
+                                break;
+                        }
+                    });
+                }
+
+                return _aspectRatioCommand;
+            }
+        }
+
+        private ICommand ScreenshotsCommand
+        {
+            get 
+            { 
+                if (_screenshotsCommand == null)
+                {
+                    _screenshotsCommand = new RelayCommand(TakeScreenshot);
+                }
+
+                return _screenshotsCommand;
+            }
+        }
+
+        private ICommand AboutCommand
+        {
+            get
+            {
+                if (_aboutCommand == null)
+                {
+                    
+                }
+
+                return _aboutCommand;
             }
         }
     }

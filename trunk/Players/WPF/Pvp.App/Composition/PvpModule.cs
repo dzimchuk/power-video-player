@@ -20,12 +20,16 @@ namespace Pvp.App.Composition
             Bind<IWindowHandleProvider>().To<WindowHandleProvider>();
             Bind<IDriveService>().To<DriveService>();
             Bind<ISettingsProvider>().To<SettingsProvider>().InSingletonScope();
+            Bind<IKeyInterpreter>().To<KeyInterpreter>();
 
             Bind<ViewModelBase>().To<MainWindowViewModel>().InSingletonScope().Named(ViewModelLocator.MainWindowViewModelName);
             Bind<ViewModelBase>().To<MainViewModel>().InSingletonScope().Named(ViewModelLocator.MainViewModelName);
             Bind<ControlPanelViewModel>().ToSelf().InSingletonScope();
 
+            Bind<IImageCreaterFactory>().To<ImageCreaterFactory>().InSingletonScope();
+
             Bind<ViewModelBase>().To<SettingsViewModel>().Named(ViewModelLocator.SettingsViewModelName);
+            Bind<ViewModelBase>().To<EnterKeyViewModel>().Named(ViewModelLocator.EnterKeyViewModelName);
         }
     }
 }

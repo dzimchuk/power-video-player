@@ -14,6 +14,8 @@ namespace Pvp.App.Messaging
         DispatcherTimerTick,
         ContextMenuOpened,
         InitSize,
-        MainWindowResizeSuggested
+        MainWindowResizeSuggested,
+        SettingsDialogActivated,
+        SettingsDialogDeactivated
     }
 }

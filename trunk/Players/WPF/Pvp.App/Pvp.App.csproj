@@ -11,7 +11,8 @@
     <RootNamespace>Pvp.App</RootNamespace>
     <AssemblyName>Pvp.App</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
@@ -54,6 +55,9 @@
     <Reference Include="Ninject">
       <HintPath>..\..\..\packages\Ninject.2.2.1.4\lib\net40-Client\Ninject.dll</HintPath>
     </Reference>
+    <Reference Include="Ookii.Dialogs.Wpf">
+      <HintPath>..\..\..\lib\Ookii.Dialogs\Ookii.Dialogs.Wpf.dll</HintPath>
+    </Reference>
     <Reference Include="ReuxablesLegacy, Version=3.2.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\lib\Reuxables\ReuxablesLegacy.dll</HintPath>
@@ -91,7 +95,16 @@
     <Compile Include="Service\DriveInfo.cs" />
     <Compile Include="Service\DriveService.cs" />
     <Compile Include="Util\WindowCustomizer.cs" />
+    <Compile Include="ViewModel\CommandConstants.cs" />
+    <Compile Include="ViewModel\DefaultSettings.cs" />
     <Compile Include="ViewModel\Extensions.cs" />
+    <Compile Include="ViewModel\IImageCreaterFactory.cs" />
+    <Compile Include="Service\ImageCreaterFactory.cs" />
+    <Compile Include="ViewModel\IKeyInterpreter.cs" />
+    <Compile Include="ViewModel\KeyCombination.cs" />
+    <Compile Include="Service\KeyInterpreter.cs" />
+    <Compile Include="ViewModel\MouseWheelAction.cs" />
+    <Compile Include="ViewModel\Settings\EnterKeyViewModel.cs" />
     <Compile Include="ViewModel\Settings\ISettingsViewModel.cs" />
     <Compile Include="ViewModel\Settings\SettingChangeEventArgs.cs" />
     <Compile Include="Service\SettingsProvider.cs" />
@@ -140,6 +153,7 @@
     <Compile Include="ViewModel\Settings\GeneralSettingsViewModel.cs" />
     <Compile Include="ViewModel\Settings\ISettingsProvider.cs" />
     <Compile Include="ViewModel\Settings\KeyboardMouseSettingsViewModel.cs" />
+    <Compile Include="ViewModel\SettingsConstants.cs" />
     <Compile Include="ViewModel\Settings\SettingsViewModel.cs" />
     <Compile Include="ViewModel\Settings\VideoSettingsViewModel.cs" />
     <Compile Include="ViewModel\TitleChapterCommand.cs" />
@@ -147,7 +161,11 @@
     <Compile Include="View\BooleanToVisibilityValueConverter.cs" />
     <Compile Include="View\BooleanToWindowStartupLocationValueConverter.cs" />
     <Compile Include="View\DoubleToBooleanValueConverter.cs" />
+    <Compile Include="View\EnterKeyWindow.xaml.cs">
+      <DependentUpon>EnterKeyWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\FullSceenPanelVisibilityValueConverter.cs" />
+    <Compile Include="View\MouseWheelActionToBooleanConverter.cs" />
     <Compile Include="View\PercentToStringValueConverter.cs" />
     <Compile Include="View\RegularControlPanelVisibilityValueConverter.cs" />
     <Compile Include="View\MainView.xaml.cs">
@@ -167,6 +185,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
       <ContainsDesignTimeResources>true</ContainsDesignTimeResources>
+    </Page>
+    <Page Include="View\EnterKeyWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -210,6 +232,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="app.config" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

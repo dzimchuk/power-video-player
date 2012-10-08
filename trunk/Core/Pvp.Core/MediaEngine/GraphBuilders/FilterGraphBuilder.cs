@@ -83,7 +83,7 @@ namespace Pvp.Core.MediaEngine.GraphBuilders
             FilterGraph pFilterGraph = null;
             try
             {
-                Trace.GetTrace().TraceInformation(
+                TraceSink.GetTraceSink().TraceInformation(
                     String.Format("Start building filter graph. Source: {0}. WhatToPlay: {1}. PreferredVideoRenderer: {2}.",
                     source, sourceType, preferredVideoRenderer));
 
@@ -93,7 +93,7 @@ namespace Pvp.Core.MediaEngine.GraphBuilders
                                                                                pFilterGraph);
                 if (pFilterGraphBuilder == null)
                 {
-                    Trace.GetTrace().TraceWarning("Could not identify source type.");
+                    TraceSink.GetTraceSink().TraceWarning("Could not identify source type.");
                     pFilterGraphBuilder = RegularFilterGraphBuilder.GetGraphBuilder();
                 }
 
@@ -108,21 +108,21 @@ namespace Pvp.Core.MediaEngine.GraphBuilders
                 parameters.OnPartialSuccessCallback = onPartialSuccessCallback;
 
                 pFilterGraphBuilder.BuildFilterGraph(ref comobj, ref parameters);
-                Trace.GetTrace().TraceInformation("The graph was built successfully.");
+                TraceSink.GetTraceSink().TraceInformation("The graph was built successfully.");
                 return pFilterGraph;
             }
             catch (AbortException)
             {
                 if (pFilterGraph != null)
                     pFilterGraph.Dispose();
-                Trace.GetTrace().TraceWarning("User abort.");
+                TraceSink.GetTraceSink().TraceWarning("User abort.");
                 return null;
             }
             catch (FilterGraphBuilderException builder_ex)
             {
                 if (pFilterGraph != null)
                     pFilterGraph.Dispose();
-                Trace.GetTrace().TraceError(builder_ex.ToString());
+                TraceSink.GetTraceSink().TraceError(builder_ex.ToString());
                 onErrorCallback(builder_ex.Message);
                 return null;
             }
@@ -137,8 +137,8 @@ namespace Pvp.Core.MediaEngine.GraphBuilders
                 }
                 else
                     error = com_ex.Message;
-                Trace.GetTrace().TraceError(com_ex.ToString());
-                Trace.GetTrace().TraceError(error);
+                TraceSink.GetTraceSink().TraceError(com_ex.ToString());
+                TraceSink.GetTraceSink().TraceError(error);
                 onErrorCallback(error);
                 return null;
             }
@@ -146,7 +146,7 @@ namespace Pvp.Core.MediaEngine.GraphBuilders
             {
                 if (pFilterGraph != null)
                     pFilterGraph.Dispose();
-                Trace.GetTrace().TraceError(e.ToString());
+                TraceSink.GetTraceSink().TraceError(e.ToString());
                 onErrorCallback(e.Message);
                 return null;
             }
@@ -218,7 +218,7 @@ namespace Pvp.Core.MediaEngine.GraphBuilders
             {
                 if (comobj != null)
                     while(Marshal.ReleaseComObject(comobj) > 0) {}
-                Trace.GetTrace().TraceWarning("Could not instantiate DirectSound Filter.");
+                TraceSink.GetTraceSink().TraceWarning("Could not instantiate DirectSound Filter.");
                 return false;
             }
             comobj = null;
@@ -229,7 +229,7 @@ namespace Pvp.Core.MediaEngine.GraphBuilders
             if (DsHlp.FAILED(hr))
             {
                 while(Marshal.ReleaseComObject(pDSBaseFilter) > 0) {}
-                Trace.GetTrace().TraceWarning("Could not add DirectSound Filter to the filter graph.");
+                TraceSink.GetTraceSink().TraceWarning("Could not add DirectSound Filter to the filter graph.");
                 return false;
             }
 
@@ -237,7 +237,7 @@ namespace Pvp.Core.MediaEngine.GraphBuilders
             if (pBA == null)
             {
                 while(Marshal.ReleaseComObject(pDSBaseFilter) > 0) {}
-                Trace.GetTrace().TraceWarning("Could not get IBasicAudio interface.");
+                TraceSink.GetTraceSink().TraceWarning("Could not get IBasicAudio interface.");
                 return false;
             }
 

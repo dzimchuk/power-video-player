@@ -1,9 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Text;
-using Pvp.App.ViewModel;
 using System.Windows;
+using Microsoft.Win32;
+using Ookii.Dialogs.Wpf;
+using Pvp.App.ViewModel;
 
 namespace Pvp.App.Service
 {
@@ -11,12 +12,27 @@ namespace Pvp.App.Service
     {
         public string SelectFile(string filter)
         {
-            Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
+            OpenFileDialog dlg = new OpenFileDialog();
             dlg.Filter = filter;
             dlg.Multiselect = false;
 
             var result = dlg.ShowDialog(Application.Current.MainWindow);
-            return result.HasValue && result.Value == true && !string.IsNullOrEmpty(dlg.FileName) ? dlg.FileName : null;
+            return result.HasValue && result.Value && !string.IsNullOrEmpty(dlg.FileName) ? dlg.FileName : null;
+        }
+
+        public string SelectFolder(string defaultFolder)
+        {
+            VistaFolderBrowserDialog dlg = new VistaFolderBrowserDialog();
+//            dlg.Description = Resources.Resources.ResourceManager.GetString("folder_select_dialog_caption");
+//            dlg.UseDescriptionForTitle = true;
+            if (!string.IsNullOrEmpty(defaultFolder) && Directory.Exists(defaultFolder))
+            {
+                dlg.SelectedPath = defaultFolder;
+            }
+            dlg.ShowNewFolderButton = true;
+
+            var result = dlg.ShowDialog(Application.Current.MainWindow);
+            return result.HasValue && result.Value && !string.IsNullOrEmpty(dlg.SelectedPath) ? dlg.SelectedPath : null;
         }
     }
 }

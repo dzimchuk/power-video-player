@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
@@ -20,17 +21,22 @@ namespace Pvp.App.ViewModel
         private bool _topMost;
         private bool _centerWindow;
 
+        private bool _settingsDialogActivated;
+
         private ICommand _minimizeCommand;
         private ICommand _maximizeCommand;
         private ICommand _closeCommand;
+        private ICommand _keyDownCommand;
 
         private readonly ISettingsProvider _settingsProvider;
+        private readonly IKeyInterpreter _keyInterpreter;
         private readonly IMediaEngineFacade _engine;
 
-        public MainWindowViewModel(ISettingsProvider settingsProvider, IMediaEngineFacade engine)
+        public MainWindowViewModel(ISettingsProvider settingsProvider, IMediaEngineFacade engine, IKeyInterpreter keyInterpreter)
         {
             _settingsProvider = settingsProvider;
             _engine = engine;
+            _keyInterpreter = keyInterpreter;
             _settingsProvider.SettingChanged += _settingsProvider_SettingChanged;
 
             ReadSettings();
@@ -206,6 +212,14 @@ namespace Pvp.App.ViewModel
                 var args = (MainWindowResizeSuggestedEventArgs)message.EventArgs;
                 RaiseResizeMainWindowEvent(args.VideoSize, args.Width, args.Height);
             }
+            else if (message.Content == Event.SettingsDialogActivated)
+            {
+                _settingsDialogActivated = true;
+            }
+            else if (message.Content == Event.SettingsDialogDeactivated)
+            {
+                _settingsDialogActivated = false;
+            }
         }
 
         private void RaiseResizeMainWindowEvent(VideoSize videoSize, double width, double height)
@@ -237,6 +251,29 @@ namespace Pvp.App.ViewModel
                 {
                     FlipFullScreen(false);
                 }
+            }
+        }
+
+        public ICommand KeyDownCommand
+        {
+            get
+            {
+                if (_keyDownCommand == null)
+                {
+                    _keyDownCommand = new RelayCommand<EventArgs>(args =>
+                    {
+                        if (!_settingsDialogActivated)
+                        {
+                            var keyCombination = _keyInterpreter.Interpret(args);
+                            if (keyCombination != null)
+                            {
+                                Debug.WriteLine(keyCombination);
+                            }
+                        }
+                    });
+                }
+
+                return _keyDownCommand;
             }
         }
     }

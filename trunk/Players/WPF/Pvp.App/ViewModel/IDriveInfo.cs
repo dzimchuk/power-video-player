@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Pvp.App.ViewModel
 {
-    internal interface IDriveInfo
+    public interface IDriveInfo
     {
         string Name { get; }
         string VolumeLabel { get; }
