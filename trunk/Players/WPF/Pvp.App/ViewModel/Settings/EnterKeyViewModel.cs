@@ -23,14 +23,14 @@ namespace Pvp.App.ViewModel.Settings
             _selectedKeyCombination = new KeyCombination();
         }
 
-        public KeyCombination SelectedKeyCombinationCombination
+        public KeyCombination SelectedKeyCombination
         {
             get { return _selectedKeyCombination; }
             set
             {
                 if (Equals(value, _selectedKeyCombination)) return;
                 _selectedKeyCombination = value;
-                RaisePropertyChanged("SelectedKeyCombinationCombination");
+                RaisePropertyChanged("SelectedKeyCombination");
             }
         }
 
@@ -58,7 +58,7 @@ namespace Pvp.App.ViewModel.Settings
                                                                           var keyCombination = _keyInterpreter.Interpret(args);
                                                                           if (keyCombination != null)
                                                                           {
-                                                                              SelectedKeyCombinationCombination = keyCombination;
+                                                                              SelectedKeyCombination = keyCombination;
                                                                           }
                                                                       });
                 }

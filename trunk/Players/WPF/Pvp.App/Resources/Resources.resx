@@ -666,4 +666,91 @@
   <data name="settings_mousewheel_action_volume" xml:space="preserve">
     <value>Sound volume</value>
   </data>
+  <data name="settings_keyboard_about" xml:space="preserve">
+    <value>About</value>
+  </data>
+  <data name="settings_keyboard_aspectratio16x10" xml:space="preserve">
+    <value>Aspect ratio: 16x10</value>
+  </data>
+  <data name="settings_keyboard_aspectratio16x9" xml:space="preserve">
+    <value>Aspect ratio: 16x9</value>
+  </data>
+  <data name="settings_keyboard_aspectratio1x1" xml:space="preserve">
+    <value>Aspect ratio: 1x1</value>
+  </data>
+  <data name="settings_keyboard_aspectratio47x20" xml:space="preserve">
+    <value>Aspect ratio: 47x20</value>
+  </data>
+  <data name="settings_keyboard_aspectratio4x3" xml:space="preserve">
+    <value>Aspect ratio: 4x3</value>
+  </data>
+  <data name="settings_keyboard_aspectratio5x4" xml:space="preserve">
+    <value>Aspect ratio: 5x4</value>
+  </data>
+  <data name="settings_keyboard_aspectratiofree" xml:space="preserve">
+    <value>Aspect ratio: Free</value>
+  </data>
+  <data name="settings_keyboard_aspectratiooriginal" xml:space="preserve">
+    <value>Aspect ratio: Original</value>
+  </data>
+  <data name="settings_keyboard_back" xml:space="preserve">
+    <value>Backward</value>
+  </data>
+  <data name="settings_keyboard_close" xml:space="preserve">
+    <value>Close file</value>
+  </data>
+  <data name="settings_keyboard_exit" xml:space="preserve">
+    <value>Exit</value>
+  </data>
+  <data name="settings_keyboard_forth" xml:space="preserve">
+    <value>Forward</value>
+  </data>
+  <data name="settings_keyboard_fullscreen" xml:space="preserve">
+    <value>Fullscreen</value>
+  </data>
+  <data name="settings_keyboard_info" xml:space="preserve">
+    <value>File information</value>
+  </data>
+  <data name="settings_keyboard_mute" xml:space="preserve">
+    <value>Mute</value>
+  </data>
+  <data name="settings_keyboard_open" xml:space="preserve">
+    <value>Open file</value>
+  </data>
+  <data name="settings_keyboard_pause" xml:space="preserve">
+    <value>Pause/Play</value>
+  </data>
+  <data name="settings_keyboard_play" xml:space="preserve">
+    <value>Play</value>
+  </data>
+  <data name="settings_keyboard_repeat" xml:space="preserve">
+    <value>Repeat</value>
+  </data>
+  <data name="settings_keyboard_settings" xml:space="preserve">
+    <value>Preferences</value>
+  </data>
+  <data name="settings_keyboard_stop" xml:space="preserve">
+    <value>Stop</value>
+  </data>
+  <data name="settings_keyboard_takescreenshot" xml:space="preserve">
+    <value>Take screenshot</value>
+  </data>
+  <data name="settings_keyboard_videosize100" xml:space="preserve">
+    <value>Video size: 100%</value>
+  </data>
+  <data name="settings_keyboard_videosize200" xml:space="preserve">
+    <value>Video size: 200%</value>
+  </data>
+  <data name="settings_keyboard_videosize50" xml:space="preserve">
+    <value>Video size: 50%</value>
+  </data>
+  <data name="settings_keyboard_videosizefree" xml:space="preserve">
+    <value>Video size: Free</value>
+  </data>
+  <data name="settings_keyboard_volumedown" xml:space="preserve">
+    <value>Decrease volume</value>
+  </data>
+  <data name="settings_keyboard_volumeup" xml:space="preserve">
+    <value>Increase volume</value>
+  </data>
 </root>

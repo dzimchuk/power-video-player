@@ -666,4 +666,91 @@
   <data name="settings_mousewheel_action_volume" xml:space="preserve">
     <value>Изменение громкости</value>
   </data>
+  <data name="settings_keyboard_about" xml:space="preserve">
+    <value>О программе</value>
+  </data>
+  <data name="settings_keyboard_aspectratio16x10" xml:space="preserve">
+    <value>Пропорции: 16x10</value>
+  </data>
+  <data name="settings_keyboard_aspectratio16x9" xml:space="preserve">
+    <value>Пропорции: 16x9</value>
+  </data>
+  <data name="settings_keyboard_aspectratio1x1" xml:space="preserve">
+    <value>Пропорции: 1x1</value>
+  </data>
+  <data name="settings_keyboard_aspectratio47x20" xml:space="preserve">
+    <value>Пропорции: 47x20</value>
+  </data>
+  <data name="settings_keyboard_aspectratio4x3" xml:space="preserve">
+    <value>Пропорции: 4x3</value>
+  </data>
+  <data name="settings_keyboard_aspectratio5x4" xml:space="preserve">
+    <value>Пропорции: 5x4</value>
+  </data>
+  <data name="settings_keyboard_aspectratiofree" xml:space="preserve">
+    <value>Пропорции: Произвольные</value>
+  </data>
+  <data name="settings_keyboard_aspectratiooriginal" xml:space="preserve">
+    <value>Пропорции: Как есть</value>
+  </data>
+  <data name="settings_keyboard_back" xml:space="preserve">
+    <value>Назад</value>
+  </data>
+  <data name="settings_keyboard_close" xml:space="preserve">
+    <value>Закрыть</value>
+  </data>
+  <data name="settings_keyboard_exit" xml:space="preserve">
+    <value>Выход</value>
+  </data>
+  <data name="settings_keyboard_forth" xml:space="preserve">
+    <value>Вперед</value>
+  </data>
+  <data name="settings_keyboard_fullscreen" xml:space="preserve">
+    <value>На весь экран</value>
+  </data>
+  <data name="settings_keyboard_info" xml:space="preserve">
+    <value>Информация о файле</value>
+  </data>
+  <data name="settings_keyboard_mute" xml:space="preserve">
+    <value>Отключить звук</value>
+  </data>
+  <data name="settings_keyboard_open" xml:space="preserve">
+    <value>Открыть</value>
+  </data>
+  <data name="settings_keyboard_pause" xml:space="preserve">
+    <value>Пауза/Воспроизведение</value>
+  </data>
+  <data name="settings_keyboard_play" xml:space="preserve">
+    <value>Воспроизведение</value>
+  </data>
+  <data name="settings_keyboard_repeat" xml:space="preserve">
+    <value>Повтор</value>
+  </data>
+  <data name="settings_keyboard_settings" xml:space="preserve">
+    <value>Настройки</value>
+  </data>
+  <data name="settings_keyboard_stop" xml:space="preserve">
+    <value>Стоп</value>
+  </data>
+  <data name="settings_keyboard_takescreenshot" xml:space="preserve">
+    <value>Сделать скриншот</value>
+  </data>
+  <data name="settings_keyboard_videosize100" xml:space="preserve">
+    <value>Размер видео: 100%</value>
+  </data>
+  <data name="settings_keyboard_videosize200" xml:space="preserve">
+    <value>Размер видео: 200%</value>
+  </data>
+  <data name="settings_keyboard_videosize50" xml:space="preserve">
+    <value>Размер видео: 50%</value>
+  </data>
+  <data name="settings_keyboard_videosizefree" xml:space="preserve">
+    <value>Размер видео: Произвольный</value>
+  </data>
+  <data name="settings_keyboard_volumedown" xml:space="preserve">
+    <value>Уменьшить громкость</value>
+  </data>
+  <data name="settings_keyboard_volumeup" xml:space="preserve">
+    <value>Увеличить громкость</value>
+  </data>
 </root>

@@ -43,6 +43,7 @@ namespace Pvp.App.ViewModel
         private ICommand _aspectRatioCommand;
         private ICommand _aboutCommand;
         private ICommand _screenshotsCommand;
+        private ICommand _playPauseCommand;
 
         private bool _isFullScreen;
         private bool _isRepeat;
@@ -491,6 +492,14 @@ namespace Pvp.App.ViewModel
                 if (args.NewVideoSize.Width > 0.0 && args.NewVideoSize.Height > 0.0)
                 {
                     _videoSize = new Tuple<double, double>(args.NewVideoSize.Width, args.NewVideoSize.Height);
+                }
+            }
+            else if (message.Content == Event.KeyboardAction)
+            {
+                var args = message.EventArgs as KeyboardActionEventArgs;
+                if (args != null)
+                {
+                    ExecuteCommand(args.Action);
                 }
             }
         }
@@ -1262,7 +1271,7 @@ namespace Pvp.App.ViewModel
             _commandBag.Add(CommandConstants.Info, InfoCommand);
 
             _commandBag.Add(CommandConstants.Play, _controlViewModel.PlayCommand);
-            _commandBag.Add(CommandConstants.Pause, _controlViewModel.PauseCommand);
+            _commandBag.Add(CommandConstants.PlayPause, PlayPauseCommand);
             _commandBag.Add(CommandConstants.Stop, _controlViewModel.StopCommand);
             _commandBag.Add(CommandConstants.Repeat, _controlViewModel.RepeatCommand);
             _commandBag.Add(CommandConstants.FullScreen, FullScreenCommand);
@@ -1288,7 +1297,7 @@ namespace Pvp.App.ViewModel
             _commandBag.Add(CommandConstants.VolumeDown, _controlViewModel.VolumeDownCommand);
             _commandBag.Add(CommandConstants.Mute, _controlViewModel.MuteCommand);
 
-            _commandBag.Add(CommandConstants.TaskScreenshot, ScreenshotsCommand);
+            _commandBag.Add(CommandConstants.TakeScreenshot, ScreenshotsCommand);
             _commandBag.Add(CommandConstants.Settings, SettingsCommand);
             _commandBag.Add(CommandConstants.About, AboutCommand);
             _commandBag.Add(CommandConstants.Exit, ExitCommand);
@@ -1303,6 +1312,30 @@ namespace Pvp.App.ViewModel
                 {
                     command.Execute(commandName);
                 }
+            }
+        }
+
+        private ICommand PlayPauseCommand
+        {
+            get
+            {
+                if (_playPauseCommand == null)
+                {
+                    _playPauseCommand = new RelayCommand(
+                        () =>
+                            {
+                                if (_controlViewModel.PlayCommand.CanExecute(null))
+                                    _controlViewModel.PlayCommand.Execute(null);
+                                else if (_controlViewModel.PauseCommand.CanExecute(null))
+                                    _controlViewModel.PauseCommand.Execute(null);
+                            },
+                        () =>
+                            {
+                                return _controlViewModel.PlayCommand.CanExecute(null) || _controlViewModel.PauseCommand.CanExecute(null);
+                            });
+                }
+
+                return _playPauseCommand;
             }
         }
 

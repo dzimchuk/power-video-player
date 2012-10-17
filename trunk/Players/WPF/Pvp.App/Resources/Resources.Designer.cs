@@ -1555,6 +1555,96 @@ namespace Pvp.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to About.
+        /// </summary>
+        public static string settings_keyboard_about {
+            get {
+                return ResourceManager.GetString("settings_keyboard_about", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Aspect ratio: 16x10.
+        /// </summary>
+        public static string settings_keyboard_aspectratio16x10 {
+            get {
+                return ResourceManager.GetString("settings_keyboard_aspectratio16x10", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Aspect ratio: 16x9.
+        /// </summary>
+        public static string settings_keyboard_aspectratio16x9 {
+            get {
+                return ResourceManager.GetString("settings_keyboard_aspectratio16x9", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Aspect ratio: 1x1.
+        /// </summary>
+        public static string settings_keyboard_aspectratio1x1 {
+            get {
+                return ResourceManager.GetString("settings_keyboard_aspectratio1x1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Aspect ratio: 47x20.
+        /// </summary>
+        public static string settings_keyboard_aspectratio47x20 {
+            get {
+                return ResourceManager.GetString("settings_keyboard_aspectratio47x20", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Aspect ratio: 4x3.
+        /// </summary>
+        public static string settings_keyboard_aspectratio4x3 {
+            get {
+                return ResourceManager.GetString("settings_keyboard_aspectratio4x3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Aspect ratio: 5x4.
+        /// </summary>
+        public static string settings_keyboard_aspectratio5x4 {
+            get {
+                return ResourceManager.GetString("settings_keyboard_aspectratio5x4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Aspect ratio: Free.
+        /// </summary>
+        public static string settings_keyboard_aspectratiofree {
+            get {
+                return ResourceManager.GetString("settings_keyboard_aspectratiofree", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Aspect ratio: Original.
+        /// </summary>
+        public static string settings_keyboard_aspectratiooriginal {
+            get {
+                return ResourceManager.GetString("settings_keyboard_aspectratiooriginal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Backward.
+        /// </summary>
+        public static string settings_keyboard_back {
+            get {
+                return ResourceManager.GetString("settings_keyboard_back", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Keyboard/Mouse.
         /// </summary>
         public static string settings_keyboard_caption {
@@ -1582,6 +1672,15 @@ namespace Pvp.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Close file.
+        /// </summary>
+        public static string settings_keyboard_close {
+            get {
+                return ResourceManager.GetString("settings_keyboard_close", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Default.
         /// </summary>
         public static string settings_keyboard_defaults {
@@ -1591,11 +1690,173 @@ namespace Pvp.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Exit.
+        /// </summary>
+        public static string settings_keyboard_exit {
+            get {
+                return ResourceManager.GetString("settings_keyboard_exit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Forward.
+        /// </summary>
+        public static string settings_keyboard_forth {
+            get {
+                return ResourceManager.GetString("settings_keyboard_forth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fullscreen.
+        /// </summary>
+        public static string settings_keyboard_fullscreen {
+            get {
+                return ResourceManager.GetString("settings_keyboard_fullscreen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File information.
+        /// </summary>
+        public static string settings_keyboard_info {
+            get {
+                return ResourceManager.GetString("settings_keyboard_info", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Mouse Wheel:.
         /// </summary>
         public static string settings_keyboard_mousewheel_action {
             get {
                 return ResourceManager.GetString("settings_keyboard_mousewheel_action", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mute.
+        /// </summary>
+        public static string settings_keyboard_mute {
+            get {
+                return ResourceManager.GetString("settings_keyboard_mute", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open file.
+        /// </summary>
+        public static string settings_keyboard_open {
+            get {
+                return ResourceManager.GetString("settings_keyboard_open", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pause/Play.
+        /// </summary>
+        public static string settings_keyboard_pause {
+            get {
+                return ResourceManager.GetString("settings_keyboard_pause", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Play.
+        /// </summary>
+        public static string settings_keyboard_play {
+            get {
+                return ResourceManager.GetString("settings_keyboard_play", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Repeat.
+        /// </summary>
+        public static string settings_keyboard_repeat {
+            get {
+                return ResourceManager.GetString("settings_keyboard_repeat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Preferences.
+        /// </summary>
+        public static string settings_keyboard_settings {
+            get {
+                return ResourceManager.GetString("settings_keyboard_settings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Stop.
+        /// </summary>
+        public static string settings_keyboard_stop {
+            get {
+                return ResourceManager.GetString("settings_keyboard_stop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Take screenshot.
+        /// </summary>
+        public static string settings_keyboard_takescreenshot {
+            get {
+                return ResourceManager.GetString("settings_keyboard_takescreenshot", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Video size: 100%.
+        /// </summary>
+        public static string settings_keyboard_videosize100 {
+            get {
+                return ResourceManager.GetString("settings_keyboard_videosize100", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Video size: 200%.
+        /// </summary>
+        public static string settings_keyboard_videosize200 {
+            get {
+                return ResourceManager.GetString("settings_keyboard_videosize200", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Video size: 50%.
+        /// </summary>
+        public static string settings_keyboard_videosize50 {
+            get {
+                return ResourceManager.GetString("settings_keyboard_videosize50", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Video size: Free.
+        /// </summary>
+        public static string settings_keyboard_videosizefree {
+            get {
+                return ResourceManager.GetString("settings_keyboard_videosizefree", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Decrease volume.
+        /// </summary>
+        public static string settings_keyboard_volumedown {
+            get {
+                return ResourceManager.GetString("settings_keyboard_volumedown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Increase volume.
+        /// </summary>
+        public static string settings_keyboard_volumeup {
+            get {
+                return ResourceManager.GetString("settings_keyboard_volumeup", resourceCulture);
             }
         }
         

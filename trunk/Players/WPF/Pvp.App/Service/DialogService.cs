@@ -22,13 +22,14 @@ namespace Pvp.App.Service
             Application.Current.MainWindow.Activate();
         }
 
-        public void ShowEnterKeyWindow()
+        public KeyCombination ShowEnterKeyWindow()
         {
             var dlg = new EnterKeyWindow();
             dlg.Owner = _settingsDalog ?? Application.Current.MainWindow;
             dlg.WindowStartupLocation = WindowStartupLocation.CenterOwner;
 
             dlg.ShowDialog();
+            return dlg.SelectedKeyCombination;
         }
 
         public void DisplayMessage(string message)

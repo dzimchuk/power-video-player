@@ -74,5 +74,15 @@ namespace Pvp.App.ViewModel
                        ? string.Empty
                        : (string.IsNullOrEmpty(modifiers) ? key : string.Format("{0}+{1}", modifiers, key));
         }
+
+        public KeyCombination Clone()
+        {
+            return new KeyCombination(Key, ModifierKeys);
+        }
+
+        public bool IsEmpty
+        {
+            get { return Key == Key.None && ModifierKeys == ModifierKeys.None; }
+        }
     }
 }

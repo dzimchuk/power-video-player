@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows.Input;
@@ -20,6 +21,7 @@ namespace Pvp.App.ViewModel
 
         private bool _topMost;
         private bool _centerWindow;
+        private readonly Dictionary<KeyCombination, string> _keys = new Dictionary<KeyCombination, string>(); 
 
         private bool _settingsDialogActivated;
 
@@ -47,20 +49,39 @@ namespace Pvp.App.ViewModel
 
         private void _settingsProvider_SettingChanged(object sender, SettingChangeEventArgs e)
         {
-            if (e.SettingName.Equals("TopMost", StringComparison.InvariantCultureIgnoreCase))
+            if (e.SettingName.Equals(SettingsConstants.TopMost, StringComparison.InvariantCultureIgnoreCase))
             {
-            	TopMost = _settingsProvider.Get("TopMost", false);
+                TopMost = _settingsProvider.Get(SettingsConstants.TopMost, DefaultSettings.TopMost);
             }
-            else if (e.SettingName.Equals("CenterWindow", StringComparison.InvariantCultureIgnoreCase))
+            else if (e.SettingName.Equals(SettingsConstants.CenterWindow, StringComparison.InvariantCultureIgnoreCase))
             {
-                CenterWindow = _settingsProvider.Get("CenterWindow", true);
+                CenterWindow = _settingsProvider.Get(SettingsConstants.CenterWindow, DefaultSettings.CenterWindow);
+            }
+            else if (e.SettingName.Equals(SettingsConstants.KeyMap, StringComparison.InvariantCultureIgnoreCase))
+            {
+                ReadKeyCombinations();
             }
         }
 
         private void ReadSettings()
         {
-            _topMost = _settingsProvider.Get("TopMost", false);
-            _centerWindow = _settingsProvider.Get("CenterWindow", true);
+            _topMost = _settingsProvider.Get(SettingsConstants.TopMost, DefaultSettings.TopMost);
+            _centerWindow = _settingsProvider.Get(SettingsConstants.CenterWindow, DefaultSettings.CenterWindow);
+            ReadKeyCombinations();
+        }
+
+        private void ReadKeyCombinations()
+        {
+            _keys.Clear();
+            var keys = _settingsProvider.Get(SettingsConstants.KeyMap, DefaultSettings.KeyMap);
+            foreach (var pair in keys)
+            {
+                var keyCombination = pair.Value;
+                if (keyCombination != null && !keyCombination.IsEmpty && !_keys.ContainsKey(keyCombination))
+                {
+                    _keys.Add(keyCombination, pair.Key);
+                }
+            }
         }
 
         public bool TopMost
@@ -267,7 +288,11 @@ namespace Pvp.App.ViewModel
                             var keyCombination = _keyInterpreter.Interpret(args);
                             if (keyCombination != null)
                             {
-                                Debug.WriteLine(keyCombination);
+                                string command;
+                                if (_keys.TryGetValue(keyCombination, out command))
+                                {
+                                    Messenger.Default.Send(new EventMessage(Event.KeyboardAction, new KeyboardActionEventArgs(command)));
+                                }
                             }
                         }
                     });

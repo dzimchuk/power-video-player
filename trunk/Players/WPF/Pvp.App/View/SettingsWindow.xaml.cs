@@ -3,6 +3,7 @@ using System.Linq;
 using System.Windows;
 using GalaSoft.MvvmLight.Messaging;
 using Pvp.App.Messaging;
+using Pvp.App.ViewModel.Settings;
 
 namespace Pvp.App.View
 {
@@ -36,6 +37,12 @@ namespace Pvp.App.View
             _btnApply.Width = width;
             _btnCancel.Width = width;
             _btnOk.Width = width;
+        }
+
+        private void _listKeys_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            var keyCombinationItem = (KeyCombinationItem)_listKeys.SelectedItem;
+            Messenger.Default.Send(new EventMessage(Event.EditKeyCombination, new EditKeyCombinationEventArgs(keyCombinationItem)));
         }
     }
 }

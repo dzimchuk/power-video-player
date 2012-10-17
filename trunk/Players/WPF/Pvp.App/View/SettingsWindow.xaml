@@ -16,6 +16,7 @@
     <Window.Resources>
         <view:RendererToBooleanValueConverter x:Key="RendererConverter" />
         <view:MouseWheelActionToBooleanConverter x:Key="MouseWheelActionToBooleanConverter" />
+        <view:KeyCombinationTranslateConverter x:Key="KeyCombinationTranslateConverter" />
     </Window.Resources>
     
     <Grid>
@@ -98,6 +99,18 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
+
+                    <ListBox ItemsSource="{Binding Keys, Mode=OneWay}" Margin="5" HorizontalContentAlignment="Stretch" 
+                             MouseDoubleClick="_listKeys_MouseDoubleClick" x:Name="_listKeys">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Width="360" Text="{Binding Key, Converter={StaticResource KeyCombinationTranslateConverter}}" />
+                                    <TextBlock Text="{Binding KeyCombination}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
                     
                     <StackPanel Grid.Column="1">
                         <Button Content="{x:Static res:Resources.settings_keyboard_clear}" 
