@@ -11,6 +11,6 @@ namespace Pvp.App.ViewModel
         bool DisplayYesNoDialog(string message);
 
         void DisplaySettingsDialog();
-        void ShowEnterKeyWindow();
+        KeyCombination ShowEnterKeyWindow();
     }
 }

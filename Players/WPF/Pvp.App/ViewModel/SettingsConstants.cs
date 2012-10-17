@@ -4,9 +4,9 @@ namespace Pvp.App.ViewModel
 {
     public static class SettingsConstants
     {
-        public static string MouseWheelAction
-        {
-            get { return "MouseWheelAction"; }
-        }
+        public const string TopMost = "TopMost";
+        public const string CenterWindow = "CenterWindow";
+        public const string KeyMap = "KeyMap";
+        public const string MouseWheelAction = "MouseWheelAction";
     }
 }

@@ -10,7 +10,7 @@ namespace Pvp.App.ViewModel
         public const string Info = "Info";
 
         public const string Play = "Play";
-        public const string Pause = "Pause";
+        public const string PlayPause = "PlayPause";
         public const string Stop = "Stop";
         public const string Repeat = "Repeat";
         public const string FullScreen = "FullScreen";
@@ -36,7 +36,7 @@ namespace Pvp.App.ViewModel
         public const string VolumeDown = "VolumeDown";
         public const string Mute = "Mute";
 
-        public const string TaskScreenshot = "TaskScreenshot";
+        public const string TakeScreenshot = "TakeScreenshot";
         public const string Settings = "Settings";
         public const string About = "About";
         public const string Exit = "Exit";

@@ -15,7 +15,7 @@ namespace Pvp.App.Service
             if (keyArgs != null)
             {
                 var key = GetKey(keyArgs);
-                if (!keyArgs.IsRepeat && key != Key.Return && key != Key.Enter)
+                if (key != Key.Return && key != Key.Enter)
                 {
                     if (key != Key.LeftCtrl && key != Key.RightCtrl &&
                         key != Key.LeftShift && key != Key.RightShift &&

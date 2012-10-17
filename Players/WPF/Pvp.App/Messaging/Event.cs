@@ -16,6 +16,8 @@ namespace Pvp.App.Messaging
         InitSize,
         MainWindowResizeSuggested,
         SettingsDialogActivated,
-        SettingsDialogDeactivated
+        SettingsDialogDeactivated,
+        EditKeyCombination,
+        KeyboardAction
     }
 }

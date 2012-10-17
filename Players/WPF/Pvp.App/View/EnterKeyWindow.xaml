@@ -11,7 +11,7 @@
         DataContext="{x:Static app:ViewModelLocator.EnterKeyViewModel}">
     <StackPanel Margin="10">
         <TextBlock Text="{x:Static res:Resources.enter_key_message}" HorizontalAlignment="Center" Margin="10" />
-        <TextBlock Text="{Binding SelectedKeyCombinationCombination, Mode=OneWay}" HorizontalAlignment="Center" Margin="10" />
+        <TextBlock Text="{Binding SelectedKeyCombination, Mode=OneWay}" HorizontalAlignment="Center" Margin="10" />
         <Button IsDefault="True" Command="{Binding OkCommand}" Content="{x:Static res:Resources.ok}" HorizontalAlignment="Center" 
                 Margin="10" Padding="20,5,20,5" />
     </StackPanel>
