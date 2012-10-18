@@ -50,7 +50,7 @@ namespace Pvp.App.ViewModel.Settings
                     _enterKeyCommand = new RelayCommand<KeyCombinationItem>(item =>
                                                                                 {
                                                                                     item.KeyCombination = _dialogService.ShowEnterKeyWindow();
-                                                                                    RaisePropertyChanged("CheckMe");
+                                                                                    NotifySettingsProvider();
                                                                                 });
                 }
 
@@ -64,7 +64,11 @@ namespace Pvp.App.ViewModel.Settings
             {
                 if (_clearCommand == null)
                 {
-                    _clearCommand = new RelayCommand(() => Console.WriteLine());
+                    _clearCommand = new RelayCommand<KeyCombinationItem>(item =>
+                                                                             {
+                                                                                 item.KeyCombination = new KeyCombination();
+                                                                                 NotifySettingsProvider();
+                                                                             });
                 }
 
                 return _clearCommand;
@@ -77,7 +81,16 @@ namespace Pvp.App.ViewModel.Settings
             {
                 if (_clearAllCommand == null)
                 {
-                    _clearAllCommand = new RelayCommand(() => Console.WriteLine());
+                    _clearAllCommand = new RelayCommand(() =>
+                                                            {
+                                                                var emptyCombination = new KeyCombination();
+                                                                foreach (var item in _keys)
+                                                                {
+                                                                    item.KeyCombination = emptyCombination;
+                                                                }
+
+                                                                NotifySettingsProvider();
+                                                            });
                 }
 
                 return _clearAllCommand;
@@ -90,7 +103,15 @@ namespace Pvp.App.ViewModel.Settings
             {
                 if (_defaultsCommand == null)
                 {
-                    _defaultsCommand = new RelayCommand(() => Console.WriteLine());
+                    _defaultsCommand = new RelayCommand(() =>
+                                                            {
+                                                                for (int i = 0; i < _keys.Count; i++)
+                                                                {
+                                                                    _keys[i].KeyCombination = _originalKeys[i].KeyCombination;
+                                                                }
+
+                                                                NotifySettingsProvider();
+                                                            });
                 }
 
                 return _defaultsCommand;
@@ -142,6 +163,11 @@ namespace Pvp.App.ViewModel.Settings
 
             var keys = _keys.ToDictionary(i => i.Key, i => i.KeyCombination);
             _settingsProvider.Set(SettingsConstants.KeyMap, keys);
+        }
+
+        private void NotifySettingsProvider()
+        {
+            RaisePropertyChanged(string.Empty); // forces SettingsProvider to check AnyChanges
         }
 
         public bool AnyChanges
