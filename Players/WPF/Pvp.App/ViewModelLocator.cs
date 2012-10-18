@@ -19,7 +19,7 @@ namespace Pvp.App
         {
             get
             {
-                return (ViewModelBase)DependencyResolver.Current.Resolve<ViewModelBase>(MainViewModelName);
+                return DependencyResolver.Current.Resolve<ViewModelBase>(MainViewModelName);
             }
         }
 
@@ -27,18 +27,18 @@ namespace Pvp.App
         {
             get
             {
-                return (ViewModelBase)DependencyResolver.Current.Resolve<ViewModelBase>(MainWindowViewModelName);
+                return DependencyResolver.Current.Resolve<ViewModelBase>(MainWindowViewModelName);
             }
         }
 
         public static ViewModelBase SettingsViewModel
         {
-            get { return (ViewModelBase)DependencyResolver.Current.Resolve<ViewModelBase>(SettingsViewModelName); }
+            get { return DependencyResolver.Current.Resolve<ViewModelBase>(SettingsViewModelName); }
         }
 
         public static ViewModelBase EnterKeyViewModel
         {
-            get { return (ViewModelBase)DependencyResolver.Current.Resolve<ViewModelBase>(EnterKeyViewModelName); }
+            get { return DependencyResolver.Current.Resolve<ViewModelBase>(EnterKeyViewModelName); }
         }
     }
 }

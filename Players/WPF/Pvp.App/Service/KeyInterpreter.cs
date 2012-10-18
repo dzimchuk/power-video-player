@@ -32,7 +32,7 @@ namespace Pvp.App.Service
             return result;
         }
 
-        private Key GetKey(EventArgs args)
+        private static Key GetKey(EventArgs args)
         {
             var keyArgs = args as KeyEventArgs;
             if (keyArgs != null)
@@ -46,7 +46,7 @@ namespace Pvp.App.Service
             }
         }
 
-        private ModifierKeys GetModifiers(EventArgs args)
+        private static ModifierKeys GetModifiers(EventArgs args)
         {
             var keyArgs = args as KeyEventArgs;
             if (keyArgs != null)

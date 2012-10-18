@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Ninject;
 
 namespace Pvp.App.Composition
@@ -15,14 +14,19 @@ namespace Pvp.App.Composition
             _kernel = kernel;
         }
 
-        public object Resolve<T>()
+        public T Resolve<T>()
         {
             return _kernel.Get<T>();
         }
 
-        public object Resolve<T>(string name)
+        public T Resolve<T>(string name)
         {
             return _kernel.Get<T>(name);
+        }
+
+        public IEnumerable<T> ResolveAll<T>()
+        {
+            return _kernel.GetAll<T>();
         }
     }
 }

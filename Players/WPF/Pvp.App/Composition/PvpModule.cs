@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Windows;
 using GalaSoft.MvvmLight;
 using Ninject.Modules;
 using Pvp.App.Service;
@@ -14,6 +15,7 @@ namespace Pvp.App.Composition
         {
             Bind<IMediaEngineFacade>().ToMethod(context => MediaEngineFacade.Instance);
             Bind<IMediaControlAcceptor>().ToMethod(context => MediaEngineFacade.Instance);
+            Bind<IMediaControlAcceptor>().ToMethod(context => (IMediaControlAcceptor)Application.Current.MainWindow);
 
             Bind<IFileSelector>().To<FileSelector>();
             Bind<IDialogService>().To<DialogService>();

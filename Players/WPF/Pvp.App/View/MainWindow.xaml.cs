@@ -20,7 +20,7 @@ namespace Pvp.App.View
     [TemplatePart(Name = "PART_MaximizeButton", Type = typeof(Button))]
     [TemplatePart(Name = "PART_CloseButton", Type = typeof(Button))]
     [TemplatePart(Name = "PART_VideoArea", Type = typeof(Border))]
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window, IMediaControlAcceptor
     {
         static MainWindow()
         {
@@ -48,6 +48,9 @@ namespace Pvp.App.View
         public static readonly DependencyProperty StartupLocationProperty =
             DependencyProperty.Register("StartupLocation", typeof(WindowStartupLocation), typeof(MainWindow), 
             new PropertyMetadata(default(WindowStartupLocation), new PropertyChangedCallback(StartupLocationChanged)));
+
+        public static readonly DependencyProperty MWEventSourceProperty =
+            DependencyProperty.Register("MWEventSource", typeof(object), typeof(MainWindow), new PropertyMetadata(default(object)));
 
         private enum WindowResizeMode
         {
@@ -219,6 +222,12 @@ namespace Pvp.App.View
             {
                 SetValue(IsMinimizedProperty, value);
             }
+        }
+
+        public object MWEventSource
+        {
+            get { return (object)GetValue(MWEventSourceProperty); }
+            set { SetValue(MWEventSourceProperty, value); }
         }
 
         private void OnCommand(CommandMessage message)
@@ -457,6 +466,11 @@ namespace Pvp.App.View
             {
                 Messenger.Default.Send(new DragDropMessage(filenames.First()));
             }
+        }
+
+        Core.Wpf.MediaControl IMediaControlAcceptor.MediaControl
+        {
+            set { MWEventSource = value; }
         }
     }
 }
