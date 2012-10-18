@@ -22,8 +22,11 @@ namespace Pvp.App.View
         {
             InitializeComponent();
 
-            var acceptor = (IMediaControlAcceptor)DependencyResolver.Current.Resolve<IMediaControlAcceptor>();
-            acceptor.MediaControl = _mediaControl;
+            var acceptors = DependencyResolver.Current.ResolveAll<IMediaControlAcceptor>();
+            foreach (var acceptor in acceptors)
+            {
+                acceptor.MediaControl = _mediaControl;
+            }
 
             Messenger.Default.Send<EventMessage>(new EventMessage(Event.MediaControlCreated));
 

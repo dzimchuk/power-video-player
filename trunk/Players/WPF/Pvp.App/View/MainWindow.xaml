@@ -17,7 +17,7 @@
         <i:EventTrigger EventName="KeyDown">
             <cmd:EventToCommand Command="{Binding KeyDownCommand}" PassEventArgsToCommand="True" />
         </i:EventTrigger>
-        <i:EventTrigger EventName="MWKeyDown">
+        <i:EventTrigger EventName="MWKeyDown" SourceObject="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=MWEventSource}">
             <cmd:EventToCommand Command="{Binding KeyDownCommand}" PassEventArgsToCommand="True" />
         </i:EventTrigger>
     </i:Interaction.Triggers>
