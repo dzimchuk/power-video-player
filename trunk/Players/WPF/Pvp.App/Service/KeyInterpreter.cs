@@ -1,6 +1,7 @@
 using System;
 using System.Windows.Input;
 using Pvp.App.ViewModel;
+using Pvp.Core.Wpf;
 
 namespace Pvp.App.Service
 {
@@ -10,43 +11,53 @@ namespace Pvp.App.Service
         {
             KeyCombination result = null;
 
-            var keyArgs = args as KeyEventArgs;
-
-            if (keyArgs != null)
+            var key = GetKey(args);
+            if (key != Key.Return && key != Key.Enter)
             {
-                var key = GetKey(keyArgs);
-                if (key != Key.Return && key != Key.Enter)
+                if (key != Key.LeftCtrl && key != Key.RightCtrl &&
+                    key != Key.LeftShift && key != Key.RightShift &&
+                    key != Key.LeftAlt && key != Key.RightAlt &&
+                    key != Key.LWin && key != Key.RWin)
                 {
-                    if (key != Key.LeftCtrl && key != Key.RightCtrl &&
-                        key != Key.LeftShift && key != Key.RightShift &&
-                        key != Key.LeftAlt && key != Key.RightAlt &&
-                        key != Key.LWin && key != Key.RWin)
-                    {
-                        ModifierKeys modifiers = ModifierKeys.None;
-                        if ((keyArgs.KeyboardDevice.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
-                            modifiers |= ModifierKeys.Control;
-                        if ((keyArgs.KeyboardDevice.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift)
-                            modifiers |= ModifierKeys.Shift;
-                        if ((keyArgs.KeyboardDevice.Modifiers & ModifierKeys.Alt) == ModifierKeys.Alt)
-                            modifiers |= ModifierKeys.Alt;
-                        if ((keyArgs.KeyboardDevice.Modifiers & ModifierKeys.Windows) == ModifierKeys.Windows)
-                            modifiers |= ModifierKeys.Windows;
+                    var modifiers = GetModifiers(args);
 
-                        result = new KeyCombination(key, modifiers);
-                    }
-                    else
-                    {
-                        result = new KeyCombination();
-                    }
+                    result = new KeyCombination(key, modifiers);
+                }
+                else
+                {
+                    result = new KeyCombination();
                 }
             }
 
             return result;
         }
 
-        private Key GetKey(KeyEventArgs keyArgs)
+        private Key GetKey(EventArgs args)
         {
-            return keyArgs.SystemKey == Key.None ? keyArgs.Key : keyArgs.SystemKey;
+            var keyArgs = args as KeyEventArgs;
+            if (keyArgs != null)
+            {
+                return keyArgs.SystemKey == Key.None ? keyArgs.Key : keyArgs.SystemKey;
+            }
+            else
+            {
+                var mwKeyArgs = args as MWKeyEventArgs;
+                return mwKeyArgs != null ? mwKeyArgs.Key : Key.None;
+            }
+        }
+
+        private ModifierKeys GetModifiers(EventArgs args)
+        {
+            var keyArgs = args as KeyEventArgs;
+            if (keyArgs != null)
+            {
+                return keyArgs.KeyboardDevice.Modifiers;
+            }
+            else
+            {
+                var mwKeyArgs = args as MWKeyEventArgs;
+                return mwKeyArgs != null ? mwKeyArgs.Modifiers : ModifierKeys.None;
+            }
         }
     }
 }
