@@ -71,6 +71,8 @@
     <Compile Include="MediaWindowHost.cs" />
     <Compile Include="MediaWindowHost2.cs" />
     <Compile Include="MediaWindowHwndHost.cs" />
+    <Compile Include="MWKeyEventArgs.cs" />
+    <Compile Include="MWKeyDownEventHandler.cs" />
     <Compile Include="MWMouseMoveEventHandler.cs" />
     <Compile Include="ScreenPositionEventArgs.cs" />
     <Compile Include="MWContextMenuEventHandler.cs" />

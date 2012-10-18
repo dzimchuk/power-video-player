@@ -17,5 +17,8 @@
         <i:EventTrigger EventName="KeyDown">
             <cmd:EventToCommand Command="{Binding KeyDownCommand}" PassEventArgsToCommand="True" />
         </i:EventTrigger>
+        <i:EventTrigger EventName="MWKeyDown">
+            <cmd:EventToCommand Command="{Binding KeyDownCommand}" PassEventArgsToCommand="True" />
+        </i:EventTrigger>
     </i:Interaction.Triggers>
 </Window>

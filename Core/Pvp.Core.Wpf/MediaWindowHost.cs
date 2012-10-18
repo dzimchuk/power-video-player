@@ -65,6 +65,9 @@ namespace Pvp.Core.Wpf
 
         public static readonly RoutedEvent InitSizeEvent = EventManager.RegisterRoutedEvent("InitSize", RoutingStrategy.Bubble,
             typeof(InitSizeEventHandler), typeof(MediaWindowHost));
+
+        public static readonly RoutedEvent MWKeyDownEvent = EventManager.RegisterRoutedEvent("MWKeyDown", RoutingStrategy.Bubble,
+            typeof(MWKeyDownEventHandler), typeof(MediaWindowHost));
   
         private Border _border;
 
@@ -288,6 +291,12 @@ namespace Pvp.Core.Wpf
         {
             add { AddHandler(InitSizeEvent, value); }
             remove { RemoveHandler(InitSizeEvent, value); }
+        }
+
+        public event MWKeyDownEventHandler MWKeyDown
+        {
+            add { AddHandler(MWKeyDownEvent, value); }
+            remove { RemoveHandler(MWKeyDownEvent, value); }
         }
   
         #endregion
@@ -604,59 +613,52 @@ namespace Pvp.Core.Wpf
                         _mwh.RaiseEvent(new RoutedEventArgs(MWMouseLeaveEvent));
                         break;
                     case (uint)WindowsMessages.WM_KEYDOWN:
-                        if (_mwh.MediaEngine.IsMenuOn)
-                        {
-                            var code = wParam.ToInt32();
-                            Key? key = null;
-                            switch(code)
-                            {
-                            	case 0x0D:
-                                    key = Key.Enter;
-                                    break;
-                                case 0x25:
-                                    key = Key.Left;
-                                    break;
-                                case 0x26:
-                                    key = Key.Up;
-                                    break;
-                                case 0x27:
-                                    key = Key.Right;
-                                    break;
-                                case 0x28:
-                                    key = Key.Down;
-                                    break;
-                            }
+                        var modifiers = Keyboard.Modifiers;
+                        var code = wParam.ToInt32();
+                        var key = KeyInterop.KeyFromVirtualKey(code);
 
-                            if (key.HasValue)
-                                HandleKey(key.Value);
+                        var handled = HandleKey(key);
+
+                        if (!handled)
+                        {
+                            _mwh.RaiseEvent(new MWKeyEventArgs(MWKeyDownEvent, key, modifiers));
                         }
                         break;
                 }
             }
   
-            public void HandleKey(Key key)
+            public bool HandleKey(Key key)
             {
+                bool handled = false;
+                
                 if (_mwh.MediaEngine.IsMenuOn)
                 {
                     switch(key)
                     {
                         case Key.Enter:
                             _mwh.MediaEngine.ActivateSelectedDVDMenuButton();
+                            handled = true;
                             break;
                         case Key.Left:
                             _mwh.MediaEngine.SelectDVDMenuButtonLeft();
+                            handled = true;
                             break;
                         case Key.Right:
                             _mwh.MediaEngine.SelectDVDMenuButtonRight();
+                            handled = true;
                             break;
                         case Key.Up:
                             _mwh.MediaEngine.SelectDVDMenuButtonUp();
+                            handled = true;
                             break;
                         case Key.Down:
                             _mwh.MediaEngine.SelectDVDMenuButtonDown();
+                            handled = true;
                             break;
                     }
                 }
+
+                return handled;
             }
   
             private ScreenPositionEventArgs CreateScreenPositionEventArgs()
@@ -671,7 +673,7 @@ namespace Pvp.Core.Wpf
             }
         }
 
-        protected override void OnKeyDown(System.Windows.Input.KeyEventArgs e)
+        protected override void OnKeyDown(KeyEventArgs e)
         {
             base.OnKeyDown(e);
 
