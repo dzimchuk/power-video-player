@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
@@ -21,7 +20,8 @@ namespace Pvp.App.ViewModel
 
         private bool _topMost;
         private bool _centerWindow;
-        private readonly Dictionary<KeyCombination, string> _keys = new Dictionary<KeyCombination, string>(); 
+        private readonly Dictionary<KeyCombination, string> _keys = new Dictionary<KeyCombination, string>();
+        private MouseWheelAction _mouseWheelAction;
 
         private bool _settingsDialogActivated;
 
@@ -29,16 +29,19 @@ namespace Pvp.App.ViewModel
         private ICommand _maximizeCommand;
         private ICommand _closeCommand;
         private ICommand _keyDownCommand;
+        private ICommand _mouseWheelCommand;
 
         private readonly ISettingsProvider _settingsProvider;
         private readonly IKeyInterpreter _keyInterpreter;
+        private readonly IMouseWheelInterpreter _mouseWheelInterpreter;
         private readonly IMediaEngineFacade _engine;
 
-        public MainWindowViewModel(ISettingsProvider settingsProvider, IMediaEngineFacade engine, IKeyInterpreter keyInterpreter)
+        public MainWindowViewModel(ISettingsProvider settingsProvider, IMediaEngineFacade engine, IKeyInterpreter keyInterpreter, IMouseWheelInterpreter mouseWheelInterpreter)
         {
             _settingsProvider = settingsProvider;
             _engine = engine;
             _keyInterpreter = keyInterpreter;
+            _mouseWheelInterpreter = mouseWheelInterpreter;
             _settingsProvider.SettingChanged += _settingsProvider_SettingChanged;
 
             ReadSettings();
@@ -61,6 +64,10 @@ namespace Pvp.App.ViewModel
             {
                 ReadKeyCombinations();
             }
+            else if (e.SettingName.Equals(SettingsConstants.MouseWheelAction, StringComparison.InvariantCultureIgnoreCase))
+            {
+                _mouseWheelAction = _settingsProvider.Get(SettingsConstants.MouseWheelAction, DefaultSettings.MouseWheekAction);
+            }
         }
 
         private void ReadSettings()
@@ -68,6 +75,7 @@ namespace Pvp.App.ViewModel
             _topMost = _settingsProvider.Get(SettingsConstants.TopMost, DefaultSettings.TopMost);
             _centerWindow = _settingsProvider.Get(SettingsConstants.CenterWindow, DefaultSettings.CenterWindow);
             ReadKeyCombinations();
+            _mouseWheelAction = _settingsProvider.Get(SettingsConstants.MouseWheelAction, DefaultSettings.MouseWheekAction);
         }
 
         private void ReadKeyCombinations()
@@ -291,7 +299,7 @@ namespace Pvp.App.ViewModel
                                 string command;
                                 if (_keys.TryGetValue(keyCombination, out command))
                                 {
-                                    Messenger.Default.Send(new EventMessage(Event.KeyboardAction, new KeyboardActionEventArgs(command)));
+                                    Messenger.Default.Send(new EventMessage(Event.KeyboardMouseAction, new KeyboardMouseActionEventArgs(command)));
                                 }
                             }
                         }
@@ -299,6 +307,41 @@ namespace Pvp.App.ViewModel
                 }
 
                 return _keyDownCommand;
+            }
+        }
+
+        public ICommand MouseWheelCommand
+        {
+            get
+            {
+                if (_mouseWheelCommand == null)
+                {
+                    _mouseWheelCommand = new RelayCommand<EventArgs>(args =>
+                                                                         {
+                                                                             var delta = _mouseWheelInterpreter.Interpret(args);
+                                                                             if (delta != 0)
+                                                                             {
+                                                                                 string command;
+                                                                                 switch(_mouseWheelAction)
+                                                                                 {
+                                                                                     case MouseWheelAction.Volume:
+                                                                                         command = delta > 0
+                                                                                                        ? CommandConstants.VolumeUp
+                                                                                                        : CommandConstants.VolumeDown;
+                                                                                         break;
+                                                                                     case MouseWheelAction.Seek:
+                                                                                         command = delta > 0 ? CommandConstants.Forth : CommandConstants.Back;
+                                                                                         break;
+                                                                                     default:
+                                                                                         throw new ArgumentOutOfRangeException();
+                                                                                 }
+
+                                                                                 Messenger.Default.Send(new EventMessage(Event.KeyboardMouseAction, new KeyboardMouseActionEventArgs(command)));
+                                                                             }
+                                                                         });
+                }
+
+                return _mouseWheelCommand;
             }
         }
     }

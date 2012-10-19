@@ -91,11 +91,12 @@
     <Compile Include="Controls\FullScreenControlPanel.cs" />
     <Compile Include="Controls\WrapBreakPanel.cs" />
     <Compile Include="Messaging\EditKeyCombinationEventArgs.cs" />
-    <Compile Include="Messaging\KeyboardActionEventArgs.cs" />
+    <Compile Include="Messaging\KeyboardMouseActionEventArgs.cs" />
     <Compile Include="Messaging\MainWindowResizeSuggestedEventArgs.cs" />
     <Compile Include="Messaging\ResizeMainWindowCommandMessage.cs" />
     <Compile Include="Service\DriveInfo.cs" />
     <Compile Include="Service\DriveService.cs" />
+    <Compile Include="Service\MouseWheelInterpreter.cs" />
     <Compile Include="Util\WindowCustomizer.cs" />
     <Compile Include="ViewModel\CommandConstants.cs" />
     <Compile Include="ViewModel\DefaultSettings.cs" />
@@ -103,6 +104,7 @@
     <Compile Include="ViewModel\IImageCreaterFactory.cs" />
     <Compile Include="Service\ImageCreaterFactory.cs" />
     <Compile Include="ViewModel\IKeyInterpreter.cs" />
+    <Compile Include="ViewModel\IMouseWheelInterpreter.cs" />
     <Compile Include="ViewModel\KeyCombination.cs" />
     <Compile Include="Service\KeyInterpreter.cs" />
     <Compile Include="ViewModel\MouseWheelAction.cs" />

@@ -494,9 +494,9 @@ namespace Pvp.App.ViewModel
                     _videoSize = new Tuple<double, double>(args.NewVideoSize.Width, args.NewVideoSize.Height);
                 }
             }
-            else if (message.Content == Event.KeyboardAction)
+            else if (message.Content == Event.KeyboardMouseAction)
             {
-                var args = message.EventArgs as KeyboardActionEventArgs;
+                var args = message.EventArgs as KeyboardMouseActionEventArgs;
                 if (args != null)
                 {
                     ExecuteCommand(args.Action);

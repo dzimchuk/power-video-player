@@ -3,11 +3,11 @@ using System.Linq;
 
 namespace Pvp.App.Messaging
 {
-    internal class KeyboardActionEventArgs : EventArgs
+    internal class KeyboardMouseActionEventArgs : EventArgs
     {
         public string Action { get; private set; }
 
-        public KeyboardActionEventArgs(string action)
+        public KeyboardMouseActionEventArgs(string action)
         {
             Action = action;
         }

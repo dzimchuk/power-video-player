@@ -74,6 +74,8 @@
     <Compile Include="MWKeyEventArgs.cs" />
     <Compile Include="MWKeyDownEventHandler.cs" />
     <Compile Include="MWMouseMoveEventHandler.cs" />
+    <Compile Include="MWMouseWheelEventArgs.cs" />
+    <Compile Include="MWMouseWheelEventHandler.cs" />
     <Compile Include="ScreenPositionEventArgs.cs" />
     <Compile Include="MWContextMenuEventHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
