@@ -23,6 +23,7 @@ namespace Pvp.App.Composition
             Bind<IDriveService>().To<DriveService>();
             Bind<ISettingsProvider>().To<SettingsProvider>().InSingletonScope();
             Bind<IKeyInterpreter>().To<KeyInterpreter>();
+            Bind<IMouseWheelInterpreter>().To<MouseWheelInterpreter>();
 
             Bind<ViewModelBase>().To<MainWindowViewModel>().InSingletonScope().Named(ViewModelLocator.MainWindowViewModelName);
             Bind<ViewModelBase>().To<MainViewModel>().InSingletonScope().Named(ViewModelLocator.MainViewModelName);

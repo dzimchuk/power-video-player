@@ -20,5 +20,11 @@
         <i:EventTrigger EventName="MWKeyDown" SourceObject="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=MWEventSource}">
             <cmd:EventToCommand Command="{Binding KeyDownCommand}" PassEventArgsToCommand="True" />
         </i:EventTrigger>
+        <i:EventTrigger EventName="MouseWheel">
+            <cmd:EventToCommand Command="{Binding MouseWheelCommand}" PassEventArgsToCommand="True" />
+        </i:EventTrigger>
+        <i:EventTrigger EventName="MWMouseWheel" SourceObject="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=MWEventSource}">
+            <cmd:EventToCommand Command="{Binding MouseWheelCommand}" PassEventArgsToCommand="True" />
+        </i:EventTrigger>
     </i:Interaction.Triggers>
 </Window>

@@ -18,6 +18,6 @@ namespace Pvp.App.Messaging
         SettingsDialogActivated,
         SettingsDialogDeactivated,
         EditKeyCombination,
-        KeyboardAction
+        KeyboardMouseAction
     }
 }

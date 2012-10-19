@@ -68,6 +68,9 @@ namespace Pvp.Core.Wpf
 
         public static readonly RoutedEvent MWKeyDownEvent = EventManager.RegisterRoutedEvent("MWKeyDown", RoutingStrategy.Bubble,
             typeof(MWKeyDownEventHandler), typeof(MediaWindowHost));
+
+        public static readonly RoutedEvent MWMouseWheelEvent = EventManager.RegisterRoutedEvent("MWMouseWheel", RoutingStrategy.Bubble,
+            typeof(MWMouseWheelEventHandler), typeof(MediaWindowHost));
   
         private Border _border;
 
@@ -88,6 +91,8 @@ namespace Pvp.Core.Wpf
         private bool _isFixed = true;		                //FIXED (true) of FREE (false)
         private VideoSize _fixedSize = VideoSize.SIZE100;	//FIXED video size (SIZE100 or SIZE 200)
         private int _divideSize = 1;
+
+        private const int WHEEL_DELTA = 120;
   
         protected MediaWindowHost()
         {
@@ -297,6 +302,12 @@ namespace Pvp.Core.Wpf
         {
             add { AddHandler(MWKeyDownEvent, value); }
             remove { RemoveHandler(MWKeyDownEvent, value); }
+        }
+
+        public event MWMouseWheelEventHandler MWMouseWheel
+        {
+            add { AddHandler(MWMouseWheelEvent, value); }
+            remove { RemoveHandler(MWMouseWheelEvent, value); }
         }
   
         #endregion
@@ -623,6 +634,11 @@ namespace Pvp.Core.Wpf
                         {
                             _mwh.RaiseEvent(new MWKeyEventArgs(MWKeyDownEvent, key, modifiers));
                         }
+                        break;
+                    case (uint)WindowsMessages.WM_MOUSEWHEEL:
+                        uint delta = ((uint)wParam) & 0xFFFF0000;
+                        delta >>= 16;
+                        _mwh.RaiseEvent(new MWMouseWheelEventArgs(MWMouseWheelEvent, (int)delta));
                         break;
                 }
             }
