@@ -42,10 +42,7 @@ namespace Pvp.App.ViewModel.Settings
             {
                 if (_selectedItemChangedCommand == null)
                 {
-                    _selectedItemChangedCommand = new RelayCommand<EventArgs>(args =>
-                                                                                  {
-                                                                                      _selectedItem = _selectedKeyCombinationItemResolver.Resolve(args);
-                                                                                  });
+                    _selectedItemChangedCommand = new RelayCommand<EventArgs>(args => { _selectedItem = _selectedKeyCombinationItemResolver.Resolve(args); });
                 }
 
                 return _selectedItemChangedCommand;
