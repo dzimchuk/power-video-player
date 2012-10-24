@@ -92,8 +92,6 @@ namespace Pvp.Core.Wpf
         private VideoSize _fixedSize = VideoSize.SIZE100;	//FIXED video size (SIZE100 or SIZE 200)
         private int _divideSize = 1;
 
-        private const int WHEEL_DELTA = 120;
-  
         protected MediaWindowHost()
         {
             _mwHandler = new MediaWindowHandler(this);
@@ -638,7 +636,7 @@ namespace Pvp.Core.Wpf
                     case (uint)WindowsMessages.WM_MOUSEWHEEL:
                         uint delta = ((uint)wParam) & 0xFFFF0000;
                         delta >>= 16;
-                        _mwh.RaiseEvent(new MWMouseWheelEventArgs(MWMouseWheelEvent, (int)delta));
+                        _mwh.RaiseEvent(new MWMouseWheelEventArgs(MWMouseWheelEvent, (short)delta)); // it's WORD (2 bytes)
                         break;
                 }
             }

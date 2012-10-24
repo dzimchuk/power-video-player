@@ -4,7 +4,7 @@ using GalaSoft.MvvmLight;
 
 namespace Pvp.App.ViewModel.Settings
 {
-    internal class KeyCombinationItem : ViewModelBase, IEquatable<KeyCombinationItem>
+    public class KeyCombinationItem : ViewModelBase, IEquatable<KeyCombinationItem>
     {
         private KeyCombination _keyCombination;
 
@@ -32,7 +32,7 @@ namespace Pvp.App.ViewModel.Settings
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != GetType()) return false;
+            if (obj.GetType() != this.GetType()) return false;
             return Equals((KeyCombinationItem)obj);
         }
 

@@ -160,9 +160,6 @@ namespace Pvp.App.ViewModel
         {
             IsControlPanelVisible = !IsControlPanelVisible;
             Messenger.Default.Send(new PropertyChangedMessage<bool>(this, !IsControlPanelVisible, IsControlPanelVisible, "IsControlPanelVisible"));
-
-            _settingsProvider.Set("ControlPanelVisible", IsControlPanelVisible);
-            _settingsProvider.Save();
         }
 
         public ICommand OpenCommand
@@ -501,6 +498,10 @@ namespace Pvp.App.ViewModel
                 {
                     ExecuteCommand(args.Action);
                 }
+            }
+            else if (message.Content == Event.MainWindowClosing)
+            {
+                _settingsProvider.Set("ControlPanelVisible", IsControlPanelVisible);
             }
         }
   

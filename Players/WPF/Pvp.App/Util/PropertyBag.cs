@@ -13,6 +13,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 
 namespace Pvp.App.Util
@@ -29,7 +30,14 @@ namespace Pvp.App.Util
         public PropertyBag(Stream stream) // used to load properties
         {
             BinaryFormatter formatter = new BinaryFormatter();
-            _props = (IDictionary<string, object>)formatter.Deserialize(stream);
+            try
+            {
+                _props = (IDictionary<string, object>)formatter.Deserialize(stream);
+            }
+            catch (SerializationException)
+            {
+                _props = new Dictionary<string, object>();
+            }
         }
 
         public void Save(Stream stream)

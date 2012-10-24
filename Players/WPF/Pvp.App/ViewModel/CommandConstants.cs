@@ -10,7 +10,7 @@ namespace Pvp.App.ViewModel
         public const string Info = "Info";
 
         public const string Play = "Play";
-        public const string PlayPause = "PlayPause";
+        public const string PlayPause = "Pause";
         public const string Stop = "Stop";
         public const string Repeat = "Repeat";
         public const string FullScreen = "FullScreen";

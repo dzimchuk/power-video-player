@@ -4,6 +4,7 @@ using System.Windows.Input;
 
 namespace Pvp.App.ViewModel
 {
+    [Serializable]
     public class KeyCombination : IEquatable<KeyCombination>
     {
         public KeyCombination()

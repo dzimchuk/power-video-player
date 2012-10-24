@@ -7,6 +7,8 @@
         xmlns:view="clr-namespace:Pvp.App.View"
         xmlns:engine="clr-namespace:Pvp.Core.MediaEngine;assembly=Pvp.Core"
         xmlns:vm="clr-namespace:Pvp.App.ViewModel"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+        xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Extras.WPF4"
         Title="{x:Static res:Resources.settings_caption}" Height="400" Width="600"
         DataContext="{x:Static app:ViewModelLocator.SettingsViewModel}"
         Loaded="window_Loaded"
@@ -100,8 +102,7 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
 
-                    <ListBox ItemsSource="{Binding Keys, Mode=OneWay}" Margin="5" HorizontalContentAlignment="Stretch" 
-                             MouseDoubleClick="_listKeys_MouseDoubleClick" x:Name="_listKeys">
+                    <ListBox ItemsSource="{Binding Keys, Mode=OneWay}" Margin="5" HorizontalContentAlignment="Stretch">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
@@ -110,6 +111,14 @@
                                 </StackPanel>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="MouseDoubleClick">
+                                <cmd:EventToCommand Command="{Binding EnterKeyCommand}" PassEventArgsToCommand="True" />
+                            </i:EventTrigger>
+                            <i:EventTrigger EventName="SelectionChanged">
+                                <cmd:EventToCommand Command="{Binding SelectedItemChangedCommand}" PassEventArgsToCommand="True" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
                     </ListBox>
                     
                     <StackPanel Grid.Column="1">

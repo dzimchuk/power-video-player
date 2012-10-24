@@ -4,8 +4,6 @@ using System.Linq;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
-using GalaSoft.MvvmLight.Messaging;
-using Pvp.App.Messaging;
 
 namespace Pvp.App.ViewModel.Settings
 {
@@ -13,31 +11,44 @@ namespace Pvp.App.ViewModel.Settings
     {
         private readonly ISettingsProvider _settingsProvider;
         private readonly IDialogService _dialogService;
+        private readonly ISelectedKeyCombinationItemResolver _selectedKeyCombinationItemResolver;
 
         private ICommand _enterKeyCommand;
         private ICommand _clearCommand;
         private ICommand _clearAllCommand;
         private ICommand _defaultsCommand;
+        private ICommand _selectedItemChangedCommand;
 
         private MouseWheelAction _mouseWheelAction;
         private List<KeyCombinationItem> _keys;
-        private List<KeyCombinationItem> _originalKeys; 
+        private List<KeyCombinationItem> _originalKeys;
+        private List<KeyCombinationItem> _defaultKeys;
 
-        public KeyboardMouseSettingsViewModel(ISettingsProvider settingsProvider, IDialogService dialogService)
+        private KeyCombinationItem _selectedItem;
+
+        public KeyboardMouseSettingsViewModel(ISettingsProvider settingsProvider, IDialogService dialogService,
+                                              ISelectedKeyCombinationItemResolver selectedKeyCombinationItemResolver)
         {
             _settingsProvider = settingsProvider;
             _dialogService = dialogService;
-
-            Messenger.Default.Register<EventMessage>(this, OnEvent);
+            _selectedKeyCombinationItemResolver = selectedKeyCombinationItemResolver;
 
             Load();
         }
 
-        private void OnEvent(EventMessage message)
+        public ICommand SelectedItemChangedCommand
         {
-            if (message.Content == Event.EditKeyCombination)
+            get
             {
-                EnterKeyCommand.Execute(((EditKeyCombinationEventArgs)message.EventArgs).KeyCombinationItem);
+                if (_selectedItemChangedCommand == null)
+                {
+                    _selectedItemChangedCommand = new RelayCommand<EventArgs>(args =>
+                                                                                  {
+                                                                                      _selectedItem = _selectedKeyCombinationItemResolver.Resolve(args);
+                                                                                  });
+                }
+
+                return _selectedItemChangedCommand;
             }
         }
 
@@ -47,11 +58,15 @@ namespace Pvp.App.ViewModel.Settings
             {
                 if (_enterKeyCommand == null)
                 {
-                    _enterKeyCommand = new RelayCommand<KeyCombinationItem>(item =>
-                                                                                {
-                                                                                    item.KeyCombination = _dialogService.ShowEnterKeyWindow();
-                                                                                    NotifySettingsProvider();
-                                                                                });
+                    _enterKeyCommand = new RelayCommand<EventArgs>(args =>
+                                                                       {
+                                                                           var item = _selectedKeyCombinationItemResolver.Resolve(args);
+                                                                           if (item != null)
+                                                                           {
+                                                                               item.KeyCombination = _dialogService.ShowEnterKeyWindow();
+                                                                               NotifySettingsViewModel();
+                                                                           }
+                                                                       });
                 }
 
                 return _enterKeyCommand;
@@ -64,11 +79,14 @@ namespace Pvp.App.ViewModel.Settings
             {
                 if (_clearCommand == null)
                 {
-                    _clearCommand = new RelayCommand<KeyCombinationItem>(item =>
-                                                                             {
-                                                                                 item.KeyCombination = new KeyCombination();
-                                                                                 NotifySettingsProvider();
-                                                                             });
+                    _clearCommand = new RelayCommand(() =>
+                                                         {
+                                                             if (_selectedItem != null)
+                                                             {
+                                                                 _selectedItem.KeyCombination = new KeyCombination();
+                                                                 NotifySettingsViewModel();
+                                                             }
+                                                         });
                 }
 
                 return _clearCommand;
@@ -89,7 +107,7 @@ namespace Pvp.App.ViewModel.Settings
                                                                     item.KeyCombination = emptyCombination;
                                                                 }
 
-                                                                NotifySettingsProvider();
+                                                                NotifySettingsViewModel();
                                                             });
                 }
 
@@ -107,10 +125,10 @@ namespace Pvp.App.ViewModel.Settings
                                                             {
                                                                 for (int i = 0; i < _keys.Count; i++)
                                                                 {
-                                                                    _keys[i].KeyCombination = _originalKeys[i].KeyCombination;
+                                                                    _keys[i].KeyCombination = _defaultKeys[i].KeyCombination;
                                                                 }
 
-                                                                NotifySettingsProvider();
+                                                                NotifySettingsViewModel();
                                                             });
                 }
 
@@ -149,6 +167,16 @@ namespace Pvp.App.ViewModel.Settings
                                       });
             }
 
+            _defaultKeys = new List<KeyCombinationItem>();
+            foreach (var pair in DefaultSettings.KeyMap)
+            {
+                _defaultKeys.Add(new KeyCombinationItem
+                                     {
+                                         Key = pair.Key,
+                                         KeyCombination = pair.Value
+                                     });
+            }
+
             _keys = new List<KeyCombinationItem>(_originalKeys.Select(i => i.Clone()));
         }
 
@@ -165,17 +193,14 @@ namespace Pvp.App.ViewModel.Settings
             _settingsProvider.Set(SettingsConstants.KeyMap, keys);
         }
 
-        private void NotifySettingsProvider()
+        private void NotifySettingsViewModel()
         {
-            RaisePropertyChanged(string.Empty); // forces SettingsProvider to check AnyChanges
+            RaisePropertyChanged(string.Empty); // forces SettingsViewModel to check AnyChanges
         }
 
         public bool AnyChanges
         {
-            get
-            {
-                return _originalKeys.Where((t, i) => t != _keys[i]).Any() || _mouseWheelAction != MouseWheelActionOriginal;
-            }
+            get { return _originalKeys.Where((t, i) => t != _keys[i]).Any() || _mouseWheelAction != MouseWheelActionOriginal; }
         }
     }
 }
