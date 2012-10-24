@@ -48,6 +48,12 @@ namespace Pvp.App.ViewModel
 
             Messenger.Default.Register<EventMessage>(this, OnEvent);
             Messenger.Default.Register<PropertyChangedMessageBase>(this, true, OnPropertyChanged);
+            Messenger.Default.Register<CommandMessage>(this, OnCommand);
+        }
+
+        private void OnCommand(CommandMessage obj)
+        {
+            _settingsProvider.Save();
         }
 
         private void _settingsProvider_SettingChanged(object sender, SettingChangeEventArgs e)

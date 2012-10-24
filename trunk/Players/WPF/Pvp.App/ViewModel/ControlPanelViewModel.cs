@@ -151,8 +151,6 @@ namespace Pvp.App.ViewModel
                 {
                     _settingsProvider.Set("Volume", _volume);
                     _settingsProvider.Set("IsMute", _isMute);
-
-                    _settingsProvider.Save();
                 }
             }
         }

@@ -288,6 +288,7 @@ namespace Pvp.App.View
             base.OnClosing(e);
 
             Messenger.Default.Send(new EventMessage(Event.MainWindowClosing));
+            Messenger.Default.Send(new CommandMessage(Command.SaveSettings));
         }
 
         public override void OnApplyTemplate()

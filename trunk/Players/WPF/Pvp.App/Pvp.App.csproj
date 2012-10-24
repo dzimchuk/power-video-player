@@ -90,13 +90,13 @@
     <Compile Include="Controls\ControlPanelBase.cs" />
     <Compile Include="Controls\FullScreenControlPanel.cs" />
     <Compile Include="Controls\WrapBreakPanel.cs" />
-    <Compile Include="Messaging\EditKeyCombinationEventArgs.cs" />
     <Compile Include="Messaging\KeyboardMouseActionEventArgs.cs" />
     <Compile Include="Messaging\MainWindowResizeSuggestedEventArgs.cs" />
     <Compile Include="Messaging\ResizeMainWindowCommandMessage.cs" />
     <Compile Include="Service\DriveInfo.cs" />
     <Compile Include="Service\DriveService.cs" />
     <Compile Include="Service\MouseWheelInterpreter.cs" />
+    <Compile Include="Service\SelectedKeyCombinationItemResolver.cs" />
     <Compile Include="Util\WindowCustomizer.cs" />
     <Compile Include="ViewModel\CommandConstants.cs" />
     <Compile Include="ViewModel\DefaultSettings.cs" />
@@ -109,6 +109,7 @@
     <Compile Include="Service\KeyInterpreter.cs" />
     <Compile Include="ViewModel\MouseWheelAction.cs" />
     <Compile Include="ViewModel\Settings\EnterKeyViewModel.cs" />
+    <Compile Include="ViewModel\Settings\ISelectedKeyCombinationItemResolver.cs" />
     <Compile Include="ViewModel\Settings\ISettingsViewModel.cs" />
     <Compile Include="ViewModel\Settings\KeyCombinationItem.cs" />
     <Compile Include="View\KeyCombinationTranslateConverter.cs" />
