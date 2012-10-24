@@ -3,6 +3,7 @@ using System.Linq;
 using System.Windows;
 using GalaSoft.MvvmLight.Messaging;
 using Pvp.App.Messaging;
+using Pvp.App.ViewModel.Settings;
 
 namespace Pvp.App.View
 {
