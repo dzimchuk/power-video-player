@@ -4,9 +4,9 @@ using GalaSoft.MvvmLight.Messaging;
 
 namespace Pvp.App.Messaging
 {
-    internal class DragDropMessage : GenericMessage<string>
+    internal class PlayNewFileMessage : GenericMessage<string>
     {
-        public DragDropMessage(string filename)
+        public PlayNewFileMessage(string filename)
             : base(filename)
         {
         }

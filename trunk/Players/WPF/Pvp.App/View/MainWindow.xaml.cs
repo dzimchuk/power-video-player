@@ -465,7 +465,7 @@ namespace Pvp.App.View
             var filenames = e.Data.GetData(DataFormats.FileDrop) as string[];
             if (filenames != null && filenames.Any())
             {
-                Messenger.Default.Send(new DragDropMessage(filenames.First()));
+                Messenger.Default.Send(new PlayNewFileMessage(filenames.First()));
             }
         }
 
