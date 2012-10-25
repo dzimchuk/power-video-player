@@ -520,7 +520,7 @@
     <value>.ifo - DVD file</value>
   </data>
   <data name="program_description" xml:space="preserve">
-    <value>Powerful and convenient video player for Windows 2000, XP, Vista and 7. The player is capable to play most video formats (given the necessary decoders are present on the system) and provides full DVD support. In addition, it provides advanced functionality like configuration of preferred decoders and renderers.</value>
+    <value>Powerful and convenient video player for Windows 2000, XP, Vista, 7 and 8. The player is capable to play most video formats (given the necessary decoders are present on the system) and provides full DVD support. In addition, it provides advanced functionality like configuration of preferred decoders and renderers.</value>
   </data>
   <data name="about_license" xml:space="preserve">
     <value>This product is licensed under Ms-PL.</value>
@@ -752,5 +752,17 @@
   </data>
   <data name="settings_keyboard_volumeup" xml:space="preserve">
     <value>Increase volume</value>
+  </data>
+  <data name="settings_filetypes_caption" xml:space="preserve">
+    <value>File Types</value>
+  </data>
+  <data name="settings_filetypes_clear_all" xml:space="preserve">
+    <value>Clear All</value>
+  </data>
+  <data name="settings_filetypes_description" xml:space="preserve">
+    <value>Select file types for which you want Power Video Player to be the default player.</value>
+  </data>
+  <data name="settings_filetypes_select_all" xml:space="preserve">
+    <value>Select All</value>
   </data>
 </root>

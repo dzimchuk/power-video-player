@@ -21,8 +21,8 @@ namespace Pvp.App.ViewModel.Settings
 
         private MouseWheelAction _mouseWheelAction;
         private List<KeyCombinationItem> _keys;
-        private List<KeyCombinationItem> _originalKeys;
         private List<KeyCombinationItem> _defaultKeys;
+        private Dictionary<string, KeyCombination> _originalKeys;
 
         private KeyCombinationItem _selectedItem;
 
@@ -154,14 +154,15 @@ namespace Pvp.App.ViewModel.Settings
             _mouseWheelAction = MouseWheelActionOriginal;
 
             var keys = _settingsProvider.Get(SettingsConstants.KeyMap, DefaultSettings.KeyMap);
-            _originalKeys = new List<KeyCombinationItem>();
+
+            _keys = new List<KeyCombinationItem>();
             foreach (var pair in keys)
             {
-                _originalKeys.Add(new KeyCombinationItem
-                                      {
-                                          Key = pair.Key,
-                                          KeyCombination = pair.Value
-                                      });
+                _keys.Add(new KeyCombinationItem
+                              {
+                                  Key = pair.Key,
+                                  KeyCombination = pair.Value
+                              });
             }
 
             _defaultKeys = new List<KeyCombinationItem>();
@@ -174,7 +175,7 @@ namespace Pvp.App.ViewModel.Settings
                                      });
             }
 
-            _keys = new List<KeyCombinationItem>(_originalKeys.Select(i => i.Clone()));
+            _originalKeys = keys;
         }
 
         private MouseWheelAction MouseWheelActionOriginal
@@ -192,12 +193,12 @@ namespace Pvp.App.ViewModel.Settings
 
         private void NotifySettingsViewModel()
         {
-            RaisePropertyChanged(string.Empty); // forces SettingsViewModel to check AnyChanges
+            RaisePropertyChanged("Keys"); // forces SettingsViewModel to check AnyChanges
         }
 
         public bool AnyChanges
         {
-            get { return _originalKeys.Where((t, i) => t != _keys[i]).Any() || _mouseWheelAction != MouseWheelActionOriginal; }
+            get { return _keys.Any(i => _originalKeys[i.Key] != i.KeyCombination) || _mouseWheelAction != MouseWheelActionOriginal; }
         }
     }
 }

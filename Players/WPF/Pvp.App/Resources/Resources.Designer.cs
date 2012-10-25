@@ -1438,7 +1438,7 @@ namespace Pvp.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Powerful and convenient video player for Windows 2000, XP, Vista and 7. The player is capable to play most video formats (given the necessary decoders are present on the system) and provides full DVD support. In addition, it provides advanced functionality like configuration of preferred decoders and renderers..
+        ///   Looks up a localized string similar to Powerful and convenient video player for Windows 2000, XP, Vista, 7 and 8. The player is capable to play most video formats (given the necessary decoders are present on the system) and provides full DVD support. In addition, it provides advanced functionality like configuration of preferred decoders and renderers..
         /// </summary>
         public static string program_description {
             get {
@@ -1461,6 +1461,42 @@ namespace Pvp.App.Resources {
         public static string settings_caption {
             get {
                 return ResourceManager.GetString("settings_caption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File Types.
+        /// </summary>
+        public static string settings_filetypes_caption {
+            get {
+                return ResourceManager.GetString("settings_filetypes_caption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Clear All.
+        /// </summary>
+        public static string settings_filetypes_clear_all {
+            get {
+                return ResourceManager.GetString("settings_filetypes_clear_all", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select file types for which you want Power Video Player to be the default player..
+        /// </summary>
+        public static string settings_filetypes_description {
+            get {
+                return ResourceManager.GetString("settings_filetypes_description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select All.
+        /// </summary>
+        public static string settings_filetypes_select_all {
+            get {
+                return ResourceManager.GetString("settings_filetypes_select_all", resourceCulture);
             }
         }
         

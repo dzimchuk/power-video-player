@@ -82,7 +82,7 @@ namespace Pvp.App.ViewModel
 
             Messenger.Default.Register<PropertyChangedMessageBase>(this, true, OnPropertyChanged);
             Messenger.Default.Register<EventMessage>(this, true, OnEventMessage);
-            Messenger.Default.Register<DragDropMessage>(this, true, OnDragDrop);
+            Messenger.Default.Register<PlayNewFileMessage>(this, true, OnPlayNewFile);
 
             PopulateCDRomMenu();
             PackUpCommandBag();
@@ -426,7 +426,7 @@ namespace Pvp.App.ViewModel
             Messenger.Default.Send(new PropertyChangedMessage<bool>(this, !_isInPlayingMode, _isInPlayingMode, "IsInPlayingMode"));
         }
 
-        private void OnDragDrop(DragDropMessage message)
+        private void OnPlayNewFile(PlayNewFileMessage message)
         {
             PlayFile(message.Content);
         }

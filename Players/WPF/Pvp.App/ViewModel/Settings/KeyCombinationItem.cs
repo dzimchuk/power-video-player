@@ -20,14 +20,5 @@ namespace Pvp.App.ViewModel.Settings
         }
 
         public string Key { get; set; }
-
-        public KeyCombinationItem Clone()
-        {
-            return new KeyCombinationItem
-                       {
-                           Key = Key,
-                           KeyCombination = KeyCombination
-                       };
-        }
     }
 }
