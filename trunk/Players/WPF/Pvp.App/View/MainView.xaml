@@ -67,7 +67,7 @@
                           ItemsSource="{Binding Path=CDRomMenuItems}"
                           ItemTemplate="{StaticResource BoundCommandTemplate}" />
                 <Separator/>
-                <MenuItem Header="{x:Static res:Resources.mi_file_information}"/> 
+                <MenuItem Header="{x:Static res:Resources.mi_file_information}" Command="{Binding InfoCommand}"/> 
             </MenuItem>
             <Separator/>
             <MenuItem Header="{x:Static res:Resources.mi_play}" Command="{Binding Path=PlayCommand}"/>

@@ -24,11 +24,15 @@ namespace Pvp.App
     {
         private readonly Guid _appGuid = new Guid("{631D2885-2074-4804-9BBB-BAC7CEB94993}");
 
+        static App()
+        {
+            SetUpDependencies();
+        }
+
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-            SetUpDependencies();
-
+            
             if (Array.Find(e.Args,
                            delegate(string arg)
                                {

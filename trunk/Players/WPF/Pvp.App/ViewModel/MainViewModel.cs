@@ -247,9 +247,9 @@ namespace Pvp.App.ViewModel
                     _infoCommand = new RelayCommand
                         (
                             () =>
-                            {
-
-                            },
+                                {
+                                    _dialogService.DisplayMediaInformationWindow();
+                                },
                             () =>
                             {
                                 return _engine.GraphState != GraphState.Reset;

@@ -258,7 +258,7 @@
   <data name="infodialog_Video_Size" xml:space="preserve">
     <value>Размер видео</value>
   </data>
-  <data name="infofialog_Stream_format" xml:space="preserve">
+  <data name="infodialog_Stream_format" xml:space="preserve">
     <value>Поток {0}</value>
   </data>
   <data name="keys_about" xml:space="preserve">
@@ -764,5 +764,8 @@
   </data>
   <data name="settings_filetypes_select_all" xml:space="preserve">
     <value>Выбрать все</value>
+  </data>
+  <data name="infodialog_caption" xml:space="preserve">
+    <value>Информация</value>
   </data>
 </root>

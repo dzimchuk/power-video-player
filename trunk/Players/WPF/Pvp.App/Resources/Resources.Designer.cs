@@ -466,6 +466,15 @@ namespace Pvp.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Information.
+        /// </summary>
+        public static string infodialog_caption {
+            get {
+                return ResourceManager.GetString("infodialog_caption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to , {0} channel.
         /// </summary>
         public static string infodialog_channel_format {
@@ -646,6 +655,15 @@ namespace Pvp.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Stream {0}.
+        /// </summary>
+        public static string infodialog_Stream_format {
+            get {
+                return ResourceManager.GetString("infodialog_Stream_format", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Title Duration.
         /// </summary>
         public static string infodialog_Title_Duration {
@@ -696,15 +714,6 @@ namespace Pvp.App.Resources {
         public static string infodialog_Video_Size {
             get {
                 return ResourceManager.GetString("infodialog_Video_Size", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Stream {0}.
-        /// </summary>
-        public static string infofialog_Stream_format {
-            get {
-                return ResourceManager.GetString("infofialog_Stream_format", resourceCulture);
             }
         }
         
