@@ -6,10 +6,10 @@ using Pvp.App.ViewModel.Settings;
 
 namespace Pvp.App.Service
 {
-    internal class FileAssociatorWrapper : IFileAssociator
+    internal class FileAssociatorWrapper : IFileAssociator, IFileAssociatorRegistration
     {
-        private const string ProgramName = "Power Video Player 2";
-        private const string DocTypePrefix = "PVP2.AssocFile";
+        private const string ProgramName = "Power Video Player";
+        private const string DocTypePrefix = "PVP.AssocFile";
 
         public void SetStatus(IEnumerable<FileTypeItem> items)
         {

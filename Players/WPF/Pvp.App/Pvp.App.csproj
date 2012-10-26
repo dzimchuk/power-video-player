@@ -90,9 +90,11 @@
     <Compile Include="Controls\ControlPanelBase.cs" />
     <Compile Include="Controls\FullScreenControlPanel.cs" />
     <Compile Include="Controls\WrapBreakPanel.cs" />
+    <Compile Include="IFileAssociatorRegistration.cs" />
     <Compile Include="Messaging\KeyboardMouseActionEventArgs.cs" />
     <Compile Include="Messaging\MainWindowResizeSuggestedEventArgs.cs" />
     <Compile Include="Messaging\ResizeMainWindowCommandMessage.cs" />
+    <Compile Include="Service\DisplayService.cs" />
     <Compile Include="Service\DriveInfo.cs" />
     <Compile Include="Service\DriveService.cs" />
     <Compile Include="Service\FileAssociatorWrapper.cs" />
@@ -105,6 +107,7 @@
     <Compile Include="ViewModel\DefaultSettings.cs" />
     <Compile Include="ViewModel\Extensions.cs" />
     <Compile Include="ViewModel\FileTypes.cs" />
+    <Compile Include="ViewModel\IDisplayService.cs" />
     <Compile Include="ViewModel\IImageCreaterFactory.cs" />
     <Compile Include="Service\ImageCreaterFactory.cs" />
     <Compile Include="ViewModel\IKeyInterpreter.cs" />

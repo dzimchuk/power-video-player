@@ -26,6 +26,8 @@ namespace Pvp.App.Composition
             Bind<IMouseWheelInterpreter>().To<MouseWheelInterpreter>();
             Bind<ISelectedKeyCombinationItemResolver>().To<SelectedKeyCombinationItemResolver>();
             Bind<IFileAssociator>().To<FileAssociatorWrapper>();
+            Bind<IFileAssociatorRegistration>().To<FileAssociatorWrapper>();
+            Bind<IDisplayService>().To<DisplayService>();
 
             Bind<ViewModelBase>().To<MainWindowViewModel>().InSingletonScope().Named(ViewModelLocator.MainWindowViewModelName);
             Bind<ViewModelBase>().To<MainViewModel>().InSingletonScope().Named(ViewModelLocator.MainViewModelName);
