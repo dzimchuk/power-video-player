@@ -32,6 +32,16 @@ namespace Pvp.App.Service
             return dlg.SelectedKeyCombination;
         }
 
+        public void DisplayMediaInformationWindow()
+        {
+            var dlg = new MediaInformationWindow();
+            dlg.Owner = Application.Current.MainWindow;
+            dlg.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+
+            dlg.ShowDialog();
+            Application.Current.MainWindow.Activate();
+        }
+
         public void DisplayMessage(string message)
         {
             MessageBox.Show(message, Resources.Resources.program_name, MessageBoxButton.OK, MessageBoxImage.Information);

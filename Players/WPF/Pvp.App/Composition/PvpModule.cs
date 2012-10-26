@@ -37,6 +37,7 @@ namespace Pvp.App.Composition
 
             Bind<ViewModelBase>().To<SettingsViewModel>().Named(ViewModelLocator.SettingsViewModelName);
             Bind<ViewModelBase>().To<EnterKeyViewModel>().Named(ViewModelLocator.EnterKeyViewModelName);
+            Bind<ViewModelBase>().To<MediaInformationViewModel>().Named(ViewModelLocator.MediaInformationViewModelName);
         }
     }
 }

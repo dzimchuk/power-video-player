@@ -114,6 +114,8 @@
     <Compile Include="ViewModel\IMouseWheelInterpreter.cs" />
     <Compile Include="ViewModel\KeyCombination.cs" />
     <Compile Include="Service\KeyInterpreter.cs" />
+    <Compile Include="ViewModel\MediaInfoItem.cs" />
+    <Compile Include="ViewModel\MediaInformationViewModel.cs" />
     <Compile Include="ViewModel\MouseWheelAction.cs" />
     <Compile Include="ViewModel\Settings\EnterKeyViewModel.cs" />
     <Compile Include="ViewModel\Settings\FileTypeItem.cs" />
@@ -182,6 +184,9 @@
       <DependentUpon>EnterKeyWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\FullSceenPanelVisibilityValueConverter.cs" />
+    <Compile Include="View\MediaInformationWindow.xaml.cs">
+      <DependentUpon>MediaInformationWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\MouseWheelActionToBooleanConverter.cs" />
     <Compile Include="View\PercentToStringValueConverter.cs" />
     <Compile Include="View\RegularControlPanelVisibilityValueConverter.cs" />
@@ -233,6 +238,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\MainView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\MediaInformationWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
