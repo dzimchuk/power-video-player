@@ -17,7 +17,7 @@ using System.IO;
 using Pvp.Core.DirectShow;
 using Pvp.Core.MediaEngine;
 
-namespace Pvp.Core.WindowsForms
+namespace Pvp.Core.Wpf
 {
     /// <summary>
     /// GDI+ specific image creator.

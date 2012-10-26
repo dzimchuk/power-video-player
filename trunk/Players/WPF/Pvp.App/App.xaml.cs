@@ -14,7 +14,6 @@ using Pvp.App.Messaging;
 using Pvp.App.Util;
 using Pvp.App.View;
 using Pvp.App.ViewModel;
-using Pvp.App.ViewModel.Settings;
 
 namespace Pvp.App
 {
@@ -31,26 +30,26 @@ namespace Pvp.App
             SetUpDependencies();
 
             if (Array.Find(e.Args,
-                            delegate(string arg)
-                            {
-                                string s = arg.ToLowerInvariant();
-                                return s == "-regapp" || s == "/regapp";
-                            }
-                           ) != default(string))
+                           delegate(string arg)
+                               {
+                                   string s = arg.ToLowerInvariant();
+                                   return s == "-regapp" || s == "/regapp";
+                               }
+                    ) != default(string))
             {
                 HandleRegApp();
-                return;
+                Shutdown();
             }
             else if (Array.Find(e.Args,
                                 delegate(string arg)
-                                {
-                                    string s = arg.ToLowerInvariant();
-                                    return s == "-unregapp" || s == "/unregapp";
-                                }
-                ) != default(string))
+                                    {
+                                        string s = arg.ToLowerInvariant();
+                                        return s == "-unregapp" || s == "/unregapp";
+                                    }
+                         ) != default(string))
             {
                 HandleUnRegApp();
-                return;
+                Shutdown();
             }
 
             var si = new SingleInstance(_appGuid);
@@ -60,6 +59,8 @@ namespace Pvp.App
                            new MainWindow().Show();
                            return MainWindow;
                        }, e.Args);
+
+            SynchronizationContext.Current.Post(state => { si_ArgsRecieved((string[])state); }, e.Args);
         }
 
         private void si_ArgsRecieved(string[] args)
@@ -99,7 +100,7 @@ namespace Pvp.App
                 string appName = Pvp.App.Resources.Resources.program_name;
                 string appDescription = Pvp.App.Resources.Resources.program_description;
 
-                var fileAssociator = DependencyResolver.Current.Resolve<IFileAssociator>();
+                var fileAssociator = DependencyResolver.Current.Resolve<IFileAssociatorRegistration>();
                 fileAssociator.Register(@"Software\Clients\Media", icon, command, appName, appDescription, GetTypesInfo());
             }
             else
@@ -112,7 +113,7 @@ namespace Pvp.App
         {
             if (IsAdmin)
             {
-                var fileAssociator = DependencyResolver.Current.Resolve<IFileAssociator>();
+                var fileAssociator = DependencyResolver.Current.Resolve<IFileAssociatorRegistration>();
                 fileAssociator.Unregister();
             }
             else

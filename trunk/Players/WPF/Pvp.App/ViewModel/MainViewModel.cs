@@ -30,6 +30,7 @@ namespace Pvp.App.ViewModel
         private readonly IDriveService _driveService;
         private readonly ISettingsProvider _settingsProvider;
         private readonly IImageCreaterFactory _imageCreaterFactory;
+        private readonly IDisplayService _displayService;
 
         private ICommand _openCommand;
         private ICommand _closeCommand;
@@ -66,7 +67,8 @@ namespace Pvp.App.ViewModel
             IWindowHandleProvider windowHandleProvider,
             IDriveService driveService,
             ISettingsProvider settingsProvider, 
-            IImageCreaterFactory imageCreaterFactory)
+            IImageCreaterFactory imageCreaterFactory, 
+            IDisplayService displayService)
         {
             _engine = engine;
             _controlViewModel = controlViewModel;
@@ -76,6 +78,7 @@ namespace Pvp.App.ViewModel
             _driveService = driveService;
             _settingsProvider = settingsProvider;
             _imageCreaterFactory = imageCreaterFactory;
+            _displayService = displayService;
 
             _settingsProvider.SettingChanged += _settingsProvider_SettingChanged;
             ReadSettings();
@@ -564,6 +567,11 @@ namespace Pvp.App.ViewModel
             if (_engine.GraphState == GraphState.Reset)
             {
                 _videoSize = null;
+                _displayService.AllowMonitorPowerdown();
+            }
+            else
+            {
+                _displayService.PreventMonitorPowerdown();
             }
             
             UpdateMenu();

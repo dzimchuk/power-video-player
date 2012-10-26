@@ -1,6 +1,7 @@
 using System;
 using Pvp.App.ViewModel;
 using Pvp.Core.MediaEngine;
+using Pvp.Core.Wpf;
 
 namespace Pvp.App.Service
 {
@@ -8,7 +9,7 @@ namespace Pvp.App.Service
     {
         public IImageCreator GetNew()
         {
-            throw new NotImplementedException();
+            return new ImageCreator();
         }
     }
 }
