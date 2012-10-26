@@ -13,5 +13,7 @@ namespace Pvp.App.ViewModel
         void DisplaySettingsDialog();
         KeyCombination ShowEnterKeyWindow();
         void DisplayMediaInformationWindow();
+        void DisplayFailedStreamsWindow();
+        void DisplayAboutAppWindow();
     }
 }

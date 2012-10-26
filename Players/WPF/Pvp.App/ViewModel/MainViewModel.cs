@@ -31,6 +31,7 @@ namespace Pvp.App.ViewModel
         private readonly ISettingsProvider _settingsProvider;
         private readonly IImageCreaterFactory _imageCreaterFactory;
         private readonly IDisplayService _displayService;
+        private readonly IFailedStreamsContainer _failedStreamsContainer;
 
         private ICommand _openCommand;
         private ICommand _closeCommand;
@@ -60,6 +61,8 @@ namespace Pvp.App.ViewModel
         private Tuple<double, double> _videoSize;
         private Dictionary<string, ICommand> _commandBag;
 
+        private SynchronizationContext _synchronizationContext;
+
         public MainViewModel(IMediaEngineFacade engine,
             ControlPanelViewModel controlViewModel,
             IFileSelector fileSelector,
@@ -68,7 +71,7 @@ namespace Pvp.App.ViewModel
             IDriveService driveService,
             ISettingsProvider settingsProvider, 
             IImageCreaterFactory imageCreaterFactory, 
-            IDisplayService displayService)
+            IDisplayService displayService, IFailedStreamsContainer failedStreamsContainer)
         {
             _engine = engine;
             _controlViewModel = controlViewModel;
@@ -79,8 +82,12 @@ namespace Pvp.App.ViewModel
             _settingsProvider = settingsProvider;
             _imageCreaterFactory = imageCreaterFactory;
             _displayService = displayService;
+            _failedStreamsContainer = failedStreamsContainer;
 
             _settingsProvider.SettingChanged += _settingsProvider_SettingChanged;
+
+            _synchronizationContext = SynchronizationContext.Current;
+
             ReadSettings();
 
             Messenger.Default.Register<PropertyChangedMessageBase>(this, true, OnPropertyChanged);
@@ -462,6 +469,8 @@ namespace Pvp.App.ViewModel
                     _dialogService.DisplayError(args.Message);
                 };
 
+                _engine.FailedStreamsAvailable += _engine_FailedStreamsAvailable;
+
                 _engine.DvdParentalChange += OnUserDecisionNeeded;
                 _engine.PartialSuccess += OnUserDecisionNeeded;
                 _engine.ModifyMenu += _engine_ModifyMenu;
@@ -505,6 +514,19 @@ namespace Pvp.App.ViewModel
             else if (message.Content == Event.MainWindowClosing)
             {
                 _settingsProvider.Set("ControlPanelVisible", IsControlPanelVisible);
+            }
+        }
+
+        private void _engine_FailedStreamsAvailable(IList<Core.MediaEngine.Description.StreamInfo> streams)
+        {
+            if (_synchronizationContext != null)
+            {
+                _synchronizationContext.Post(state =>
+                                                 {
+                                                     _failedStreamsContainer.SetFailedStreams((IEnumerable<Core.MediaEngine.Description.StreamInfo>)state);
+                                                     _dialogService.DisplayFailedStreamsWindow();
+                                                     _failedStreamsContainer.Clear();
+                                                 }, streams);
             }
         }
   

@@ -32,14 +32,31 @@ namespace Pvp.App.Service
             return dlg.SelectedKeyCombination;
         }
 
-        public void DisplayMediaInformationWindow()
+        private static void ShowModalDialog(Window dlg)
         {
-            var dlg = new MediaInformationWindow();
             dlg.Owner = Application.Current.MainWindow;
             dlg.WindowStartupLocation = WindowStartupLocation.CenterOwner;
 
             dlg.ShowDialog();
             Application.Current.MainWindow.Activate();
+        }
+
+        public void DisplayMediaInformationWindow()
+        {
+            var dlg = new MediaInformationWindow();
+            ShowModalDialog(dlg);
+        }
+
+        public void DisplayFailedStreamsWindow()
+        {
+            var dlg = new FailedStreamsWindow();
+            ShowModalDialog(dlg);
+        }
+
+        public void DisplayAboutAppWindow()
+        {
+            var dlg = new AboutAppWindow();
+            ShowModalDialog(dlg);
         }
 
         public void DisplayMessage(string message)

@@ -768,4 +768,13 @@
   <data name="infodialog_caption" xml:space="preserve">
     <value>Information</value>
   </data>
+  <data name="failedstreams_caption" xml:space="preserve">
+    <value>Warning</value>
+  </data>
+  <data name="failedstreams_msg1" xml:space="preserve">
+    <value>There were streams that PVP could not render. The details are listed below.</value>
+  </data>
+  <data name="failedstreams_msg2" xml:space="preserve">
+    <value>Most likely the streams were not rendered because necessary decoders are not installed.</value>
+  </data>
 </root>
