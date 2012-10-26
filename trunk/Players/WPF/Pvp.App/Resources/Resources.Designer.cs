@@ -250,6 +250,33 @@ namespace Pvp.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Warning.
+        /// </summary>
+        public static string failedstreams_caption {
+            get {
+                return ResourceManager.GetString("failedstreams_caption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There were streams that PVP could not render. The details are listed below..
+        /// </summary>
+        public static string failedstreams_msg1 {
+            get {
+                return ResourceManager.GetString("failedstreams_msg1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Most likely the streams were not rendered because necessary decoders are not installed..
+        /// </summary>
+        public static string failedstreams_msg2 {
+            get {
+                return ResourceManager.GetString("failedstreams_msg2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to .3g2 - 3GPP2.
         /// </summary>
         public static string file_type_3g2 {

@@ -9,6 +9,8 @@ namespace Pvp.App.Messaging
         SettingsWindowClose,
         EnterKeyWindowClose,
         MediaInformationWindowClose,
+        FailedStreamsWindowClose,
+        AboutAppWindowClose,
         ResizeMainWindow,
         SaveSettings
     }

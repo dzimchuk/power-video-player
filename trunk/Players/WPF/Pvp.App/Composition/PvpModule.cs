@@ -28,6 +28,7 @@ namespace Pvp.App.Composition
             Bind<IFileAssociator>().To<FileAssociatorWrapper>();
             Bind<IFileAssociatorRegistration>().To<FileAssociatorWrapper>();
             Bind<IDisplayService>().To<DisplayService>();
+            Bind<IFailedStreamsContainer>().To<FailedStreamsContainer>().InSingletonScope();
 
             Bind<ViewModelBase>().To<MainWindowViewModel>().InSingletonScope().Named(ViewModelLocator.MainWindowViewModelName);
             Bind<ViewModelBase>().To<MainViewModel>().InSingletonScope().Named(ViewModelLocator.MainViewModelName);
@@ -38,6 +39,8 @@ namespace Pvp.App.Composition
             Bind<ViewModelBase>().To<SettingsViewModel>().Named(ViewModelLocator.SettingsViewModelName);
             Bind<ViewModelBase>().To<EnterKeyViewModel>().Named(ViewModelLocator.EnterKeyViewModelName);
             Bind<ViewModelBase>().To<MediaInformationViewModel>().Named(ViewModelLocator.MediaInformationViewModelName);
+            Bind<ViewModelBase>().To<FailedStreamsViewModel>().Named(ViewModelLocator.FailedStreamsViewModelName);
+            Bind<ViewModelBase>().To<AboutAppViewModel>().Named(ViewModelLocator.AboutAppViewModelName);
         }
     }
 }

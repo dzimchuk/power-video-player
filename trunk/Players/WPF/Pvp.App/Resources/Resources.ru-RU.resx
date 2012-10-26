@@ -768,4 +768,13 @@
   <data name="infodialog_caption" xml:space="preserve">
     <value>Информация</value>
   </data>
+  <data name="failedstreams_caption" xml:space="preserve">
+    <value>Внимание</value>
+  </data>
+  <data name="failedstreams_msg1" xml:space="preserve">
+    <value>Некоторые потоки не были прорендерены PVP. Подробности представлены ниже.</value>
+  </data>
+  <data name="failedstreams_msg2" xml:space="preserve">
+    <value>Наиболее вероятно, что необходимые декодеры не установлены в системе.</value>
+  </data>
 </root>
