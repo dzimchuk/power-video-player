@@ -29,6 +29,7 @@ namespace Pvp.App.Composition
             Bind<IFileAssociatorRegistration>().To<FileAssociatorWrapper>();
             Bind<IDisplayService>().To<DisplayService>();
             Bind<IFailedStreamsContainer>().To<FailedStreamsContainer>().InSingletonScope();
+            Bind<ICursorManager>().To<CursorManager>();
 
             Bind<ViewModelBase>().To<MainWindowViewModel>().InSingletonScope().Named(ViewModelLocator.MainWindowViewModelName);
             Bind<ViewModelBase>().To<MainViewModel>().InSingletonScope().Named(ViewModelLocator.MainViewModelName);

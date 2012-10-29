@@ -29,11 +29,6 @@ namespace Pvp.Core.MediaEngine
         /// <summary>
         /// Indicates that there is at least one unrendered stream.
         /// Details on failed streams are provided as a list of StreamInfo objects.
-        /// 
-        /// Caution: the event is raised on a thread pool thread,
-        /// application is responsible to synchronize with the UI thread if needed.
-        /// 
-        /// Raising it on another thread is needed so that BuildGraph could continue.
         /// </summary>
         event FailedStreamsHandler FailedStreamsAvailable;
         

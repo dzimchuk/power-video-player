@@ -64,6 +64,8 @@ namespace Pvp.App.View
                     _fullScreenControlPanel.OnMouseEnter();
                 }
             }
+
+            Messenger.Default.Send(new EventMessage(Event.MouseMove));
         }
 
         private CustomPopupPlacement[] fullscreenPlacementCallback(
@@ -87,6 +89,8 @@ namespace Pvp.App.View
                     _fullScreenControlPanel.OnMouseEnter();
                 }
             }
+
+            Messenger.Default.Send(new EventMessage(Event.MouseMove));
         }
 
         private void ContextMenu_Opened(object sender, RoutedEventArgs e)
