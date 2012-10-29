@@ -94,6 +94,7 @@
     <Compile Include="Messaging\KeyboardMouseActionEventArgs.cs" />
     <Compile Include="Messaging\MainWindowResizeSuggestedEventArgs.cs" />
     <Compile Include="Messaging\ResizeMainWindowCommandMessage.cs" />
+    <Compile Include="Service\CursorManager.cs" />
     <Compile Include="Service\DisplayService.cs" />
     <Compile Include="Service\DriveInfo.cs" />
     <Compile Include="Service\DriveService.cs" />
@@ -110,6 +111,7 @@
     <Compile Include="ViewModel\Extensions.cs" />
     <Compile Include="ViewModel\FailedStreamsViewModel.cs" />
     <Compile Include="ViewModel\FileTypes.cs" />
+    <Compile Include="ViewModel\ICursorManager.cs" />
     <Compile Include="ViewModel\IDisplayService.cs" />
     <Compile Include="ViewModel\IFailedStreamsContainer.cs" />
     <Compile Include="ViewModel\IImageCreaterFactory.cs" />

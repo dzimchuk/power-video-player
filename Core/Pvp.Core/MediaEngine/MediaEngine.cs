@@ -24,8 +24,8 @@ namespace Pvp.Core.MediaEngine
 {
     internal class MediaEngine : IMediaEngine
     {
-        private RegularFilterGraphBuilder _regularBuilder;
-        private DVDFilterGraphBuilder _dvdBuilder;
+        private readonly RegularFilterGraphBuilder _regularBuilder;
+        private readonly DVDFilterGraphBuilder _dvdBuilder;
         private FilterGraph _filterGraph;
 
         private bool _autoPlay;
@@ -34,6 +34,8 @@ namespace Pvp.Core.MediaEngine
 
         private IMediaWindow _mediaWindow;
         private readonly IMediaWindowHost _mediaWindowHost;
+
+        private readonly SynchronizationContext _synchronizationContext;
            
         /// <summary>
         /// Constructor.
@@ -47,6 +49,8 @@ namespace Pvp.Core.MediaEngine
 
             _regularBuilder.FailedStreamsAvailable += new FailedStreamsHandler(OnFailedStreamsAvailableInternal);
             _dvdBuilder.FailedStreamsAvailable += new FailedStreamsHandler(OnFailedStreamsAvailableInternal);
+
+            _synchronizationContext = SynchronizationContext.Current;
         }
         
         #region Events
@@ -1216,13 +1220,16 @@ namespace Pvp.Core.MediaEngine
 
         private void OnFailedStreamsAvailableInternal(IList<StreamInfo> streams)
         {
+            // Raising it on another thread is needed so that BuildGraph could continue.s
             ThreadPool.QueueUserWorkItem(delegate(object state) { OnFailedStreamsAvailable((IList<StreamInfo>)state); }, streams);
         }
 
         protected virtual void OnFailedStreamsAvailable(IList<StreamInfo> streams)
         {
-            if (FailedStreamsAvailable != null)
-                FailedStreamsAvailable(streams);
+            if (FailedStreamsAvailable != null && _synchronizationContext != null)
+            {
+                _synchronizationContext.Post(state => FailedStreamsAvailable((IList<StreamInfo>)state), streams);
+            }
         }
 
         protected virtual void OnPartialSuccess(UserDecisionEventArgs args)

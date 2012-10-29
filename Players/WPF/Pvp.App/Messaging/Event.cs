@@ -7,6 +7,7 @@ namespace Pvp.App.Messaging
     {
         TitleBarDoubleClick,
         VideoAreaDoubleClick,
+        MouseMove,
         MainWindowClosing,
         SessionEnding,
         MediaControlCreated,

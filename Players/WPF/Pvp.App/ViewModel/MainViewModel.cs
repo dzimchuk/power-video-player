@@ -32,6 +32,7 @@ namespace Pvp.App.ViewModel
         private readonly IImageCreaterFactory _imageCreaterFactory;
         private readonly IDisplayService _displayService;
         private readonly IFailedStreamsContainer _failedStreamsContainer;
+        private readonly ICursorManager _cursorManager;
 
         private ICommand _openCommand;
         private ICommand _closeCommand;
@@ -61,8 +62,6 @@ namespace Pvp.App.ViewModel
         private Tuple<double, double> _videoSize;
         private Dictionary<string, ICommand> _commandBag;
 
-        private SynchronizationContext _synchronizationContext;
-
         public MainViewModel(IMediaEngineFacade engine,
             ControlPanelViewModel controlViewModel,
             IFileSelector fileSelector,
@@ -71,7 +70,9 @@ namespace Pvp.App.ViewModel
             IDriveService driveService,
             ISettingsProvider settingsProvider, 
             IImageCreaterFactory imageCreaterFactory, 
-            IDisplayService displayService, IFailedStreamsContainer failedStreamsContainer)
+            IDisplayService displayService, 
+            IFailedStreamsContainer failedStreamsContainer, 
+            ICursorManager cursorManager)
         {
             _engine = engine;
             _controlViewModel = controlViewModel;
@@ -83,10 +84,9 @@ namespace Pvp.App.ViewModel
             _imageCreaterFactory = imageCreaterFactory;
             _displayService = displayService;
             _failedStreamsContainer = failedStreamsContainer;
+            _cursorManager = cursorManager;
 
             _settingsProvider.SettingChanged += _settingsProvider_SettingChanged;
-
-            _synchronizationContext = SynchronizationContext.Current;
 
             ReadSettings();
 
@@ -489,6 +489,7 @@ namespace Pvp.App.ViewModel
                     Messenger.Default.Send(new EventMessage(Event.StateRefreshSuggested));
 
                     UpdateMenusCheckedStatus();
+                    UpdateCursor();
                 }
             }
             else if (message.Content == Event.ContextMenuOpened)
@@ -515,18 +516,34 @@ namespace Pvp.App.ViewModel
             {
                 _settingsProvider.Set("ControlPanelVisible", IsControlPanelVisible);
             }
+            else if (message.Content == Event.MouseMove)
+            {
+                if (!_cursorManager.IsCursorVisible)
+                {
+                    _cursorManager.ShowCursor();
+                    _nCursorCount = 0;
+                }
+            }
         }
 
         private void _engine_FailedStreamsAvailable(IList<Core.MediaEngine.Description.StreamInfo> streams)
         {
-            if (_synchronizationContext != null)
+            _failedStreamsContainer.SetFailedStreams(streams);
+            _dialogService.DisplayFailedStreamsWindow();
+            _failedStreamsContainer.Clear();
+        }
+
+        private int _nCursorCount;
+        private void UpdateCursor()
+        {
+            if (++_nCursorCount > 4)
             {
-                _synchronizationContext.Post(state =>
-                                                 {
-                                                     _failedStreamsContainer.SetFailedStreams((IEnumerable<Core.MediaEngine.Description.StreamInfo>)state);
-                                                     _dialogService.DisplayFailedStreamsWindow();
-                                                     _failedStreamsContainer.Clear();
-                                                 }, streams);
+                _nCursorCount = 0;
+
+                if (_isInPlayingMode && IsFullScreen && _cursorManager.IsCursorVisible)
+                {
+                    _cursorManager.HideCursor();
+                }
             }
         }
   
