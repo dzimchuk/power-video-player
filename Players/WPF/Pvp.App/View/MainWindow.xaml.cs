@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -20,7 +21,7 @@ namespace Pvp.App.View
     [TemplatePart(Name = "PART_MaximizeButton", Type = typeof(Button))]
     [TemplatePart(Name = "PART_CloseButton", Type = typeof(Button))]
     [TemplatePart(Name = "PART_VideoArea", Type = typeof(Border))]
-    public partial class MainWindow : Window, IMediaControlAcceptor
+    public partial class MainWindow : Window, IMediaControlAcceptor, IValueConverter
     {
         static MainWindow()
         {
@@ -158,7 +159,7 @@ namespace Pvp.App.View
                 win.MoveWindow(bounds.Left, bounds.Top, bounds.Width, bounds.Height);
             }
 
-            win.SetMaximizeButtonTooltip();
+            Messenger.Default.Send(new EventMessage(Event.CurrentCultureChanged));
         }
 
         private static void IsMinimizedChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -422,29 +423,41 @@ namespace Pvp.App.View
             element.ReleaseMouseCapture();
         }
 
-        private void SetMaximizeButtonTooltip()
+        private void UpdateTooltips()
         {
+            var locHelper = FindResource("LocHelper");
+            var locConverter = (IValueConverter)FindResource("LocConverter");
+
             var button = Template.FindName("PART_MaximizeButton", this) as Button;
             if (button != null)
             {
-                button.ToolTip = IsMaximized ? res.Resources.captionbar_restore : res.Resources.captionbar_maximize;
+                var binding = new Binding("LS");
+                binding.Source = locHelper;
+                binding.Converter = this;
+                binding.Mode = BindingMode.OneWay;
+                button.SetBinding(ToolTipProperty, binding);
             }
-        }
 
-        private void UpdateTooltips()
-        {
-            SetMaximizeButtonTooltip();
-
-            var button = Template.FindName("PART_MinimizeButton", this) as Button;
+            button = Template.FindName("PART_MinimizeButton", this) as Button;
             if (button != null)
             {
-                button.ToolTip = res.Resources.captionbar_minimize;
+                var binding = new Binding("LS");
+                binding.Source = locHelper;
+                binding.Converter = locConverter;
+                binding.Mode = BindingMode.OneWay;
+                binding.ConverterParameter = "captionbar_minimize";
+                button.SetBinding(ToolTipProperty, binding);
             }
 
             button = Template.FindName("PART_CloseButton", this) as Button;
             if (button != null)
             {
-                button.ToolTip = res.Resources.captionbar_close;
+                var binding = new Binding("LS");
+                binding.Source = locHelper;
+                binding.Converter = locConverter;
+                binding.Mode = BindingMode.OneWay;
+                binding.ConverterParameter = "captionbar_close";
+                button.SetBinding(ToolTipProperty, binding);
             }
         }
 
@@ -472,6 +485,16 @@ namespace Pvp.App.View
         Core.Wpf.MediaControl IMediaControlAcceptor.MediaControl
         {
             set { MWEventSource = value; }
+        }
+
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return IsMaximized ? res.Resources.captionbar_restore : res.Resources.captionbar_maximize;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
         }
     }
 }

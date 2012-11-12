@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="about_copyright" xml:space="preserve">
-    <value>Copyright 2004-2010 - Andrei Dzimchuk</value>
+    <value>Copyright 2004-2012 - Andrei Dzimchuk</value>
   </data>
   <data name="about_pvp" xml:space="preserve">
     <value>About PVP</value>
@@ -358,7 +358,7 @@
     <value>Mute</value>
   </data>
   <data name="mi_about" xml:space="preserve">
-    <value>&amp;About</value>
+    <value>_About</value>
   </data>
   <data name="mi_angle_format" xml:space="preserve">
     <value>Angle {0}</value>
@@ -406,25 +406,25 @@
     <value>Close Menu (Resume)</value>
   </data>
   <data name="mi_controlbar" xml:space="preserve">
-    <value>&amp;Controlbar</value>
+    <value>_Controlbar</value>
   </data>
   <data name="mi_display_subpictures" xml:space="preserve">
     <value>Display Subtitles</value>
   </data>
   <data name="mi_exit" xml:space="preserve">
-    <value>E&amp;xit</value>
+    <value>E_xit</value>
   </data>
   <data name="mi_file" xml:space="preserve">
-    <value>&amp;File</value>
+    <value>_File</value>
   </data>
   <data name="mi_file_close" xml:space="preserve">
-    <value>C&amp;lose</value>
+    <value>C_lose</value>
   </data>
   <data name="mi_file_information" xml:space="preserve">
-    <value>&amp;Information</value>
+    <value>_Information</value>
   </data>
   <data name="mi_file_open" xml:space="preserve">
-    <value>&amp;Open</value>
+    <value>_Open</value>
   </data>
   <data name="mi_file_play_dvd" xml:space="preserve">
     <value>Play DVD</value>
@@ -442,16 +442,16 @@
     <value>Menu Languages</value>
   </data>
   <data name="mi_pause" xml:space="preserve">
-    <value>P&amp;ause</value>
+    <value>P_ause</value>
   </data>
   <data name="mi_play" xml:space="preserve">
-    <value>&amp;Play</value>
+    <value>_Play</value>
   </data>
   <data name="mi_playrate" xml:space="preserve">
     <value>Playrate</value>
   </data>
   <data name="mi_preferences" xml:space="preserve">
-    <value>&amp;Preferences</value>
+    <value>_Preferences</value>
   </data>
   <data name="mi_repeat" xml:space="preserve">
     <value>Repeat</value>
@@ -463,7 +463,7 @@
     <value>Select Menu</value>
   </data>
   <data name="mi_stop" xml:space="preserve">
-    <value>&amp;Stop</value>
+    <value>_Stop</value>
   </data>
   <data name="mi_subpicture_menu" xml:space="preserve">
     <value>Subpicture Menu</value>

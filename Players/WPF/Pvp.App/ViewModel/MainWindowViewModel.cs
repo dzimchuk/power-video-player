@@ -51,9 +51,12 @@ namespace Pvp.App.ViewModel
             Messenger.Default.Register<CommandMessage>(this, OnCommand);
         }
 
-        private void OnCommand(CommandMessage obj)
+        private void OnCommand(CommandMessage command)
         {
-            _settingsProvider.Save();
+            if (command.Content == Command.SaveSettings)
+            {
+                _settingsProvider.Save();
+            }
         }
 
         private void _settingsProvider_SettingChanged(object sender, SettingChangeEventArgs e)

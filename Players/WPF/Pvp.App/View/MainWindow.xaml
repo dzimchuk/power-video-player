@@ -11,6 +11,11 @@
         DataContext="{x:Static app:ViewModelLocator.MainWindowViewModel}"
         Style="{DynamicResource MainWindowStyle}"
         AllowDrop="True">
+    <Window.Resources>
+        <view:LocalizationConverter x:Key="LocConverter" />
+        <view:LocalizationHelper x:Key="LocHelper" />
+    </Window.Resources>
+    
     <view:MainView x:Name="_mainView" />
 
     <i:Interaction.Triggers>

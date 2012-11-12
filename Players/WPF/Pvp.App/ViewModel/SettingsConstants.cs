@@ -8,5 +8,6 @@ namespace Pvp.App.ViewModel
         public const string CenterWindow = "CenterWindow";
         public const string KeyMap = "KeyMap";
         public const string MouseWheelAction = "MouseWheelAction";
+        public const string Language = "Language";
     }
 }

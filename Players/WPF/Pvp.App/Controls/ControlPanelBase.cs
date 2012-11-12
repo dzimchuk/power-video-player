@@ -349,70 +349,128 @@ namespace Pvp.App.Controls
 
         private void UpdateTooltips()
         {
+            var locHelper = FindResource("LocHelper");
+            var locConverter = (IValueConverter)FindResource("LocConverter");
+
             var playButton = Template.FindName("PART_PlayButton", this) as ButtonBase;
             if (playButton != null)
             {
-                playButton.ToolTip = res.Resources.controlbar_play;
+                var binding = new Binding("LS");
+                binding.Source = locHelper;
+                binding.Converter = locConverter;
+                binding.Mode = BindingMode.OneWay;
+                binding.ConverterParameter = "controlbar_play";
+                playButton.SetBinding(ToolTipProperty, binding);
             }
 
             var pauseButton = Template.FindName("PART_PauseButton", this) as ButtonBase;
             if (pauseButton != null)
             {
-                pauseButton.ToolTip = res.Resources.controlbar_pause;
+                var binding = new Binding("LS");
+                binding.Source = locHelper;
+                binding.Converter = locConverter;
+                binding.Mode = BindingMode.OneWay;
+                binding.ConverterParameter = "controlbar_pause";
+                pauseButton.SetBinding(ToolTipProperty, binding);
             }
 
             var stopButton = Template.FindName("PART_StopButton", this) as ButtonBase;
             if (stopButton != null)
             {
-                stopButton.ToolTip = res.Resources.controlbar_stop;
+                var binding = new Binding("LS");
+                binding.Source = locHelper;
+                binding.Converter = locConverter;
+                binding.Mode = BindingMode.OneWay;
+                binding.ConverterParameter = "controlbar_stop";
+                stopButton.SetBinding(ToolTipProperty, binding);
             }
 
             var forwardButton = Template.FindName("PART_ForwardButton", this) as ButtonBase;
             if (forwardButton != null)
             {
-                forwardButton.ToolTip = res.Resources.controlbar_forward;
+                var binding = new Binding("LS");
+                binding.Source = locHelper;
+                binding.Converter = locConverter;
+                binding.Mode = BindingMode.OneWay;
+                binding.ConverterParameter = "controlbar_forward";
+                forwardButton.SetBinding(ToolTipProperty, binding);
             }
 
             var backwardButton = Template.FindName("PART_BackwardButton", this) as ButtonBase;
             if (backwardButton != null)
             {
-                backwardButton.ToolTip = res.Resources.controlbar_backward;
+                var binding = new Binding("LS");
+                binding.Source = locHelper;
+                binding.Converter = locConverter;
+                binding.Mode = BindingMode.OneWay;
+                binding.ConverterParameter = "controlbar_backward";
+                backwardButton.SetBinding(ToolTipProperty, binding);
             }
 
             var toEndButton = Template.FindName("PART_ToEndButton", this) as ButtonBase;
             if (toEndButton != null)
             {
-                toEndButton.ToolTip = res.Resources.controlbar_to_end;
+                var binding = new Binding("LS");
+                binding.Source = locHelper;
+                binding.Converter = locConverter;
+                binding.Mode = BindingMode.OneWay;
+                binding.ConverterParameter = "controlbar_to_end";
+                toEndButton.SetBinding(ToolTipProperty, binding);
             }
 
             var toBeginingButton = Template.FindName("PART_ToBeginingButton", this) as ButtonBase;
             if (toBeginingButton != null)
             {
-                toBeginingButton.ToolTip = res.Resources.controlbar_to_begining;
+                var binding = new Binding("LS");
+                binding.Source = locHelper;
+                binding.Converter = locConverter;
+                binding.Mode = BindingMode.OneWay;
+                binding.ConverterParameter = "controlbar_to_begining";
+                toBeginingButton.SetBinding(ToolTipProperty, binding);
             }
 
             var repeatButton = Template.FindName("PART_RepeatButton", this) as ToggleButton;
             if (repeatButton != null)
             {
-                repeatButton.ToolTip = res.Resources.controlbar_repeat;
+                var binding = new Binding("LS");
+                binding.Source = locHelper;
+                binding.Converter = locConverter;
+                binding.Mode = BindingMode.OneWay;
+                binding.ConverterParameter = "controlbar_repeat";
+                repeatButton.SetBinding(ToolTipProperty, binding);
             }
 
             var muteButton = Template.FindName("PART_MuteButton", this) as ToggleButton;
             if (muteButton != null)
             {
-                muteButton.ToolTip = res.Resources.controlbar_mute;
+                var binding = new Binding("LS");
+                binding.Source = locHelper;
+                binding.Converter = locConverter;
+                binding.Mode = BindingMode.OneWay;
+                binding.ConverterParameter = "controlbar_mute";
+                muteButton.SetBinding(ToolTipProperty, binding);
             }
 
             var seekSlider = Template.FindName("PART_SeekSlider", this) as CommandSlider;
             if (seekSlider != null)
             {
-                seekSlider.ToolTip = res.Resources.controlbar_seekbar;
+                var binding = new Binding("LS");
+                binding.Source = locHelper;
+                binding.Converter = locConverter;
+                binding.Mode = BindingMode.OneWay;
+                binding.ConverterParameter = "controlbar_seekbar";
+                seekSlider.SetBinding(ToolTipProperty, binding);
             }
 
             var volumeSlider = Template.FindName("PART_VolumeSlider", this) as CommandSlider;
             if (volumeSlider != null)
             {
-                volumeSlider.ToolTip = res.Resources.controlbar_volume;
+                var binding = new Binding("LS");
+                binding.Source = locHelper;
+                binding.Converter = locConverter;
+                binding.Mode = BindingMode.OneWay;
+                binding.ConverterParameter = "controlbar_volume";
+                volumeSlider.SetBinding(ToolTipProperty, binding);
             }
         }
     }

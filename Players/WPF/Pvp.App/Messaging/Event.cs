@@ -14,10 +14,14 @@ namespace Pvp.App.Messaging
         StateRefreshSuggested,
         DispatcherTimerTick,
         ContextMenuOpened,
+        ContextMenuClosed,
         InitSize,
         MainWindowResizeSuggested,
         SettingsDialogActivated,
         SettingsDialogDeactivated,
-        KeyboardMouseAction
+        KeyboardMouseAction,
+        FullScreenControlPanelOpened,
+        FullScreenControlPanelClosed,
+        CurrentCultureChanged
     }
 }

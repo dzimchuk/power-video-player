@@ -27,6 +27,11 @@ namespace Pvp.App.ViewModel
             get { return MouseWheelAction.Volume; }
         }
 
+        public static SupportedLanguage Language
+        {
+            get { return SupportedLanguage.English; }
+        }
+
         public static Dictionary<string, KeyCombination> KeyMap
         {
             get

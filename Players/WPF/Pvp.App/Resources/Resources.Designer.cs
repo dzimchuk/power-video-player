@@ -61,7 +61,7 @@ namespace Pvp.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Copyright 2004-2010 - Andrei Dzimchuk.
+        ///   Looks up a localized string similar to Copyright 2004-2012 - Andrei Dzimchuk.
         /// </summary>
         public static string about_copyright {
             get {
@@ -1042,7 +1042,7 @@ namespace Pvp.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &amp;About.
+        ///   Looks up a localized string similar to _About.
         /// </summary>
         public static string mi_about {
             get {
@@ -1186,7 +1186,7 @@ namespace Pvp.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &amp;Controlbar.
+        ///   Looks up a localized string similar to _Controlbar.
         /// </summary>
         public static string mi_controlbar {
             get {
@@ -1204,7 +1204,7 @@ namespace Pvp.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to E&amp;xit.
+        ///   Looks up a localized string similar to E_xit.
         /// </summary>
         public static string mi_exit {
             get {
@@ -1213,7 +1213,7 @@ namespace Pvp.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &amp;File.
+        ///   Looks up a localized string similar to _File.
         /// </summary>
         public static string mi_file {
             get {
@@ -1222,7 +1222,7 @@ namespace Pvp.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to C&amp;lose.
+        ///   Looks up a localized string similar to C_lose.
         /// </summary>
         public static string mi_file_close {
             get {
@@ -1231,7 +1231,7 @@ namespace Pvp.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &amp;Information.
+        ///   Looks up a localized string similar to _Information.
         /// </summary>
         public static string mi_file_information {
             get {
@@ -1240,7 +1240,7 @@ namespace Pvp.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &amp;Open.
+        ///   Looks up a localized string similar to _Open.
         /// </summary>
         public static string mi_file_open {
             get {
@@ -1294,7 +1294,7 @@ namespace Pvp.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to P&amp;ause.
+        ///   Looks up a localized string similar to P_ause.
         /// </summary>
         public static string mi_pause {
             get {
@@ -1303,7 +1303,7 @@ namespace Pvp.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &amp;Play.
+        ///   Looks up a localized string similar to _Play.
         /// </summary>
         public static string mi_play {
             get {
@@ -1321,7 +1321,7 @@ namespace Pvp.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &amp;Preferences.
+        ///   Looks up a localized string similar to _Preferences.
         /// </summary>
         public static string mi_preferences {
             get {
@@ -1357,7 +1357,7 @@ namespace Pvp.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &amp;Stop.
+        ///   Looks up a localized string similar to _Stop.
         /// </summary>
         public static string mi_stop {
             get {

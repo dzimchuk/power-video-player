@@ -102,6 +102,7 @@
     <Compile Include="Service\FileAssociatorWrapper.cs" />
     <Compile Include="Service\MouseWheelInterpreter.cs" />
     <Compile Include="Service\SelectedKeyCombinationItemResolver.cs" />
+    <Compile Include="SupportedLanguage.cs" />
     <Compile Include="Util\FileAssociator.cs" />
     <Compile Include="Util\FileAssociatorW6.cs" />
     <Compile Include="Util\WindowCustomizer.cs" />
@@ -196,6 +197,8 @@
       <DependentUpon>EnterKeyWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\FullSceenPanelVisibilityValueConverter.cs" />
+    <Compile Include="View\LocalizationConverter.cs" />
+    <Compile Include="View\LocalizationHelper.cs" />
     <Compile Include="View\MediaInformationWindow.xaml.cs">
       <DependentUpon>MediaInformationWindow.xaml</DependentUpon>
     </Compile>
@@ -210,6 +213,7 @@
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\SingleSelectionGrid.cs" />
+    <Compile Include="View\SupportedLanguageToBooleanValueConverter.cs" />
     <Compile Include="View\TitleChapterTemplateSelector.cs" />
     <Compile Include="View\VideoSizeToBooleanValueConverter.cs" />
     <Page Include="logo.xaml">
