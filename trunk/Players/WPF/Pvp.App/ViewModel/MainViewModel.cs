@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Collections.ObjectModel;
@@ -62,6 +63,13 @@ namespace Pvp.App.ViewModel
         private Tuple<double, double> _videoSize;
         private Dictionary<string, ICommand> _commandBag;
 
+        private bool _isContextMenuOpen;
+        private bool _fullScreenControlPanelOpened;
+
+        private SupportedLanguage _language;
+
+        private bool _mediaControlCreated;
+
         public MainViewModel(IMediaEngineFacade engine,
             ControlPanelViewModel controlViewModel,
             IFileSelector fileSelector,
@@ -119,6 +127,8 @@ namespace Pvp.App.ViewModel
             FlipControlPanelVisibility();
 
             _startFullScreen = _settingsProvider.Get("StartFullScreen", false);
+
+            Language = _settingsProvider.Get(SettingsConstants.Language, SupportedLanguage.English);
         }
 
         public ControlPanelViewModel ControlViewModel
@@ -464,6 +474,9 @@ namespace Pvp.App.ViewModel
         {
             if (message.Content == Event.MediaControlCreated)
             {
+                _mediaControlCreated = true;
+                _engine.OnCultureChanged();
+
                 _engine.ErrorOccured += delegate(object sender, ErrorOccuredEventArgs args)
                 {
                     _dialogService.DisplayError(args.Message);
@@ -494,7 +507,20 @@ namespace Pvp.App.ViewModel
             }
             else if (message.Content == Event.ContextMenuOpened)
             {
+                _isContextMenuOpen = true;
             	ScanCDRomDrives();
+            }
+            else if (message.Content == Event.ContextMenuClosed)
+            {
+                _isContextMenuOpen = false;
+            }
+            else if (message.Content == Event.FullScreenControlPanelOpened)
+            {
+                _fullScreenControlPanelOpened = true;
+            }
+            else if (message.Content == Event.FullScreenControlPanelClosed)
+            {
+                _fullScreenControlPanelOpened = false;
             }
             else if (message.Content == Event.InitSize)
             {
@@ -515,6 +541,7 @@ namespace Pvp.App.ViewModel
             else if (message.Content == Event.MainWindowClosing)
             {
                 _settingsProvider.Set("ControlPanelVisible", IsControlPanelVisible);
+                _settingsProvider.Set(SettingsConstants.Language, Language);
             }
             else if (message.Content == Event.MouseMove)
             {
@@ -540,7 +567,7 @@ namespace Pvp.App.ViewModel
             {
                 _nCursorCount = 0;
 
-                if (_isInPlayingMode && IsFullScreen && _cursorManager.IsCursorVisible)
+                if (_isInPlayingMode && IsFullScreen && !_isContextMenuOpen && !_fullScreenControlPanelOpened && _cursorManager.IsCursorVisible)
                 {
                     _cursorManager.HideCursor();
                 }
@@ -1478,10 +1505,47 @@ namespace Pvp.App.ViewModel
             {
                 if (_aboutCommand == null)
                 {
-                    
+                    _aboutCommand = new RelayCommand(() =>
+                                                         {
+
+                                                         });
                 }
 
                 return _aboutCommand;
+            }
+        }
+
+        public SupportedLanguage Language
+        {
+            get { return _language; }
+            set
+            {
+                _language = value;
+
+                CultureInfo ci = null;
+                switch(value)
+                {
+                    case SupportedLanguage.English:
+                        ci = new CultureInfo("en-US");
+                        break;
+                    case SupportedLanguage.Russian:
+                        ci = new CultureInfo("ru-RU");
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException(value.ToString());
+                }
+
+                Thread.CurrentThread.CurrentCulture = ci;
+                Thread.CurrentThread.CurrentUICulture = ci;
+
+                Messenger.Default.Send(new EventMessage(Event.CurrentCultureChanged));
+
+                if (_mediaControlCreated)
+                {
+                    _engine.OnCultureChanged();
+                }
+
+                RaisePropertyChanged("Language");
             }
         }
     }

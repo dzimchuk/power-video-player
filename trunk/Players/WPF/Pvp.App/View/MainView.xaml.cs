@@ -54,13 +54,14 @@ namespace Pvp.App.View
         {
             Messenger.Default.Send(new EventMessage(Event.VideoAreaDoubleClick));
         }
-  
-        public void _mediaControl_MWMouseMove(object sender, ScreenPositionEventArgs e)
+
+        private void _mediaControl_MWMouseMove(object sender, ScreenPositionEventArgs e)
         {
             if (_fullScreenPanelHolder.IsOpen)
             {
                 if (e.ScreenPosition.Y >= ActualHeight - _fullScreenControlPanel.DesiredSize.Height)
                 {
+                    Messenger.Default.Send(new EventMessage(Event.FullScreenControlPanelOpened));
                     _fullScreenControlPanel.OnMouseEnter();
                 }
             }
@@ -98,6 +99,11 @@ namespace Pvp.App.View
             Messenger.Default.Send(new EventMessage(Event.ContextMenuOpened));
         }
 
+        private void ContextMenu_Closed(object sender, RoutedEventArgs e)
+        {
+            Messenger.Default.Send(new EventMessage(Event.ContextMenuClosed));
+        }
+
         private void _mediaControl_InitSize(object sender, InitSizeEventArgs arg)
         {
             Messenger.Default.Send(new EventMessage(Event.InitSize, arg));
@@ -106,6 +112,11 @@ namespace Pvp.App.View
         public Size MediaControlSize
         {
             get { return new Size(_mediaControl.ActualWidth, _mediaControl.ActualHeight); }
+        }
+
+        private void _fullScreenControlPanel_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            Messenger.Default.Send(new EventMessage(Event.FullScreenControlPanelClosed));
         }
     }
 }
