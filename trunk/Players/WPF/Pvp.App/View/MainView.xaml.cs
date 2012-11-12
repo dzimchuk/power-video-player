@@ -87,6 +87,7 @@ namespace Pvp.App.View
                 var element = _fullScreenControlPanel.InputHitTest(e.GetPosition(_fullScreenControlPanel));
                 if (element != null)
                 {
+                    Messenger.Default.Send(new EventMessage(Event.FullScreenControlPanelOpened));
                     _fullScreenControlPanel.OnMouseEnter();
                 }
             }

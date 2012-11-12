@@ -209,6 +209,9 @@ namespace Pvp.Core.Native
         [DllImport("user32.dll")]
         public static extern IntPtr SetCursor(IntPtr hCursor);
 
+        [DllImport("user32.dll")]
+        public static extern IntPtr GetCursor();
+
         [DllImport("user32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool DestroyWindow(IntPtr hwnd);
