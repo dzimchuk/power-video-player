@@ -6,7 +6,6 @@
              xmlns:app="clr-namespace:Pvp.App"
              xmlns:ctrls="clr-namespace:Pvp.App.Controls"
              xmlns:view="clr-namespace:Pvp.App.View"
-             xmlns:res="clr-namespace:Pvp.App.Resources"
              xmlns:core="clr-namespace:Pvp.Core.Wpf;assembly=Pvp.Core.Wpf"
              xmlns:engine="clr-namespace:Pvp.Core.MediaEngine;assembly=Pvp.Core"
              xmlns:util="clr-namespace:Pvp.App.Util"
@@ -195,7 +194,7 @@
                               IsChecked="{Binding Language, Mode=TwoWay, Converter={StaticResource SupportedLanguageToBooleanValueConverter}, ConverterParameter={x:Static app:SupportedLanguage.Russian}}"/>
                 </MenuItem>
                 <MenuItem Header="{Binding LS, Source={StaticResource LocHelper}, Converter={StaticResource LocConverter}, ConverterParameter=mi_preferences}" Command="{Binding Path=SettingsCommand}"/>
-                <MenuItem Header="{Binding LS, Source={StaticResource LocHelper}, Converter={StaticResource LocConverter}, ConverterParameter=mi_about}"/>
+                <MenuItem Header="{Binding LS, Source={StaticResource LocHelper}, Converter={StaticResource LocConverter}, ConverterParameter=mi_about}" Command="{Binding Path=AboutCommand}"/>
             </MenuItem>
             <MenuItem Header="{Binding LS, Source={StaticResource LocHelper}, Converter={StaticResource LocConverter}, ConverterParameter=mi_exit}" Command="{Binding Path=ExitCommand}"/>
         </ContextMenu>

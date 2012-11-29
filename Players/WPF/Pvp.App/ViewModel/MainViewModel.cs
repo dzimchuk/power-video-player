@@ -1499,16 +1499,13 @@ namespace Pvp.App.ViewModel
             }
         }
 
-        private ICommand AboutCommand
+        public ICommand AboutCommand
         {
             get
             {
                 if (_aboutCommand == null)
                 {
-                    _aboutCommand = new RelayCommand(() =>
-                                                         {
-
-                                                         });
+                    _aboutCommand = new RelayCommand(() => _dialogService.DisplayAboutAppWindow());
                 }
 
                 return _aboutCommand;
