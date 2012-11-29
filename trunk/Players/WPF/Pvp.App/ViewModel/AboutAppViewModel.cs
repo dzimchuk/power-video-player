@@ -1,31 +1,30 @@
 using System;
-using System.Windows.Input;
+using System.Reflection;
 using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
-using GalaSoft.MvvmLight.Messaging;
-using Pvp.App.Messaging;
 
 namespace Pvp.App.ViewModel
 {
     public class AboutAppViewModel : ViewModelBase
     {
-        private ICommand _okCommand;
-
-        public ICommand OkCommand
+        public string ProgramNameAndVersion
         {
-            get
-            {
-                if (_okCommand == null)
-                {
-                    _okCommand = new RelayCommand(
-                        () =>
-                        {
-                            Messenger.Default.Send<CommandMessage>(new CommandMessage(Command.AboutAppWindowClose));
-                        });
-                }
+            get { return string.Format("{0} {1}", Resources.Resources.program_name, GetProductVersion()); }
+        }
 
-                return _okCommand;
-            }
+        public string CopyRight
+        {
+            get { return Resources.Resources.about_copyright; }
+        }
+
+        public string License
+        {
+            get { return Resources.Resources.about_license; }
+        }
+
+        private string GetProductVersion()
+        {
+            var version = Assembly.GetExecutingAssembly().GetName().Version;
+            return string.Format("{0}.{1}.{2}", version.Major, version.Minor, version.Build);
         }
     }
 }
