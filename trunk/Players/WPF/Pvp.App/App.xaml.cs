@@ -55,16 +55,18 @@ namespace Pvp.App
                 HandleUnRegApp();
                 Shutdown();
             }
+            else
+            {
+                var si = new SingleInstance(_appGuid);
+                si.ArgsRecieved += si_ArgsRecieved;
+                si.Run(() =>
+                {
+                    new MainWindow().Show();
+                    return MainWindow;
+                }, e.Args);
 
-            var si = new SingleInstance(_appGuid);
-            si.ArgsRecieved += si_ArgsRecieved;
-            si.Run(() =>
-                       {
-                           new MainWindow().Show();
-                           return MainWindow;
-                       }, e.Args);
-
-            SynchronizationContext.Current.Post(state => { si_ArgsRecieved((string[])state); }, e.Args);
+                SynchronizationContext.Current.Post(state => { si_ArgsRecieved((string[])state); }, e.Args);
+            }
         }
 
         private void si_ArgsRecieved(string[] args)
