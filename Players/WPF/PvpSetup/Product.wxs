@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+     xmlns:netfx="http://schemas.microsoft.com/wix/NetFxExtension">
+  <Product Id="262D8430-F78D-43C0-8AB2-003D4A222F22" Name="Power Video Player" Language="1033" Version="2.0.0.0" Manufacturer="Andrei Dzimchuk" 
+           UpgradeCode="95049F34-9EEE-4BE6-B523-D36DE8186857">
+		<Package Id ="*" InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+
+		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+		<MediaTemplate EmbedCab="yes" />
+
+		<Feature Id="ProductFeature" Title="PvpSetup" Level="1">
+			<ComponentGroupRef Id="ProductComponents" />
+			<ComponentGroupRef Id="ProductComponents_ru_RU" />
+      <ComponentRef Id="StartMenuShortcuts" />
+		</Feature>
+    
+	</Product>
+  
+  <Fragment>
+    
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="ProgramFilesFolder">
+        <Directory Id="INSTALLFOLDER" Name="Power Video Player">
+          <Directory Id="ru_RU" Name="ru-RU" />
+        </Directory>
+      </Directory>
+    
+      <Directory Id="ProgramMenuFolder">
+        <Directory Id="ApplicationProgramsFolder" Name="Power Video Player"/>
+      </Directory>
+    
+      <Directory Id ="DesktopFolder"/> 
+    </Directory>
+
+    <Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />
+    <UIRef Id="WixUI_InstallDir" />
+    <UIRef Id="WixUI_ErrorProgressText" />
+
+    <WixVariable Id="WixUILicenseRtf" Value="$(var.SolutionDir)\license.rtf" />
+    
+<!--    <Property Id="QtExecRegApp"/>-->
+    <CustomAction Id="Set_QtExecRegApp" Property="QtExecRegApp" Value="&quot;[INSTALLFOLDER]Pvp.App.exe&quot; -regapp"  Execute="immediate"/>
+    <CustomAction Id="QtExecRegApp" BinaryKey="WixCA" DllEntry="CAQuietExec"
+              Execute="deferred" Return="check" Impersonate="no"/>
+    
+<!--    <Property Id="QtExecUnRegApp"/>-->
+    <CustomAction Id="Set_QtExecUnRegApp" Property="QtExecUnRegApp" Value="&quot;[INSTALLFOLDER]Pvp.App.exe&quot; -unregapp" Execute="immediate"/>
+    <CustomAction Id="QtExecUnRegApp" BinaryKey="WixCA" DllEntry="CAQuietExec"
+              Execute="deferred" Return="ignore" Impersonate="no"/>
+    
+    <InstallExecuteSequence>
+      <Custom Action="Set_QtExecRegApp" After="CostFinalize"/>
+      <Custom Action="Set_QtExecUnRegApp" After="CostFinalize"/>
+      <Custom Action="QtExecRegApp" Before="InstallFinalize">NOT Installed</Custom>
+      <Custom Action="QtExecUnRegApp" After="InstallInitialize">Installed AND NOT UPGRADINGPRODUCTCODE</Custom>
+    </InstallExecuteSequence>
+
+    <PropertyRef Id="NETFRAMEWORK45"/>
+    
+    <Condition Message="This application requires .NET Framework 4.5. Please install the .NET Framework then run this installer again.">
+      <![CDATA[Installed OR NETFRAMEWORK45]]>
+    </Condition>
+  
+  </Fragment>
+
+	<Fragment>
+		<ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
+			 <Component Id="Pvp.App" Guid="675AB2EE-DD94-4BA9-A366-8E7D2BB8B79A">
+        <File Source="$(var.Pvp.App.TargetPath)" KeyPath="yes" Checksum="yes">
+          <Shortcut Advertise="yes"
+                    Id="ApplicationDesktopShortcut"
+                    Directory="DesktopFolder"
+                    Name="Power Video Player"
+                    WorkingDirectory="INSTALLFOLDER"
+                    Description="Launches Power Video Player"
+                    Icon="Icon.exe">
+            <Icon Id="Icon.exe" SourceFile="$(var.Pvp.App.TargetPath)" />
+          </Shortcut>
+        </File>
+        <File Source="$(var.Pvp.App.TargetDir)\Pvp.App.exe.config" />
+			 </Component>
+      <Component Id="Pvp.Core" Guid="23533DF3-100D-43DA-89C5-E4D4F40E5634">
+        <File Source="$(var.Pvp.Core.TargetPath)" KeyPath="yes" />
+      </Component>
+      <Component Id="Pvp.Core.Nwnd" Guid="EE8D435C-0C35-45AD-9741-59A4ACF2BABA">
+        <File Source="$(var.Pvp.Core.Nwnd.TargetPath)" KeyPath="yes" />
+      </Component>
+      <Component Id="Pvp.Core.Wpf" Guid="8EB97E3B-85AF-4AB3-9CE1-C464859A2FC9">
+        <File Source="$(var.Pvp.Core.Wpf.TargetPath)" KeyPath="yes" />
+      </Component>
+      <Component Id="nwnd" Guid="9C56675A-6FAF-4D6B-813A-13554A8ABEBD">
+        <File Source="$(var.Pvp.App.TargetDir)\nwnd.dll" KeyPath="yes" />
+      </Component>
+      <Component Id="MVVMLight" Guid="8DAD15FF-2B4E-4AE1-9B9B-4BD8DE16EDB9">
+        <File Source="$(var.Pvp.App.TargetDir)\GalaSoft.MvvmLight.Extras.WPF4.dll" />
+        <File Source="$(var.Pvp.App.TargetDir)\GalaSoft.MvvmLight.WPF4.dll" KeyPath="yes" />
+        <File Source="$(var.Pvp.App.TargetDir)\System.Windows.Interactivity.dll" />
+      </Component>
+      <Component Id="Ninject" Guid="E602B1EF-2B87-496D-A29E-E9EAB9899CD0">
+        <File Source="$(var.Pvp.App.TargetDir)\Ninject.dll" KeyPath="yes" />
+      </Component>
+      <Component Id="Ookii" Guid="8FDDE072-8CA1-40D0-9336-F2573E051934">
+        <File Source="$(var.Pvp.App.TargetDir)\Ookii.Dialogs.Wpf.dll" KeyPath="yes" />
+      </Component>
+      <Component Id="ReuxablesLegacy" Guid="C789D5C2-D7C2-4A95-A3A2-FB18E1E8A48D">
+        <File Source="$(var.Pvp.App.TargetDir)\ReuxablesLegacy.dll" KeyPath="yes" />
+      </Component>
+      <Component Id="License" Guid="4FAD5AF7-9D5E-4C4B-BB9D-0A643884FBFA">
+        <File Source="$(var.SolutionDir)\license.txt" KeyPath="yes" />
+      </Component>
+		</ComponentGroup>
+
+    <ComponentGroup Id="ProductComponents_ru_RU" Directory="ru_RU">
+      <Component Id="Pvp.App_ru_RU" Guid="7F229B41-E244-4DF6-B309-11AD2DF22414">
+        <File Source="$(var.Pvp.App.TargetDir)\ru-RU\Pvp.App.resources.dll" KeyPath="yes" />
+      </Component>
+      <Component Id="Pvp.Core_ru_RU" Guid="417A0B7C-456D-4D92-AAFC-1218A55E9691">
+        <File Source="$(var.Pvp.Core.TargetDir)\ru-RU\Pvp.Core.resources.dll" KeyPath="yes" />
+      </Component>
+    </ComponentGroup>
+
+    <DirectoryRef Id="ApplicationProgramsFolder">
+      <Component Id="StartMenuShortcuts" Guid="720B9D0B-2B1A-4774-90C3-A92D7F8C5B98">
+        <Shortcut Id="ApplicationStartMenuShortcut"
+                  Name="Power Video Player"
+                  Description="Launches Power Video Player"
+                  Target="[INSTALLFOLDER]Pvp.App.exe"
+                  WorkingDirectory="INSTALLFOLDER"/>
+        <Shortcut Id="UninstallProduct"             
+                  Name="Uninstall"
+                  Description="Uninstalls Power Video Player"
+                  Target="[SystemFolder]msiexec.exe"
+                  Arguments="/x [ProductCode]"/>
+        <RemoveFolder Id="ApplicationProgramsFolder" On="uninstall"/>
+        <RegistryValue Root="HKCU" Key="Software\Andrei Dzimchuk\Power Video Player" Name="installed" Type="integer" Value="1" KeyPath="yes"/>
+      </Component>
+    </DirectoryRef>
+
+  </Fragment>
+</Wix>
