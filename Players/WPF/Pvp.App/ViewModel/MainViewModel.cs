@@ -1101,12 +1101,11 @@ namespace Pvp.App.ViewModel
                                 _engine.CurrentAudioStream = nc.Number;
                         },
                         nc =>
-                        {
-                            return nc != null ? 
-                                    (_engine.IsAudioStreamEnabled(nc.Number)) && (_engine.UOPS & VALID_UOP_FLAG.UOP_FLAG_Select_Audio_Stream) == 0 
-                                    : 
-                                    false;
-                        });
+                            {
+                                return nc != null &&
+                                       (_engine.SourceType != SourceType.DVD ||
+                                        ((_engine.IsAudioStreamEnabled(nc.Number)) && (_engine.UOPS & VALID_UOP_FLAG.UOP_FLAG_Select_Audio_Stream) == 0));
+                            });
 
                     if (nStreams > 8)
                         nStreams = 8;
