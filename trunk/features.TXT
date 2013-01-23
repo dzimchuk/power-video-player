@@ -13,14 +13,8 @@ Multilingual interface: English, Russian
 Skinnable
 Supports various video renderers: Legacy Video Renderer, VMR/VMR9, EVR
 Ability to take screenshots of a movie
- 
- 
-To include in the next release:
-More aspect ratio's: 1:1, 5:4, 16:10
-Play directory  
-Playlists with bookmarks (media library)
 Drag-and-drop support 
-  
+
 
 Future:
 
@@ -30,3 +24,5 @@ Subtitles control: position, font, color, transparency, background...
 Multi-audio media support 
 Infrared Remotes support: (WinLIRC)
 Advanced video control: brightness, contrast, sharpness...
+Play directory  
+Playlists with bookmarks (media library)
