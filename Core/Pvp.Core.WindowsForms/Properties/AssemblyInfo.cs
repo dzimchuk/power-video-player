@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("DirectShow Media Engine adapter for Windows Forms")]
+[assembly: AssemblyTitle("DirectShow Media Engine Adapter for Windows Forms")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("DirectShow Media Engine for .NET")]
-[assembly: AssemblyCopyright("Copyright 2004-2011 - Andrei Dzimchuk")]
+[assembly: AssemblyProduct("DirectShow Media Engine Adapter for Windows Forms")]
+[assembly: AssemblyCopyright("Copyright 2004-2013 - Andrei Dzimchuk")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
