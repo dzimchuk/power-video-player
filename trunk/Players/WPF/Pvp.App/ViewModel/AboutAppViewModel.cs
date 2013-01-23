@@ -23,8 +23,23 @@ namespace Pvp.App.ViewModel
 
         private string GetProductVersion()
         {
-            var version = Assembly.GetExecutingAssembly().GetName().Version;
-            return string.Format("{0}.{1}.{2}", version.Major, version.Minor, version.Build);
+            var assembly = Assembly.GetExecutingAssembly();
+
+            var infoVersion = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>();
+            if (infoVersion != null)
+                return infoVersion.InformationalVersion;
+
+            var fileVersion = assembly.GetCustomAttribute<AssemblyFileVersionAttribute>();
+            if (fileVersion != null)
+                return fileVersion.Version;
+
+            var version = assembly.GetName().Version;
+            return FormatVersion(version.Major, version.Minor, version.Build);
+        }
+
+        private string FormatVersion(int major, int minor, int build)
+        {
+            return string.Format("{0}.{1}.{2}", major, minor, build);
         }
     }
 }

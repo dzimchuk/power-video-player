@@ -1,0 +1,2 @@
+NOTE: this is a fake ADKeyPair.snk (that is, not the one that's used to sign official releases).
+It is used as a convenient replacement of the original key during development.
