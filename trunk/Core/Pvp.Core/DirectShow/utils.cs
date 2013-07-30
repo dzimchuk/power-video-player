@@ -47,7 +47,7 @@ namespace Pvp.Core.DirectShow
         // nPinsToSkip - how many Pins that match the conditions should be skipped.
         // Leaving the last two parameters at their default
         // values is like saying: "Gimme the first unconnected pin".
-        public static IPin GetPin(IBaseFilter pFilter, PinDirection PinDir, bool bConnected, int nPinsToSkip)
+        public static IPin GetPin(IBaseFilter pFilter, PinDirection pinDir, bool bConnected, int nPinsToSkip)
         {
             bool bFound = false;
             IEnumPins pEnum;
@@ -64,7 +64,7 @@ namespace Pvp.Core.DirectShow
             {
                 PinDirection PinDirThis;
                 pPin.QueryDirection(out PinDirThis);
-                if (PinDir == PinDirThis)
+                if (pinDir == PinDirThis)
                 {
                     hr=pPin.ConnectedTo(out pConnectedPin);
                     if (pConnectedPin != null) 
@@ -93,14 +93,14 @@ namespace Pvp.Core.DirectShow
             return (bFound ? pPin : null);  
         }
 
-        public static IPin GetPin(IBaseFilter pFilter, PinDirection PinDir, bool bConnected)
+        public static IPin GetPin(IBaseFilter pFilter, PinDirection pinDir, bool bConnected)
         {
-            return GetPin(pFilter, PinDir, bConnected, 0);
+            return GetPin(pFilter, pinDir, bConnected, 0);
         }
 
-        public static IPin GetPin(IBaseFilter pFilter, PinDirection PinDir)
+        public static IPin GetPin(IBaseFilter pFilter, PinDirection pinDir)
         {
-            return GetPin(pFilter, PinDir, false);
+            return GetPin(pFilter, pinDir, false);
         }
 
         public static bool AddToRot(object pUnkGraph, out int pdwRegister)
@@ -216,6 +216,41 @@ namespace Pvp.Core.DirectShow
             {
                 AMMediaType mt = (AMMediaType)Marshal.PtrToStructure(ptr, typeof(AMMediaType));
                 if (mt.majorType == majortype)
+                {
+                    FreeFormatBlock(ptr);
+                    Marshal.FreeCoTaskMem(ptr);
+                    bFound = true;
+                    break;
+                }
+                // free the allocated memory
+                FreeFormatBlock(ptr);
+                Marshal.FreeCoTaskMem(ptr);
+                nSkipped++;
+            }
+
+            Marshal.ReleaseComObject(pEnumTypes);
+            return (bFound ? nSkipped : -1);
+        }
+
+        // if subtype is not supported by the pin the return value is -1
+        // if subtype is supported the return value indicates how many other types
+        // were skipped before we got this one.
+        public static int IsSubTypeSupported(IPin pPin, Guid subtype)
+        {
+            IEnumMediaTypes pEnumTypes;
+            int cFetched;
+            int nSkipped = 0;
+            bool bFound = false;
+
+            int hr = pPin.EnumMediaTypes(out pEnumTypes);
+            if (DsHlp.FAILED(hr))
+                return -1;
+
+            IntPtr ptr;
+            while (pEnumTypes.Next(1, out ptr, out cFetched) == DsHlp.S_OK)
+            {
+                AMMediaType mt = (AMMediaType)Marshal.PtrToStructure(ptr, typeof(AMMediaType));
+                if (mt.subType == subtype)
                 {
                     FreeFormatBlock(ptr);
                     Marshal.FreeCoTaskMem(ptr);
@@ -363,6 +398,79 @@ namespace Pvp.Core.DirectShow
             }
 
             pGraphBuilder.Disconnect(pPin);
+        }
+
+        /// <summary>
+        /// Get the first pin that satisfies conditions on _any_ filter in the graph.
+        /// The caller is responsible for releasing an outstanding reference to the pin if one was obtained.
+        /// </summary>
+        /// <param name="pGraph"></param>
+        /// <param name="pinDir"></param>
+        /// <param name="bConnected"></param>
+        /// <param name="majorMediaType"></param>
+        /// <returns></returns>
+        public static IPin GetPinByMediaType(IGraphBuilder pGraph, PinDirection pinDir, bool bConnected, Guid majorMediaType)
+        {
+            return GetPinByMediaType(pGraph, pinDir, bConnected, majorMediaType, false);
+        }
+
+        /// <summary>
+        /// Get the first pin that satisfies conditions on _any_ filter in the graph.
+        /// The caller is responsible for releasing an outstanding reference to the pin if one was obtained.
+        /// </summary>
+        /// <param name="pGraph"></param>
+        /// <param name="pinDir"></param>
+        /// <param name="bConnected"></param>
+        /// <param name="subType"></param>
+        /// <returns></returns>
+        public static IPin GetPinBySubType(IGraphBuilder pGraph, PinDirection pinDir, bool bConnected, Guid subType)
+        {
+            return GetPinByMediaType(pGraph, pinDir, bConnected, subType, true);
+        }
+
+        private static IPin GetPinByMediaType(IGraphBuilder pGraph, PinDirection pinDir, bool bConnected, Guid type, bool isSubType)
+        {
+            IEnumFilters pEnumFilters = null;
+            IBaseFilter pFilter = null;
+            int cFetched;
+
+            int hr = pGraph.EnumFilters(out pEnumFilters);
+            if (DsHlp.FAILED(hr))
+                return null;
+
+            IPin pPin = null;
+            var found = false;
+
+            while ((pEnumFilters.Next(1, out pFilter, out cFetched) == DsHlp.S_OK))
+            {
+                pPin = GetPin(pFilter, pinDir, bConnected, 0);
+                if (pPin != null)
+                {
+                    if (isSubType && IsSubTypeSupported(pPin, type) == 0)
+                    {
+                        found = true;
+                    }
+                    else if (!isSubType && IsMediaTypeSupported(pPin, type) == 0)
+                    {
+                        found = true;
+                    }
+
+                    if (!found)
+                    {
+                        Marshal.ReleaseComObject(pPin);
+                        pPin = null;
+                    }
+                }
+
+                Marshal.ReleaseComObject(pFilter);
+
+                if (found)
+                    break;
+            }
+
+            Marshal.ReleaseComObject(pEnumFilters);
+
+            return pPin;
         }
     }
 }
