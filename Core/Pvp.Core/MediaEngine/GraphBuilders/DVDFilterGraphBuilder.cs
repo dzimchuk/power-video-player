@@ -123,15 +123,30 @@ namespace Pvp.Core.MediaEngine.GraphBuilders
 
             if (DsHlp.S_FALSE == hr) // partial success
             {
+                if ((buildStatus.dwFailedStreamsFlag & AM_DVD_STREAM_FLAGS.AM_DVD_STREAM_VIDEO) != 0)
+                {
+                    FixUpVideoStream(pFilterGraph, ref buildStatus);
+                }
+
+                if ((buildStatus.dwFailedStreamsFlag & AM_DVD_STREAM_FLAGS.AM_DVD_STREAM_SUBPIC) != 0)
+                {
+                    FixUpSubpictureStream(pFilterGraph, ref buildStatus);
+                }
+
                 StringBuilder strError = new StringBuilder();
                 bool bOk = GetStatusText(pFilterGraph, ref buildStatus, strError);
                 str = strError.Length == 0 ? Resources.Resources.dvd_unknown_error : strError.ToString();
                 if (!bOk)
-                    throw new FilterGraphBuilderException(str);
-
-                if (!onPartialSuccessCallback(str + "\n" + Resources.Resources.dvd_question_continue))
                 {
-                    throw new AbortException();
+                    throw new FilterGraphBuilderException(str);
+                }
+
+                if (strError.Length != 0)
+                {
+                    if (!onPartialSuccessCallback(str + "\n" + Resources.Resources.dvd_question_continue))
+                    {
+                        throw new AbortException();
+                    }
                 }
             }
 
@@ -215,6 +230,77 @@ namespace Pvp.Core.MediaEngine.GraphBuilders
             pFilterGraph.bAddedToRot = DsUtils.AddToRot(pFilterGraph.pGraphBuilder, out pFilterGraph.dwRegister);
 #endif
             pFilterGraph.SourceType = SourceType.DVD;
+        }
+
+        private void FixUpVideoStream(FilterGraph pFilterGraph, ref AM_DVD_RENDERSTATUS buildStatus)
+        {
+            var outputPin = DsUtils.GetPinByMediaType(pFilterGraph.pGraphBuilder, PinDirection.Output, false, MediaType.Video);
+            if (outputPin == null)
+            {
+                return;
+            }
+
+            var ok = true;
+
+            if (pFilterGraph.pRenderer != null)
+            {
+                IPin pVideoRendererInputPin = pFilterGraph.pRenderer.GetInputPin();
+                if (pVideoRendererInputPin != null)
+                {
+                    var hr = pFilterGraph.pGraphBuilder.Connect(outputPin, pVideoRendererInputPin);
+                    Marshal.ReleaseComObject(pVideoRendererInputPin);
+
+                    if (DsHlp.FAILED(hr))
+                    {
+                        hr = pFilterGraph.pGraphBuilder.Render(outputPin);
+                        if (DsHlp.FAILED(hr))
+                        {
+                            ok = false;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                var hr = pFilterGraph.pGraphBuilder.Render(outputPin);
+                if (DsHlp.FAILED(hr))
+                {
+                    ok = false;
+                }
+            }
+
+            Marshal.ReleaseComObject(outputPin);
+
+            if (ok)
+            {
+                buildStatus.dwFailedStreamsFlag = buildStatus.dwFailedStreamsFlag ^ AM_DVD_STREAM_FLAGS.AM_DVD_STREAM_VIDEO;
+                buildStatus.iNumStreamsFailed = buildStatus.iNumStreamsFailed - 1;
+            }
+        }
+
+        private void FixUpSubpictureStream(FilterGraph pFilterGraph, ref AM_DVD_RENDERSTATUS buildStatus)
+        {
+            var outputPin = DsUtils.GetPinBySubType(pFilterGraph.pGraphBuilder, PinDirection.Output, false, MediaSubType.DVD_SUBPICTURE);
+            if (outputPin == null)
+            {
+                return;
+            }
+
+            var ok = true;
+
+            var hr = pFilterGraph.pGraphBuilder.Render(outputPin);
+            if (DsHlp.FAILED(hr))
+            {
+                ok = false;
+            }
+            
+            Marshal.ReleaseComObject(outputPin);
+
+            if (ok)
+            {
+                buildStatus.dwFailedStreamsFlag = buildStatus.dwFailedStreamsFlag ^ AM_DVD_STREAM_FLAGS.AM_DVD_STREAM_SUBPIC;
+                buildStatus.iNumStreamsFailed = buildStatus.iNumStreamsFailed - 1;
+            }
         }
 
         //This method parses AM_DVD_RENDERSTATUS and returns a text description 

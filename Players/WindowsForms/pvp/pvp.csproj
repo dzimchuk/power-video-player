@@ -19,7 +19,7 @@
     <DefaultClientScript>JScript</DefaultClientScript>
     <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
     <DefaultTargetSchema>IE50</DefaultTargetSchema>
-    <DelaySign>true</DelaySign>
+    <DelaySign>false</DelaySign>
     <OutputType>WinExe</OutputType>
     <RootNamespace>Pvp</RootNamespace>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
