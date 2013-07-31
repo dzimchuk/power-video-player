@@ -18,6 +18,7 @@ using System.Runtime.InteropServices.ComTypes;
 using System.IO;
 using Pvp.Core.DirectShow;
 using System.Collections.ObjectModel;
+using Pvp.Core.MediaEngine.Render;
 
 namespace Pvp.Core.MediaEngine
 {
@@ -463,33 +464,43 @@ namespace Pvp.Core.MediaEngine
                                                     IntPtr.Zero);	// Output pin category
                 if (DsHlp.SUCCEEDED(hr))
                 {
-                    object o;
-                    IntPtr cFetched = IntPtr.Zero;
-                    while (pEnum.Next(1, pMonikers, cFetched) == DsHlp.S_OK)
+                    try
                     {
-                        o = null;
-                        Guid clsId = Guid.Empty;
-                        
-                        pMonikers[0].BindToObject(null, null,
-                                ref IID_IBaseFilter, out o);
-                        if (o != null && o is IBaseFilter)
+                        object o;
+                        IntPtr cFetched = IntPtr.Zero;
+                        while (pEnum.Next(1, pMonikers, cFetched) == DsHlp.S_OK)
                         {
-                            IBaseFilter pBaseFilter = (IBaseFilter)o;
                             o = null;
+                            Guid clsId = Guid.Empty;
 
-                            pBaseFilter.GetClassID(out clsId);
+                            try
+                            {
+                                pMonikers[0].BindToObject(null, null,
+                                                          ref IID_IBaseFilter, out o);
+                                if (o != null && o is IBaseFilter)
+                                {
+                                    IBaseFilter pBaseFilter = (IBaseFilter)o;
+                                    o = null;
 
-                            Marshal.FinalReleaseComObject(pBaseFilter);
+                                    pBaseFilter.GetClassID(out clsId);
+
+                                    Marshal.FinalReleaseComObject(pBaseFilter);
+                                }
+                            }
+                            finally
+                            {
+                                Marshal.ReleaseComObject(pMonikers[0]);
+                            }
+
+                            IRenderer renderer = RendererBase.GetRenderer(clsId);
+                            if (renderer != null)
+                                renderers.Add(renderer.Renderer);
                         }
-                        
-                        Marshal.ReleaseComObject(pMonikers[0]);
-
-                        Render.IRenderer renderer = Render.RendererBase.GetRenderer(clsId);
-                        if (renderer != null)
-                            renderers.Add(renderer.Renderer);
                     }
-
-                    Marshal.ReleaseComObject(pEnum);
+                    finally
+                    {
+                        Marshal.ReleaseComObject(pEnum);
+                    }
                 }
                 
             }

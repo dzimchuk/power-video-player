@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
      xmlns:bal="http://schemas.microsoft.com/wix/BalExtension">
-	<Bundle Name="Power Video Player" Version="2.0.0.0" Manufacturer="Andrei Dzimchuk" UpgradeCode="5f1c9654-e716-4054-aca9-c6e9a74bc77e">
+  <Bundle Name="Power Video Player" Version="2.0.0.0" Manufacturer="Andrei Dzimchuk" UpgradeCode="5f1c9654-e716-4054-aca9-c6e9a74bc77e">
     <BootstrapperApplicationRef Id="WixStandardBootstrapperApplication.HyperlinkLicense">
       <bal:WixStandardBootstrapperApplication LicenseUrl="http://pvp.codeplex.com/license" />
     </BootstrapperApplicationRef>
 
-		<Chain>
+    <Chain>
       <PackageGroupRef Id="NetFx45Web"/>
       <MsiPackage Id="PvpSetup" SourceFile="$(var.PvpSetup.TargetPath)"/>
-		</Chain>
-	</Bundle>
+    </Chain>
+  </Bundle>
 </Wix>

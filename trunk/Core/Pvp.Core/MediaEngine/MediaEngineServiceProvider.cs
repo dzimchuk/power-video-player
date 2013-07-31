@@ -40,9 +40,16 @@ namespace Pvp.Core.MediaEngine
                 {
                     if (_renderers == null)
                     {
-                        using (var manager = new MediaTypeManager())
+                        try
                         {
-                            _renderers = manager.GetPresentVideoRenderers();
+                            using (var manager = new MediaTypeManager())
+                            {
+                                _renderers = manager.GetPresentVideoRenderers();
+                            }
+                        }
+                        catch
+                        {
+                            _renderers = new Renderer[] { };
                         }
                     }
                 }
