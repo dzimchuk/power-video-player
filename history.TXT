@@ -1,3 +1,7 @@
+v2.0.4960
+07/31/2013
+8918 - Can't play DVD when LAV filters are installed
+
 v2.0.4771
 01/23/2013
 5520 - WPF re-implementation of the player (+ a bunch of rethinking and refactoring of the core)
