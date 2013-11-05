@@ -194,7 +194,7 @@ namespace Pvp.Core.MediaEngine
             }
         }
 
-        public void Move(ref GDI.RECT rcDest)
+        public void Move(GDI.RECT rcDest)
         {
             if (_hwnd != null)
             {

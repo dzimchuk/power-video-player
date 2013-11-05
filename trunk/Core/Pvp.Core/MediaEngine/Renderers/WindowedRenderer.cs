@@ -12,17 +12,16 @@
 
 using System;
 using Pvp.Core.DirectShow;
-using Pvp.Core.MediaEngine.GraphBuilders;
 using Pvp.Core.Native;
 using System.Runtime.InteropServices;
 
-namespace Pvp.Core.MediaEngine.Render
+namespace Pvp.Core.MediaEngine.Renderers
 {
     internal abstract class WindowedRenderer : RendererBase
     {
         protected IVideoWindow VideoWindow;
         protected IBasicVideo2 BasicVideo2;
-        private bool _initialized = false;
+        private bool _initialized;
 
         protected override void Initialize(IGraphBuilder pGraphBuilder, IntPtr hMediaWindow)
         {
@@ -33,7 +32,7 @@ namespace Pvp.Core.MediaEngine.Render
             }
             catch (Exception e)
             {
-                throw new FilterGraphBuilderException(Error.NecessaryInterfaces, e);
+                throw new FilterGraphBuilderException(GraphBuilderError.NecessaryInterfaces, e);
             }
 
             VideoWindow.put_Owner(hMediaWindow);
@@ -62,7 +61,7 @@ namespace Pvp.Core.MediaEngine.Render
             get { return true; }
         }
 
-        public override void SetVideoPosition(ref GDI.RECT rcSrc, ref GDI.RECT rcDest)
+        public override void SetVideoPosition(GDI.RECT rcSrc, GDI.RECT rcDest)
         {
             if (!_initialized)
             {

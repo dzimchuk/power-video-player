@@ -13,30 +13,30 @@
 using System;
 using System.Runtime.InteropServices;
 using Pvp.Core.DirectShow;
-using Pvp.Core.MediaEngine.GraphBuilders;
+using Pvp.Core.MediaEngine.Internal;
 using Pvp.Core.Native;
 
-namespace Pvp.Core.MediaEngine.Render
+namespace Pvp.Core.MediaEngine.Renderers
 {
-    internal class EVR : RendererBase, IEnhancedVideoRenderer
+    internal class EVR : RendererBase, IEVR
     {
-        private IMFVideoDisplayControl pMFVideoDisplayControl;
-        private MFVideoNormalizedRect rcSrc;
-        private GDI.RECT rcDest;
+        private IMFVideoDisplayControl _pMfVideoDisplayControl;
+        private MFVideoNormalizedRect _rcSrc;
+        private GDI.RECT _rcDest;
         
         public EVR()
         {
             _renderer = Renderer.EVR;
 
-            rcSrc = new MFVideoNormalizedRect();
-            rcSrc.left = rcSrc.top = 0.0f;
-            rcSrc.right = rcSrc.bottom = 1.0f;
+            _rcSrc = new MFVideoNormalizedRect();
+            _rcSrc.left = _rcSrc.top = 0.0f;
+            _rcSrc.right = _rcSrc.bottom = 1.0f;
 
-            rcDest = new GDI.RECT();
-            rcDest.left = rcDest.top = 0;
+            _rcDest = new GDI.RECT();
+            _rcDest.left = _rcDest.top = 0;
         }
         
-        public override void SetVideoPosition(ref GDI.RECT rcSrc, ref GDI.RECT rcDest)
+        public override void SetVideoPosition(GDI.RECT rcSrc, GDI.RECT rcDest)
         {
             // in EVR default source rectangle is {0.0, 0.0, 1.0, 1.0}, these are so-called normalized coordinates
             // however VMR, VMR9 and PVP consider the source rectangle as the video size
@@ -46,15 +46,15 @@ namespace Pvp.Core.MediaEngine.Render
             // back buffers is being drawn
             // To overcme this issue we set our media window (nwnd) to be of the size of the video we want to show, in other words EVR should paint the whole window area
             // EVR's default destination rectangle is {0, 0, 0, 0} so we need to adjust it to {0, 0, width, height}
-            this.rcDest.right = rcDest.right - rcDest.left;
-            this.rcDest.bottom = rcDest.bottom - rcDest.top;
-            pMFVideoDisplayControl.SetVideoPosition(ref this.rcSrc, ref this.rcDest);
+            _rcDest.right = rcDest.right - rcDest.left;
+            _rcDest.bottom = rcDest.bottom - rcDest.top;
+            _pMfVideoDisplayControl.SetVideoPosition(ref _rcSrc, ref _rcDest);
         }
 
         public override void GetNativeVideoSize(out int width, out int height, out int arWidth, out int arHeight)
         {
             GDI.SIZE size = new GDI.SIZE(), ratio = new GDI.SIZE();
-            pMFVideoDisplayControl.GetNativeVideoSize(ref size, ref ratio);
+            _pMfVideoDisplayControl.GetNativeVideoSize(ref size, ref ratio);
             width = size.cx;
             height = size.cy;
             arWidth = ratio.cx;
@@ -65,7 +65,7 @@ namespace Pvp.Core.MediaEngine.Render
         {
             // add the EVR to the graph
             int hr = pGraphBuilder.AddFilter(BaseFilter, "Enhanced Video Renderer");
-            errorFunc(hr, Error.AddEVR);
+            errorFunc(hr, GraphBuilderError.AddEVR);
         }
 
         protected override void Initialize(IGraphBuilder pGraphBuilder, IntPtr hMediaWindow)
@@ -78,14 +78,14 @@ namespace Pvp.Core.MediaEngine.Render
                 Guid serviceId = ServiceID.EnhancedVideoRenderer;
                 Guid IID_IMFVideoDisplayControl = typeof(IMFVideoDisplayControl).GUID;
                 Marshal.ThrowExceptionForHR(pMFGetService.GetService(ref serviceId, ref IID_IMFVideoDisplayControl, out o));
-                pMFVideoDisplayControl = (IMFVideoDisplayControl)o;
+                _pMfVideoDisplayControl = (IMFVideoDisplayControl)o;
 
-                pMFVideoDisplayControl.SetVideoWindow(hMediaWindow);
-                pMFVideoDisplayControl.SetAspectRatioMode(MFVideoAspectRatioMode.MFVideoARMode_None);
+                _pMfVideoDisplayControl.SetVideoWindow(hMediaWindow);
+                _pMfVideoDisplayControl.SetAspectRatioMode(MFVideoAspectRatioMode.MFVideoARMode_None);
             }
             catch (Exception e)
             {
-                throw new FilterGraphBuilderException(Error.ConfigureEVR, e);
+                throw new FilterGraphBuilderException(GraphBuilderError.ConfigureEVR, e);
             }
         }
 
@@ -106,11 +106,11 @@ namespace Pvp.Core.MediaEngine.Render
 
         protected override void CloseInterfaces()
         {
-            if (pMFVideoDisplayControl != null)
+            if (_pMfVideoDisplayControl != null)
             {
-                pMFVideoDisplayControl.SetVideoWindow(IntPtr.Zero);
-                Marshal.FinalReleaseComObject(pMFVideoDisplayControl);
-                pMFVideoDisplayControl = null;
+                _pMfVideoDisplayControl.SetVideoWindow(IntPtr.Zero);
+                Marshal.FinalReleaseComObject(_pMfVideoDisplayControl);
+                _pMfVideoDisplayControl = null;
             }
 
             base.CloseInterfaces(); // release pBaseFilter
@@ -118,7 +118,7 @@ namespace Pvp.Core.MediaEngine.Render
 
         public IMFVideoDisplayControl MFVideoDisplayControl
         {
-            get { return pMFVideoDisplayControl; }
+            get { return _pMfVideoDisplayControl; }
         }
 
         protected override Guid IID_4DVDGraphInstantiation
@@ -132,7 +132,7 @@ namespace Pvp.Core.MediaEngine.Render
             long timestamp = 0;
             header = new BITMAPINFOHEADER();
             header.biSize = Marshal.SizeOf(typeof(BITMAPINFOHEADER));
-            int hr = pMFVideoDisplayControl.GetCurrentImage(ref header, out dibFull, out cbDib, ref timestamp);
+            int hr = _pMfVideoDisplayControl.GetCurrentImage(ref header, out dibFull, out cbDib, ref timestamp);
             if (DsHlp.SUCCEEDED(hr))
             {
                 dibDataOnly = new IntPtr(dibFull.ToInt64() + Marshal.SizeOf(typeof(BITMAPINFOHEADER)));

@@ -12,9 +12,9 @@
 
 using System;
 using Pvp.Core.DirectShow;
-using Pvp.Core.MediaEngine.GraphBuilders;
+using Pvp.Core.MediaEngine.Internal;
 
-namespace Pvp.Core.MediaEngine.Render
+namespace Pvp.Core.MediaEngine.Renderers
 {
     internal class VMRWindowed : WindowedRenderer
     {
@@ -37,7 +37,7 @@ namespace Pvp.Core.MediaEngine.Render
         {
             // add the VMR to the graph
             int hr = pGraphBuilder.AddFilter(BaseFilter, "VMR (Windowed)");
-            errorFunc(hr, Error.AddVMR);
+            errorFunc(hr, GraphBuilderError.AddVMR);
         }
 
         // VMR windowed behaves like a real windowed renderer, i.e. it must be configured after the video is rendered (compare with VMR9 windowed)

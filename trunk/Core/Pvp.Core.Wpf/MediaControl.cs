@@ -15,8 +15,8 @@ using System.Linq;
 using Pvp.Core.DirectShow;
 using Pvp.Core.MediaEngine;
 using Pvp.Core.MediaEngine.Description;
-using Pvp.Core.MediaEngine.GraphBuilders;
 using System.Windows;
+using Pvp.Core.MediaEngine.Internal;
 
 namespace Pvp.Core.Wpf
 {
@@ -187,7 +187,7 @@ namespace Pvp.Core.Wpf
         {
             get
             {
-                return MediaEngine.AudioStreams;
+                return MediaEngine.AudioStreamsCount;
             }
         }
 
@@ -479,7 +479,7 @@ namespace Pvp.Core.Wpf
 
         public bool IsResumeDVDEnabled()
         {
-            return MediaEngine.IsResumeDVDEnabled();
+            return MediaEngine.IsResumeDvdEnabled();
         }
 
         public bool IsSubpictureEnabled()
@@ -494,7 +494,7 @@ namespace Pvp.Core.Wpf
 
         public bool ResumeDVD()
         {
-            return MediaEngine.ResumeDVD();
+            return MediaEngine.ResumeDvd();
         }
 
         public void ReturnFromSubmenu()
@@ -524,11 +524,6 @@ namespace Pvp.Core.Wpf
         public bool DisplayFilterPropPage(IntPtr hParent, string strFilter, bool bDisplay)
         {
             return MediaEngine.DisplayFilterPropPage(hParent, strFilter, bDisplay);
-        }
-
-        public void OnCultureChanged()
-        {
-            MediaEngine.OnCultureChanged();
         }
         #endregion
     }

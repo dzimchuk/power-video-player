@@ -52,7 +52,7 @@ namespace Pvp.Core.MediaEngine
         /// Re-positions the media window. The coordinates are given relative to the media window host.
         /// </summary>
         /// <param name="rcDest"></param>
-        void Move(ref GDI.RECT rcDest);
+        void Move(GDI.RECT rcDest);
 
         /// <summary>
         /// Sets control interfaces for windowless renderers. Only 1 interface will be set at a time,

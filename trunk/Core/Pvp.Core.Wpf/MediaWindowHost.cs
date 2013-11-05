@@ -517,14 +517,14 @@ namespace Pvp.Core.Wpf
         private void ApplyDestinationRect()
         {
             // move the media window to the new position
-            _mediaWindow.Move(ref _rcDest);
+            _mediaWindow.Move(_rcDest);
 
             // set the new rectangle on the renderer but relative to the media window;
             // as we now always resize the media window to fit the destinaton rectangle
             // we need to make sure Top and Left values are 0
             _rcDestMW.right = _rcDest.right - _rcDest.left;
             _rcDestMW.bottom = _rcDest.bottom - _rcDest.top;
-            MediaEngine.SetVideoPosition(ref _rcDestMW);
+            MediaEngine.SetVideoPosition(_rcDestMW);
         }
         #endregion
 
@@ -571,7 +571,7 @@ namespace Pvp.Core.Wpf
                                 GDI.POINT pt = new GDI.POINT();
                                 pt.x = (int)x;
                                 pt.y = (int)y;
-                                _mwh.MediaEngine.ActivateDVDMenuButtonAtPosition(pt);
+                                _mwh.MediaEngine.ActivateDvdMenuButtonAtPosition(pt);
                             }
 
                             if (!_mwh.MediaEngine.IsMenuOn && !_doubleClick)
@@ -595,7 +595,7 @@ namespace Pvp.Core.Wpf
                                 GDI.POINT pt = new GDI.POINT();
                                 pt.x = (int)x;
                                 pt.y = (int)y;
-                                _mwh.MediaEngine.SelectDVDMenuButtonAtPosition(pt);
+                                _mwh.MediaEngine.SelectDvdMenuButtonAtPosition(pt);
                             }
 
                             if (!_mouseOnWindow)
@@ -650,23 +650,23 @@ namespace Pvp.Core.Wpf
                     switch(key)
                     {
                         case Key.Enter:
-                            _mwh.MediaEngine.ActivateSelectedDVDMenuButton();
+                            _mwh.MediaEngine.ActivateSelectedDvdMenuButton();
                             handled = true;
                             break;
                         case Key.Left:
-                            _mwh.MediaEngine.SelectDVDMenuButtonLeft();
+                            _mwh.MediaEngine.SelectDvdMenuButtonLeft();
                             handled = true;
                             break;
                         case Key.Right:
-                            _mwh.MediaEngine.SelectDVDMenuButtonRight();
+                            _mwh.MediaEngine.SelectDvdMenuButtonRight();
                             handled = true;
                             break;
                         case Key.Up:
-                            _mwh.MediaEngine.SelectDVDMenuButtonUp();
+                            _mwh.MediaEngine.SelectDvdMenuButtonUp();
                             handled = true;
                             break;
                         case Key.Down:
-                            _mwh.MediaEngine.SelectDVDMenuButtonDown();
+                            _mwh.MediaEngine.SelectDvdMenuButtonDown();
                             handled = true;
                             break;
                     }

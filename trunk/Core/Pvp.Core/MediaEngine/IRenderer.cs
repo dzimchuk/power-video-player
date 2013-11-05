@@ -11,12 +11,10 @@
  * ***************************************************************************/
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Pvp.Core.DirectShow;
 using Pvp.Core.Native;
 
-namespace Pvp.Core.MediaEngine.Render
+namespace Pvp.Core.MediaEngine
 {
     /// <summary>
     /// Specifies the public contract of a video renderer.
@@ -39,7 +37,7 @@ namespace Pvp.Core.MediaEngine.Render
         /// </summary>
         /// <param name="rcSrc">Source rectangle relative to the native video size.</param>
         /// <param name="rcDest">Destination rectangle relative to the media window.</param>
-        void SetVideoPosition(ref GDI.RECT rcSrc, ref GDI.RECT rcDest);
+        void SetVideoPosition(GDI.RECT rcSrc, GDI.RECT rcDest);
 
         /// <summary>
         /// Gets the size and aspect ratio of the video that is being rendered.

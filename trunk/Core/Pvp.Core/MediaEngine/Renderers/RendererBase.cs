@@ -13,10 +13,10 @@
 using System;
 using System.Runtime.InteropServices;
 using Pvp.Core.DirectShow;
-using Pvp.Core.MediaEngine.GraphBuilders;
+using Pvp.Core.MediaEngine.Internal;
 using Pvp.Core.Native;
 
-namespace Pvp.Core.MediaEngine.Render
+namespace Pvp.Core.MediaEngine.Renderers
 {
     public abstract class RendererBase : IRenderer, IDisposable
     {
@@ -85,7 +85,7 @@ namespace Pvp.Core.MediaEngine.Render
             return bRet;
         }
 
-        public abstract void SetVideoPosition(ref GDI.RECT rcSrc, ref GDI.RECT rcDest);
+        public abstract void SetVideoPosition(GDI.RECT rcSrc, GDI.RECT rcDest);
         public abstract void GetNativeVideoSize(out int width, out int height, out int arWidth, out int arHeight);
         public abstract bool GetCurrentImage(out BITMAPINFOHEADER header, out IntPtr dibFull, out IntPtr dibDataOnly);
 
@@ -160,7 +160,7 @@ namespace Pvp.Core.MediaEngine.Render
                         renderer.InstantiateRenderer(); // it will throw FilterGraphBuilderException if it can't be instantiated
                     }
                     else
-                        throw new FilterGraphBuilderException(Error.VideoRenderer);
+                        throw new FilterGraphBuilderException(GraphBuilderError.VideoRenderer);
                 }
 
                 renderer.AddToGraph(pGraphBuilder, errorFunc);
@@ -342,7 +342,7 @@ namespace Pvp.Core.MediaEngine.Render
                     renderer = TryGetUnknownRenderer(pGraphBuilder); // last resort
 
                 if (renderer == null)
-                    throw new FilterGraphBuilderException(Error.VideoRenderer); // we've tried hard enough, there is no point to continue
+                    throw new FilterGraphBuilderException(GraphBuilderError.VideoRenderer); // we've tried hard enough, there is no point to continue
 
                 if (!renderer.IsDelayedInitialize)
                     renderer.Initialize(pGraphBuilder, hMediaWindow);
@@ -374,7 +374,7 @@ namespace Pvp.Core.MediaEngine.Render
                 {
                     newRenderer = (RendererBase)AddRenderer(pGraphBuilder,
                                                             desiredRenderer,
-                                                            delegate(int hrCode, Error error) { },
+                                                            delegate(int hrCode, GraphBuilderError error) { },
                                                             hMediaWindow,
                                                             false);
                     IPin existingRendererInput, decoderOut;

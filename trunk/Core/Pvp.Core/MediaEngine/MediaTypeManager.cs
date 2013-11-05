@@ -18,7 +18,7 @@ using System.Runtime.InteropServices.ComTypes;
 using System.IO;
 using Pvp.Core.DirectShow;
 using System.Collections.ObjectModel;
-using Pvp.Core.MediaEngine.Render;
+using Pvp.Core.MediaEngine.Renderers;
 
 namespace Pvp.Core.MediaEngine
 {

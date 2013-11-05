@@ -13,36 +13,36 @@
 using System;
 using System.Runtime.InteropServices;
 using Pvp.Core.DirectShow;
-using Pvp.Core.MediaEngine.GraphBuilders;
+using Pvp.Core.MediaEngine.Internal;
 using Pvp.Core.Native;
 
-namespace Pvp.Core.MediaEngine.Render
+namespace Pvp.Core.MediaEngine.Renderers
 {
     internal class VMRWindowless : RendererBase, IVMRWindowless
     {
-        private IVMRWindowlessControl pVMRWindowlessControl;
-        private IVMRFilterConfig pVMRFilterConfig;
+        private IVMRWindowlessControl _pVMRWindowlessControl;
+        private IVMRFilterConfig _pVMRFilterConfig;
         
         public VMRWindowless()
         {
             _renderer = Renderer.VMR_Windowless;
         }
         
-        public override void SetVideoPosition(ref GDI.RECT rcSrc, ref GDI.RECT rcDest)
+        public override void SetVideoPosition(GDI.RECT rcSrc, GDI.RECT rcDest)
         {
-            pVMRWindowlessControl.SetVideoPosition(/*ref rcSrc*/ IntPtr.Zero, ref rcDest);
+            _pVMRWindowlessControl.SetVideoPosition(/*ref rcSrc*/ IntPtr.Zero, ref rcDest);
         }
 
         public override void GetNativeVideoSize(out int width, out int height, out int arWidth, out int arHeight)
         {
-            pVMRWindowlessControl.GetNativeVideoSize(out width, out height, out arWidth, out arHeight);
+            _pVMRWindowlessControl.GetNativeVideoSize(out width, out height, out arWidth, out arHeight);
         }
 
         protected override void AddToGraph(IGraphBuilder pGraphBuilder, ThrowExceptionForHRPointer errorFunc)
         {
             // add the VMR to the graph
             int hr = pGraphBuilder.AddFilter(BaseFilter, "VMR (Windowless)");
-            errorFunc(hr, Error.AddVMR);
+            errorFunc(hr, GraphBuilderError.AddVMR);
         }
 
         protected override void Initialize(IGraphBuilder pGraphBuilder, IntPtr hMediaWindow)
@@ -50,23 +50,23 @@ namespace Pvp.Core.MediaEngine.Render
             // QUERY the VMR interfaces
             try
             {
-                pVMRFilterConfig = (IVMRFilterConfig)BaseFilter;
-                pVMRFilterConfig.SetRenderingMode(VMRMode.VMRMode_Windowless);
-                pVMRWindowlessControl = (IVMRWindowlessControl)BaseFilter;
-                pVMRWindowlessControl.SetVideoClippingWindow(hMediaWindow);
+                _pVMRFilterConfig = (IVMRFilterConfig)BaseFilter;
+                _pVMRFilterConfig.SetRenderingMode(VMRMode.VMRMode_Windowless);
+                _pVMRWindowlessControl = (IVMRWindowlessControl)BaseFilter;
+                _pVMRWindowlessControl.SetVideoClippingWindow(hMediaWindow);
 
-                pVMRWindowlessControl.SetAspectRatioMode(VMR_ASPECT_RATIO_MODE.VMR_ARMODE_NONE);
+                _pVMRWindowlessControl.SetAspectRatioMode(VMR_ASPECT_RATIO_MODE.VMR_ARMODE_NONE);
             }
             catch (Exception e)
             {
-                throw new FilterGraphBuilderException(Error.ConfigureVMR, e);
+                throw new FilterGraphBuilderException(GraphBuilderError.ConfigureVMR, e);
             }
         }
 
         protected override void CloseInterfaces()
         {
-            pVMRFilterConfig = null;
-            pVMRWindowlessControl = null; // they will be released when pBaseFilter is released
+            _pVMRFilterConfig = null;
+            _pVMRWindowlessControl = null; // they will be released when pBaseFilter is released
 
             base.CloseInterfaces(); // release pBaseFilter
         }
@@ -88,7 +88,7 @@ namespace Pvp.Core.MediaEngine.Render
 
         public IVMRWindowlessControl VMRWindowlessControl
         {
-            get { return pVMRWindowlessControl; }
+            get { return _pVMRWindowlessControl; }
         }
 
         protected override Guid IID_4DVDGraphInstantiation
@@ -98,7 +98,7 @@ namespace Pvp.Core.MediaEngine.Render
 
         public override bool GetCurrentImage(out BITMAPINFOHEADER header, out IntPtr dibFull, out IntPtr dibDataOnly)
         {
-            int hr = pVMRWindowlessControl.GetCurrentImage(out dibFull);
+            int hr = _pVMRWindowlessControl.GetCurrentImage(out dibFull);
             if (DsHlp.SUCCEEDED(hr))
             {
                 header = (BITMAPINFOHEADER)Marshal.PtrToStructure(dibFull, typeof(BITMAPINFOHEADER));

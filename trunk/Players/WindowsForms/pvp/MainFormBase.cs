@@ -179,7 +179,6 @@ namespace Pvp
             base.OnCultureChanged();
             controlbar.UpdateToolTips();
             SetMenuItemsText();
-            mediaControl.OnCultureChanged();
         }
 
         protected override void OnLoad(EventArgs e)

@@ -839,7 +839,7 @@ namespace Pvp
             MenuItemEx popup = (MenuItemEx)sender;
             foreach(MenuItemEx item in popup.MenuItems)
             {
-                if (mediaControl.SourceType == SourceType.DVD)
+                if (mediaControl.SourceType == SourceType.Dvd)
                 {
                     bool bEnable=((mediaControl.IsAudioStreamEnabled((int)item.Tag)) && 
                         (mediaControl.UOPS & VALID_UOP_FLAG.UOP_FLAG_Select_Audio_Stream)==0);
@@ -1066,7 +1066,7 @@ namespace Pvp
 
         private void CreateDVDMenusMenu(Menu popup, int nPos, bool bAppend)
         {
-            if (mediaControl.SourceType != SourceType.DVD)
+            if (mediaControl.SourceType != SourceType.Dvd)
                 return;
             menus_menu = new MenuItemEx(Resources.Resources.mi_select_menu);
             menus_menu.Popup += new EventHandler(OnDVDMenusPopup);

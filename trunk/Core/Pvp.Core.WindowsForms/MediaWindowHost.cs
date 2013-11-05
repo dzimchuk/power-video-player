@@ -104,7 +104,7 @@ namespace Pvp.Core.WindowsForms
                                 GDI.POINT pt = new GDI.POINT();
                                 pt.x = (int)x;
                                 pt.y = (int)y;
-                                _mwh._engine.ActivateDVDMenuButtonAtPosition(pt);
+                                _mwh._engine.ActivateDvdMenuButtonAtPosition(pt);
                             }
 
                             if (!_mwh._engine.IsMenuOn && !_doubleClick && _mwh.MWClick != null)
@@ -128,7 +128,7 @@ namespace Pvp.Core.WindowsForms
                                 GDI.POINT pt = new GDI.POINT();
                                 pt.x = (int)x;
                                 pt.y = (int)y;
-                                _mwh._engine.SelectDVDMenuButtonAtPosition(pt);
+                                _mwh._engine.SelectDvdMenuButtonAtPosition(pt);
                             }
 
                             if (!_mwh._mouseOnWindow)
@@ -265,19 +265,19 @@ namespace Pvp.Core.WindowsForms
                 switch (e.KeyCode)
                 {
                     case Keys.Enter:
-                        _engine.ActivateSelectedDVDMenuButton();
+                        _engine.ActivateSelectedDvdMenuButton();
                         break;
                     case Keys.Left:
-                        _engine.SelectDVDMenuButtonLeft();
+                        _engine.SelectDvdMenuButtonLeft();
                         break;
                     case Keys.Right:
-                        _engine.SelectDVDMenuButtonRight();
+                        _engine.SelectDvdMenuButtonRight();
                         break;
                     case Keys.Up:
-                        _engine.SelectDVDMenuButtonUp();
+                        _engine.SelectDvdMenuButtonUp();
                         break;
                     case Keys.Down:
-                        _engine.SelectDVDMenuButtonDown();
+                        _engine.SelectDvdMenuButtonDown();
                         break;
                 }
             }
@@ -321,7 +321,7 @@ namespace Pvp.Core.WindowsForms
                 {
                     _rcClient.right = Width;
                     _rcClient.bottom = Height;
-                    _mediaWindow.Move(ref _rcClient); // resize to the full client area to center the logo
+                    _mediaWindow.Move(_rcClient); // resize to the full client area to center the logo
                 }
                 else
                 {
@@ -444,14 +444,14 @@ namespace Pvp.Core.WindowsForms
         private void ApplyDestinationRect()
         {
             // move the media window to the new position
-            _mediaWindow.Move(ref _rcDest);
+            _mediaWindow.Move(_rcDest);
 
             // set the new rectangle on the renderer but relative to the media window;
             // as we now always resize the media window to fit the destinaton rectangle
             // we need to make sure Top and Left values are 0
             _rcDestMW.right = _rcDest.right - _rcDest.left;
             _rcDestMW.bottom = _rcDest.bottom - _rcDest.top;
-            _engine.SetVideoPosition(ref _rcDestMW);
+            _engine.SetVideoPosition(_rcDestMW);
         }
         #endregion
 

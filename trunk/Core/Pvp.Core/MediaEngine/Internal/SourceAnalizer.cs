@@ -17,67 +17,70 @@ using System.Text;
 using Pvp.Core.DirectShow;
 using Microsoft.Win32;
 
-namespace Pvp.Core.MediaEngine.GraphBuilders
+namespace Pvp.Core.MediaEngine.Internal
 {
-    /// <summary>
-    /// 
-    /// </summary>
     internal abstract class SourceAnalizer
     {
-        protected class SourceInfo
-        {
-            public SourceType type = SourceType.Unknown;
-            public Guid clsId = Guid.Empty;
-        }
-
         protected class SampleBytes
         {
-            public int offset;
-            public int cb;
-            public string mask;
-            public string value;
+            private readonly int _offset;
+            private readonly int _bytesCount;
+            private readonly string _mask;
+            private readonly string _value;
 
-            public SampleBytes(int offset, int cb, string value) : this(offset, cb, String.Empty, value)
+            public SampleBytes(int offset, int bytesCount, string value) : this(offset, bytesCount, String.Empty, value)
             {
             }
 
-            public SampleBytes(int offset, int cb, string mask, string value)
+            public SampleBytes(int offset, int bytesCount, string mask, string value)
             {
-                this.offset = offset;
-                this.cb = cb;
-                this.mask = mask;
-                this.value = value;
+                _offset = offset;
+                _bytesCount = bytesCount;
+                _mask = mask;
+                _value = value;
+            }
+
+            public int Offset
+            {
+                get { return _offset; }
+            }
+
+            public int BytesCount
+            {
+                get { return _bytesCount; }
+            }
+
+            public string Mask
+            {
+                get { return _mask; }
+            }
+
+            public string Value
+            {
+                get { return _value; }
             }
         }
 
-        const string SOURCE_FILTER = "Source Filter";
-        static SourceAnalizer[] analizers;
-        private static bool _sourceFilterDetectionEnabled = false;
+        private const string SOURCE_FILTER = "Source Filter";
+        private static readonly SourceAnalizer[] Analizers;
 
         static SourceAnalizer()
         {
-            analizers = new SourceAnalizer[4];
-            analizers[0] = new SourceBasic();
-            analizers[1] = new SourceAsf();
-            analizers[2] = new SourceMkv();
-            analizers[3] = new SourceFlv();
+            Analizers = new SourceAnalizer[4];
+            Analizers[0] = new SourceBasic();
+            Analizers[1] = new SourceAsf();
+            Analizers[2] = new SourceMkv();
+            Analizers[3] = new SourceFlv();
         }
-        
-        internal SourceAnalizer()
+
+        protected SourceAnalizer()
         {
         }
 
-        public static bool SourceFilterDetectionEnabled
-        {
-            get { return _sourceFilterDetectionEnabled; }
-            set { _sourceFilterDetectionEnabled = value; }
-        }
-
-        public static void SetSourceType(string source,
-                                         FilterGraph pGraph)
+        public static SourceInfo GetSourceType(string source)
         {
             int nBytesToRead = 0;
-            foreach (SourceAnalizer analizer in analizers)
+            foreach (SourceAnalizer analizer in Analizers)
             {
                 if (analizer.NumberOfBytes > nBytesToRead)
                     nBytesToRead = analizer.NumberOfBytes;
@@ -91,23 +94,22 @@ namespace Pvp.Core.MediaEngine.GraphBuilders
 
             int nAnalizer = 0;
             SourceInfo si = new SourceInfo();
-            while (nAnalizer < analizers.Length)
+            while (nAnalizer < Analizers.Length)
             {
-                si = analizers[nAnalizer].GetSourceType(bytes);
-                if (si.type != SourceType.Unknown)
+                si = Analizers[nAnalizer].GetSourceType(bytes);
+                if (si.Type != SourceType.Unknown)
                     break;
 
                 nAnalizer++;
             }
 
-            if(si.type == SourceType.Unknown)
+            if(si.Type == SourceType.Unknown)
                 SetSourceTypeByExtension(source, si);
             
-            if (si.clsId == Guid.Empty)
+            if (si.ClsId == Guid.Empty)
                 SetClsIdByExtension(source, si);
 
-            pGraph.SourceType = si.type;
-            pGraph.RecommnedSourceFilterId = si.clsId;
+            return si;
         }
 
         private static void SetSourceTypeByExtension(string source,
@@ -117,25 +119,22 @@ namespace Pvp.Core.MediaEngine.GraphBuilders
             if (ext.EndsWith("avi") || ext.EndsWith("ivx") || ext.EndsWith("mpg")
                 || ext.EndsWith("peg") || ext.EndsWith("mov") || ext.EndsWith("vob")
                 || ext.EndsWith("mp4") || ext.EndsWith("3gp") || ext.EndsWith("3g2"))
-                si.type = SourceType.Basic;
+                si.Type = SourceType.Basic;
             else if (ext.EndsWith("asf") || ext.EndsWith("wmv"))
-                si.type = SourceType.Asf;
+                si.Type = SourceType.Asf;
             else if (ext.EndsWith("ifo"))
-                si.type = SourceType.DVD;
+                si.Type = SourceType.Dvd;
             else if (ext.EndsWith("mkv"))
-                si.type = SourceType.Mkv;
+                si.Type = SourceType.Mkv;
             else if (ext.EndsWith("flv"))
-                si.type = SourceType.Flv;
+                si.Type = SourceType.Flv;
             else
-                si.type = SourceType.Unknown;
+                si.Type = SourceType.Unknown;
         }
 
         private static void SetClsIdByExtension(string source,
                                                 SourceInfo si)
         {
-            if (!SourceFilterDetectionEnabled)
-                return;
-            
             RegistryKey key = null;
             string ext = Path.GetExtension(source).Trim().ToLowerInvariant();
             try
@@ -144,7 +143,7 @@ namespace Pvp.Core.MediaEngine.GraphBuilders
                 string strGuid = key.GetValue(SOURCE_FILTER) as string;
                 if (strGuid != null)
                 {
-                    si.clsId = new Guid(strGuid);
+                    si.ClsId = new Guid(strGuid);
                 }
             }
             catch
@@ -204,13 +203,13 @@ namespace Pvp.Core.MediaEngine.GraphBuilders
                     bool bMatch = false;
                     foreach (SampleBytes sampleReg in samplesReg)
                     {
-                        if (sample.offset >= sampleReg.offset) // sample is further than sampleReg
+                        if (sample.Offset >= sampleReg.Offset) // sample is further than sampleReg
                         {
-                            int gap = sample.offset - sampleReg.offset;
-                            if (sampleReg.cb - gap > MIN_BYTES && sample.cb > MIN_BYTES) // overlapping area is more than MIN_BYTES
+                            int gap = sample.Offset - sampleReg.Offset;
+                            if (sampleReg.BytesCount - gap > MIN_BYTES && sample.BytesCount > MIN_BYTES) // overlapping area is more than MIN_BYTES
                             {
-                                string sampleRegOverlap = sampleReg.value.Substring(gap * 2, Math.Min((sampleReg.cb - gap) * 2, sample.cb * 2));
-                                string sampleOverlap = sample.value.Substring(0, Math.Min((sampleReg.cb - gap) * 2, sample.cb * 2));
+                                string sampleRegOverlap = sampleReg.Value.Substring(gap * 2, Math.Min((sampleReg.BytesCount - gap) * 2, sample.BytesCount * 2));
+                                string sampleOverlap = sample.Value.Substring(0, Math.Min((sampleReg.BytesCount - gap) * 2, sample.BytesCount * 2));
                                 bMatch = sampleRegOverlap == sampleOverlap;
                                 if (bMatch)
                                     break;
@@ -218,11 +217,11 @@ namespace Pvp.Core.MediaEngine.GraphBuilders
                         }
                         else // sample is prior to sampleReg
                         {
-                            int gap = sampleReg.offset - sample.offset;
-                            if (sample.cb - gap > MIN_BYTES && sampleReg.cb > MIN_BYTES)
+                            int gap = sampleReg.Offset - sample.Offset;
+                            if (sample.BytesCount - gap > MIN_BYTES && sampleReg.BytesCount > MIN_BYTES)
                             {
-                                string sampleOverlap = sample.value.Substring(gap * 2, Math.Min((sample.cb - gap) * 2, sampleReg.cb * 2));
-                                string sampleRegOverlap = sampleReg.value.Substring(0, Math.Min((sample.cb - gap) * 2, sampleReg.cb * 2));
+                                string sampleOverlap = sample.Value.Substring(gap * 2, Math.Min((sample.BytesCount - gap) * 2, sampleReg.BytesCount * 2));
+                                string sampleRegOverlap = sampleReg.Value.Substring(0, Math.Min((sample.BytesCount - gap) * 2, sampleReg.BytesCount * 2));
                                 bMatch = sampleRegOverlap == sampleOverlap;
                                 if (bMatch)
                                     break;
@@ -246,9 +245,6 @@ namespace Pvp.Core.MediaEngine.GraphBuilders
 
         protected Guid GetClsId(IList<SampleBytes> formatBytes) // offset,cb,mask,val
         {
-            if (!_sourceFilterDetectionEnabled)
-                return Guid.Empty;
-            
             RegistryKey keyStream = null;
             RegistryKey keySubtype = null;
             Guid clsId = Guid.Empty;
@@ -337,9 +333,9 @@ namespace Pvp.Core.MediaEngine.GraphBuilders
         {
             SourceInfo si = new SourceInfo();
             CheckAvi(bytes, ref si);
-            if(si.type == SourceType.Unknown)
+            if(si.Type == SourceType.Unknown)
                 CheckMpeg(bytes, ref si);
-            if (si.type == SourceType.Unknown)
+            if (si.Type == SourceType.Unknown)
                 CheckMov(bytes, ref si);
             return si;
         }
@@ -360,8 +356,8 @@ namespace Pvp.Core.MediaEngine.GraphBuilders
                     list.Add(new SampleBytes(0, formatBytes1.Length, BytesToString(formatBytes1)));
                     list.Add(new SampleBytes(8, formatBytes2.Length, BytesToString(formatBytes2)));
 
-                    si.type = SourceType.Basic;
-                    si.clsId = GetClsId(list);
+                    si.Type = SourceType.Basic;
+                    si.ClsId = GetClsId(list);
                 }
             }
         }
@@ -378,8 +374,8 @@ namespace Pvp.Core.MediaEngine.GraphBuilders
                     IList<SampleBytes> list = new List<SampleBytes>();
                     list.Add(new SampleBytes(0, formatBytes.Length, BytesToString(formatBytes)));
 
-                    si.type = SourceType.Basic;
-                    si.clsId = GetClsId(list);
+                    si.Type = SourceType.Basic;
+                    si.ClsId = GetClsId(list);
                 }
             }
         }
@@ -394,8 +390,8 @@ namespace Pvp.Core.MediaEngine.GraphBuilders
                 IList<SampleBytes> list = new List<SampleBytes>();
                 list.Add(new SampleBytes(4, formatBytes.Length, BytesToString(formatBytes)));
 
-                si.type = SourceType.Basic;
-                si.clsId = GetClsId(list);
+                si.Type = SourceType.Basic;
+                si.ClsId = GetClsId(list);
             }
         }
     }
@@ -418,8 +414,8 @@ namespace Pvp.Core.MediaEngine.GraphBuilders
                 IList<SampleBytes> list = new List<SampleBytes>();
                 list.Add(new SampleBytes(1, formatBytes.Length, BytesToString(formatBytes)));
 
-                si.type = SourceType.Asf;
-                si.clsId = GetClsId(list);
+                si.Type = SourceType.Asf;
+                si.ClsId = GetClsId(list);
             }
             return si;
         }
@@ -443,8 +439,8 @@ namespace Pvp.Core.MediaEngine.GraphBuilders
                 IList<SampleBytes> list = new List<SampleBytes>();
                 list.Add(new SampleBytes(0, formatBytes.Length, BytesToString(formatBytes)));
 
-                si.type = SourceType.Mkv;
-                si.clsId = GetClsId(list);
+                si.Type = SourceType.Mkv;
+                si.ClsId = GetClsId(list);
             }
             return si;
         }
@@ -468,8 +464,8 @@ namespace Pvp.Core.MediaEngine.GraphBuilders
                 IList<SampleBytes> list = new List<SampleBytes>();
                 list.Add(new SampleBytes(0, formatBytes.Length, BytesToString(formatBytes)));
                 
-                si.type = SourceType.Flv;
-                si.clsId = GetClsId(list);
+                si.Type = SourceType.Flv;
+                si.ClsId = GetClsId(list);
             }
             return si;
         }

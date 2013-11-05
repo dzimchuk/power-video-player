@@ -12,9 +12,9 @@
 
 using System;
 using Pvp.Core.DirectShow;
-using Pvp.Core.MediaEngine.GraphBuilders;
+using Pvp.Core.MediaEngine.Internal;
 
-namespace Pvp.Core.MediaEngine.Render
+namespace Pvp.Core.MediaEngine.Renderers
 {
     internal class VMR9Windowed : WindowedRenderer
     {
@@ -39,7 +39,7 @@ namespace Pvp.Core.MediaEngine.Render
         {
             // add the VMR9 to the graph
             int hr = pGraphBuilder.AddFilter(BaseFilter, "VMR9 (Windowed)");
-            errorFunc(hr, Error.AddVMR9);
+            errorFunc(hr, GraphBuilderError.AddVMR9);
         }
 
         // we must set number of input pins to 1 and we need to do it before VMR9 is connected,
@@ -50,7 +50,7 @@ namespace Pvp.Core.MediaEngine.Render
             get { return false; }
         }
 
-        private bool _initialized = false;
+        private bool _initialized;
         protected override void Initialize(IGraphBuilder pGraphBuilder, IntPtr hMediaWindow)
         {
             if (_initialized)

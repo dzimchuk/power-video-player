@@ -2,8 +2,8 @@
 using System.Runtime.InteropServices;
 using Pvp.Core.DirectShow;
 using Pvp.Core.MediaEngine;
-using Pvp.Core.MediaEngine.GraphBuilders;
-using Pvp.Core.MediaEngine.Render;
+using Pvp.Core.MediaEngine.Internal;
+using Pvp.Core.MediaEngine.Renderers;
 using Pvp.Core.Native;
 
 namespace Pvp.Core.Wpf
@@ -17,7 +17,7 @@ namespace Pvp.Core.Wpf
         int SetBufferCount(int bufferCount);
     }
 
-    internal class EVRRenderer : RendererBase, IEnhancedVideoRenderer
+    internal class EVRRenderer : RendererBase, IEVR
     {
         private const int PRESENTER_BUFFER_COUNT = 4;
         private static Guid CLSID_CustomEVRPresenter = new Guid("4C536A77-7D8B-4F92-ACCA-27F84912B393");
@@ -33,14 +33,14 @@ namespace Pvp.Core.Wpf
         public EVRRenderer(IPvpPresenterHook pvpPresenterHook)
         {
             _pvpPresenterHook = pvpPresenterHook;
-            _renderer = Renderer.EVR;
+            _renderer = MediaEngine.Renderer.EVR;
 
             _rcSrc = new MFVideoNormalizedRect { left = _rcSrc.top = 0.0f, right = _rcSrc.bottom = 1.0f };
 
             _rcDest = new GDI.RECT { left = _rcDest.top = 0 };
         }
 
-        public override void SetVideoPosition(ref GDI.RECT rcSrc, ref GDI.RECT rcDest)
+        public override void SetVideoPosition(GDI.RECT rcSrc, GDI.RECT rcDest)
         {
             // in EVR default source rectangle is {0.0, 0.0, 1.0, 1.0}, these are so-called normalized coordinates
             // however VMR, VMR9 and PVP consider the source rectangle as the video size
@@ -87,7 +87,7 @@ namespace Pvp.Core.Wpf
         {
             // add the EVR to the graph
             int hr = pGraphBuilder.AddFilter(BaseFilter, "Enhanced Video Renderer");
-            errorFunc(hr, Error.AddEVR);
+            errorFunc(hr, GraphBuilderError.AddEVR);
         }
 
         protected override void Initialize(IGraphBuilder pGraphBuilder, IntPtr hMediaWindow)

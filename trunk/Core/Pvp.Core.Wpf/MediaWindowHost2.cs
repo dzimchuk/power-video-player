@@ -17,7 +17,7 @@ using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using Pvp.Core.MediaEngine;
-using Pvp.Core.MediaEngine.Render;
+using Pvp.Core.MediaEngine.Renderers;
 
 namespace Pvp.Core.Wpf
 {
