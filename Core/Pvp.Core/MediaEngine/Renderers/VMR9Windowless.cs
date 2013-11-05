@@ -13,38 +13,38 @@
 using System;
 using System.Runtime.InteropServices;
 using Pvp.Core.DirectShow;
-using Pvp.Core.MediaEngine.GraphBuilders;
+using Pvp.Core.MediaEngine.Internal;
 using Pvp.Core.Native;
 
-namespace Pvp.Core.MediaEngine.Render
+namespace Pvp.Core.MediaEngine.Renderers
 {
     internal class VMR9Windowless : RendererBase, IVMR9Windowless
     {
         private const int NUMBER_OF_STREAMS = 1;
         
-        private IVMRWindowlessControl9 pVMRWindowlessControl9;
-        private IVMRFilterConfig9 pVMRFilterConfig9;
+        private IVMRWindowlessControl9 _pVMRWindowlessControl9;
+        private IVMRFilterConfig9 _pVMRFilterConfig9;
         
         public VMR9Windowless()
         {
             _renderer = Renderer.VMR9_Windowless;
         }
         
-        public override void SetVideoPosition(ref GDI.RECT rcSrc, ref GDI.RECT rcDest)
+        public override void SetVideoPosition(GDI.RECT rcSrc, GDI.RECT rcDest)
         {
-            pVMRWindowlessControl9.SetVideoPosition(/*ref rcSrc*/ IntPtr.Zero, ref rcDest);
+            _pVMRWindowlessControl9.SetVideoPosition(/*ref rcSrc*/ IntPtr.Zero, ref rcDest);
         }
 
         public override void GetNativeVideoSize(out int width, out int height, out int arWidth, out int arHeight)
         {
-            pVMRWindowlessControl9.GetNativeVideoSize(out width, out height, out arWidth, out arHeight);
+            _pVMRWindowlessControl9.GetNativeVideoSize(out width, out height, out arWidth, out arHeight);
         }
 
         protected override void AddToGraph(IGraphBuilder pGraphBuilder, ThrowExceptionForHRPointer errorFunc)
         {
             // add the VMR9 to the graph
             int hr = pGraphBuilder.AddFilter(BaseFilter, "VMR9 (Windowless)");
-            errorFunc(hr, Error.AddVMR9);
+            errorFunc(hr, GraphBuilderError.AddVMR9);
         }
 
         protected override void Initialize(IGraphBuilder pGraphBuilder, IntPtr hMediaWindow)
@@ -52,24 +52,24 @@ namespace Pvp.Core.MediaEngine.Render
             // QUERY the VMR9 interfaces
             try
             {
-                pVMRFilterConfig9 = (IVMRFilterConfig9)BaseFilter;
-                pVMRFilterConfig9.SetRenderingMode(VMR9Mode.VMR9Mode_Windowless);
-                pVMRFilterConfig9.SetNumberOfStreams(NUMBER_OF_STREAMS);
-                pVMRWindowlessControl9 = (IVMRWindowlessControl9)BaseFilter;
-                pVMRWindowlessControl9.SetVideoClippingWindow(hMediaWindow);
+                _pVMRFilterConfig9 = (IVMRFilterConfig9)BaseFilter;
+                _pVMRFilterConfig9.SetRenderingMode(VMR9Mode.VMR9Mode_Windowless);
+                _pVMRFilterConfig9.SetNumberOfStreams(NUMBER_OF_STREAMS);
+                _pVMRWindowlessControl9 = (IVMRWindowlessControl9)BaseFilter;
+                _pVMRWindowlessControl9.SetVideoClippingWindow(hMediaWindow);
 
-                pVMRWindowlessControl9.SetAspectRatioMode(VMR9AspectRatioMode.VMR9ARMode_None);
+                _pVMRWindowlessControl9.SetAspectRatioMode(VMR9AspectRatioMode.VMR9ARMode_None);
             }
             catch (Exception e)
             {
-                throw new FilterGraphBuilderException(Error.ConfigureVMR9, e);
+                throw new FilterGraphBuilderException(GraphBuilderError.ConfigureVMR9, e);
             }
         }
 
         protected override void CloseInterfaces()
         {
-            pVMRFilterConfig9 = null;
-            pVMRWindowlessControl9 = null; // they will be released when pBaseFilter is released
+            _pVMRFilterConfig9 = null;
+            _pVMRWindowlessControl9 = null; // they will be released when pBaseFilter is released
             
             base.CloseInterfaces(); // release bBaseFilter
         }
@@ -91,7 +91,7 @@ namespace Pvp.Core.MediaEngine.Render
 
         public IVMRWindowlessControl9 VMRWindowlessControl
         {
-            get { return pVMRWindowlessControl9; }
+            get { return _pVMRWindowlessControl9; }
         }
 
         protected override Guid IID_4DVDGraphInstantiation
@@ -101,7 +101,7 @@ namespace Pvp.Core.MediaEngine.Render
 
         public override bool GetCurrentImage(out BITMAPINFOHEADER header, out IntPtr dibFull, out IntPtr dibDataOnly)
         {
-            int hr = pVMRWindowlessControl9.GetCurrentImage(out dibFull);
+            int hr = _pVMRWindowlessControl9.GetCurrentImage(out dibFull);
             if (DsHlp.SUCCEEDED(hr))
             {
                 header = (BITMAPINFOHEADER)Marshal.PtrToStructure(dibFull, typeof(BITMAPINFOHEADER));

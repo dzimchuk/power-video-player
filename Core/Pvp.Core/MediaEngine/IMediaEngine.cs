@@ -13,9 +13,8 @@
 using System;
 using Pvp.Core.DirectShow;
 using Pvp.Core.MediaEngine.Description;
-using Pvp.Core.MediaEngine.GraphBuilders;
+using Pvp.Core.MediaEngine.Internal;
 using Pvp.Core.Native;
-using Pvp.Core.MediaEngine.Render;
 
 namespace Pvp.Core.MediaEngine
 {
@@ -91,22 +90,20 @@ namespace Pvp.Core.MediaEngine
         event EventHandler MediaWindowDisposed;
 
         #endregion
-
         
+
         #region General properties (preferences)
 
         bool     AutoPlay { get; set; }
         bool     Repeat { get; set; }
         Renderer PreferredVideoRenderer { get; set; }
-        bool     UsePreferredFilters { get; set; }
-        bool     UsePreferredFilters4DVD { get; set; }
 
         #endregion
 
 
         #region Playback properties and methods
 
-        int         AudioStreams { get; }
+        int         AudioStreamsCount { get; }
         int         CurrentAudioStream { get; set; }
         int         FilterCount { get; }
         GraphState  GraphState { get; }
@@ -156,7 +153,6 @@ namespace Pvp.Core.MediaEngine
         #region Playback control methods
 
         bool BuildGraph(string source, MediaSourceType mediaSourceType);
-        bool BuildGraph(string source, MediaSourceType mediaSourceType, RendererBase renderer);
         bool PauseGraph();
         void ResetGraph();
         bool ResumeGraph();
@@ -185,31 +181,31 @@ namespace Pvp.Core.MediaEngine
         string GetSubpictureStreamName(int nStream);
         void   GoTo(int ulTitle, int ulChapter);
         bool   IsAudioStreamEnabled(int ulStreamNum);
-        bool   IsResumeDVDEnabled();
+        bool   IsResumeDvdEnabled();
         bool   IsSubpictureEnabled();
         bool   IsSubpictureStreamEnabled(int ulStreamNum);
-        bool   ResumeDVD();
+        bool   ResumeDvd();
         void   ReturnFromSubmenu();
         void   SetMenuLang(int nLang);
-        void   ShowMenu(DVD_MENU_ID menuID);
+        void   ShowMenu(DVD_MENU_ID menuId);
 
-        void ActivateSelectedDVDMenuButton();
-        void SelectDVDMenuButtonUp();
-        void SelectDVDMenuButtonDown();
-        void SelectDVDMenuButtonLeft();
-        void SelectDVDMenuButtonRight();
+        void ActivateSelectedDvdMenuButton();
+        void SelectDvdMenuButtonUp();
+        void SelectDvdMenuButtonDown();
+        void SelectDvdMenuButtonLeft();
+        void SelectDvdMenuButtonRight();
         /// <summary>
         /// Activates the menu button under the mouse pointer position (if there is a button).
         /// Call it when DVD menu is on (check IsMenuOn) and the user clicks anywhere on the video area.
         /// </summary>
         /// <param name="point">Point on the client window area (that is, relative to the upper left of the client area).</param>
-        void ActivateDVDMenuButtonAtPosition(GDI.POINT point);
+        void ActivateDvdMenuButtonAtPosition(GDI.POINT point);
         /// <summary>
         /// Highlights the menu button under the mouse pointer position (if there is a button).
         /// Call it when DVD menu is on (check IsMenuOn) and the user moves the mouse over the video area.
         /// </summary>
         /// <param name="point">Point on the client window area (that is, relative to the upper left of the client area).</param>
-        void SelectDVDMenuButtonAtPosition(GDI.POINT point);
+        void SelectDvdMenuButtonAtPosition(GDI.POINT point);
 
         #endregion
 
@@ -218,14 +214,13 @@ namespace Pvp.Core.MediaEngine
 
         bool DisplayFilterPropPage(IntPtr hParent, int nFilterNum, bool bDisplay);
         bool DisplayFilterPropPage(IntPtr hParent, string strFilter, bool bDisplay);
-        void OnCultureChanged();
 
         /// <summary>
         /// Sets a destination video rectangle relative to media window.
         /// Applications should call this method when the media window is resized.
         /// </summary>
         /// <param name="rcDest">Destination video rectangle relative to media window.</param>
-        void SetVideoPosition(ref GDI.RECT rcDest);
+        void SetVideoPosition(GDI.RECT rcDest);
 
         #endregion
     }

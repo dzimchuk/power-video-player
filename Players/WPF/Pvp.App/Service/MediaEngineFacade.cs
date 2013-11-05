@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Linq;
 using Pvp.Core.MediaEngine;
+using Pvp.Core.MediaEngine.Internal;
 using Pvp.Core.Wpf;
-using Pvp.Core.MediaEngine.GraphBuilders;
 using Pvp.Core.MediaEngine.Description;
 using Pvp.Core.DirectShow;
 
@@ -352,11 +352,6 @@ namespace Pvp.App.Service
         public bool DisplayFilterPropPage(IntPtr hParent, string strFilter, bool bDisplay)
         {
             return _mediaControl.DisplayFilterPropPage(hParent, strFilter, bDisplay);
-        }
-
-        public void OnCultureChanged()
-        {
-            _mediaControl.OnCultureChanged();
         }
 
         #endregion

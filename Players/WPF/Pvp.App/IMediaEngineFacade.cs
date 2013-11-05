@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Pvp.Core.MediaEngine.GraphBuilders;
 using Pvp.Core.MediaEngine;
 using Pvp.Core.MediaEngine.Description;
 using Pvp.Core.DirectShow;
+using Pvp.Core.MediaEngine.Internal;
 
 namespace Pvp.App
 {
@@ -156,7 +156,6 @@ namespace Pvp.App
 
         bool DisplayFilterPropPage(IntPtr hParent, int nFilterNum, bool bDisplay);
         bool DisplayFilterPropPage(IntPtr hParent, string strFilter, bool bDisplay);
-        void OnCultureChanged();
 
         #endregion
     }

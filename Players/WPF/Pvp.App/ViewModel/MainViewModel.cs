@@ -475,7 +475,6 @@ namespace Pvp.App.ViewModel
             if (message.Content == Event.MediaControlCreated)
             {
                 _mediaControlCreated = true;
-                _engine.OnCultureChanged();
 
                 _engine.ErrorOccured += delegate(object sender, ErrorOccuredEventArgs args)
                 {
@@ -797,7 +796,7 @@ namespace Pvp.App.ViewModel
         	_dvdMenuItems.Clear();
             DvdMenuVisible = false;
 
-            if (_engine.SourceType == SourceType.DVD)
+            if (_engine.SourceType == SourceType.Dvd)
             {
                 var command = new GenericRelayCommand<NumberedCommand>(
                     nc =>
@@ -1103,7 +1102,7 @@ namespace Pvp.App.ViewModel
                         nc =>
                             {
                                 return nc != null &&
-                                       (_engine.SourceType != SourceType.DVD ||
+                                       (_engine.SourceType != SourceType.Dvd ||
                                         ((_engine.IsAudioStreamEnabled(nc.Number)) && (_engine.UOPS & VALID_UOP_FLAG.UOP_FLAG_Select_Audio_Stream) == 0));
                             });
 
@@ -1535,12 +1534,7 @@ namespace Pvp.App.ViewModel
                 Thread.CurrentThread.CurrentUICulture = ci;
 
                 Messenger.Default.Send(new EventMessage(Event.CurrentCultureChanged));
-
-                if (_mediaControlCreated)
-                {
-                    _engine.OnCultureChanged();
-                }
-
+                
                 RaisePropertyChanged("Language");
             }
         }

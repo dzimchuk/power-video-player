@@ -54,9 +54,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MediaEngine\AspectRatio.cs" />
+    <Compile Include="MediaEngine\CoreInitSizeEventArgs.cs" />
+    <Compile Include="MediaEngine\DestinationRectangleChangedEventArgs.cs" />
+    <Compile Include="MediaEngine\ErrorOccuredEventArgs.cs" />
+    <Compile Include="MediaEngine\FilterGraphs\DvdFilterGraph.cs" />
+    <Compile Include="MediaEngine\FilterGraphs\FilterGraphBase.cs" />
     <Compile Include="MediaEngine\CoreDefinitions.cs" />
-    <Compile Include="MediaEngine\CoreEnums.cs" />
-    <Compile Include="MediaEngine\CoreEventArgs.cs" />
+    <Compile Include="MediaEngine\Renderer.cs" />
+    <Compile Include="MediaEngine\GraphState.cs" />
+    <Compile Include="MediaEngine\MediaSourceType.cs" />
+    <Compile Include="MediaEngine\SourceType.cs" />
+    <Compile Include="MediaEngine\UserDecisionEventArgs.cs" />
     <Compile Include="MediaEngine\DefaultMediaWindow.cs" />
     <Compile Include="MediaEngine\Description\MediaInfo.cs" />
     <Compile Include="MediaEngine\Description\StreamInfo.cs" />
@@ -70,11 +79,21 @@
     <Compile Include="DirectShow\uuids.cs" />
     <Compile Include="DirectShow\vmr.cs" />
     <Compile Include="DirectShow\vmr9.cs" />
-    <Compile Include="MediaEngine\FilterGraph.cs" />
-    <Compile Include="MediaEngine\GraphBuilders\DVDFilterGraphBuilder.cs" />
-    <Compile Include="MediaEngine\GraphBuilders\FilterGraphBuilder.cs" />
-    <Compile Include="MediaEngine\GraphBuilders\RegularFilterGraphBuilder.cs" />
-    <Compile Include="MediaEngine\GraphBuilders\SourceAnalizer.cs" />
+    <Compile Include="MediaEngine\GraphBuilderError.cs" />
+    <Compile Include="MediaEngine\FilterGraphBuilderException.cs" />
+    <Compile Include="MediaEngine\AbortException.cs" />
+    <Compile Include="MediaEngine\IDvdFilterGraph.cs" />
+    <Compile Include="MediaEngine\FilterGraphs\ISourceFilterHandler.cs" />
+    <Compile Include="MediaEngine\FilterGraphs\RegularFilterGraph.cs" />
+    <Compile Include="MediaEngine\Internal\SourceInfo.cs" />
+    <Compile Include="MediaEngine\MessageReceivedEventArgs.cs" />
+    <Compile Include="MediaEngine\SourceFilterHandlerFactory.cs" />
+    <Compile Include="MediaEngine\SourceFilterHandlers\RegularSourceFilterHandler.cs" />
+    <Compile Include="MediaEngine\Util.cs" />
+    <Compile Include="MediaEngine\Internal\FilterGraphBuilder.cs" />
+    <Compile Include="MediaEngine\Internal\FilterGraphBuilderParameters.cs" />
+    <Compile Include="MediaEngine\Internal\SourceAnalizer.cs" />
+    <Compile Include="MediaEngine\IFilterGraph.cs" />
     <Compile Include="MediaEngine\IImageCreator.cs" />
     <Compile Include="MediaEngine\IMediaEngine.cs" />
     <Compile Include="MediaEngine\IMediaWindow.cs" />
@@ -82,9 +101,10 @@
     <Compile Include="MediaEngine\MediaEngine.cs" />
     <Compile Include="MediaEngine\MediaEngineServiceProvider.cs" />
     <Compile Include="MediaEngine\MediaTypeManager.cs" />
-    <Compile Include="MediaEngine\Render\IEnhancedVideoRenderer.cs" />
-    <Compile Include="MediaEngine\Render\IVMR9Windowless.cs" />
-    <Compile Include="MediaEngine\Render\IVMRWindowless.cs" />
+    <Compile Include="MediaEngine\Renderers\IEVR.cs" />
+    <Compile Include="MediaEngine\Renderers\IVMR9Windowless.cs" />
+    <Compile Include="MediaEngine\Renderers\IVMRWindowless.cs" />
+    <Compile Include="MediaEngine\VideoSize.cs" />
     <Compile Include="Native\Com.cs" />
     <Compile Include="Native\GDI.cs" />
     <Compile Include="Native\NoCat.cs" />
@@ -93,15 +113,15 @@
     <Compile Include="Native\WindowsManagement.cs" />
     <Compile Include="Native\WindowsMessages.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="MediaEngine\Render\EVR.cs" />
-    <Compile Include="MediaEngine\Render\IRenderer.cs" />
-    <Compile Include="MediaEngine\Render\RendererBase.cs" />
-    <Compile Include="MediaEngine\Render\VideoRenderer.cs" />
-    <Compile Include="MediaEngine\Render\VMR9Windowed.cs" />
-    <Compile Include="MediaEngine\Render\VMR9Windowless.cs" />
-    <Compile Include="MediaEngine\Render\VMRWindowed.cs" />
-    <Compile Include="MediaEngine\Render\VMRWindowless.cs" />
-    <Compile Include="MediaEngine\Render\WindowedRenderer.cs" />
+    <Compile Include="MediaEngine\Renderers\EVR.cs" />
+    <Compile Include="MediaEngine\IRenderer.cs" />
+    <Compile Include="MediaEngine\Renderers\RendererBase.cs" />
+    <Compile Include="MediaEngine\Renderers\VideoRenderer.cs" />
+    <Compile Include="MediaEngine\Renderers\VMR9Windowed.cs" />
+    <Compile Include="MediaEngine\Renderers\VMR9Windowless.cs" />
+    <Compile Include="MediaEngine\Renderers\VMRWindowed.cs" />
+    <Compile Include="MediaEngine\Renderers\VMRWindowless.cs" />
+    <Compile Include="MediaEngine\Renderers\WindowedRenderer.cs" />
     <Compile Include="MediaEngine\Resources\Resources.Designer.cs">
       <DependentUpon>Resources.resx</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -123,6 +143,10 @@
     <None Include="..\..\Keypairs\ADKeyPair.snk">
       <Link>ADKeyPair.snk</Link>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="MediaEngine\GraphBuilders\" />
+    <Folder Include="MediaEngine\Render\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

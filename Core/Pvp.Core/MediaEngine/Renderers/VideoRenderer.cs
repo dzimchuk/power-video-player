@@ -12,9 +12,9 @@
 
 using System;
 using Pvp.Core.DirectShow;
-using Pvp.Core.MediaEngine.GraphBuilders;
+using Pvp.Core.MediaEngine.Internal;
 
-namespace Pvp.Core.MediaEngine.Render
+namespace Pvp.Core.MediaEngine.Renderers
 {
     internal class VideoRenderer : WindowedRenderer
     {
@@ -27,7 +27,7 @@ namespace Pvp.Core.MediaEngine.Render
         {
             // add the Video Renderer filter to the graph
             int hr = pGraphBuilder.AddFilter(BaseFilter, "Video Renderer");
-            errorFunc(hr, Error.AddVideoRenderer);
+            errorFunc(hr, GraphBuilderError.AddVideoRenderer);
         }
 
         protected override Guid RendererID
@@ -37,7 +37,7 @@ namespace Pvp.Core.MediaEngine.Render
 
         protected override void HandleInstantiationError(Exception e)
         {
-            throw new FilterGraphBuilderException(Error.VideoRenderer, e);
+            throw new FilterGraphBuilderException(GraphBuilderError.VideoRenderer, e);
         }
 
         protected override Guid IID_4DVDGraphInstantiation

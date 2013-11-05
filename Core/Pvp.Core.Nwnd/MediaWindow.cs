@@ -91,7 +91,7 @@ namespace Pvp.Core.Nwnd
             _manager.InvalidateMediaWindow();
         }
 
-        public void Move(ref GDI.RECT rcDest)
+        public void Move(GDI.RECT rcDest)
         {
             WindowsManagement.MoveWindow(Handle, rcDest.left, rcDest.top, rcDest.right - rcDest.left, rcDest.bottom - rcDest.top, true);
         }

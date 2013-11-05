@@ -87,7 +87,7 @@ namespace Pvp.Core.Wpf
 
         private GDI.RECT? _clientRect;
         private GDI.RECT? _windowRect;
-        public void Move(ref GDI.RECT rcDest)
+        public void Move(GDI.RECT rcDest)
         {
             if (_clientRect == null)
             {

@@ -14,10 +14,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Pvp.Core.MediaEngine.GraphBuilders;
 using Pvp.Core.MediaEngine;
 using Pvp.Core.MediaEngine.Description;
 using Pvp.Core.DirectShow;
+using Pvp.Core.MediaEngine.Internal;
 
 namespace Pvp.Core.WindowsForms
 {
@@ -129,7 +129,7 @@ namespace Pvp.Core.WindowsForms
 
         public int AudioStreams 
         {
-            get { return MediaEngine.AudioStreams; }
+            get { return MediaEngine.AudioStreamsCount; }
         }
 
         public int CurrentAudioStream 
@@ -366,7 +366,7 @@ namespace Pvp.Core.WindowsForms
 
         public bool IsResumeDVDEnabled()
         {
-            return MediaEngine.IsResumeDVDEnabled();
+            return MediaEngine.IsResumeDvdEnabled();
         }
 
         public bool IsSubpictureEnabled()
@@ -381,7 +381,7 @@ namespace Pvp.Core.WindowsForms
 
         public bool ResumeDVD()
         {
-            return MediaEngine.ResumeDVD();
+            return MediaEngine.ResumeDvd();
         }
 
         public void ReturnFromSubmenu()
@@ -411,11 +411,6 @@ namespace Pvp.Core.WindowsForms
         public bool DisplayFilterPropPage(IntPtr hParent, string strFilter, bool bDisplay)
         {
             return MediaEngine.DisplayFilterPropPage(hParent, strFilter, bDisplay);
-        }
-
-        public void OnCultureChanged()
-        {
-            MediaEngine.OnCultureChanged();
         }
 
         #endregion

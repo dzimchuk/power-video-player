@@ -11,18 +11,18 @@
  * ***************************************************************************/
 
 using System;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
 using System.Diagnostics;
-using System.Collections;
 using System.Collections.Generic;
 
 namespace Pvp.Core.DirectShow
 {
     [ComVisible(false)]
-    public class DsUtils
+    internal static class DsUtils
     {
-        private static Dictionary<Guid, string> mediaTypeNames;
+        private static readonly Dictionary<Guid, string> mediaTypeNames;
         static DsUtils()
         {
             mediaTypeNames = new Dictionary<Guid, string>();
@@ -41,12 +41,22 @@ namespace Pvp.Core.DirectShow
             mediaTypeNames.Add(MediaType.Video, "Video");
         }
         
-        // If this function finds a matching pin, it returns an IPin interface pointer 
-        // with an outstanding reference count. The caller is responsible for releasing the interface.
-        // bConnected - whether the returned Pin should be connected to some other pin.
-        // nPinsToSkip - how many Pins that match the conditions should be skipped.
-        // Leaving the last two parameters at their default
-        // values is like saying: "Gimme the first unconnected pin".
+        
+        /// <summary>
+        /// Gets the first pin of the specified direction and connection status. You also specify
+        /// how many matching pins should be skipped before a desired pin is returned.
+        /// 
+        /// If this function finds a matching pin, it returns an IPin interface pointer 
+        /// with an outstanding reference count. The caller is responsible for releasing the interface.
+        /// 
+        /// Leaving the last two parameters at their default
+        /// values is like saying: "Gimme the first unconnected pin".
+        /// </summary>
+        /// <param name="pFilter">Filter</param>
+        /// <param name="pinDir">Pin direction</param>
+        /// <param name="bConnected">Whether the returned Pin should be connected to some other pin</param>
+        /// <param name="nPinsToSkip">How many Pins that match the conditions should be skipped</param>
+        /// <returns></returns>
         public static IPin GetPin(IBaseFilter pFilter, PinDirection pinDir, bool bConnected, int nPinsToSkip)
         {
             bool bFound = false;
@@ -93,14 +103,130 @@ namespace Pvp.Core.DirectShow
             return (bFound ? pPin : null);  
         }
 
+        /// <summary>
+        /// Gets the first pin of the specified direction and connection status.
+        /// 
+        /// If this function finds a matching pin, it returns an IPin interface pointer 
+        /// with an outstanding reference count. The caller is responsible for releasing the interface.
+        /// </summary>
+        /// <param name="pFilter">Filter</param>
+        /// <param name="pinDir">Pin direction</param>
+        /// <param name="bConnected">Is pin connected?</param>
+        /// <returns></returns>
         public static IPin GetPin(IBaseFilter pFilter, PinDirection pinDir, bool bConnected)
         {
             return GetPin(pFilter, pinDir, bConnected, 0);
         }
 
+        /// <summary>
+        /// Gets the first unconnected pin of the specified direction.
+        /// 
+        /// If this function finds a matching pin, it returns an IPin interface pointer 
+        /// with an outstanding reference count. The caller is responsible for releasing the interface.
+        /// </summary>
+        /// <param name="pFilter">Filter</param>
+        /// <param name="pinDir">Pin direction</param>
+        /// <returns></returns>
         public static IPin GetPin(IBaseFilter pFilter, PinDirection pinDir)
         {
             return GetPin(pFilter, pinDir, false);
+        }
+
+        /// <summary>
+        /// Gets the first pin of the specified direction that supports specified media types.
+        /// 
+        /// If this function finds a matching pin, it returns an IPin interface pointer 
+        /// with an outstanding reference count. The caller is responsible for releasing the interface.
+        /// </summary>
+        /// <param name="pFilter">Filter</param>
+        /// <param name="pinDir">Pin direction</param>
+        /// <param name="mediaTypes">Supported media types</param>
+        /// <param name="searchConnected">Search connected pins in addition to disconnected ones</param>
+        /// <param name="disconnect">Disconnect a connected pin if it satifies the conditions and return it</param>
+        /// <returns></returns>
+        public static IPin GetPin(IBaseFilter pFilter, PinDirection pinDir, Guid[] mediaTypes, bool searchConnected, bool disconnect)
+        {
+            IPin pPin = null;
+            int nSkip = 0;
+
+            while ((pPin = GetPin(pFilter, pinDir, false, nSkip)) != null)
+            {
+                if (mediaTypes.Any(t => IsMediaTypeSupported(pPin, t) == 0))
+                {
+                    break;
+                }
+                
+                nSkip++;
+                Marshal.ReleaseComObject(pPin);
+                pPin = null;
+            }
+
+            if (pPin == null && searchConnected)
+            {
+                // let's try connected pins
+                nSkip = 0;
+                while ((pPin = GetPin(pFilter, pinDir, true, nSkip)) != null)
+                {
+                    if (mediaTypes.Any(t => IsMediaTypeSupported(pPin, t) == 0))
+                    {
+                        if (disconnect)
+                        {
+                            FilterInfo fInfo = new FilterInfo();
+                            var hr = pFilter.QueryFilterInfo(out fInfo);
+                            if (DsHlp.SUCCEEDED(hr))
+                            {
+                                // The FILTER_INFO structure holds a pointer to the Filter Graph
+                                // Manager, with a reference count that must be released.
+                                if (fInfo.pGraph != null)
+                                {
+                                    Disconnect(fInfo.pGraph, pPin);
+                                    Marshal.ReleaseComObject(fInfo.pGraph);
+                                }
+                            }
+                        }
+
+                        break;
+                    }
+
+                    nSkip++;
+                    Marshal.ReleaseComObject(pPin);
+                    pPin = null;
+                }
+            }
+
+            return pPin;
+        }
+
+        /// <summary>
+        /// Gets the first pin (either connected or disconnected) of the specified direction that supports specified media types.
+        /// If a matching connected filter is found, it is returned but not disconnected.
+        /// 
+        /// If this function finds a matching pin, it returns an IPin interface pointer 
+        /// with an outstanding reference count. The caller is responsible for releasing the interface.
+        /// </summary>
+        /// <param name="pFilter">Filter</param>
+        /// <param name="pinDir">Pin direction</param>
+        /// <param name="mediaTypes">Supported media types</param>
+        /// <param name="searchConnected">Search connected pins in addition to disconnected ones</param>
+        /// <returns></returns>
+        public static IPin GetPin(IBaseFilter pFilter, PinDirection pinDir, Guid[] mediaTypes, bool searchConnected)
+        {
+            return GetPin(pFilter, pinDir, mediaTypes, searchConnected, false);
+        }
+
+        /// <summary>
+        /// Gets the first unconnected pin of the specified direction that supports specified media types.
+        /// 
+        /// If this function finds a matching pin, it returns an IPin interface pointer 
+        /// with an outstanding reference count. The caller is responsible for releasing the interface.
+        /// </summary>
+        /// <param name="pFilter">Filter</param>
+        /// <param name="pinDir">Pin direction</param>
+        /// <param name="mediaTypes">Supported media types</param>
+        /// <returns></returns>
+        public static IPin GetPin(IBaseFilter pFilter, PinDirection pinDir, Guid[] mediaTypes)
+        {
+            return GetPin(pFilter, pinDir, mediaTypes, false);
         }
 
         public static bool AddToRot(object pUnkGraph, out int pdwRegister)
@@ -165,15 +291,18 @@ namespace Pvp.Core.DirectShow
             [MarshalAs(UnmanagedType.LPWStr)] string delim,
             [MarshalAs(UnmanagedType.LPWStr)] string item, out IMoniker ppmk);
 
-        public static int EnumFilters(IGraphBuilder pGraph, ArrayList aFilters) // just getting their names here
+        public static int EnumFilters(IGraphBuilder pGraph, out IEnumerable<string> aFilters) // just getting their names here
         {
-            aFilters.Clear();
+            aFilters = null;
             IEnumFilters pEnum = null;
             IBaseFilter pFilter;
             int cFetched;
 
             int hr = pGraph.EnumFilters(out pEnum);
-            if (DsHlp.FAILED(hr)) return hr;
+            if (DsHlp.FAILED(hr)) 
+                return hr;
+
+            var result = new List<string>();
 
             while(pEnum.Next(1, out pFilter, out cFetched) == DsHlp.S_OK)
             {
@@ -181,11 +310,11 @@ namespace Pvp.Core.DirectShow
                 hr = pFilter.QueryFilterInfo(out fInfo);
                 if (DsHlp.FAILED(hr))
                 {
-                    aFilters.Add("Could not get the filter info");
+                    result.Add("Could not get the filter info");
                     continue;  // Maybe the next one will work.
                 }
 
-                aFilters.Add(fInfo.achName);
+                result.Add(fInfo.achName);
                 
                 // The FILTER_INFO structure holds a pointer to the Filter Graph
                 // Manager, with a reference count that must be released.
@@ -194,6 +323,8 @@ namespace Pvp.Core.DirectShow
                 Marshal.ReleaseComObject(pFilter);
             }
             Marshal.ReleaseComObject(pEnum);
+
+            aFilters = result;
             return DsHlp.S_OK;
         }
 
@@ -400,6 +531,18 @@ namespace Pvp.Core.DirectShow
             pGraphBuilder.Disconnect(pPin);
         }
 
+        public static void Disconnect(IFilterGraph pFilterGraph, IPin pPin)
+        {
+            IPin pInputPin = null;
+            if (pPin.ConnectedTo(out pInputPin) == DsHlp.S_OK)
+            {
+                pFilterGraph.Disconnect(pInputPin);
+                Marshal.ReleaseComObject(pInputPin);
+            }
+
+            pFilterGraph.Disconnect(pPin);
+        }
+
         /// <summary>
         /// Get the first pin that satisfies conditions on _any_ filter in the graph.
         /// The caller is responsible for releasing an outstanding reference to the pin if one was obtained.
@@ -471,6 +614,109 @@ namespace Pvp.Core.DirectShow
             Marshal.ReleaseComObject(pEnumFilters);
 
             return pPin;
+        }
+
+        public static IBaseFilter GetFilter(Guid clsId, bool throwOnError)
+        {
+            IBaseFilter filter = null;
+            object comobj = null;
+            try
+            {
+                Type type = Type.GetTypeFromCLSID(clsId, true);
+                comobj = Activator.CreateInstance(type);
+                filter = (IBaseFilter)comobj;
+                comobj = null; // important! (see the finally block)
+            }
+            catch
+            {
+                if (throwOnError)
+                {
+                    throw;
+                }
+            }
+            finally
+            {
+                if (comobj != null)
+                    while (Marshal.ReleaseComObject(comobj) > 0) { }
+            }
+
+            return filter;
+        }
+
+        public static void RemoveRedundantFilters(IBaseFilter sourceFilter, IGraphBuilder graphBuilder)
+        {
+            IEnumFilters pEnumFilters = null;
+            IBaseFilter pFilter = null;
+            int cFetched;
+            int hr;
+
+            bool bCallAgain = false;
+
+            // get information about the source filter (its name)
+            FilterInfo fSourceInfo = new FilterInfo();
+            if (sourceFilter != null)
+            {
+                hr = sourceFilter.QueryFilterInfo(out fSourceInfo);
+                if (DsHlp.SUCCEEDED(hr))
+                {
+                    if (fSourceInfo.pGraph != null)
+                        Marshal.ReleaseComObject(fSourceInfo.pGraph);
+                }
+                else
+                    fSourceInfo.achName = null;
+            }
+
+            // let's start enumerating filters
+            hr = graphBuilder.EnumFilters(out pEnumFilters);
+            if (DsHlp.FAILED(hr)) return;
+
+            while ((pEnumFilters.Next(1, out pFilter, out cFetched) == DsHlp.S_OK))
+            {
+                FilterInfo fInfo = new FilterInfo();
+                hr = pFilter.QueryFilterInfo(out fInfo);
+                if (DsHlp.FAILED(hr))
+                {
+                    Marshal.ReleaseComObject(pFilter);
+                    continue;  // don't touch this one
+                }
+
+                // The FILTER_INFO structure holds a pointer to the Filter Graph
+                // Manager, with a reference count that must be released.
+                if (fInfo.pGraph != null)
+                    Marshal.ReleaseComObject(fInfo.pGraph);
+
+                if (fInfo.achName == null || fSourceInfo.achName == null)
+                {
+                    Marshal.ReleaseComObject(pFilter);
+                    continue;
+                }
+
+                if (fInfo.achName == fSourceInfo.achName) // source filter
+                {
+                    Marshal.ReleaseComObject(pFilter);
+                    continue;
+                }
+
+                IPin pPin = DsUtils.GetPin(pFilter, PinDirection.Input, true, 0);
+                if (pPin == null)
+                {
+                    // this filter does not have connected input pins
+                    graphBuilder.RemoveFilter(pFilter);
+                    Marshal.ReleaseComObject(pFilter);
+                    bCallAgain = true;
+                    break;
+                }
+                else
+                {
+                    // this filter is connected, let's try another one
+                    Marshal.ReleaseComObject(pPin);
+                    Marshal.ReleaseComObject(pFilter);
+                }
+            }
+
+            Marshal.ReleaseComObject(pEnumFilters);
+            if (bCallAgain)
+                RemoveRedundantFilters(sourceFilter, graphBuilder);
         }
     }
 }
