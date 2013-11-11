@@ -12,11 +12,12 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using Pvp.Core.DirectShow;
 using Pvp.Core.MediaEngine.Description;
 using Pvp.Core.MediaEngine.FilterGraphs;
 
-namespace Pvp.Core.MediaEngine.Internal
+namespace Pvp.Core.MediaEngine
 {
     public delegate void FailedStreamsHandler(IList<StreamInfo> streams);
 
@@ -99,14 +100,14 @@ namespace Pvp.Core.MediaEngine.Internal
             }
             else
             {
-                var sourceType = SourceAnalizer.GetSourceType(source);
-                switch (sourceType.Type)
+                var sourceType = GetSourceTypeByExtension(source);
+                switch (sourceType)
                 {
                     case SourceType.Basic:
                     case SourceType.Asf:
                     case SourceType.Mkv:
                     case SourceType.Flv:
-                        filterGraph = new RegularFilterGraph(sourceType.Type, sourceType.ClsId);
+                        filterGraph = new RegularFilterGraph(sourceType, Guid.Empty);
                         break;
                     case SourceType.Dvd:
                         filterGraph = new DvdFilterGraph();
@@ -118,6 +119,35 @@ namespace Pvp.Core.MediaEngine.Internal
             }
 
             return filterGraph;
+        }
+
+        private static SourceType GetSourceTypeByExtension(string source)
+        {
+            var sourceType = SourceType.Basic;
+
+            var extension = Path.GetExtension(source);
+            if (extension != null)
+            {
+                var ext = extension.Trim().ToLowerInvariant();
+                if (ext.EndsWith("avi") || ext.EndsWith("ivx") || ext.EndsWith("mpg")
+                    || ext.EndsWith("peg") || ext.EndsWith("mov") || ext.EndsWith("vob")
+                    || ext.EndsWith("mp4") || ext.EndsWith("3gp") || ext.EndsWith("3g2"))
+                    sourceType = SourceType.Basic;
+                else if (ext.EndsWith("asf") || ext.EndsWith("wmv"))
+                    sourceType = SourceType.Asf;
+                else if (ext.EndsWith("ifo"))
+                    sourceType = SourceType.Dvd;
+                else if (ext.EndsWith("mkv"))
+                    sourceType = SourceType.Mkv;
+                else if (ext.EndsWith("flv"))
+                    sourceType = SourceType.Flv;
+            }
+            else
+            {
+                sourceType = SourceType.Unknown;
+            }
+
+            return sourceType;
         }
     }
 }

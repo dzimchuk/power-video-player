@@ -5,7 +5,6 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using Pvp.Core.DirectShow;
 using Pvp.Core.MediaEngine.Description;
-using Pvp.Core.MediaEngine.Internal;
 using Pvp.Core.Native;
 
 namespace Pvp.Core.MediaEngine.FilterGraphs

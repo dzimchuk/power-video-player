@@ -28,6 +28,7 @@ namespace Pvp.App.ViewModel
                                "qt",
                                "vob",
                                "wmv",
+                               "m2ts",
                                "3gp",
                                "3g2"
                            };

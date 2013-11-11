@@ -12,7 +12,6 @@
 
 using System;
 using Pvp.Core.DirectShow;
-using Pvp.Core.MediaEngine.Internal;
 
 namespace Pvp.Core.MediaEngine.Renderers
 {

@@ -2,7 +2,6 @@
 using System.Runtime.InteropServices;
 using Pvp.Core.DirectShow;
 using Pvp.Core.MediaEngine.Description;
-using Pvp.Core.MediaEngine.Internal;
 using Pvp.Core.MediaEngine.Renderers;
 using Pvp.Core.Native;
 

@@ -85,14 +85,12 @@
     <Compile Include="MediaEngine\IDvdFilterGraph.cs" />
     <Compile Include="MediaEngine\FilterGraphs\ISourceFilterHandler.cs" />
     <Compile Include="MediaEngine\FilterGraphs\RegularFilterGraph.cs" />
-    <Compile Include="MediaEngine\Internal\SourceInfo.cs" />
     <Compile Include="MediaEngine\MessageReceivedEventArgs.cs" />
     <Compile Include="MediaEngine\SourceFilterHandlerFactory.cs" />
     <Compile Include="MediaEngine\SourceFilterHandlers\RegularSourceFilterHandler.cs" />
     <Compile Include="MediaEngine\Util.cs" />
-    <Compile Include="MediaEngine\Internal\FilterGraphBuilder.cs" />
-    <Compile Include="MediaEngine\Internal\FilterGraphBuilderParameters.cs" />
-    <Compile Include="MediaEngine\Internal\SourceAnalizer.cs" />
+    <Compile Include="MediaEngine\FilterGraphBuilder.cs" />
+    <Compile Include="MediaEngine\FilterGraphBuilderParameters.cs" />
     <Compile Include="MediaEngine\IFilterGraph.cs" />
     <Compile Include="MediaEngine\IImageCreator.cs" />
     <Compile Include="MediaEngine\IMediaEngine.cs" />
@@ -145,8 +143,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="MediaEngine\GraphBuilders\" />
-    <Folder Include="MediaEngine\Render\" />
+    <Folder Include="MediaEngine\Internal\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
