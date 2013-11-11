@@ -16,7 +16,6 @@ using System.Windows.Forms;
 using System.Drawing;
 using System.IO;
 using Pvp.Core.MediaEngine;
-using Pvp.Core.MediaEngine.Internal;
 using Pvp.Core.Native;
 using Dzimchuk.AUI;
 using Pvp.Core.MediaEngine.Description;

@@ -17,7 +17,6 @@ using System.Text;
 using Pvp.Core.MediaEngine;
 using Pvp.Core.MediaEngine.Description;
 using Pvp.Core.DirectShow;
-using Pvp.Core.MediaEngine.Internal;
 
 namespace Pvp.Core.WindowsForms
 {

@@ -16,7 +16,6 @@ using Pvp.Core.DirectShow;
 using Pvp.Core.MediaEngine;
 using Pvp.Core.MediaEngine.Description;
 using System.Windows;
-using Pvp.Core.MediaEngine.Internal;
 
 namespace Pvp.Core.Wpf
 {

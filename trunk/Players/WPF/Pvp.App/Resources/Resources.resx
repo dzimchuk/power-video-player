@@ -777,4 +777,7 @@
   <data name="failedstreams_msg2" xml:space="preserve">
     <value>Most likely the streams were not rendered because necessary decoders are not installed.</value>
   </data>
+  <data name="file_type_m2ts" xml:space="preserve">
+    <value>Blu-ray Disc Audio-Video MPEG-2 Transport Stream</value>
+  </data>
 </root>

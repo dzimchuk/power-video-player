@@ -777,4 +777,7 @@
   <data name="failedstreams_msg2" xml:space="preserve">
     <value>Наиболее вероятно, что необходимые декодеры не установлены в системе.</value>
   </data>
+  <data name="file_type_m2ts" xml:space="preserve">
+    <value>Blu-ray Disc Audio-Video MPEG-2 Transport Stream</value>
+  </data>
 </root>
