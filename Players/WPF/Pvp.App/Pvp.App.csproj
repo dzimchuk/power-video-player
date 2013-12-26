@@ -111,8 +111,15 @@
     <Compile Include="Service\MouseWheelInterpreter.cs" />
     <Compile Include="Service\SelectedKeyCombinationItemResolver.cs" />
     <Compile Include="SupportedLanguage.cs" />
-    <Compile Include="Util\FileAssociator.cs" />
-    <Compile Include="Util\FileAssociatorW6.cs" />
+    <Compile Include="Util\FileTypes\AppRegisterer.cs" />
+    <Compile Include="Util\FileTypes\DefaultProgramsFileAssociator.cs" />
+    <Compile Include="Util\FileTypes\DefaultProgramsFileAssociator8.cs" />
+    <Compile Include="Util\FileTypes\DocTypeInfo.cs" />
+    <Compile Include="Util\FileTypes\FileAssociator.cs" />
+    <Compile Include="Util\FileTypes\FileAssociatorFactory.cs" />
+    <Compile Include="Util\FileTypes\IDefaultProgramsFileAssociator.cs" />
+    <Compile Include="Util\FileTypes\IFileAssociator.cs" />
+    <Compile Include="Util\FileTypes\RegistryHelper.cs" />
     <Compile Include="Util\WindowCustomizer.cs" />
     <Compile Include="ViewModel\AboutAppViewModel.cs" />
     <Compile Include="ViewModel\CommandConstants.cs" />
