@@ -12,6 +12,7 @@ using Ninject;
 using Pvp.App.Composition;
 using Pvp.App.Messaging;
 using Pvp.App.Util;
+using Pvp.App.Util.FileTypes;
 using Pvp.App.View;
 using Pvp.App.ViewModel;
 
@@ -157,7 +158,7 @@ namespace Pvp.App
             }
         }
 
-        private static IEnumerable<FileAssociator.DocTypeInfo> GetTypesInfo()
+        private static IEnumerable<DocTypeInfo> GetTypesInfo()
         {
             string strExe = Assembly.GetExecutingAssembly().Location;
             string command = "\"" + strExe + "\" \"%L\"";
@@ -166,7 +167,7 @@ namespace Pvp.App
             return (from t in FileTypes.All
                     let description = Pvp.App.Resources.Resources.ResourceManager.GetString(string.Format("file_type_{0}", t).ToLowerInvariant())
                     select
-                        new FileAssociator.DocTypeInfo(string.Format(".{0}", t), description.Substring(description.IndexOf('-') + 2), icon, command, command,
+                        new DocTypeInfo(string.Format(".{0}", t), description.Substring(description.IndexOf('-') + 2), icon, command, command,
                                                        true)).ToList();
         }
 

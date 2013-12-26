@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Pvp.App.Util;
+using Pvp.App.Util.FileTypes;
 using Pvp.App.ViewModel.Settings;
+using IFileAssociator = Pvp.App.ViewModel.Settings.IFileAssociator;
 
 namespace Pvp.App.Service
 {
@@ -13,7 +14,7 @@ namespace Pvp.App.Service
 
         public void SetStatus(IEnumerable<FileTypeItem> items)
         {
-            using (FileAssociator fa = FileAssociator.GetFileAssociator(DocTypePrefix, ProgramName))
+            using (var fa = FileAssociatorFactory.GetFileAssociator(DocTypePrefix, ProgramName))
             {
                 foreach (var item in items)
                 {
@@ -24,15 +25,23 @@ namespace Pvp.App.Service
 
         public void Associate(IEnumerable<FileTypeItem> items)
         {
-            using (FileAssociator fa = FileAssociator.GetFileAssociator(DocTypePrefix, ProgramName))
+            using (var fa = FileAssociatorFactory.GetFileAssociator(DocTypePrefix, ProgramName))
             {
                 foreach (var item in items)
                 {
-                    fa.Associate(Normalize(item.Extension), item.Selected);
+                    var ext = Normalize(item.Extension);
+                    if (item.Selected)
+                    {
+                        fa.Associate(ext);
+                    }
+                    else
+                    {
+                        fa.UnAssociate(ext);
+                    }
                 }
-            }
 
-            FileAssociator.NotifyShell();
+                fa.NotifyShell();
+            }
         }
 
         private string Normalize(string extension)
@@ -45,9 +54,9 @@ namespace Pvp.App.Service
                              string openCommand,
                              string localizedAppName,
                              string localizedAppDescription,
-                             IEnumerable<FileAssociator.DocTypeInfo> docTypes)
+                             IEnumerable<DocTypeInfo> docTypes)
         {
-            using (FileAssociator fa = FileAssociator.GetFileAssociator(DocTypePrefix, ProgramName))
+            using (var fa = FileAssociatorFactory.GetAppRegisterer(DocTypePrefix, ProgramName))
             {
                 fa.Register(regPath, defaultIcon, openCommand, localizedAppName, localizedAppDescription, docTypes);
             }
@@ -55,7 +64,7 @@ namespace Pvp.App.Service
 
         public void Unregister()
         {
-            using (FileAssociator fa = FileAssociator.GetFileAssociator(DocTypePrefix, ProgramName))
+            using (var fa = FileAssociatorFactory.GetAppRegisterer(DocTypePrefix, ProgramName))
             {
                 fa.Unregister();
             }

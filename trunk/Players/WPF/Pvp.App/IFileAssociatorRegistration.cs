@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Pvp.App.Util;
+using Pvp.App.Util.FileTypes;
 
 namespace Pvp.App
 {
@@ -12,7 +12,7 @@ namespace Pvp.App
                       string openCommand,
                       string localizedAppName,
                       string localizedAppDescription,
-                      IEnumerable<FileAssociator.DocTypeInfo> docTypes);
+                      IEnumerable<DocTypeInfo> docTypes);
 
         void Unregister();
     }
