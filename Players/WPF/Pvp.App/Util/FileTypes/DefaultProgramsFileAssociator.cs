@@ -6,7 +6,7 @@ using Pvp.Core.Native;
 
 namespace Pvp.App.Util.FileTypes
 {
-    internal class DefaultProgramsFileAssociator : IDefaultProgramsFileAssociator
+    internal class DefaultProgramsFileAssociator : IFileAssociator
     {
         private readonly Lazy<Shell.IApplicationAssociationRegistration> _pAppAssocReg = 
             new Lazy<Shell.IApplicationAssociationRegistration>(GetInstance<Shell.IApplicationAssociationRegistration>, true);
@@ -67,6 +67,8 @@ namespace Pvp.App.Util.FileTypes
             }
         }
 
+        public bool CanShowExternalUI { get { return true; } }
+
         public string DocTypePrefix
         {
             get { return _docTypePrefix; }
@@ -124,9 +126,9 @@ namespace Pvp.App.Util.FileTypes
             Shell.SHChangeNotify(Shell.SHCNE_ASSOCCHANGED, Shell.SHCNF_IDLIST, IntPtr.Zero, IntPtr.Zero);
         }
 
-        public bool LaunchAdvancedAssociationUI(string appName)
+        public bool ShowExternalUI()
         {
-            return _pAppAssocRegUi.Value.LaunchAdvancedAssociationUI(appName) == S_OK;
+            return _pAppAssocRegUi.Value.LaunchAdvancedAssociationUI(_appName) == S_OK;
         }
 
         private string SanatePreviousApp(string prevApp, string ext)

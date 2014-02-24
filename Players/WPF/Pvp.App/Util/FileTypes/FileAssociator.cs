@@ -14,6 +14,11 @@ namespace Pvp.App.Util.FileTypes
             _appName = appName;
         }
 
+        public bool CanShowExternalUI
+        {
+            get { return false; }
+        }
+
         public string DocTypePrefix
         {
             get { return _docTypePrefix; }
@@ -56,6 +61,11 @@ namespace Pvp.App.Util.FileTypes
         public void NotifyShell()
         {
             Shell.SHChangeNotify(Shell.SHCNE_ASSOCCHANGED, Shell.SHCNF_IDLIST, IntPtr.Zero, IntPtr.Zero);
+        }
+
+        public bool ShowExternalUI()
+        {
+            throw new InvalidOperationException();
         }
 
         public void Dispose()
