@@ -20,6 +20,7 @@
         <view:MouseWheelActionToBooleanConverter x:Key="MouseWheelActionToBooleanConverter" />
         <view:KeyCombinationTranslateConverter x:Key="KeyCombinationTranslateConverter" />
         <view:FileTypeTranslateConverter x:Key="FileTypeTranslateConverter" />
+        <view:BooleanToVisibilityValueConverter x:Key="BooleanToVisibiltyConverter" />
     </Window.Resources>
     
     <Grid>
@@ -145,33 +146,41 @@
             </TabItem>
 
             <TabItem Header="{x:Static res:Resources.settings_filetypes_caption}" DataContext="{Binding FileTypesSettingsViewModel}">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
+                <StackPanel>
+                    <Grid Visibility="{Binding ShowFileTypes, Mode=OneTime, Converter={StaticResource BooleanToVisibiltyConverter}}">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
 
-                    <TextBlock Text="{x:Static res:Resources.settings_filetypes_description}" Margin="5,5,5,10" TextWrapping="Wrap" />
-                    
-                    <ListBox Grid.Row="1" ItemsSource="{Binding Items, Mode=OneWay}" Margin="5,0,5,0">
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel>
-                                    <CheckBox Content="{Binding Extension, Converter={StaticResource FileTypeTranslateConverter}}"
-                                              IsChecked="{Binding Selected, Mode=TwoWay}"/>
-                                </StackPanel>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
-                    
-                    <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
-                        <Button Content="{x:Static res:Resources.settings_filetypes_select_all}" Padding="10,2,10,2" 
-                                Margin="10,10,10,5" Command="{Binding SelectAllCommand}"/>
-                        <Button Content="{x:Static res:Resources.settings_filetypes_clear_all}" Padding="10,2,10,2" 
-                                Margin="10,10,10,5" Command="{Binding ClearAllCommand}"/>
-                    </StackPanel>
-                </Grid>
+                        <TextBlock Text="{x:Static res:Resources.settings_filetypes_description}" Margin="5,5,5,10"
+                                   TextWrapping="Wrap" />
+
+                        <ListBox Grid.Row="1" ItemsSource="{Binding Items, Mode=OneWay}" Margin="5,0,5,0">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel>
+                                        <CheckBox
+                                            Content="{Binding Extension, Converter={StaticResource FileTypeTranslateConverter}}"
+                                            IsChecked="{Binding Selected, Mode=TwoWay}" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+
+                        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
+                            <Button Content="{x:Static res:Resources.settings_filetypes_select_all}" Padding="10,2,10,2"
+                                    Margin="10,10,10,5" Command="{Binding SelectAllCommand}" />
+                            <Button Content="{x:Static res:Resources.settings_filetypes_clear_all}" Padding="10,2,10,2"
+                                    Margin="10,10,10,5" Command="{Binding ClearAllCommand}" />
+                        </StackPanel>
+                    </Grid>
+                    <Button Content="{x:Static res:Resources.settings_show_external_ui_text}"
+                            Visibility="{Binding CanShowExternalUI, Mode=OneTime, Converter={StaticResource BooleanToVisibiltyConverter}}"
+                            HorizontalAlignment="Center" VerticalAlignment="Center" Padding="15,5,15,5" Margin="0,100,0,0"
+                            Command="{Binding ShowExternalUICommand}"/>
+                </StackPanel>
             </TabItem>
         </TabControl>
         

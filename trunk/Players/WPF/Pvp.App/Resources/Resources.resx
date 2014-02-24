@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="about_copyright" xml:space="preserve">
-    <value>Copyright 2004-2012 - Andrei Dzimchuk</value>
+    <value>Copyright 2004-2014 - Andrei Dzimchuk</value>
   </data>
   <data name="about_pvp" xml:space="preserve">
     <value>About PVP</value>
@@ -779,5 +779,11 @@
   </data>
   <data name="file_type_m2ts" xml:space="preserve">
     <value>Blu-ray Disc Audio-Video MPEG-2 Transport Stream</value>
+  </data>
+  <data name="settings_show_external_ui_text" xml:space="preserve">
+    <value>Show Default Programs Panel</value>
+  </data>
+  <data name="settings_launch_external_ui_error" xml:space="preserve">
+    <value>Failed to open Default Programs Panel. Please make sure you have properly registered PVP by launching it from a command prompt with the following parameter: -regapp</value>
   </data>
 </root>

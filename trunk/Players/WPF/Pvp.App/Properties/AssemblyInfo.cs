@@ -10,9 +10,9 @@ using System.Windows;
 [assembly: AssemblyTitle("Power Video Player")]
 [assembly: AssemblyDescription("Video/DVD player")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Andrei Dzimchuk")]
 [assembly: AssemblyProduct("Power Video Player")]
-[assembly: AssemblyCopyright("Copyright 2004-2013 - Andrei Dzimchuk")]
+[assembly: AssemblyCopyright("Copyright 2004-2014 - Andrei Dzimchuk")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="about_copyright" xml:space="preserve">
-    <value>Copyright 2004-2012 - Andrei Dzimchuk</value>
+    <value>Copyright 2004-2014 - Andrei Dzimchuk</value>
   </data>
   <data name="about_pvp" xml:space="preserve">
     <value>О программе</value>
@@ -779,5 +779,11 @@
   </data>
   <data name="file_type_m2ts" xml:space="preserve">
     <value>Blu-ray Disc Audio-Video MPEG-2 Transport Stream</value>
+  </data>
+  <data name="settings_show_external_ui_text" xml:space="preserve">
+    <value>Открыть панель настройки программ по умолчанию</value>
+  </data>
+  <data name="settings_launch_external_ui_error" xml:space="preserve">
+    <value>Произошла ошибка при открытии панели настройки программ по умолчанию. Пожалуйста, убедитесь, что Вы зарегистрировали PVP, запустив его из командной строки с параметром: -regapp</value>
   </data>
 </root>

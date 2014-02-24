@@ -44,6 +44,36 @@ namespace Pvp.App.Service
             }
         }
 
+        public bool CanAssociate
+        {
+            get
+            {
+                using (var fa = FileAssociatorFactory.GetFileAssociator(DocTypePrefix, ProgramName))
+                {
+                    return fa.CanAssociate;
+                }
+            }
+        }
+
+        public bool CanShowExternalUI
+        {
+            get
+            {
+                using (var fa = FileAssociatorFactory.GetFileAssociator(DocTypePrefix, ProgramName))
+                {
+                    return fa.CanShowExternalUI;
+                }
+            }
+        }
+
+        public bool ShowExternalUI()
+        {
+            using (var fa = FileAssociatorFactory.GetFileAssociator(DocTypePrefix, ProgramName))
+            {
+                return fa.ShowExternalUI();
+            }
+        }
+
         private string Normalize(string extension)
         {
             return extension.StartsWith(".") ? extension : string.Format(".{0}", extension);
