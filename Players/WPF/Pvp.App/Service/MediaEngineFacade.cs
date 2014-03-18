@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Pvp.Core.MediaEngine;
 using Pvp.Core.Wpf;
@@ -353,6 +354,20 @@ namespace Pvp.App.Service
             return _mediaControl.DisplayFilterPropPage(hParent, strFilter, bDisplay);
         }
 
+        public IEnumerable<SelectableStream> GetSelectableStreams(string filterName)
+        {
+            return _mediaControl.GetSelectableStreams(filterName);
+        }
+
+        public bool IsStreamSelected(string filterName, int index)
+        {
+            return _mediaControl.IsStreamSelected(filterName, index);
+        }
+
+        public void SelectStream(string filterName, int index)
+        {
+            _mediaControl.SelectStream(filterName, index);
+        }
         #endregion
     }
 }

@@ -726,6 +726,23 @@ namespace Pvp.Core.MediaEngine
             return DisplayFilterPropPage(hParent, GetFilterName(nFilterNum), bDisplay);
         }
 
+        public IEnumerable<SelectableStream> GetSelectableStreams(string filterName)
+        {
+            return _filterGraph != null ? _filterGraph.GetSelectableStreams(filterName) : null;
+        }
+
+        public bool IsStreamSelected(string filterName, int index)
+        {
+            return _filterGraph != null && _filterGraph.IsStreamSelected(filterName, index);
+        }
+
+        public void SelectStream(string filterName, int index)
+        {
+            if (_filterGraph == null)
+                return;
+
+            _filterGraph.SelectStream(filterName, index);
+        }
         #endregion
 
         #region Internal stuff

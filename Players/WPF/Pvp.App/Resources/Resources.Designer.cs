@@ -1339,6 +1339,15 @@ namespace Pvp.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Properties.
+        /// </summary>
+        public static string mi_properties {
+            get {
+                return ResourceManager.GetString("mi_properties", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Repeat.
         /// </summary>
         public static string mi_repeat {

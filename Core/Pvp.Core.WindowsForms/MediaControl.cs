@@ -412,6 +412,21 @@ namespace Pvp.Core.WindowsForms
             return MediaEngine.DisplayFilterPropPage(hParent, strFilter, bDisplay);
         }
 
+        public IEnumerable<SelectableStream> GetSelectableStreams(string filterName)
+        {
+            return MediaEngine.GetSelectableStreams(filterName);
+        }
+
+        public bool IsStreamSelected(string filterName, int index)
+        {
+            return MediaEngine.IsStreamSelected(filterName, index);
+        }
+
+        public void SelectStream(string filterName, int index)
+        {
+            MediaEngine.SelectStream(filterName, index);
+        }
+
         #endregion
     }
 }

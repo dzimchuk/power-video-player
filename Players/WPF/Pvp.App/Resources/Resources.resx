@@ -786,4 +786,7 @@
   <data name="settings_launch_external_ui_error" xml:space="preserve">
     <value>Failed to open Default Programs Panel. Please make sure you have properly registered PVP by launching it from a command prompt with the following parameter: -regapp</value>
   </data>
+  <data name="mi_properties" xml:space="preserve">
+    <value>Properties</value>
+  </data>
 </root>

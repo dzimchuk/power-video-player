@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Pvp.Core.MediaEngine.Description;
 using Pvp.Core.Native;
 
@@ -48,5 +49,8 @@ namespace Pvp.Core.MediaEngine
         event EventHandler PlayBackComplete;
         event EventHandler ErrorAbort;
         event FailedStreamsHandler FailedStreamsAvailable;
+        IEnumerable<SelectableStream> GetSelectableStreams(string filterName);
+        bool IsStreamSelected(string filterName, int index);
+        void SelectStream(string filterName, int index);
     }
 }

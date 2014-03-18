@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using GalaSoft.MvvmLight.Command;
-using Pvp.App.Util;
 
-namespace Pvp.App.ViewModel
+namespace Pvp.App.Util
 {
     /// <summary>
     /// This class will help hook up a workaround for context menu (see Pvp.App.Util.BoundCommand).

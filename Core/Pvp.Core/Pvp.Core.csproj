@@ -64,7 +64,11 @@
     <Compile Include="MediaEngine\Renderer.cs" />
     <Compile Include="MediaEngine\GraphState.cs" />
     <Compile Include="MediaEngine\MediaSourceType.cs" />
+    <Compile Include="MediaEngine\SelectableStream.cs" />
+    <Compile Include="MediaEngine\SourceFilterHandlers\IAudioStreamHandler.cs" />
     <Compile Include="MediaEngine\SourceType.cs" />
+    <Compile Include="MediaEngine\StreamHandlers\SimpleAudioStreamHandler.cs" />
+    <Compile Include="MediaEngine\StreamHandlers\AudioStreamHandlerFactory.cs" />
     <Compile Include="MediaEngine\UserDecisionEventArgs.cs" />
     <Compile Include="MediaEngine\DefaultMediaWindow.cs" />
     <Compile Include="MediaEngine\Description\MediaInfo.cs" />
@@ -142,9 +146,7 @@
       <Link>ADKeyPair.snk</Link>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="MediaEngine\Internal\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

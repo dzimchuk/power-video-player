@@ -1,11 +1,14 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30110.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{6B228E9F-22B3-4347-867B-F33FF44B8F00}"
 	ProjectSection(SolutionItems) = preProject
 		features.TXT = features.TXT
 		history.TXT = history.TXT
 		license.rtf = license.rtf
 		license.txt = license.txt
+		Power Video Player.sln.DotSettings = Power Video Player.sln.DotSettings
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{5F9B37B0-2053-4B4C-882C-C9E5A15F4154}"
