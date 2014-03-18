@@ -786,4 +786,7 @@
   <data name="settings_launch_external_ui_error" xml:space="preserve">
     <value>Произошла ошибка при открытии панели настройки программ по умолчанию. Пожалуйста, убедитесь, что Вы зарегистрировали PVP, запустив его из командной строки с параметром: -regapp</value>
   </data>
+  <data name="mi_properties" xml:space="preserve">
+    <value>Свойства</value>
+  </data>
 </root>

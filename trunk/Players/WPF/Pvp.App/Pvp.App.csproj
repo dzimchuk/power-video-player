@@ -126,6 +126,15 @@
     <Compile Include="ViewModel\Extensions.cs" />
     <Compile Include="ViewModel\FailedStreamsViewModel.cs" />
     <Compile Include="ViewModel\FileTypes.cs" />
+    <Compile Include="ViewModel\HierarchicalMenu\Extensions.cs" />
+    <Compile Include="ViewModel\HierarchicalMenu\ParentDataItem.cs" />
+    <Compile Include="ViewModel\NumberedMenuItemData.cs" />
+    <Compile Include="ViewModel\HierarchicalMenu\ContentItem.cs" />
+    <Compile Include="ViewModel\HierarchicalMenu\HierarchicalItemType.cs" />
+    <Compile Include="ViewModel\HierarchicalMenu\IHierarchicalItem.cs" />
+    <Compile Include="ViewModel\HierarchicalMenu\LeafItem.cs" />
+    <Compile Include="ViewModel\HierarchicalMenu\ParentItem.cs" />
+    <Compile Include="ViewModel\HierarchicalMenu\SeparatorItem.cs" />
     <Compile Include="ViewModel\ICursorManager.cs" />
     <Compile Include="ViewModel\IDisplayService.cs" />
     <Compile Include="ViewModel\IFailedStreamsContainer.cs" />
@@ -138,6 +147,7 @@
     <Compile Include="ViewModel\MediaInfoItem.cs" />
     <Compile Include="ViewModel\MediaInformationViewModel.cs" />
     <Compile Include="ViewModel\MouseWheelAction.cs" />
+    <Compile Include="ViewModel\SelectableStreamMenuItemData.cs" />
     <Compile Include="ViewModel\Settings\EnterKeyViewModel.cs" />
     <Compile Include="ViewModel\Settings\FileTypeItem.cs" />
     <Compile Include="ViewModel\Settings\IFileAssociator.cs" />
@@ -151,6 +161,7 @@
       <DependentUpon>FailedStreamsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\FileTypeTranslateConverter.cs" />
+    <Compile Include="View\HierarchicalDataTemplateSelector.cs" />
     <Compile Include="View\KeyCombinationTranslateConverter.cs" />
     <Compile Include="ViewModel\Settings\SettingChangeEventArgs.cs" />
     <Compile Include="Service\SettingsProvider.cs" />
@@ -187,13 +198,12 @@
     <Compile Include="Util\SingleInstance.cs" />
     <Compile Include="ViewModelLocator.cs" />
     <Compile Include="ViewModel\ControlPanelViewModel.cs" />
-    <Compile Include="ViewModel\GenericRelayCommand.cs" />
+    <Compile Include="Util\GenericRelayCommand.cs" />
     <Compile Include="ViewModel\IDialogService.cs" />
     <Compile Include="ViewModel\IFileSelector.cs" />
     <Compile Include="ViewModel\IWindowHandleProvider.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
-    <Compile Include="ViewModel\NumberedCommand.cs" />
     <Compile Include="ViewModel\Settings\FileTypesSettingsViewModel.cs" />
     <Compile Include="ViewModel\Settings\FiltersSettingsViewModel.cs" />
     <Compile Include="ViewModel\Settings\GeneralSettingsViewModel.cs" />
@@ -202,7 +212,7 @@
     <Compile Include="ViewModel\SettingsConstants.cs" />
     <Compile Include="ViewModel\Settings\SettingsViewModel.cs" />
     <Compile Include="ViewModel\Settings\VideoSettingsViewModel.cs" />
-    <Compile Include="ViewModel\TitleChapterCommand.cs" />
+    <Compile Include="ViewModel\TitleChapterMenuItemData.cs" />
     <Compile Include="View\AspectRatioToBooleanValueConverter.cs" />
     <Compile Include="View\BooleanToVisibilityValueConverter.cs" />
     <Compile Include="View\BooleanToWindowStartupLocationValueConverter.cs" />
@@ -228,7 +238,6 @@
     </Compile>
     <Compile Include="Controls\SingleSelectionGrid.cs" />
     <Compile Include="View\SupportedLanguageToBooleanValueConverter.cs" />
-    <Compile Include="View\TitleChapterTemplateSelector.cs" />
     <Compile Include="View\VideoSizeToBooleanValueConverter.cs" />
     <Page Include="logo.xaml">
       <Generator>MSBuild:Compile</Generator>

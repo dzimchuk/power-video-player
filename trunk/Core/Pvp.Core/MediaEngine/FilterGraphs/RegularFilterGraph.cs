@@ -53,7 +53,7 @@ namespace Pvp.Core.MediaEngine.FilterGraphs
             
 
             // Adding a source filter for a specific video file
-            _sourceFilterHandler = SourceFilterHandlerFactory.AddSourceFilter(GraphBuilder, parameters.Source, _recommendedSourceFilterId);
+            _sourceFilterHandler = SourceFilterHandlerFactory.AddSourceFilter(GraphBuilder, parameters.Source);
 
             // QUERY the filter graph interfaces
             InitializeMediaEventEx(parameters.MediaWindowHandle);

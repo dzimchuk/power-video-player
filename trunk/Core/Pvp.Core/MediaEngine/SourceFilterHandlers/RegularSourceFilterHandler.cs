@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using Pvp.Core.DirectShow;
 using Pvp.Core.MediaEngine.FilterGraphs;
+using Pvp.Core.MediaEngine.StreamHandlers;
 
 namespace Pvp.Core.MediaEngine.SourceFilterHandlers
 {
@@ -15,20 +14,11 @@ namespace Pvp.Core.MediaEngine.SourceFilterHandlers
         private IPin _sourceOutPin;
         private bool _disposed;
 
-        // DirectSound Interfaces
-        private readonly List<IBaseFilter> _directSoundBaseFilters;
-        private readonly List<IBasicAudio> _basicAudioInterfaces;
-
-        // Audio streams stuff
-        private int _audioStreamsCount;
-        private int _currentAudioStream;
+        private IAudioStreamHandler _audioStreamHandler;
 
         public RegularSourceFilterHandler(IBaseFilter sourceFilter)
         {
             _sourceFilter = sourceFilter;
-
-            _directSoundBaseFilters = new List<IBaseFilter>();
-            _basicAudioInterfaces = new List<IBasicAudio>();
         }
 
         public void Dispose()
@@ -38,32 +28,19 @@ namespace Pvp.Core.MediaEngine.SourceFilterHandlers
                 return;
             }
 
-            _basicAudioInterfaces.Clear();
-            IEnumerator ie = _directSoundBaseFilters.GetEnumerator();
-            while (ie.MoveNext())
-            {
-                var pBaseFilter = (IBaseFilter)ie.Current;
-                while (Marshal.ReleaseComObject(pBaseFilter) > 0) { }
-            }
-            _directSoundBaseFilters.Clear();
-
             if (_sourceOutPin != null)
             {
                 Marshal.FinalReleaseComObject(_sourceOutPin);
             }
 
+            if (_audioStreamHandler != null)
+            {
+                _audioStreamHandler.Dispose();
+            }
+            
             if (_sourceFilter != null)
             {
-                if (_sourceFilter == _splitterFilter)
-                {
-                    _splitterFilter = null;
-                }
                 Marshal.FinalReleaseComObject(_sourceFilter);
-            }
-
-            if (_splitterFilter != null)
-            {
-                Marshal.FinalReleaseComObject(_splitterFilter);
             }
 
             _disposed = true;
@@ -91,68 +68,10 @@ namespace Pvp.Core.MediaEngine.SourceFilterHandlers
 
         public void RenderAudio(IGraphBuilder pGraphBuilder)
         {
-            IPin pPin = null;
-            IPin pInputPin = null;
-
-            IBasicAudio pBA;
-            IBaseFilter pBaseFilter;
-
-            int hr;
-            int nSkip = 0;
             if (FindSplitter(pGraphBuilder))
             {
-                while ((pPin = DsUtils.GetPin(_splitterFilter, PinDirection.Output, false, nSkip)) != null)
-                {
-                    if (DsUtils.IsMediaTypeSupported(pPin, MediaType.Audio) == 0)
-                    {
-                        // this unconnected pin supports audio type!
-                        // let's render it!
-                        if (BuildSoundRenderer(pGraphBuilder))
-                        {
-                            pInputPin = DsUtils.GetPin(_directSoundBaseFilters.Last(), PinDirection.Input);
-                            hr = DsHlp.S_FALSE;
-                            hr = pGraphBuilder.Connect(pPin, pInputPin);
-                            Marshal.ReleaseComObject(pInputPin);
-                            if (hr == DsHlp.S_OK || hr == DsHlp.VFW_S_PARTIAL_RENDER)
-                            {
-                                if (_directSoundBaseFilters.Count == 8)
-                                {
-                                    Marshal.ReleaseComObject(pPin);
-                                    break; // out of while cycle
-                                }
-
-                            }
-                            else
-                            {
-                                pBaseFilter = _directSoundBaseFilters.Last();
-                                pGraphBuilder.RemoveFilter(pBaseFilter);
-                                Marshal.ReleaseComObject(pBaseFilter);
-
-                                _basicAudioInterfaces.RemoveAt(_basicAudioInterfaces.Count - 1);
-                                _directSoundBaseFilters.RemoveAt(_directSoundBaseFilters.Count - 1);
-
-                                nSkip++;
-                            }
-                        }
-                        else
-                        {
-                            // could not create/add DirectSound filter
-                            Marshal.ReleaseComObject(pPin);
-                            break; // out of while cycle
-                        }
-                    }
-                    else
-                        nSkip++;
-                    Marshal.ReleaseComObject(pPin);
-                } // end of while
-            }
-
-            _currentAudioStream = 0;
-            _audioStreamsCount = _basicAudioInterfaces.Count;
-            const int lVolume = -10000;
-            for (var i = 1; i < _audioStreamsCount; i++)
-            {
-                _basicAudioInterfaces[i].put_Volume(lVolume);
+                _audioStreamHandler = AudioStreamHandlerFactory.GetHandler(_splitterFilter, _splitterFilter != _sourceFilter);
+                _audioStreamHandler.RenderAudio(pGraphBuilder);
             }
         }
 
@@ -167,37 +86,6 @@ namespace Pvp.Core.MediaEngine.SourceFilterHandlers
         //            if (guidFilter != Guid.Empty)
         //                GetFilter(guidFilter, out filter);
         //        }
-
-        private bool BuildSoundRenderer(IGraphBuilder pGraphBuilder)
-        {
-            var pDSBaseFilter = DsUtils.GetFilter(Clsid.DSoundRender, false);
-            if (pDSBaseFilter == null)
-            {
-                TraceSink.GetTraceSink().TraceWarning("Could not instantiate DirectSound Filter.");
-                return false;
-            }
-
-            // add the DirectSound filter to the graph
-            var hr = pGraphBuilder.AddFilter(pDSBaseFilter, "DirectSound Filter");
-            if (DsHlp.FAILED(hr))
-            {
-                while (Marshal.ReleaseComObject(pDSBaseFilter) > 0) { }
-                TraceSink.GetTraceSink().TraceWarning("Could not add DirectSound Filter to the filter graph.");
-                return false;
-            }
-
-            IBasicAudio pBA = pDSBaseFilter as IBasicAudio;
-            if (pBA == null)
-            {
-                while (Marshal.ReleaseComObject(pDSBaseFilter) > 0) { }
-                TraceSink.GetTraceSink().TraceWarning("Could not get IBasicAudio interface.");
-                return false;
-            }
-
-            _basicAudioInterfaces.Add(pBA);
-            _directSoundBaseFilters.Add(pDSBaseFilter);
-            return true;
-        }
 
         private void InsureSourceOutPin()
         {
@@ -384,50 +272,30 @@ namespace Pvp.Core.MediaEngine.SourceFilterHandlers
 
         public int AudioStreamsCount
         {
-            get { return _audioStreamsCount; }
+            get { return _audioStreamHandler != null ? _audioStreamHandler.AudioStreamsCount : 0; }
         }
 
         public int CurrentAudioStream
         {
-            get { return _currentAudioStream; }
+            get { return _audioStreamHandler != null ? _audioStreamHandler.CurrentAudioStream : 0; }
             set
             {
-                if (_basicAudioInterfaces.Count == 0)
+                if (_audioStreamHandler == null)
                     return;
 
-                int lVolume;
-                GetVolume(out lVolume);
-
-                const int lMute = -10000;
-                for (int i = 0; i < _audioStreamsCount; i++)
-                {
-                    var pBA = _basicAudioInterfaces[i];
-                    pBA.put_Volume(lMute);
-                }
-
-                _currentAudioStream = value;
-                SetVolume(lVolume);
+                _audioStreamHandler.CurrentAudioStream = value;
             }
         }
 
         public bool SetVolume(int volume)
         {
-            if (_basicAudioInterfaces.Count == 0)
-                return false;
-
-            var pBA = _basicAudioInterfaces[_currentAudioStream];
-            return pBA.put_Volume(volume) == DsHlp.S_OK;
+            return _audioStreamHandler != null && _audioStreamHandler.SetVolume(volume);
         }
 
         public bool GetVolume(out int volume)
         {
             volume = 0;
-
-            if (_basicAudioInterfaces.Count == 0)
-                return false;
-
-            var pBA = _basicAudioInterfaces[_currentAudioStream];
-            return pBA.get_Volume(out volume) == DsHlp.S_OK;
+            return _audioStreamHandler != null && _audioStreamHandler.GetVolume(out volume);
         }
     }
 }

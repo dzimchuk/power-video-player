@@ -25,9 +25,32 @@
         <view:AspectRatioToBooleanValueConverter x:Key="AspectRatioToBooleanValueConverter" />
         <view:DoubleToBooleanValueConverter x:Key="DoubleToBooleanValueConverter" />
         <view:SupportedLanguageToBooleanValueConverter x:Key="SupportedLanguageToBooleanValueConverter" />
+
+        <view:HierarchicalDataTemplateSelector x:Key="HierarchicalDataTemplateSelector" />
         
         <view:LocalizationHelper x:Key="LocHelper" />
         <view:LocalizationConverter x:Key="LocConverter" />
+
+        <DataTemplate x:Key="HierarchicalSeparatorTemplate">
+            <Separator/>
+        </DataTemplate>
+
+        <DataTemplate x:Key="HierarchicalLeafTemplate">
+            <MenuItem Header="{Binding Path=Title}"
+                      Command="{Binding Path=Command}"
+                      util:BoundCommand.Parameter="{Binding Path=Data}"
+                      IsChecked="{Binding Path=IsChecked}"/>
+        </DataTemplate>
+
+        <HierarchicalDataTemplate x:Key="HierarchicalParentTemplate">
+            <MenuItem Header="{Binding Title}" />
+            <HierarchicalDataTemplate.ItemsSource>
+                <Binding Path="SubItems" />
+            </HierarchicalDataTemplate.ItemsSource>
+            <HierarchicalDataTemplate.ItemTemplateSelector>
+                <StaticResource ResourceKey="HierarchicalDataTemplateSelector" />
+            </HierarchicalDataTemplate.ItemTemplateSelector>
+        </HierarchicalDataTemplate>
 
         <DataTemplate x:Key="BoundCommandTemplate">
             <MenuItem Header="{Binding Path=Title}"
@@ -35,31 +58,6 @@
                       util:BoundCommand.Parameter="{Binding}"
                       IsChecked="{Binding Path=IsChecked}"/>
         </DataTemplate>
-        
-        <DataTemplate x:Key="BoundChapterCommandTemplate">
-            <MenuItem Header="{Binding Path=DisplayName}"
-                      Command="{Binding Path=Command}"
-                      util:BoundCommand.Parameter="{Binding}"
-                      IsChecked="{Binding Path=IsChecked}"/>
-        </DataTemplate>
-        
-        <HierarchicalDataTemplate x:Key="BoundTitleCommandTemplate">
-            <MenuItem Header="{Binding Path=DisplayName}" IsChecked="{Binding Path=IsChecked}">
-                <MenuItem.ItemsPanel> <!-- not applied this way, idea: use a special control template for each MenuItem and set the panel there-->
-                    <ItemsPanelTemplate>
-                        <ctrls:WrapBreakPanel Orientation="Vertical" />
-                    </ItemsPanelTemplate>
-                </MenuItem.ItemsPanel>
-            </MenuItem>
-            <HierarchicalDataTemplate.ItemsSource>
-                <Binding Path="SubItems" />    
-            </HierarchicalDataTemplate.ItemsSource>
-            <HierarchicalDataTemplate.ItemTemplate>
-                <StaticResource ResourceKey="BoundChapterCommandTemplate" />
-            </HierarchicalDataTemplate.ItemTemplate>
-        </HierarchicalDataTemplate>
-        
-        <view:TitleChapterTemplateSelector x:Key="TitleChapterTemplateSelector" />
 
         <ContextMenu x:Key="PvpContextMenu" Opened="ContextMenu_Opened" Closed="ContextMenu_Closed">
             <MenuItem Header="{Binding LS, Source={StaticResource LocHelper}, Converter={StaticResource LocConverter}, ConverterParameter=mi_file}">
@@ -140,7 +138,7 @@
             <MenuItem Header="{Binding LS, Source={StaticResource LocHelper}, Converter={StaticResource LocConverter}, ConverterParameter=mi_goto_menu}" 
                       Visibility="{Binding Path=DvdChaptersMenuVisible, Converter={StaticResource BooleanToVisibilityValueConverter}}"
                       ItemsSource="{Binding Path=DvdChapters}"
-                      ItemTemplateSelector="{StaticResource TitleChapterTemplateSelector}">
+                      ItemTemplateSelector="{StaticResource HierarchicalDataTemplateSelector}">
                 <MenuItem.ItemsPanel>
                     <ItemsPanelTemplate>
                         <ctrls:WrapBreakPanel Orientation="Vertical" />
@@ -150,11 +148,11 @@
             <MenuItem Header="{Binding LS, Source={StaticResource LocHelper}, Converter={StaticResource LocConverter}, ConverterParameter=mi_audio_streams}" 
                       Visibility="{Binding Path=AudioStreamsMenuVisible, Converter={StaticResource BooleanToVisibilityValueConverter}}"
                       ItemsSource="{Binding Path=AudioStreams}"
-                      ItemTemplate="{StaticResource BoundCommandTemplate}" />
+                      ItemTemplateSelector="{StaticResource HierarchicalDataTemplateSelector}" />
             <MenuItem Header="{Binding LS, Source={StaticResource LocHelper}, Converter={StaticResource LocConverter}, ConverterParameter=mi_subpictures}" 
                       Visibility="{Binding Path=DvdSubpictureStreamsMenuVisible, Converter={StaticResource BooleanToVisibilityValueConverter}}"
                       ItemsSource="{Binding Path=DvdSubpictureStreams}"
-                      ItemTemplate="{StaticResource BoundCommandTemplate}">
+                      ItemTemplateSelector="{StaticResource HierarchicalDataTemplateSelector}">
                 <MenuItem.ItemsPanel>
                     <ItemsPanelTemplate>
                         <ctrls:WrapBreakPanel Orientation="Vertical" />
@@ -164,20 +162,20 @@
             <MenuItem Header="{Binding LS, Source={StaticResource LocHelper}, Converter={StaticResource LocConverter}, ConverterParameter=mi_angles}" 
                       Visibility="{Binding Path=DvdAnglesMenuVisible, Converter={StaticResource BooleanToVisibilityValueConverter}}"
                       ItemsSource="{Binding Path=DvdAngles}"
-                      ItemTemplate="{StaticResource BoundCommandTemplate}" />
+                      ItemTemplateSelector="{StaticResource HierarchicalDataTemplateSelector}" />
             <MenuItem Header="{Binding LS, Source={StaticResource LocHelper}, Converter={StaticResource LocConverter}, ConverterParameter=mi_menu_languages}" 
                       Visibility="{Binding Path=DvdMenuLanguagesMenuVisible, Converter={StaticResource BooleanToVisibilityValueConverter}}"
                       ItemsSource="{Binding Path=DvdMenuLanguages}"
-                      ItemTemplate="{StaticResource BoundCommandTemplate}" />
+                      ItemTemplateSelector="{StaticResource HierarchicalDataTemplateSelector}" />
             <MenuItem Header="{Binding LS, Source={StaticResource LocHelper}, Converter={StaticResource LocConverter}, ConverterParameter=mi_filters}" 
                       Visibility="{Binding Path=FiltersMenuVisible, Converter={StaticResource BooleanToVisibilityValueConverter}}"
                       ItemsSource="{Binding Path=Filters}"
-                      ItemTemplate="{StaticResource BoundCommandTemplate}" />
+                      ItemTemplateSelector="{StaticResource HierarchicalDataTemplateSelector}" />
             <Separator Visibility="{Binding Path=FiltersMenuVisible, Converter={StaticResource BooleanToVisibilityValueConverter}}"/>
             <MenuItem Header="{Binding LS, Source={StaticResource LocHelper}, Converter={StaticResource LocConverter}, ConverterParameter=mi_select_menu}"
                       Visibility="{Binding Path=DvdMenuVisible, Converter={StaticResource BooleanToVisibilityValueConverter}}"
                       ItemsSource="{Binding Path=DvdMenuItems}"
-                      ItemTemplate="{StaticResource BoundCommandTemplate}" />
+                      ItemTemplateSelector="{StaticResource HierarchicalDataTemplateSelector}" />
             <MenuItem Header="{Binding LS, Source={StaticResource LocHelper}, Converter={StaticResource LocConverter}, ConverterParameter=mi_close_menu_resume}"
                       Visibility="{Binding Path=DvdMenuVisible, Converter={StaticResource BooleanToVisibilityValueConverter}}"
                       Command="{Binding Path=DvdResumeCommand}"/>

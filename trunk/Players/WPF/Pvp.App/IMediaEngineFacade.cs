@@ -157,5 +157,9 @@ namespace Pvp.App
         bool DisplayFilterPropPage(IntPtr hParent, string strFilter, bool bDisplay);
 
         #endregion
+
+        IEnumerable<SelectableStream> GetSelectableStreams(string filterName);
+        bool IsStreamSelected(string filterName, int index);
+        void SelectStream(string filterName, int index);
     }
 }

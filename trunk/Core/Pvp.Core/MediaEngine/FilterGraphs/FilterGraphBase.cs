@@ -490,35 +490,169 @@ namespace Pvp.Core.MediaEngine.FilterGraphs
             var pProp = pFilter as ISpecifyPropertyPages;
             if (pProp != null)
             {
-                bRet = true;
-                if (bDisplay)
+                CAUUID caGuid;
+                var hr = pProp.GetPages(out caGuid);
+                if (DsHlp.SUCCEEDED(hr) && caGuid.cElems > 0)
                 {
-                    // Show the page. 
-                    CAUUID caGuid;
-                    pProp.GetPages(out caGuid);
+                    bRet = true;
 
-                    object pFilterUnk = pFilter;
-                    DsUtils.OleCreatePropertyFrame(
-                        hParent,                // Parent window
-                        0, 0,                   // Reserved
-                        strFilter,				// Caption for the dialog box
-                        1,                      // Number of objects (just the filter)
-                        ref pFilterUnk,			// Array of object pointers. 
-                        caGuid.cElems,          // Number of property pages
-                        caGuid.pElems,          // Array of property page CLSIDs
-                        0,                      // Locale identifier
-                        0, IntPtr.Zero          // Reserved
-                        );
-
-                    // Clean up.
-                    Marshal.FreeCoTaskMem(caGuid.pElems);
+                    if (bDisplay)
+                    {
+                        // Show the page
+                        object pFilterUnk = pFilter;
+                        DsUtils.OleCreatePropertyFrame(
+                            hParent,                // Parent window
+                            0, 0,                   // Reserved
+                            strFilter,				// Caption for the dialog box
+                            1,                      // Number of objects (just the filter)
+                            ref pFilterUnk,			// Array of object pointers. 
+                            caGuid.cElems,          // Number of property pages
+                            caGuid.pElems,          // Array of property page CLSIDs
+                            0,                      // Locale identifier
+                            0, IntPtr.Zero          // Reserved
+                            );
+                    }
                 }
 
-                //    Marshal.ReleaseComObject(pProp);
+                // Clean up
+                if (caGuid.pElems != IntPtr.Zero)
+                {
+                    Marshal.FreeCoTaskMem(caGuid.pElems);
+                }
             }
 
-            //    Marshal.ReleaseComObject(pFilter);
+            Marshal.ReleaseComObject(pFilter);
             return bRet;
+        }
+
+        public IEnumerable<SelectableStream> GetSelectableStreams(string filterName)
+        {
+            if (_graphBuilder == null)
+                return null;
+
+            IBaseFilter pFilter;
+            _graphBuilder.FindFilterByName(filterName, out pFilter);
+            if (pFilter == null)
+                return null;
+
+            var result = new List<SelectableStream>();
+
+            var pStreamSelect = pFilter as IAMStreamSelect;
+            if (pStreamSelect != null)
+            {
+                int count;
+                var hr = pStreamSelect.Count(out count);
+                if (DsHlp.SUCCEEDED(hr) && count > 0)
+                {
+                    for (var i = 0; i < count; i++)
+                    {
+                        var stream = GetSelectableStream(pStreamSelect, i);
+                        if (stream != null)
+                        {
+                            result.Add(stream);
+                        }
+                    }
+                }
+            }
+
+            Marshal.ReleaseComObject(pFilter);
+            return result;
+        }
+
+        public bool IsStreamSelected(string filterName, int index)
+        {
+            if (_graphBuilder == null)
+                return false;
+
+            IBaseFilter pFilter;
+            _graphBuilder.FindFilterByName(filterName, out pFilter);
+            if (pFilter == null)
+                return false;
+
+            var result = false;
+
+            var pStreamSelect = pFilter as IAMStreamSelect;
+            if (pStreamSelect != null)
+            {
+                int count;
+                var hr = pStreamSelect.Count(out count);
+                if (DsHlp.SUCCEEDED(hr) && count > index)
+                {
+                    var stream = GetSelectableStream(pStreamSelect, index);
+                    if (stream != null)
+                    {
+                        result = stream.Enabled;
+                    }
+                }
+            }
+
+            Marshal.ReleaseComObject(pFilter);
+            return result;
+        }
+
+        public void SelectStream(string filterName, int index)
+        {
+            if (_graphBuilder == null)
+                return;
+
+            IBaseFilter pFilter;
+            _graphBuilder.FindFilterByName(filterName, out pFilter);
+            if (pFilter == null)
+                return;
+
+            var pStreamSelect = pFilter as IAMStreamSelect;
+            if (pStreamSelect != null)
+            {
+                int count;
+                var hr = pStreamSelect.Count(out count);
+                if (DsHlp.SUCCEEDED(hr) && count > index)
+                {
+                    pStreamSelect.Enable(index, AMStreamSelectEnableFlags.Enable);
+                }
+            }
+
+            Marshal.ReleaseComObject(pFilter);
+        }
+
+        private static SelectableStream GetSelectableStream(IAMStreamSelect pStreamSelect, int index)
+        {
+            SelectableStream result = null;
+
+            IntPtr ppmt;
+            AMStreamSelectInfoFlags pdwFlags;
+            int plcid;
+            int pdwGroup;
+            IntPtr ppszName;
+            IntPtr ppObject;
+            IntPtr ppUnk;
+
+            var hr = pStreamSelect.Info(index, out ppmt, out pdwFlags, out plcid, out pdwGroup, out ppszName, out ppObject, out ppUnk);
+            if (DsHlp.SUCCEEDED(hr))
+            {
+                var mt = (AMMediaType)Marshal.PtrToStructure(ppmt, typeof(AMMediaType));
+                var name = Marshal.PtrToStringAuto(ppszName);
+
+                result = new SelectableStream
+                         {
+                             Index = index,
+                             Name = name,
+                             Enabled = (pdwFlags & AMStreamSelectInfoFlags.Enabled) != AMStreamSelectInfoFlags.Disabled ||
+                                       (pdwFlags & AMStreamSelectInfoFlags.Exclusive) != AMStreamSelectInfoFlags.Disabled,
+                             MajorType = mt.majorType,
+                             SubType = mt.subType
+                         };
+
+                DsUtils.FreeFormatBlock(ppmt);
+                Marshal.FreeCoTaskMem(ppmt);
+
+                Marshal.FreeCoTaskMem(ppszName);
+                if (ppObject != IntPtr.Zero)
+                    Marshal.Release(ppObject);
+                if (ppUnk != IntPtr.Zero)
+                    Marshal.Release(ppUnk);
+            }
+
+            return result;
         }
 
         public void HandleGraphEvent()
