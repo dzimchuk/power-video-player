@@ -5,9 +5,16 @@ namespace Pvp.Core.MediaEngine.StreamHandlers
 {
     internal static class AudioStreamHandlerFactory
     {
-        public static IAudioStreamHandler GetHandler(IBaseFilter splitter, bool disposeSplitter)
+        public static IAudioStreamHandler GetHandler(IBaseFilter splitter)
         {
-            return new SimpleAudioStreamHandler(splitter, disposeSplitter);
+            IAudioStreamHandler handler = null;
+
+            if (SelectingAudioStreamHandler.CanHandle(splitter))
+                handler = new SelectingAudioStreamHandler();
+            else if (SimpleAudioStreamHandler.CanHandle(splitter))
+                handler = new SimpleAudioStreamHandler();
+
+            return handler;
         }
     }
 }

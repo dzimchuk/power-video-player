@@ -476,6 +476,8 @@ namespace Pvp.Core.MediaEngine.FilterGraphs
         public abstract bool SetVolume(int volume);
         public abstract bool GetVolume(out int volume);
 
+        protected abstract void OnExternalStreamSelection();
+
         public bool DisplayFilterPropPage(IntPtr hParent, string strFilter, bool bDisplay)
         {
             if (_graphBuilder == null)
@@ -540,19 +542,7 @@ namespace Pvp.Core.MediaEngine.FilterGraphs
             var pStreamSelect = pFilter as IAMStreamSelect;
             if (pStreamSelect != null)
             {
-                int count;
-                var hr = pStreamSelect.Count(out count);
-                if (DsHlp.SUCCEEDED(hr) && count > 0)
-                {
-                    for (var i = 0; i < count; i++)
-                    {
-                        var stream = GetSelectableStream(pStreamSelect, i);
-                        if (stream != null)
-                        {
-                            result.Add(stream);
-                        }
-                    }
-                }
+                result.AddRange(pStreamSelect.GetSelectableStreams());
             }
 
             Marshal.ReleaseComObject(pFilter);
@@ -574,16 +564,7 @@ namespace Pvp.Core.MediaEngine.FilterGraphs
             var pStreamSelect = pFilter as IAMStreamSelect;
             if (pStreamSelect != null)
             {
-                int count;
-                var hr = pStreamSelect.Count(out count);
-                if (DsHlp.SUCCEEDED(hr) && count > index)
-                {
-                    var stream = GetSelectableStream(pStreamSelect, index);
-                    if (stream != null)
-                    {
-                        result = stream.Enabled;
-                    }
-                }
+                result = pStreamSelect.IsStreamSelected(index);
             }
 
             Marshal.ReleaseComObject(pFilter);
@@ -603,56 +584,13 @@ namespace Pvp.Core.MediaEngine.FilterGraphs
             var pStreamSelect = pFilter as IAMStreamSelect;
             if (pStreamSelect != null)
             {
-                int count;
-                var hr = pStreamSelect.Count(out count);
-                if (DsHlp.SUCCEEDED(hr) && count > index)
+                if (pStreamSelect.SelectStream(index))
                 {
-                    pStreamSelect.Enable(index, AMStreamSelectEnableFlags.Enable);
+                    OnExternalStreamSelection();
                 }
             }
 
             Marshal.ReleaseComObject(pFilter);
-        }
-
-        private static SelectableStream GetSelectableStream(IAMStreamSelect pStreamSelect, int index)
-        {
-            SelectableStream result = null;
-
-            IntPtr ppmt;
-            AMStreamSelectInfoFlags pdwFlags;
-            int plcid;
-            int pdwGroup;
-            IntPtr ppszName;
-            IntPtr ppObject;
-            IntPtr ppUnk;
-
-            var hr = pStreamSelect.Info(index, out ppmt, out pdwFlags, out plcid, out pdwGroup, out ppszName, out ppObject, out ppUnk);
-            if (DsHlp.SUCCEEDED(hr))
-            {
-                var mt = (AMMediaType)Marshal.PtrToStructure(ppmt, typeof(AMMediaType));
-                var name = Marshal.PtrToStringAuto(ppszName);
-
-                result = new SelectableStream
-                         {
-                             Index = index,
-                             Name = name,
-                             Enabled = (pdwFlags & AMStreamSelectInfoFlags.Enabled) != AMStreamSelectInfoFlags.Disabled ||
-                                       (pdwFlags & AMStreamSelectInfoFlags.Exclusive) != AMStreamSelectInfoFlags.Disabled,
-                             MajorType = mt.majorType,
-                             SubType = mt.subType
-                         };
-
-                DsUtils.FreeFormatBlock(ppmt);
-                Marshal.FreeCoTaskMem(ppmt);
-
-                Marshal.FreeCoTaskMem(ppszName);
-                if (ppObject != IntPtr.Zero)
-                    Marshal.Release(ppObject);
-                if (ppUnk != IntPtr.Zero)
-                    Marshal.Release(ppUnk);
-            }
-
-            return result;
         }
 
         public void HandleGraphEvent()

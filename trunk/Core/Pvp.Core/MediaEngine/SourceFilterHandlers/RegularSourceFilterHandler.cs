@@ -37,11 +37,13 @@ namespace Pvp.Core.MediaEngine.SourceFilterHandlers
             {
                 _audioStreamHandler.Dispose();
             }
-            
-            if (_sourceFilter != null)
+
+            if (_splitterFilter != _sourceFilter)
             {
-                Marshal.FinalReleaseComObject(_sourceFilter);
-            }
+                Marshal.FinalReleaseComObject(_splitterFilter);
+            } 
+
+            Marshal.FinalReleaseComObject(_sourceFilter);
 
             _disposed = true;
         }
@@ -70,8 +72,8 @@ namespace Pvp.Core.MediaEngine.SourceFilterHandlers
         {
             if (FindSplitter(pGraphBuilder))
             {
-                _audioStreamHandler = AudioStreamHandlerFactory.GetHandler(_splitterFilter, _splitterFilter != _sourceFilter);
-                _audioStreamHandler.RenderAudio(pGraphBuilder);
+                _audioStreamHandler = AudioStreamHandlerFactory.GetHandler(_splitterFilter);
+                _audioStreamHandler.RenderAudio(pGraphBuilder, _splitterFilter);
             }
         }
 
@@ -296,6 +298,19 @@ namespace Pvp.Core.MediaEngine.SourceFilterHandlers
         {
             volume = 0;
             return _audioStreamHandler != null && _audioStreamHandler.GetVolume(out volume);
+        }
+
+        public string GetAudioStreamName(int nStream)
+        {
+            return _audioStreamHandler != null ? _audioStreamHandler.GetAudioStreamName(nStream) : string.Empty;
+        }
+
+        public void OnExternalStreamSelection()
+        {
+            if (_audioStreamHandler != null)
+            {
+                _audioStreamHandler.OnExternalStreamSelection();
+            }
         }
     }
 }
