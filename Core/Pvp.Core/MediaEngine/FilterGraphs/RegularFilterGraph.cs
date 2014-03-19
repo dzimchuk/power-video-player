@@ -157,9 +157,14 @@ namespace Pvp.Core.MediaEngine.FilterGraphs
             return _sourceFilterHandler.GetVolume(out volume);
         }
 
+        protected override void OnExternalStreamSelection()
+        {
+            _sourceFilterHandler.OnExternalStreamSelection();
+        }
+
         public override string GetAudioStreamName(int nStream)
         {
-            return String.Format(Resources.Resources.mw_stream_format, nStream + 1);
+            return _sourceFilterHandler.GetAudioStreamName(nStream);
         }
 
         public override long GetCurrentPosition()

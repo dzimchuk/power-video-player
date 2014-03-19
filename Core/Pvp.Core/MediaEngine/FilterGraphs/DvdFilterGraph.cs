@@ -933,6 +933,10 @@ namespace Pvp.Core.MediaEngine.FilterGraphs
             return BasicAudio.get_Volume(out volume) == DsHlp.S_OK;
         }
 
+        protected override void OnExternalStreamSelection()
+        {
+        }
+
         public int AnglesAvailable
         {
             get { return _ulAnglesAvailable; }

@@ -61,12 +61,14 @@
     <Compile Include="MediaEngine\FilterGraphs\DvdFilterGraph.cs" />
     <Compile Include="MediaEngine\FilterGraphs\FilterGraphBase.cs" />
     <Compile Include="MediaEngine\CoreDefinitions.cs" />
+    <Compile Include="MediaEngine\FilterGraphExtensions.cs" />
     <Compile Include="MediaEngine\Renderer.cs" />
     <Compile Include="MediaEngine\GraphState.cs" />
     <Compile Include="MediaEngine\MediaSourceType.cs" />
     <Compile Include="MediaEngine\SelectableStream.cs" />
     <Compile Include="MediaEngine\SourceFilterHandlers\IAudioStreamHandler.cs" />
     <Compile Include="MediaEngine\SourceType.cs" />
+    <Compile Include="MediaEngine\StreamHandlers\SelectingAudioStreamHandler.cs" />
     <Compile Include="MediaEngine\StreamHandlers\SimpleAudioStreamHandler.cs" />
     <Compile Include="MediaEngine\StreamHandlers\AudioStreamHandlerFactory.cs" />
     <Compile Include="MediaEngine\UserDecisionEventArgs.cs" />
