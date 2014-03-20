@@ -97,6 +97,23 @@ namespace Pvp.Core.MediaEngine
         {
             SelectableStream result = null;
 
+            pStreamSelect.InspectStream(index, (mt, name, enabled) =>
+                                               {
+                                                   result = new SelectableStream
+                                                            {
+                                                                Index = index,
+                                                                Name = name,
+                                                                Enabled = enabled,
+                                                                MajorType = mt.majorType,
+                                                                SubType = mt.subType
+                                                            };
+                                               });
+
+            return result;
+        }
+
+        public static void InspectStream(this IAMStreamSelect pStreamSelect, int index, Action<AMMediaType, string, bool> inspect)
+        {
             IntPtr ppmt;
             AMStreamSelectInfoFlags pdwFlags;
             int plcid;
@@ -110,16 +127,10 @@ namespace Pvp.Core.MediaEngine
             {
                 var mt = (AMMediaType)Marshal.PtrToStructure(ppmt, typeof(AMMediaType));
                 var name = Marshal.PtrToStringAuto(ppszName);
+                var enabled = (pdwFlags & AMStreamSelectInfoFlags.Enabled) != AMStreamSelectInfoFlags.Disabled ||
+                              (pdwFlags & AMStreamSelectInfoFlags.Exclusive) != AMStreamSelectInfoFlags.Disabled;
 
-                result = new SelectableStream
-                {
-                    Index = index,
-                    Name = name,
-                    Enabled = (pdwFlags & AMStreamSelectInfoFlags.Enabled) != AMStreamSelectInfoFlags.Disabled ||
-                              (pdwFlags & AMStreamSelectInfoFlags.Exclusive) != AMStreamSelectInfoFlags.Disabled,
-                    MajorType = mt.majorType,
-                    SubType = mt.subType
-                };
+                inspect(mt, name, enabled);
 
                 DsUtils.FreeFormatBlock(ppmt);
                 Marshal.FreeCoTaskMem(ppmt);
@@ -130,8 +141,37 @@ namespace Pvp.Core.MediaEngine
                 if (ppUnk != IntPtr.Zero)
                     Marshal.Release(ppUnk);
             }
+        }
 
-            return result;
+        public static void EnumPins(this IBaseFilter filter, PinDirection direction, bool connected, Action<IPin, AMMediaType> action)
+        {
+            var nPinsToSkip = 0;
+            IPin pPin;
+            while ((pPin = DsUtils.GetPin(filter, direction, connected, nPinsToSkip)) != null)
+            {
+                nPinsToSkip++;
+
+                IEnumMediaTypes pEnumTypes;
+
+                var hr = pPin.EnumMediaTypes(out pEnumTypes);
+                if (hr == DsHlp.S_OK)
+                {
+                    IntPtr ptr;
+                    int cFetched;
+
+                    if (pEnumTypes.Next(1, out ptr, out cFetched) == DsHlp.S_OK)
+                    {
+                        AMMediaType mt = (AMMediaType)Marshal.PtrToStructure(ptr, typeof(AMMediaType));
+
+                        action(pPin, mt);
+
+                        DsUtils.FreeFormatBlock(ptr);
+                        Marshal.FreeCoTaskMem(ptr);
+                    }
+                    Marshal.ReleaseComObject(pEnumTypes);
+                }
+                Marshal.ReleaseComObject(pPin);
+            }
         }
     }
 }

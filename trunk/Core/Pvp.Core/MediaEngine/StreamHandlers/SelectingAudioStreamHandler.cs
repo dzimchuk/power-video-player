@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using Pvp.Core.DirectShow;
@@ -149,6 +150,11 @@ namespace Pvp.Core.MediaEngine.StreamHandlers
                                   {
                                       s.Enabled = _streamSelect.IsStreamSelected(s.Index);
                                   });
+        }
+
+        public void EnumMediaTypes(IPin pin, AMMediaType pinMediaType, Action<AMMediaType> action)
+        {
+            _audioStreams.ForEach(s => _streamSelect.InspectStream(s.Index, (mt, name, enabled) => action(mt)));
         }
     }
 }

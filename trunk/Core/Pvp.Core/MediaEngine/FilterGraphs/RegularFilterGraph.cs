@@ -266,7 +266,6 @@ namespace Pvp.Core.MediaEngine.FilterGraphs
 //            return streams;
 //        }
 
-        #region Gathering the info about the media file
         private void GatherMediaInfo(string source)
         {
             AddToMediaInfo(source);
@@ -282,8 +281,7 @@ namespace Pvp.Core.MediaEngine.FilterGraphs
 
             _sourceFilterHandler.GetStreamsMediaTypes(mt =>
                                                           {
-                                                              var streamInfo = new StreamInfo();
-                                                              GatherStreamInfo(streamInfo, mt);
+                                                              var streamInfo = GatherStreamInfo(mt);
                                                               AddToMediaInfo(streamInfo);
                                                           });
         }
@@ -296,11 +294,13 @@ namespace Pvp.Core.MediaEngine.FilterGraphs
             return value;
         }
 
-        private void GatherStreamInfo(StreamInfo pStreamInfo, AMMediaType pmt)
+        private StreamInfo GatherStreamInfo(AMMediaType pmt)
         {
-            pStreamInfo.MajorType = pmt.majorType;
-            pStreamInfo.SubType = pmt.subType;
-            pStreamInfo.FormatType = pmt.formatType;
+            var streamInfo = new StreamInfo();
+
+            streamInfo.MajorType = pmt.majorType;
+            streamInfo.SubType = pmt.subType;
+            streamInfo.FormatType = pmt.formatType;
 
             if (pmt.formatType == FormatType.VideoInfo)
             {
@@ -308,20 +308,20 @@ namespace Pvp.Core.MediaEngine.FilterGraphs
                 if (pmt.formatSize >= Marshal.SizeOf(typeof(VIDEOINFOHEADER)))
                 {
                     VIDEOINFOHEADER pVih = (VIDEOINFOHEADER)Marshal.PtrToStructure(pmt.formatPtr, typeof(VIDEOINFOHEADER));
-                    pStreamInfo.dwBitRate = pVih.dwBitRate;
-                    pStreamInfo.AvgTimePerFrame = pVih.AvgTimePerFrame;
-                    pStreamInfo.Flags = StreamInfoFlags.SI_VIDEOBITRATE | StreamInfoFlags.SI_FRAMERATE;
+                    streamInfo.dwBitRate = pVih.dwBitRate;
+                    streamInfo.AvgTimePerFrame = pVih.AvgTimePerFrame;
+                    streamInfo.Flags = StreamInfoFlags.SI_VIDEOBITRATE | StreamInfoFlags.SI_FRAMERATE;
 
-                    pStreamInfo.rcSrc.right = GetVideoDimension(SourceRect.right, pVih.bmiHeader.biWidth);
-                    pStreamInfo.rcSrc.bottom = GetVideoDimension(SourceRect.bottom, pVih.bmiHeader.biHeight);
+                    streamInfo.rcSrc.right = GetVideoDimension(SourceRect.right, pVih.bmiHeader.biWidth);
+                    streamInfo.rcSrc.bottom = GetVideoDimension(SourceRect.bottom, pVih.bmiHeader.biHeight);
                 }
                 else
                 {
-                    pStreamInfo.rcSrc.right = SourceRect.right;
-                    pStreamInfo.rcSrc.bottom = SourceRect.bottom;
+                    streamInfo.rcSrc.right = SourceRect.right;
+                    streamInfo.rcSrc.bottom = SourceRect.bottom;
                 }
 
-                pStreamInfo.Flags |= (StreamInfoFlags.SI_RECT | StreamInfoFlags.SI_FOURCC);
+                streamInfo.Flags |= (StreamInfoFlags.SI_RECT | StreamInfoFlags.SI_FOURCC);
             }
             else if (pmt.formatType == FormatType.VideoInfo2)
             {
@@ -329,25 +329,25 @@ namespace Pvp.Core.MediaEngine.FilterGraphs
                 if (pmt.formatSize >= Marshal.SizeOf(typeof(VIDEOINFOHEADER2)))
                 {
                     VIDEOINFOHEADER2 pVih2 = (VIDEOINFOHEADER2)Marshal.PtrToStructure(pmt.formatPtr, typeof(VIDEOINFOHEADER2));
-                    pStreamInfo.dwBitRate = pVih2.dwBitRate;
-                    pStreamInfo.AvgTimePerFrame = pVih2.AvgTimePerFrame;
-                    pStreamInfo.dwPictAspectRatioX = pVih2.dwPictAspectRatioX;
-                    pStreamInfo.dwPictAspectRatioY = pVih2.dwPictAspectRatioY;
-                    pStreamInfo.dwInterlaceFlags = pVih2.dwInterlaceFlags;
-                    pStreamInfo.Flags = StreamInfoFlags.SI_VIDEOBITRATE |
+                    streamInfo.dwBitRate = pVih2.dwBitRate;
+                    streamInfo.AvgTimePerFrame = pVih2.AvgTimePerFrame;
+                    streamInfo.dwPictAspectRatioX = pVih2.dwPictAspectRatioX;
+                    streamInfo.dwPictAspectRatioY = pVih2.dwPictAspectRatioY;
+                    streamInfo.dwInterlaceFlags = pVih2.dwInterlaceFlags;
+                    streamInfo.Flags = StreamInfoFlags.SI_VIDEOBITRATE |
                         StreamInfoFlags.SI_FRAMERATE | StreamInfoFlags.SI_ASPECTRATIO |
                         StreamInfoFlags.SI_INTERLACEMODE;
 
-                    pStreamInfo.rcSrc.right = GetVideoDimension(SourceRect.right, pVih2.bmiHeader.biWidth);
-                    pStreamInfo.rcSrc.bottom = GetVideoDimension(SourceRect.bottom, pVih2.bmiHeader.biHeight);
+                    streamInfo.rcSrc.right = GetVideoDimension(SourceRect.right, pVih2.bmiHeader.biWidth);
+                    streamInfo.rcSrc.bottom = GetVideoDimension(SourceRect.bottom, pVih2.bmiHeader.biHeight);
                 }
                 else
                 {
-                    pStreamInfo.rcSrc.right = SourceRect.right;
-                    pStreamInfo.rcSrc.bottom = SourceRect.bottom;
+                    streamInfo.rcSrc.right = SourceRect.right;
+                    streamInfo.rcSrc.bottom = SourceRect.bottom;
                 }
 
-                pStreamInfo.Flags |= (StreamInfoFlags.SI_RECT | StreamInfoFlags.SI_FOURCC);
+                streamInfo.Flags |= (StreamInfoFlags.SI_RECT | StreamInfoFlags.SI_FOURCC);
             }
             else if (pmt.formatType == FormatType.WaveEx)
             {
@@ -355,12 +355,12 @@ namespace Pvp.Core.MediaEngine.FilterGraphs
                 if (pmt.formatSize >= /*Marshal.SizeOf(typeof(WAVEFORMATEX))*/ 18)
                 {
                     WAVEFORMATEX pWfx = (WAVEFORMATEX)Marshal.PtrToStructure(pmt.formatPtr, typeof(WAVEFORMATEX));
-                    pStreamInfo.wFormatTag = pWfx.wFormatTag;
-                    pStreamInfo.nSamplesPerSec = pWfx.nSamplesPerSec;
-                    pStreamInfo.nChannels = pWfx.nChannels;
-                    pStreamInfo.wBitsPerSample = pWfx.wBitsPerSample;
-                    pStreamInfo.nAvgBytesPerSec = pWfx.nAvgBytesPerSec;
-                    pStreamInfo.Flags = StreamInfoFlags.SI_WAVEFORMAT |
+                    streamInfo.wFormatTag = pWfx.wFormatTag;
+                    streamInfo.nSamplesPerSec = pWfx.nSamplesPerSec;
+                    streamInfo.nChannels = pWfx.nChannels;
+                    streamInfo.wBitsPerSample = pWfx.wBitsPerSample;
+                    streamInfo.nAvgBytesPerSec = pWfx.nAvgBytesPerSec;
+                    streamInfo.Flags = StreamInfoFlags.SI_WAVEFORMAT |
                         StreamInfoFlags.SI_SAMPLERATE | StreamInfoFlags.SI_WAVECHANNELS |
                         StreamInfoFlags.SI_BITSPERSAMPLE | StreamInfoFlags.SI_AUDIOBITRATE;
                 }
@@ -371,20 +371,20 @@ namespace Pvp.Core.MediaEngine.FilterGraphs
                 if (pmt.formatSize >= Marshal.SizeOf(typeof(MPEG1VIDEOINFO)))
                 {
                     MPEG1VIDEOINFO pM1vi = (MPEG1VIDEOINFO)Marshal.PtrToStructure(pmt.formatPtr, typeof(MPEG1VIDEOINFO));
-                    pStreamInfo.dwBitRate = pM1vi.hdr.dwBitRate;
-                    pStreamInfo.AvgTimePerFrame = pM1vi.hdr.AvgTimePerFrame;
-                    pStreamInfo.Flags = StreamInfoFlags.SI_VIDEOBITRATE | StreamInfoFlags.SI_FRAMERATE;
+                    streamInfo.dwBitRate = pM1vi.hdr.dwBitRate;
+                    streamInfo.AvgTimePerFrame = pM1vi.hdr.AvgTimePerFrame;
+                    streamInfo.Flags = StreamInfoFlags.SI_VIDEOBITRATE | StreamInfoFlags.SI_FRAMERATE;
 
-                    pStreamInfo.rcSrc.right = GetVideoDimension(SourceRect.right, pM1vi.hdr.bmiHeader.biWidth);
-                    pStreamInfo.rcSrc.bottom = GetVideoDimension(SourceRect.bottom, pM1vi.hdr.bmiHeader.biHeight);
+                    streamInfo.rcSrc.right = GetVideoDimension(SourceRect.right, pM1vi.hdr.bmiHeader.biWidth);
+                    streamInfo.rcSrc.bottom = GetVideoDimension(SourceRect.bottom, pM1vi.hdr.bmiHeader.biHeight);
                 }
                 else
                 {
-                    pStreamInfo.rcSrc.right = SourceRect.right;
-                    pStreamInfo.rcSrc.bottom = SourceRect.bottom;
+                    streamInfo.rcSrc.right = SourceRect.right;
+                    streamInfo.rcSrc.bottom = SourceRect.bottom;
                 }
 
-                pStreamInfo.Flags |= (StreamInfoFlags.SI_RECT | StreamInfoFlags.SI_FOURCC);
+                streamInfo.Flags |= (StreamInfoFlags.SI_RECT | StreamInfoFlags.SI_FOURCC);
             }
             else if (pmt.formatType == FormatType.Mpeg2Video)
             {
@@ -392,26 +392,27 @@ namespace Pvp.Core.MediaEngine.FilterGraphs
                 if (pmt.formatSize >= Marshal.SizeOf(typeof(MPEG2VIDEOINFO)))
                 {
                     MPEG2VIDEOINFO pM2vi = (MPEG2VIDEOINFO)Marshal.PtrToStructure(pmt.formatPtr, typeof(MPEG2VIDEOINFO));
-                    pStreamInfo.dwBitRate = pM2vi.hdr.dwBitRate;
-                    pStreamInfo.AvgTimePerFrame = pM2vi.hdr.AvgTimePerFrame;
-                    pStreamInfo.dwPictAspectRatioX = pM2vi.hdr.dwPictAspectRatioX;
-                    pStreamInfo.dwPictAspectRatioY = pM2vi.hdr.dwPictAspectRatioY;
-                    pStreamInfo.dwInterlaceFlags = pM2vi.hdr.dwInterlaceFlags;
-                    pStreamInfo.Flags = StreamInfoFlags.SI_VIDEOBITRATE | StreamInfoFlags.SI_FRAMERATE |
+                    streamInfo.dwBitRate = pM2vi.hdr.dwBitRate;
+                    streamInfo.AvgTimePerFrame = pM2vi.hdr.AvgTimePerFrame;
+                    streamInfo.dwPictAspectRatioX = pM2vi.hdr.dwPictAspectRatioX;
+                    streamInfo.dwPictAspectRatioY = pM2vi.hdr.dwPictAspectRatioY;
+                    streamInfo.dwInterlaceFlags = pM2vi.hdr.dwInterlaceFlags;
+                    streamInfo.Flags = StreamInfoFlags.SI_VIDEOBITRATE | StreamInfoFlags.SI_FRAMERATE |
                         StreamInfoFlags.SI_ASPECTRATIO | StreamInfoFlags.SI_INTERLACEMODE;
 
-                    pStreamInfo.rcSrc.right = GetVideoDimension(SourceRect.right, pM2vi.hdr.bmiHeader.biWidth);
-                    pStreamInfo.rcSrc.bottom = GetVideoDimension(SourceRect.bottom, pM2vi.hdr.bmiHeader.biHeight);
+                    streamInfo.rcSrc.right = GetVideoDimension(SourceRect.right, pM2vi.hdr.bmiHeader.biWidth);
+                    streamInfo.rcSrc.bottom = GetVideoDimension(SourceRect.bottom, pM2vi.hdr.bmiHeader.biHeight);
                 }
                 else
                 {
-                    pStreamInfo.rcSrc.right = SourceRect.right;
-                    pStreamInfo.rcSrc.bottom = SourceRect.bottom;
+                    streamInfo.rcSrc.right = SourceRect.right;
+                    streamInfo.rcSrc.bottom = SourceRect.bottom;
                 }
 
-                pStreamInfo.Flags |= (StreamInfoFlags.SI_RECT | StreamInfoFlags.SI_FOURCC);
+                streamInfo.Flags |= (StreamInfoFlags.SI_RECT | StreamInfoFlags.SI_FOURCC);
             }
+
+            return streamInfo;
         }
-        #endregion
     }
 }

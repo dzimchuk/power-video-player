@@ -176,5 +176,10 @@ namespace Pvp.Core.MediaEngine.StreamHandlers
         public void OnExternalStreamSelection()
         {
         }
+
+        public void EnumMediaTypes(IPin pin, AMMediaType pinMediaType, Action<AMMediaType> action)
+        {
+            action(pinMediaType);
+        }
     }
 }
