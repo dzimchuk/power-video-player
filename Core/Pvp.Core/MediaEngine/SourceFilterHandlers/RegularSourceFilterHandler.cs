@@ -243,33 +243,17 @@ namespace Pvp.Core.MediaEngine.SourceFilterHandlers
                 return;
             }
 
-            var nPinsToSkip = 0;
-            IPin pPin;
-            while ((pPin = DsUtils.GetPin(_splitterFilter, PinDirection.Output, true, nPinsToSkip)) != null)
-            {
-                nPinsToSkip++;
-
-                IEnumMediaTypes pEnumTypes;
-
-                var hr = pPin.EnumMediaTypes(out pEnumTypes);
-                if (hr == DsHlp.S_OK)
-                {
-                    IntPtr ptr;
-                    int cFetched;
-
-                    if (pEnumTypes.Next(1, out ptr, out cFetched) == DsHlp.S_OK)
-                    {
-                        AMMediaType mt = (AMMediaType)Marshal.PtrToStructure(ptr, typeof(AMMediaType));
-
-                        inspect(mt);
-
-                        DsUtils.FreeFormatBlock(ptr);
-                        Marshal.FreeCoTaskMem(ptr);
-                    }
-                    Marshal.ReleaseComObject(pEnumTypes);
-                }
-                Marshal.ReleaseComObject(pPin);
-            }
+            _splitterFilter.EnumPins(PinDirection.Output, true, (pin, mediaType) =>
+                                                                {
+                                                                    if (mediaType.majorType == MediaType.Audio && _audioStreamHandler != null)
+                                                                    {
+                                                                        _audioStreamHandler.EnumMediaTypes(pin, mediaType, inspect);
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        inspect(mediaType);
+                                                                    }
+                                                                });
         }
 
         public int AudioStreamsCount

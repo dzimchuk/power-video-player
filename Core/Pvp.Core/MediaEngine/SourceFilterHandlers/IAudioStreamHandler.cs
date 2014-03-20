@@ -12,5 +12,6 @@ namespace Pvp.Core.MediaEngine.SourceFilterHandlers
         bool GetVolume(out int volume);
         string GetAudioStreamName(int nStream);
         void OnExternalStreamSelection();
+        void EnumMediaTypes(IPin pin, AMMediaType pinMediaType, Action<AMMediaType> action);
     }
 }
