@@ -52,5 +52,12 @@ namespace Pvp.Core.MediaEngine
         IEnumerable<SelectableStream> GetSelectableStreams(string filterName);
         bool IsStreamSelected(string filterName, int index);
         void SelectStream(string filterName, int index);
+
+        int NumberOfSubpictureStreams { get; }
+        int CurrentSubpictureStream { get; set; }
+        bool EnableSubpicture(bool bEnable);
+        string GetSubpictureStreamName(int nStream);
+        bool IsSubpictureEnabled();
+        bool IsSubpictureStreamEnabled(int ulStreamNum);
     }
 }

@@ -145,13 +145,16 @@
                     </ItemsPanelTemplate>
                 </MenuItem.ItemsPanel>
             </MenuItem>
+            
             <MenuItem Header="{Binding LS, Source={StaticResource LocHelper}, Converter={StaticResource LocConverter}, ConverterParameter=mi_audio_streams}" 
                       Visibility="{Binding Path=AudioStreamsMenuVisible, Converter={StaticResource BooleanToVisibilityValueConverter}}"
                       ItemsSource="{Binding Path=AudioStreams}"
                       ItemTemplateSelector="{StaticResource HierarchicalDataTemplateSelector}" />
+            
             <MenuItem Header="{Binding LS, Source={StaticResource LocHelper}, Converter={StaticResource LocConverter}, ConverterParameter=mi_subpictures}" 
-                      Visibility="{Binding Path=DvdSubpictureStreamsMenuVisible, Converter={StaticResource BooleanToVisibilityValueConverter}}"
-                      ItemsSource="{Binding Path=DvdSubpictureStreams}"
+                      DataContext="{x:Static app:ViewModelLocator.SubpictureMenuViewModel}"
+                      Visibility="{Binding Path=SubpictureStreamsMenuVisible, Converter={StaticResource BooleanToVisibilityValueConverter}}"
+                      ItemsSource="{Binding Path=SubpictureStreams}"
                       ItemTemplateSelector="{StaticResource HierarchicalDataTemplateSelector}">
                 <MenuItem.ItemsPanel>
                     <ItemsPanelTemplate>
@@ -159,6 +162,7 @@
                     </ItemsPanelTemplate>
                 </MenuItem.ItemsPanel>
             </MenuItem>
+            
             <MenuItem Header="{Binding LS, Source={StaticResource LocHelper}, Converter={StaticResource LocConverter}, ConverterParameter=mi_angles}" 
                       Visibility="{Binding Path=DvdAnglesMenuVisible, Converter={StaticResource BooleanToVisibilityValueConverter}}"
                       ItemsSource="{Binding Path=DvdAngles}"

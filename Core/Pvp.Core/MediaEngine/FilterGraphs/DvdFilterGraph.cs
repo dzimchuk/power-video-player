@@ -970,7 +970,7 @@ namespace Pvp.Core.MediaEngine.FilterGraphs
             get { return _ulCurChapter; }
         }
 
-        public int CurrentSubpictureStream
+        public override int CurrentSubpictureStream
         {
             get
             {
@@ -1013,7 +1013,7 @@ namespace Pvp.Core.MediaEngine.FilterGraphs
             get { return _arrayMenuLang.Count; }
         }
 
-        public int NumberOfSubpictureStreams
+        public override int NumberOfSubpictureStreams
         {
             get { return _arraySubpictureStream.Count; }
         }
@@ -1028,7 +1028,7 @@ namespace Pvp.Core.MediaEngine.FilterGraphs
             get { return _uops; }
         }
 
-        public bool EnableSubpicture(bool bEnable)
+        public override bool EnableSubpicture(bool bEnable)
         {
             IDvdCmd pObj;
             var hr = _pDvdControl2.SetSubpictureState(bEnable, DVD_CMD_FLAGS.DVD_CMD_FLAG_None, out pObj);
@@ -1068,7 +1068,7 @@ namespace Pvp.Core.MediaEngine.FilterGraphs
             return _arrayNumChapters[ulTitle - 1];
         }
 
-        public string GetSubpictureStreamName(int nStream)
+        public override string GetSubpictureStreamName(int nStream)
         {
             var str = Resources.Resources.error;
 
@@ -1121,7 +1121,7 @@ namespace Pvp.Core.MediaEngine.FilterGraphs
                 && (UOPS & VALID_UOP_FLAG.UOP_FLAG_Resume) == 0 && _bShowMenuCalledFromTitle;
         }
 
-        public bool IsSubpictureEnabled()
+        public override bool IsSubpictureEnabled()
         {
             int ulStreamsAvailable, ulCurrentStream;
             bool bIsDisabled; // TRUE means it is disabled
@@ -1133,7 +1133,7 @@ namespace Pvp.Core.MediaEngine.FilterGraphs
             return false;
         }
 
-        public bool IsSubpictureStreamEnabled(int ulStreamNum)
+        public override bool IsSubpictureStreamEnabled(int ulStreamNum)
         {
             bool bEnabled;
             var hr = _pDvdInfo2.IsSubpictureStreamEnabled(ulStreamNum, out bEnabled);

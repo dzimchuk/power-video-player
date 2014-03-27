@@ -1,11 +1,11 @@
 ﻿using GalaSoft.MvvmLight;
 using Pvp.App.Composition;
+using Pvp.App.ViewModel.MainView;
 
 namespace Pvp.App
 {
     internal static class ViewModelLocator
     {
-        internal const string MainViewModelName = "MainViewModel";
         internal const string MainWindowViewModelName = "MainWindowViewModel";
         internal const string SettingsViewModelName = "SettingsViewModelName";
         internal const string EnterKeyViewModelName = "EnterKeyViewModelName";
@@ -18,20 +18,22 @@ namespace Pvp.App
             DesignTimeComposition.SetUpDependencies();
         }
 
-        public static ViewModelBase MainViewModel
-        {
-            get
-            {
-                return DependencyResolver.Current.Resolve<ViewModelBase>(MainViewModelName);
-            }
-        }
-
         public static ViewModelBase MainWindowViewModel
         {
             get
             {
                 return DependencyResolver.Current.Resolve<ViewModelBase>(MainWindowViewModelName);
             }
+        }
+
+        public static MainViewModel MainViewModel
+        {
+            get { return DependencyResolver.Current.Resolve<MainViewModel>(); }
+        }
+
+        public static SubpictureMenuViewModel SubpictureMenuViewModel
+        {
+            get { return DependencyResolver.Current.Resolve<SubpictureMenuViewModel>(); }
         }
 
         public static ViewModelBase SettingsViewModel

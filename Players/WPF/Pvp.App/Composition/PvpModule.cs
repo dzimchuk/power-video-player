@@ -5,6 +5,7 @@ using GalaSoft.MvvmLight;
 using Ninject.Modules;
 using Pvp.App.Service;
 using Pvp.App.ViewModel;
+using Pvp.App.ViewModel.MainView;
 using Pvp.App.ViewModel.Settings;
 
 namespace Pvp.App.Composition
@@ -32,8 +33,10 @@ namespace Pvp.App.Composition
             Bind<ICursorManager>().To<CursorManager>();
 
             Bind<ViewModelBase>().To<MainWindowViewModel>().InSingletonScope().Named(ViewModelLocator.MainWindowViewModelName);
-            Bind<ViewModelBase>().To<MainViewModel>().InSingletonScope().Named(ViewModelLocator.MainViewModelName);
+            Bind<MainViewModel>().ToSelf().InSingletonScope();
             Bind<ControlPanelViewModel>().ToSelf().InSingletonScope();
+
+            Bind<SubpictureMenuViewModel>().ToSelf().InSingletonScope();
 
             Bind<IImageCreaterFactory>().To<ImageCreaterFactory>().InSingletonScope();
 

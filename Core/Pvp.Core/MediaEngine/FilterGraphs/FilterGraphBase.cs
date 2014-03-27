@@ -593,6 +593,13 @@ namespace Pvp.Core.MediaEngine.FilterGraphs
             Marshal.ReleaseComObject(pFilter);
         }
 
+        public abstract int NumberOfSubpictureStreams { get; }
+        public abstract int CurrentSubpictureStream { get; set; }
+        public abstract bool EnableSubpicture(bool bEnable);
+        public abstract string GetSubpictureStreamName(int nStream);
+        public abstract bool IsSubpictureEnabled();
+        public abstract bool IsSubpictureStreamEnabled(int ulStreamNum);
+
         public void HandleGraphEvent()
         {
             if (_mediaEventEx == null)

@@ -162,6 +162,37 @@ namespace Pvp.Core.MediaEngine.FilterGraphs
             _sourceFilterHandler.OnExternalStreamSelection();
         }
 
+        public override int NumberOfSubpictureStreams
+        {
+            get { return _sourceFilterHandler.NumberOfSubpictureStreams; }
+        }
+
+        public override int CurrentSubpictureStream
+        {
+            get { return _sourceFilterHandler.CurrentSubpictureStream; }
+            set { _sourceFilterHandler.CurrentSubpictureStream = value; }
+        }
+
+        public override bool EnableSubpicture(bool bEnable)
+        {
+            return _sourceFilterHandler.EnableSubpicture(bEnable);
+        }
+
+        public override string GetSubpictureStreamName(int nStream)
+        {
+            return _sourceFilterHandler.GetSubpictureStreamName(nStream);
+        }
+
+        public override bool IsSubpictureEnabled()
+        {
+            return _sourceFilterHandler.IsSubpictureEnabled();
+        }
+
+        public override bool IsSubpictureStreamEnabled(int ulStreamNum)
+        {
+            return _sourceFilterHandler.IsSubpictureStreamEnabled(ulStreamNum);
+        }
+
         public override string GetAudioStreamName(int nStream)
         {
             return _sourceFilterHandler.GetAudioStreamName(nStream);

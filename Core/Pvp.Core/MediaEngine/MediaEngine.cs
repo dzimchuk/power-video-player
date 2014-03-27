@@ -331,6 +331,49 @@ namespace Pvp.Core.MediaEngine
                 }
             }
         }
+
+        public int NumberOfSubpictureStreams
+        {
+            get
+            {
+                return _filterGraph == null ? 0 : _filterGraph.NumberOfSubpictureStreams;
+            }
+        }
+
+        public int CurrentSubpictureStream
+        {
+            get
+            {
+                return _filterGraph == null ? -1 : _filterGraph.CurrentSubpictureStream;
+            }
+            set
+            {
+                if (_filterGraph == null)
+                    return;
+
+                _filterGraph.CurrentSubpictureStream = value;
+            }
+        }
+
+        public bool EnableSubpicture(bool bEnable)
+        {
+            return _filterGraph != null && _filterGraph.EnableSubpicture(bEnable);
+        }
+
+        public string GetSubpictureStreamName(int nStream)
+        {
+            return _filterGraph != null ? _filterGraph.GetSubpictureStreamName(nStream) : Resources.Resources.error;
+        }
+
+        public bool IsSubpictureEnabled()
+        {
+            return _filterGraph != null && _filterGraph.IsSubpictureEnabled();
+        }
+
+        public bool IsSubpictureStreamEnabled(int ulStreamNum)
+        {
+            return _filterGraph != null && _filterGraph.IsSubpictureStreamEnabled(ulStreamNum);
+        }
         #endregion
 
         #region Playback control methods
@@ -490,23 +533,6 @@ namespace Pvp.Core.MediaEngine
             }
         }
 
-        public int CurrentSubpictureStream
-        {
-            get
-            {
-                var dvdFilterGraph = _filterGraph as IDvdFilterGraph;
-                return dvdFilterGraph == null ? -1 : dvdFilterGraph.CurrentSubpictureStream;
-            }
-            set
-            {
-                var dvdFilterGraph = _filterGraph as IDvdFilterGraph;
-                if (dvdFilterGraph == null)
-                    return;
-
-                dvdFilterGraph.CurrentSubpictureStream = value;
-            }
-        }
-
         public int CurrentTitle
         {
             get
@@ -534,15 +560,6 @@ namespace Pvp.Core.MediaEngine
             }
         }
 
-        public int NumberOfSubpictureStreams
-        {
-            get
-            {
-                var dvdFilterGraph = _filterGraph as IDvdFilterGraph;
-                return dvdFilterGraph == null ? 0 : dvdFilterGraph.NumberOfSubpictureStreams;
-            }
-        }
-
         public int NumberOfTitles
         {
             get
@@ -559,12 +576,6 @@ namespace Pvp.Core.MediaEngine
                 var dvdFilterGraph = _filterGraph as IDvdFilterGraph;
                 return dvdFilterGraph == null ? 0 : dvdFilterGraph.UOPS;
             }
-        }
-
-        public bool EnableSubpicture(bool bEnable)
-        {
-            var dvdFilterGraph = _filterGraph as IDvdFilterGraph;
-            return dvdFilterGraph != null && dvdFilterGraph.EnableSubpicture(bEnable);
         }
 
         public bool GetCurrentDomain(out DVD_DOMAIN pDomain)
@@ -587,12 +598,6 @@ namespace Pvp.Core.MediaEngine
             return dvdFilterGraph == null ? 0 : dvdFilterGraph.GetNumChapters(ulTitle);
         }
 
-        public string GetSubpictureStreamName(int nStream)
-        {
-            var dvdFilterGraph = _filterGraph as IDvdFilterGraph;
-            return dvdFilterGraph != null ? dvdFilterGraph.GetSubpictureStreamName(nStream) : Resources.Resources.error;
-        }
-
         public void GoTo(int ulTitle, int ulChapter)
         {
             var dvdFilterGraph = _filterGraph as IDvdFilterGraph;
@@ -613,18 +618,6 @@ namespace Pvp.Core.MediaEngine
         {
             var dvdFilterGraph = _filterGraph as IDvdFilterGraph;
             return dvdFilterGraph != null && dvdFilterGraph.IsResumeDvdEnabled();
-        }
-
-        public bool IsSubpictureEnabled()
-        {
-            var dvdFilterGraph = _filterGraph as IDvdFilterGraph;
-            return dvdFilterGraph != null && dvdFilterGraph.IsSubpictureEnabled();
-        }
-
-        public bool IsSubpictureStreamEnabled(int ulStreamNum)
-        {
-            var dvdFilterGraph = _filterGraph as IDvdFilterGraph;
-            return dvdFilterGraph != null && dvdFilterGraph.IsSubpictureStreamEnabled(ulStreamNum);
         }
 
         // The Resume method leaves a menu and resumes playback

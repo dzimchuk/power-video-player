@@ -335,9 +335,9 @@ namespace Pvp.App.Service
             _mediaControl.SetMenuLang(nLang);
         }
 
-        public void ShowMenu(DVD_MENU_ID menuID)
+        public void ShowMenu(DVD_MENU_ID menuId)
         {
-            _mediaControl.ShowMenu(menuID);
+            _mediaControl.ShowMenu(menuId);
         }
 
         #endregion
