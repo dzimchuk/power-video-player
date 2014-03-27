@@ -9,23 +9,17 @@ namespace Pvp.Core.MediaEngine
         int AnglesAvailable { get; }
         int CurrentAngle { get; set; }
         int CurrentChapter { get; }
-        int CurrentSubpictureStream { get; set; }
         int CurrentTitle { get; }
         bool IsMenuOn { get; }
         int MenuLangCount { get; }
-        int NumberOfSubpictureStreams { get; }
         int NumberOfTitles { get; }
         VALID_UOP_FLAG UOPS { get; }
-        bool EnableSubpicture(bool bEnable);
         bool GetCurrentDomain(out DVD_DOMAIN pDomain);
         string GetMenuLangName(int nLang);
         int GetNumChapters(int ulTitle);
-        string GetSubpictureStreamName(int nStream);
         bool GoTo(int ulTitle, int ulChapter);
         bool IsAudioStreamEnabled(int ulStreamNum);
         bool IsResumeDvdEnabled();
-        bool IsSubpictureEnabled();
-        bool IsSubpictureStreamEnabled(int ulStreamNum);
         bool ResumeDvd();
         void ReturnFromSubmenu();
         void SetMenuLang(int nLang);

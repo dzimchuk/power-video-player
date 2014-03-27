@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Collections.ObjectModel;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -20,7 +20,7 @@ using Pvp.Core.DirectShow;
 using Pvp.Core.MediaEngine;
 using Pvp.Core.Wpf;
 
-namespace Pvp.App.ViewModel
+namespace Pvp.App.ViewModel.MainView
 {
     internal class MainViewModel : ViewModelBase
     {
@@ -583,22 +583,6 @@ namespace Pvp.App.ViewModel
                 item.IsChecked = item.Data.Number == dvdAngle;
             }
 
-            var subpictureStream = _engine.CurrentSubpictureStream;
-            foreach (var item in _dvdSubpictureStreams.AsContentItems<NumberedMenuItemData>())
-            {
-                bool toBeChecked = false;
-                if (item.Data.Number == -1)
-                {
-                    toBeChecked = _engine.IsSubpictureEnabled();
-                }
-                else
-                {
-                    toBeChecked = item.Data.Number == subpictureStream;
-                }
-
-                item.IsChecked = toBeChecked;
-            }
-
             var audioStream = _engine.CurrentAudioStream;
             foreach (var item in _audioStreams.AsContentItems<NumberedMenuItemData>())
             {
@@ -727,7 +711,6 @@ namespace Pvp.App.ViewModel
             UpdateDvdMenu();
             UpdateDvdMenuLanguagesMenu();
             UpdateDvdAnglesMenu();
-            UpdateDvdSubpictureStreamsMenu();
             UpdateAudioStreamsMenu();
             UpdateDvdChaptersMenu();
         }
@@ -1032,79 +1015,6 @@ namespace Pvp.App.ViewModel
         public ObservableCollection<IHierarchicalItem> DvdAngles
         {
             get { return _dvdAngles; }
-        }
-
-        private void UpdateDvdSubpictureStreamsMenu()
-        {
-            _dvdSubpictureStreams.Clear();
-            DvdSubpictureStreamsMenuVisible = false;
-
-            if (_engine.GraphState != GraphState.Reset)
-            {
-                int nStreams = _engine.NumberOfSubpictureStreams;
-
-                if (nStreams > 0)
-                {
-                    var command = new GenericRelayCommand<NumberedMenuItemData>(
-                        data =>
-                        {
-                            if (data != null)
-                            {
-                                if (data.Number == -1)
-                                {
-                                    _engine.EnableSubpicture(!_engine.IsSubpictureEnabled());
-                                }
-                                else
-                                {
-                                    _engine.CurrentSubpictureStream = data.Number;
-                                }
-                            }
-                        },
-                        data =>
-                        {
-                            var enabled = false;
-                            if (data != null)
-                            {
-                                if (data.Number == -1)
-                                {
-                                    enabled = (_engine.UOPS & VALID_UOP_FLAG.UOP_FLAG_Select_SubPic_Stream) == 0;
-                                }
-                                else
-                                {
-                                    enabled = (_engine.UOPS & VALID_UOP_FLAG.UOP_FLAG_Select_SubPic_Stream) == 0 &&
-                                        _engine.IsSubpictureStreamEnabled(data.Number);
-                                }
-                            }
-
-                            return enabled;
-                        });
-
-                    _dvdSubpictureStreams.Add(new LeafItem<NumberedMenuItemData>(Resources.Resources.mi_display_subpictures, new NumberedMenuItemData(-1), command));
-                    for (int i = 0; i < nStreams; i++)
-                    {
-                        _dvdSubpictureStreams.Add(new LeafItem<NumberedMenuItemData>(_engine.GetSubpictureStreamName(i), new NumberedMenuItemData(i), command));
-                    }
-
-                    DvdSubpictureStreamsMenuVisible = true;
-                }
-            }
-        }
-
-        private bool _dvdSubpictureStreamsMenuVisible;
-        public bool DvdSubpictureStreamsMenuVisible
-        {
-            get { return _dvdSubpictureStreamsMenuVisible; }
-            set
-            {
-                _dvdSubpictureStreamsMenuVisible = value;
-                RaisePropertyChanged("DvdSubpictureStreamsMenuVisible");
-            }
-        }
-
-        private readonly ObservableCollection<IHierarchicalItem> _dvdSubpictureStreams = new ObservableCollection<IHierarchicalItem>();
-        public ObservableCollection<IHierarchicalItem> DvdSubpictureStreams
-        {
-            get { return _dvdSubpictureStreams; }
         }
 
         private void UpdateAudioStreamsMenu()

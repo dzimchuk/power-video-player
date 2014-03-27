@@ -15,5 +15,12 @@ namespace Pvp.Core.MediaEngine.FilterGraphs
         bool GetVolume(out int volume);
         string GetAudioStreamName(int nStream);
         void OnExternalStreamSelection();
+
+        int NumberOfSubpictureStreams { get; }
+        int CurrentSubpictureStream { get; set; }
+        bool EnableSubpicture(bool bEnable);
+        string GetSubpictureStreamName(int nStream);
+        bool IsSubpictureEnabled();
+        bool IsSubpictureStreamEnabled(int ulStreamNum);
     }
 }

@@ -128,6 +128,8 @@
     <Compile Include="ViewModel\FileTypes.cs" />
     <Compile Include="ViewModel\HierarchicalMenu\Extensions.cs" />
     <Compile Include="ViewModel\HierarchicalMenu\ParentDataItem.cs" />
+    <Compile Include="ViewModel\MainView\MenuViewModelBase.cs" />
+    <Compile Include="ViewModel\MainView\SubpictureMenuViewModel.cs" />
     <Compile Include="ViewModel\NumberedMenuItemData.cs" />
     <Compile Include="ViewModel\HierarchicalMenu\ContentItem.cs" />
     <Compile Include="ViewModel\HierarchicalMenu\HierarchicalItemType.cs" />
@@ -202,7 +204,7 @@
     <Compile Include="ViewModel\IDialogService.cs" />
     <Compile Include="ViewModel\IFileSelector.cs" />
     <Compile Include="ViewModel\IWindowHandleProvider.cs" />
-    <Compile Include="ViewModel\MainViewModel.cs" />
+    <Compile Include="ViewModel\MainView\MainViewModel.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
     <Compile Include="ViewModel\Settings\FileTypesSettingsViewModel.cs" />
     <Compile Include="ViewModel\Settings\FiltersSettingsViewModel.cs" />

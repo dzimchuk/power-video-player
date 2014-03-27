@@ -296,5 +296,27 @@ namespace Pvp.Core.MediaEngine.SourceFilterHandlers
                 _audioStreamHandler.OnExternalStreamSelection();
             }
         }
+
+        public int NumberOfSubpictureStreams { get; private set; }
+        public int CurrentSubpictureStream { get; set; }
+        public bool EnableSubpicture(bool bEnable)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string GetSubpictureStreamName(int nStream)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsSubpictureEnabled()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsSubpictureStreamEnabled(int ulStreamNum)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
