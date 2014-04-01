@@ -116,7 +116,7 @@ namespace Pvp.App.ViewModel.Settings
             get { return _fileAssociator.CanAssociate; }
         }
 
-        public bool ShowLaunchExternalUIButton
+        public bool CanShowExternalUI
         {
             get { return _fileAssociator.CanShowExternalUI; }
         }

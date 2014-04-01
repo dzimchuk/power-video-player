@@ -1,29 +1,20 @@
-﻿using GalaSoft.MvvmLight;
-using Pvp.App.Composition;
+﻿using Pvp.App.Composition;
+using Pvp.App.ViewModel;
 using Pvp.App.ViewModel.MainView;
+using Pvp.App.ViewModel.Settings;
 
 namespace Pvp.App
 {
     internal static class ViewModelLocator
     {
-        internal const string MainWindowViewModelName = "MainWindowViewModel";
-        internal const string SettingsViewModelName = "SettingsViewModelName";
-        internal const string EnterKeyViewModelName = "EnterKeyViewModelName";
-        internal const string MediaInformationViewModelName = "MediaInformationViewModelName";
-        internal const string FailedStreamsViewModelName = "FailedStreamsViewModelName";
-        internal const string AboutAppViewModelName = "AboutAppViewModelName";
-
         static ViewModelLocator()
         {
             DesignTimeComposition.SetUpDependencies();
         }
 
-        public static ViewModelBase MainWindowViewModel
+        public static MainWindowViewModel MainWindowViewModel
         {
-            get
-            {
-                return DependencyResolver.Current.Resolve<ViewModelBase>(MainWindowViewModelName);
-            }
+            get { return DependencyResolver.Current.Resolve<MainWindowViewModel>(); }
         }
 
         public static MainViewModel MainViewModel
@@ -36,29 +27,59 @@ namespace Pvp.App
             get { return DependencyResolver.Current.Resolve<SubpictureMenuViewModel>(); }
         }
 
-        public static ViewModelBase SettingsViewModel
+        public static AudioMenuViewModel AudioMenuViewModel
         {
-            get { return DependencyResolver.Current.Resolve<ViewModelBase>(SettingsViewModelName); }
+            get { return DependencyResolver.Current.Resolve<AudioMenuViewModel>(); }
         }
 
-        public static ViewModelBase EnterKeyViewModel
+        public static FiltersMenuViewModel FiltersMenuViewModel
         {
-            get { return DependencyResolver.Current.Resolve<ViewModelBase>(EnterKeyViewModelName); }
+            get { return DependencyResolver.Current.Resolve<FiltersMenuViewModel>(); }
         }
 
-        public static ViewModelBase MediaInformationViewModel
+        public static DvdMenuViewModel DvdMenuViewModel
         {
-            get { return DependencyResolver.Current.Resolve<ViewModelBase>(MediaInformationViewModelName); }
+            get { return DependencyResolver.Current.Resolve<DvdMenuViewModel>(); }
         }
 
-        public static ViewModelBase FailedStreamsViewModel
+        public static DvdMenuLanguagesViewModel DvdMenuLanguagesViewModel
         {
-            get { return DependencyResolver.Current.Resolve<ViewModelBase>(FailedStreamsViewModelName); }
+            get { return DependencyResolver.Current.Resolve<DvdMenuLanguagesViewModel>(); }
         }
 
-        public static ViewModelBase AboutAppViewModel
+        public static DvdAnglesMenuViewModel DvdAnglesMenuViewModel
         {
-            get { return DependencyResolver.Current.Resolve<ViewModelBase>(AboutAppViewModelName); }
+            get { return DependencyResolver.Current.Resolve<DvdAnglesMenuViewModel>(); }
+        }
+
+        public static DvdChaptersMenuViewModel DvdChaptersMenuViewModel
+        {
+            get { return DependencyResolver.Current.Resolve<DvdChaptersMenuViewModel>(); }
+        }
+
+        public static SettingsViewModel SettingsViewModel
+        {
+            get { return DependencyResolver.Current.Resolve<SettingsViewModel>(); }
+        }
+
+        public static EnterKeyViewModel EnterKeyViewModel
+        {
+            get { return DependencyResolver.Current.Resolve<EnterKeyViewModel>(); }
+        }
+
+        public static MediaInformationViewModel MediaInformationViewModel
+        {
+            get { return DependencyResolver.Current.Resolve<MediaInformationViewModel>(); }
+        }
+
+        public static FailedStreamsViewModel FailedStreamsViewModel
+        {
+            get { return DependencyResolver.Current.Resolve<FailedStreamsViewModel>(); }
+        }
+
+        public static AboutAppViewModel AboutAppViewModel
+        {
+            get { return DependencyResolver.Current.Resolve<AboutAppViewModel>(); }
         }
     }
 }

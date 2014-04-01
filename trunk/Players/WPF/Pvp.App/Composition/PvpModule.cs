@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Windows;
-using GalaSoft.MvvmLight;
 using Ninject.Modules;
 using Pvp.App.Service;
 using Pvp.App.ViewModel;
@@ -32,19 +31,25 @@ namespace Pvp.App.Composition
             Bind<IFailedStreamsContainer>().To<FailedStreamsContainer>().InSingletonScope();
             Bind<ICursorManager>().To<CursorManager>();
 
-            Bind<ViewModelBase>().To<MainWindowViewModel>().InSingletonScope().Named(ViewModelLocator.MainWindowViewModelName);
+            Bind<MainWindowViewModel>().ToSelf().InSingletonScope();
             Bind<MainViewModel>().ToSelf().InSingletonScope();
             Bind<ControlPanelViewModel>().ToSelf().InSingletonScope();
 
             Bind<SubpictureMenuViewModel>().ToSelf().InSingletonScope();
+            Bind<AudioMenuViewModel>().ToSelf().InSingletonScope();
+            Bind<FiltersMenuViewModel>().ToSelf().InSingletonScope();
+            Bind<DvdMenuViewModel>().ToSelf().InSingletonScope();
+            Bind<DvdMenuLanguagesViewModel>().ToSelf().InSingletonScope();
+            Bind<DvdAnglesMenuViewModel>().ToSelf().InSingletonScope();
+            Bind<DvdChaptersMenuViewModel>().ToSelf().InSingletonScope();
 
             Bind<IImageCreaterFactory>().To<ImageCreaterFactory>().InSingletonScope();
 
-            Bind<ViewModelBase>().To<SettingsViewModel>().Named(ViewModelLocator.SettingsViewModelName);
-            Bind<ViewModelBase>().To<EnterKeyViewModel>().Named(ViewModelLocator.EnterKeyViewModelName);
-            Bind<ViewModelBase>().To<MediaInformationViewModel>().Named(ViewModelLocator.MediaInformationViewModelName);
-            Bind<ViewModelBase>().To<FailedStreamsViewModel>().Named(ViewModelLocator.FailedStreamsViewModelName);
-            Bind<ViewModelBase>().To<AboutAppViewModel>().Named(ViewModelLocator.AboutAppViewModelName);
+            Bind<SettingsViewModel>().ToSelf();
+            Bind<EnterKeyViewModel>().ToSelf();
+            Bind<MediaInformationViewModel>().ToSelf();
+            Bind<FailedStreamsViewModel>().ToSelf();
+            Bind<AboutAppViewModel>().ToSelf();
         }
     }
 }

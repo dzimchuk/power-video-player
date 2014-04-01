@@ -128,6 +128,12 @@
     <Compile Include="ViewModel\FileTypes.cs" />
     <Compile Include="ViewModel\HierarchicalMenu\Extensions.cs" />
     <Compile Include="ViewModel\HierarchicalMenu\ParentDataItem.cs" />
+    <Compile Include="ViewModel\MainView\AudioMenuViewModel.cs" />
+    <Compile Include="ViewModel\MainView\DvdAnglesMenuViewModel.cs" />
+    <Compile Include="ViewModel\MainView\DvdChaptersMenuViewModel.cs" />
+    <Compile Include="ViewModel\MainView\DvdMenuLanguagesViewModel.cs" />
+    <Compile Include="ViewModel\MainView\DvdMenuViewModel.cs" />
+    <Compile Include="ViewModel\MainView\FiltersMenuViewModel.cs" />
     <Compile Include="ViewModel\MainView\MenuViewModelBase.cs" />
     <Compile Include="ViewModel\MainView\SubpictureMenuViewModel.cs" />
     <Compile Include="ViewModel\NumberedMenuItemData.cs" />
