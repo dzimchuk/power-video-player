@@ -4,7 +4,7 @@
         xmlns:res="clr-namespace:Pvp.App.Resources"
         xmlns:app="clr-namespace:Pvp.App"
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
-        xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Extras.WPF4"
+        xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Extras.WPF45"
         Title="EnterKeyWindow" Height="150" Width="400"
         WindowStyle="None"
         ResizeMode="NoResize"
