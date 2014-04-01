@@ -17,7 +17,7 @@ namespace Pvp.App.Util
         {
         }
 
-        public GenericRelayCommand(Action<T> execute, Predicate<T> canExecute)
+        public GenericRelayCommand(Action<T> execute, Func<T, bool> canExecute)
             : base(execute, canExecute)
         {
         }

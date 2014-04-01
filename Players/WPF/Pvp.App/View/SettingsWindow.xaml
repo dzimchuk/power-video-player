@@ -8,7 +8,7 @@
         xmlns:engine="clr-namespace:Pvp.Core.MediaEngine;assembly=Pvp.Core"
         xmlns:vm="clr-namespace:Pvp.App.ViewModel"
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
-        xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Extras.WPF4"
+        xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Extras.WPF45"
         Title="{x:Static res:Resources.settings_caption}" Height="400" Width="600"
         DataContext="{x:Static app:ViewModelLocator.SettingsViewModel}"
         Loaded="window_Loaded"
