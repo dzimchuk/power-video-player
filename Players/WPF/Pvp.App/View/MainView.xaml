@@ -135,7 +135,9 @@
                 <MenuItem Header="{Binding LS, Source={StaticResource LocHelper}, Converter={StaticResource LocConverter}, ConverterParameter=mi_volume_mute}" Command="{Binding Path=MuteCommand}" IsChecked="{Binding Path=IsMute}"/>
             </MenuItem>
             <Separator/>
+            
             <MenuItem Header="{Binding LS, Source={StaticResource LocHelper}, Converter={StaticResource LocConverter}, ConverterParameter=mi_goto_menu}" 
+                      DataContext="{x:Static app:ViewModelLocator.DvdChaptersMenuViewModel}"
                       Visibility="{Binding Path=DvdChaptersMenuVisible, Converter={StaticResource BooleanToVisibilityValueConverter}}"
                       ItemsSource="{Binding Path=DvdChapters}"
                       ItemTemplateSelector="{StaticResource HierarchicalDataTemplateSelector}">
@@ -147,6 +149,7 @@
             </MenuItem>
             
             <MenuItem Header="{Binding LS, Source={StaticResource LocHelper}, Converter={StaticResource LocConverter}, ConverterParameter=mi_audio_streams}" 
+                      DataContext="{x:Static app:ViewModelLocator.AudioMenuViewModel}"
                       Visibility="{Binding Path=AudioStreamsMenuVisible, Converter={StaticResource BooleanToVisibilityValueConverter}}"
                       ItemsSource="{Binding Path=AudioStreams}"
                       ItemTemplateSelector="{StaticResource HierarchicalDataTemplateSelector}" />
@@ -164,26 +167,37 @@
             </MenuItem>
             
             <MenuItem Header="{Binding LS, Source={StaticResource LocHelper}, Converter={StaticResource LocConverter}, ConverterParameter=mi_angles}" 
+                      DataContext="{x:Static app:ViewModelLocator.DvdAnglesMenuViewModel}"
                       Visibility="{Binding Path=DvdAnglesMenuVisible, Converter={StaticResource BooleanToVisibilityValueConverter}}"
                       ItemsSource="{Binding Path=DvdAngles}"
                       ItemTemplateSelector="{StaticResource HierarchicalDataTemplateSelector}" />
+            
             <MenuItem Header="{Binding LS, Source={StaticResource LocHelper}, Converter={StaticResource LocConverter}, ConverterParameter=mi_menu_languages}" 
+                      DataContext="{x:Static app:ViewModelLocator.DvdMenuLanguagesViewModel}"
                       Visibility="{Binding Path=DvdMenuLanguagesMenuVisible, Converter={StaticResource BooleanToVisibilityValueConverter}}"
                       ItemsSource="{Binding Path=DvdMenuLanguages}"
                       ItemTemplateSelector="{StaticResource HierarchicalDataTemplateSelector}" />
+            
             <MenuItem Header="{Binding LS, Source={StaticResource LocHelper}, Converter={StaticResource LocConverter}, ConverterParameter=mi_filters}" 
+                      DataContext="{x:Static app:ViewModelLocator.FiltersMenuViewModel}"
                       Visibility="{Binding Path=FiltersMenuVisible, Converter={StaticResource BooleanToVisibilityValueConverter}}"
                       ItemsSource="{Binding Path=Filters}"
                       ItemTemplateSelector="{StaticResource HierarchicalDataTemplateSelector}" />
-            <Separator Visibility="{Binding Path=FiltersMenuVisible, Converter={StaticResource BooleanToVisibilityValueConverter}}"/>
+            <Separator Visibility="{Binding Path=FiltersMenuVisible, Converter={StaticResource BooleanToVisibilityValueConverter}}"
+                       DataContext="{x:Static app:ViewModelLocator.FiltersMenuViewModel}"/>
+            
             <MenuItem Header="{Binding LS, Source={StaticResource LocHelper}, Converter={StaticResource LocConverter}, ConverterParameter=mi_select_menu}"
+                      DataContext="{x:Static app:ViewModelLocator.DvdMenuViewModel}"
                       Visibility="{Binding Path=DvdMenuVisible, Converter={StaticResource BooleanToVisibilityValueConverter}}"
                       ItemsSource="{Binding Path=DvdMenuItems}"
                       ItemTemplateSelector="{StaticResource HierarchicalDataTemplateSelector}" />
             <MenuItem Header="{Binding LS, Source={StaticResource LocHelper}, Converter={StaticResource LocConverter}, ConverterParameter=mi_close_menu_resume}"
+                      DataContext="{x:Static app:ViewModelLocator.DvdMenuViewModel}"
                       Visibility="{Binding Path=DvdMenuVisible, Converter={StaticResource BooleanToVisibilityValueConverter}}"
                       Command="{Binding Path=DvdResumeCommand}"/>
-            <Separator Visibility="{Binding Path=DvdMenuVisible, Converter={StaticResource BooleanToVisibilityValueConverter}}"/>
+            <Separator Visibility="{Binding Path=DvdMenuVisible, Converter={StaticResource BooleanToVisibilityValueConverter}}"
+                       DataContext="{x:Static app:ViewModelLocator.DvdMenuViewModel}"/>
+            
             <MenuItem Header="{Binding LS, Source={StaticResource LocHelper}, Converter={StaticResource LocConverter}, ConverterParameter=mi_application}">
                 <MenuItem Header="{Binding LS, Source={StaticResource LocHelper}, Converter={StaticResource LocConverter}, ConverterParameter=mi_controlbar}" Command="{Binding Path=ControlPanelVisibilityToggleCommand}" IsChecked="{Binding Path=IsControlPanelVisible}"/>
                 <Separator/>

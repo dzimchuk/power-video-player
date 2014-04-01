@@ -13,10 +13,7 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using Pvp.App.Messaging;
-using Pvp.App.Util;
-using Pvp.App.ViewModel.HierarchicalMenu;
 using Pvp.App.ViewModel.Settings;
-using Pvp.Core.DirectShow;
 using Pvp.Core.MediaEngine;
 using Pvp.Core.Wpf;
 
@@ -29,7 +26,6 @@ namespace Pvp.App.ViewModel.MainView
 
         private readonly IFileSelector _fileSelector;
         private readonly IDialogService _dialogService;
-        private readonly IWindowHandleProvider _windowHandleProvider;
         private readonly IDriveService _driveService;
         private readonly ISettingsProvider _settingsProvider;
         private readonly IImageCreaterFactory _imageCreaterFactory;
@@ -70,13 +66,10 @@ namespace Pvp.App.ViewModel.MainView
 
         private SupportedLanguage _language;
 
-        private bool _mediaControlCreated;
-
         public MainViewModel(IMediaEngineFacade engine,
             ControlPanelViewModel controlViewModel,
             IFileSelector fileSelector,
             IDialogService dialogService,
-            IWindowHandleProvider windowHandleProvider,
             IDriveService driveService,
             ISettingsProvider settingsProvider, 
             IImageCreaterFactory imageCreaterFactory, 
@@ -88,7 +81,6 @@ namespace Pvp.App.ViewModel.MainView
             _controlViewModel = controlViewModel;
             _fileSelector = fileSelector;
             _dialogService = dialogService;
-            _windowHandleProvider = windowHandleProvider;
             _driveService = driveService;
             _settingsProvider = settingsProvider;
             _imageCreaterFactory = imageCreaterFactory;
@@ -476,8 +468,6 @@ namespace Pvp.App.ViewModel.MainView
         {
             if (message.Content == Event.MediaControlCreated)
             {
-                _mediaControlCreated = true;
-
                 _engine.ErrorOccured += delegate(object sender, ErrorOccuredEventArgs args)
                 {
                     _dialogService.DisplayError(args.Message);
@@ -487,7 +477,6 @@ namespace Pvp.App.ViewModel.MainView
 
                 _engine.DvdParentalChange += OnUserDecisionNeeded;
                 _engine.PartialSuccess += OnUserDecisionNeeded;
-                _engine.ModifyMenu += _engine_ModifyMenu;
 
                 _previousVideoSize = VideoSize;
 
@@ -502,7 +491,6 @@ namespace Pvp.App.ViewModel.MainView
                 {
                     Messenger.Default.Send(new EventMessage(Event.StateRefreshSuggested));
 
-                    UpdateMenusCheckedStatus();
                     UpdateCursor();
                 }
             }
@@ -574,51 +562,6 @@ namespace Pvp.App.ViewModel.MainView
                 }
             }
         }
-  
-        private void UpdateMenusCheckedStatus()
-        {
-            var dvdAngle = _engine.CurrentAngle;
-            foreach (var item in _dvdAngles.AsContentItems<NumberedMenuItemData>())
-            {
-                item.IsChecked = item.Data.Number == dvdAngle;
-            }
-
-            var audioStream = _engine.CurrentAudioStream;
-            foreach (var item in _audioStreams.AsContentItems<NumberedMenuItemData>())
-            {
-                item.IsChecked = item.Data.Number == audioStream;
-            }
-
-            var title = _engine.CurrentTitle;
-            var chapter = _engine.CurrentChapter;
-            foreach (var item in _dvdChapters)
-            {
-            	CheckTitleChaperMenuItem(item, title, chapter);
-            }
-
-            foreach (var item in _filters.AsContentItemsRecursive<SelectableStreamMenuItemData>())
-            {
-                item.IsChecked = _engine.IsStreamSelected(item.Data.FilterName, item.Data.StreamIndex);
-            }
-        }
-
-        private static void CheckTitleChaperMenuItem(IHierarchicalItem item, int currentTitle, int currentChapter)
-        {
-            var parent = item as ParentDataItem<TitleChapterMenuItemData>;
-            if (parent != null)
-            {
-                parent.IsChecked = parent.Data.Title == currentTitle;
-                foreach (var subItem in parent.SubItems)
-                {
-                    CheckTitleChaperMenuItem(subItem, currentTitle, currentChapter);
-                }
-            }
-            else
-            {
-                var leaf = (LeafItem<TitleChapterMenuItemData>)item;
-                leaf.IsChecked = leaf.Data.Title == currentTitle && leaf.Data.Chapter == currentChapter;
-            }
-        }
 
         private void OnUserDecisionNeeded(object sender, UserDecisionEventArgs e)
         {
@@ -637,7 +580,6 @@ namespace Pvp.App.ViewModel.MainView
                 _displayService.PreventMonitorPowerdown();
             }
             
-            UpdateMenu();
             RaisePropertyChanged("PlayRateChangePossible");
             NotifyOnPlayingModeChanged();
 
@@ -703,447 +645,6 @@ namespace Pvp.App.ViewModel.MainView
                     builder.Remove(0, builder.Length);
                 }
             });
-        }
-
-        private void UpdateMenu()
-        {
-            UpdateFiltersMenu();
-            UpdateDvdMenu();
-            UpdateDvdMenuLanguagesMenu();
-            UpdateDvdAnglesMenu();
-            UpdateAudioStreamsMenu();
-            UpdateDvdChaptersMenu();
-        }
-
-        private void _engine_ModifyMenu(object sender, EventArgs e)
-        {
-            UpdateMenu();
-        }
-                
-        private void UpdateFiltersMenu()
-        {
-            _filters.Clear();
-
-            if (_engine.GraphState == GraphState.Reset)
-            {
-                FiltersMenuVisible = false;
-            }
-            else
-            {
-                var last = _engine.FilterCount;
-                if (last > 15)
-                    last = 15;
-
-                var displayPropPageCommand = new GenericRelayCommand<NumberedMenuItemData>(
-                    data =>
-                    {
-                        if (data != null)
-                            _engine.DisplayFilterPropPage(_windowHandleProvider.Handle, data.Number, true);
-                    },
-                    data =>
-                    {
-                        return data != null && _engine.DisplayFilterPropPage(_windowHandleProvider.Handle, data.Number, false);
-                    });
-
-                var selectStreamCommand = new GenericRelayCommand<SelectableStreamMenuItemData>(
-                    data =>
-                    {
-                        if (data != null)
-                            _engine.SelectStream(data.FilterName, data.StreamIndex);
-                    });
-
-                for (var i = 0; i < last; i++)
-                {
-                    var filterName = _engine.GetFilterName(i);
-
-                    var selectableStreams = _engine.GetSelectableStreams(filterName);
-                    var streams = selectableStreams as IList<SelectableStream> ?? selectableStreams.ToList();
-                    if (streams.Any())
-                    {
-                        var parentItem = new ParentDataItem<NumberedMenuItemData>(filterName, new NumberedMenuItemData(i));
-                        parentItem.SubItems.Add(new LeafItem<NumberedMenuItemData>(Resources.Resources.mi_properties, new NumberedMenuItemData(i),
-                            displayPropPageCommand));
-
-                        var grouppedStreams = streams.GroupBy(s => s.MajorType);
-                        foreach (var group in grouppedStreams)
-                        {
-                            parentItem.SubItems.Add(new SeparatorItem());
-                            foreach (var stream in group)
-                            {
-                                var leafItem = new LeafItem<SelectableStreamMenuItemData>(stream.Name, 
-                                    new SelectableStreamMenuItemData(filterName, stream.Index), selectStreamCommand);
-                                leafItem.IsChecked = stream.Enabled;
-                                parentItem.SubItems.Add(leafItem);
-                            }
-                        }
-
-                        _filters.Add(parentItem);
-                    }
-                    else
-                    {
-                        _filters.Add(new LeafItem<NumberedMenuItemData>(filterName, new NumberedMenuItemData(i), displayPropPageCommand));
-                    }
-                }
-
-                FiltersMenuVisible = true;
-            }
-        }
-
-        private bool _filtersMenuVisible;
-        public bool FiltersMenuVisible
-        {
-            get { return _filtersMenuVisible; }
-            set
-            {
-                _filtersMenuVisible = value;
-                RaisePropertyChanged("FiltersMenuVisible");
-            }
-        }
-
-        private readonly ObservableCollection<IHierarchicalItem> _filters = new ObservableCollection<IHierarchicalItem>();
-        public ObservableCollection<IHierarchicalItem> Filters
-        {
-            get { return _filters; }
-        }
-
-        private bool _dvdMenuVisible;
-        public bool DvdMenuVisible
-        {
-            get { return _dvdMenuVisible; }
-            set
-            {
-                _dvdMenuVisible = value;
-                RaisePropertyChanged("DvdMenuVisible");
-            }
-        }
-
-        private readonly ObservableCollection<IHierarchicalItem> _dvdMenuItems = new ObservableCollection<IHierarchicalItem>();
-        public ObservableCollection<IHierarchicalItem> DvdMenuItems
-        {
-            get { return _dvdMenuItems; }
-        }
-
-        private void UpdateDvdMenu()
-        {
-        	_dvdMenuItems.Clear();
-            DvdMenuVisible = false;
-
-            if (_engine.SourceType == SourceType.Dvd)
-            {
-                var command = new GenericRelayCommand<NumberedMenuItemData>(
-                    data =>
-                    {
-                        if (data != null)
-                        {
-                            _engine.ShowMenu((DVD_MENU_ID)data.Number);
-                        }
-                    },
-                    data =>
-                    {
-                        var enabled = false;
-
-                        if (data != null)
-                        {
-                            VALID_UOP_FLAG uops = _engine.UOPS;
-                            DVD_MENU_ID id = (DVD_MENU_ID)data.Number;
-                            switch (id)
-                            {
-                                case DVD_MENU_ID.DVD_MENU_Title:
-                                    enabled = (uops & VALID_UOP_FLAG.UOP_FLAG_ShowMenu_Title) == 0;
-                                    break;
-                                case DVD_MENU_ID.DVD_MENU_Root:
-                                    enabled = (uops & VALID_UOP_FLAG.UOP_FLAG_ShowMenu_Root) == 0;
-                                    break;
-                                case DVD_MENU_ID.DVD_MENU_Subpicture:
-                                    enabled = (uops & VALID_UOP_FLAG.UOP_FLAG_ShowMenu_SubPic) == 0;
-                                    break;
-                                case DVD_MENU_ID.DVD_MENU_Audio:
-                                    enabled = (uops & VALID_UOP_FLAG.UOP_FLAG_ShowMenu_Audio) == 0;
-                                    break;
-                                case DVD_MENU_ID.DVD_MENU_Angle:
-                                    enabled = (uops & VALID_UOP_FLAG.UOP_FLAG_ShowMenu_Angle) == 0;
-                                    break;
-                                case DVD_MENU_ID.DVD_MENU_Chapter:
-                                    enabled = (uops & VALID_UOP_FLAG.UOP_FLAG_ShowMenu_Chapter) == 0;
-                                    break;
-                            }
-                        }
-
-                        return enabled;
-                    });
-
-                _dvdMenuItems.Add(new LeafItem<NumberedMenuItemData>(Resources.Resources.mi_title_menu,
-                    new NumberedMenuItemData((int)DVD_MENU_ID.DVD_MENU_Title), command));
-
-                _dvdMenuItems.Add(new LeafItem<NumberedMenuItemData>(Resources.Resources.mi_root_menu,
-                    new NumberedMenuItemData((int)DVD_MENU_ID.DVD_MENU_Root), command));
-
-                _dvdMenuItems.Add(new LeafItem<NumberedMenuItemData>(Resources.Resources.mi_subpicture_menu,
-                    new NumberedMenuItemData((int)DVD_MENU_ID.DVD_MENU_Subpicture), command));
-
-                _dvdMenuItems.Add(new LeafItem<NumberedMenuItemData>(Resources.Resources.mi_audio_menu,
-                    new NumberedMenuItemData((int)DVD_MENU_ID.DVD_MENU_Audio), command));
-
-                _dvdMenuItems.Add(new LeafItem<NumberedMenuItemData>(Resources.Resources.mi_angle_menu,
-                    new NumberedMenuItemData((int)DVD_MENU_ID.DVD_MENU_Angle), command));
-
-                _dvdMenuItems.Add(new LeafItem<NumberedMenuItemData>(Resources.Resources.mi_chapter_menu,
-                    new NumberedMenuItemData((int)DVD_MENU_ID.DVD_MENU_Chapter), command));
-
-                DvdMenuVisible = true;
-            }
-        }
-
-        private ICommand _dvdResumeCommand;
-        public ICommand DvdResumeCommand
-        {
-            get
-            {
-                if (_dvdResumeCommand == null)
-                {
-                    _dvdResumeCommand = new RelayCommand(
-                        () =>
-                        {
-                            _engine.ResumeDVD();
-                        },
-                        () =>
-                        {
-                            return _engine.IsResumeDVDEnabled();
-                        });
-                }
-
-                return _dvdResumeCommand;
-            }
-        }
-
-        private void UpdateDvdMenuLanguagesMenu()
-        {
-            _dvdMenuLanguages.Clear();
-            DvdMenuLanguagesMenuVisible = false;
-
-            if (_engine.GraphState != GraphState.Reset)
-            {
-                var nLang = _engine.MenuLangCount;
-
-                if (nLang > 0)
-                {
-                    if (nLang > 10)
-                        nLang = 10;
-
-                    var command = new GenericRelayCommand<NumberedMenuItemData>(
-                        data =>
-                        {
-                            if (data != null)
-                                _engine.SetMenuLang(data.Number);
-                        },
-                        data =>
-                        {
-                            return data != null && _engine.MenuLangCount > 1;
-                        });
-
-                    for (int i = 0; i < nLang; i++)
-                    {
-                        _dvdMenuLanguages.Add(new LeafItem<NumberedMenuItemData>(_engine.GetMenuLangName(i), new NumberedMenuItemData(i), command));
-                    }
-
-                    DvdMenuLanguagesMenuVisible = true;
-                }
-            }
-        }
-
-        private bool _dvdMenuLanguagesMenuVisible;
-        public bool DvdMenuLanguagesMenuVisible
-        {
-            get { return _dvdMenuLanguagesMenuVisible; }
-            set
-            {
-                _dvdMenuLanguagesMenuVisible = value;
-                RaisePropertyChanged("DvdMenuLanguagesMenuVisible");
-            }
-        }
-
-        private readonly ObservableCollection<IHierarchicalItem> _dvdMenuLanguages = new ObservableCollection<IHierarchicalItem>();
-        public ObservableCollection<IHierarchicalItem> DvdMenuLanguages
-        {
-            get { return _dvdMenuLanguages; }
-        }
-
-        private void UpdateDvdAnglesMenu()
-        {
-            _dvdAngles.Clear();
-            DvdAnglesMenuVisible = false;
-
-            if (_engine.GraphState != GraphState.Reset)
-            {
-                int ulAngles = _engine.AnglesAvailable;
-
-                if (ulAngles > 1)
-                {
-                    var command = new GenericRelayCommand<NumberedMenuItemData>(
-                        data =>
-                        {
-                            if (data != null)
-                                _engine.CurrentAngle = data.Number;
-                        },
-                        data =>
-                        {
-                            return data != null && (_engine.UOPS & VALID_UOP_FLAG.UOP_FLAG_Select_Angle) == 0;
-                        });
-
-                    for (int i = 0; i < ulAngles; i++)
-                    {
-                        _dvdAngles.Add(new LeafItem<NumberedMenuItemData>(string.Format(Resources.Resources.mi_angle_format, i + 1), new NumberedMenuItemData(i + 1), command));
-                    }
-
-                    DvdAnglesMenuVisible = true;
-                }
-            }
-        }
-
-        private bool _dvdAnglesMenuVisible;
-        public bool DvdAnglesMenuVisible
-        {
-            get { return _dvdAnglesMenuVisible; }
-            set
-            {
-                _dvdAnglesMenuVisible = value;
-                RaisePropertyChanged("DvdAnglesMenuVisible");
-            }
-        }
-
-        private readonly ObservableCollection<IHierarchicalItem> _dvdAngles = new ObservableCollection<IHierarchicalItem>();
-        public ObservableCollection<IHierarchicalItem> DvdAngles
-        {
-            get { return _dvdAngles; }
-        }
-
-        private void UpdateAudioStreamsMenu()
-        {
-            _audioStreams.Clear();
-            AudioStreamsMenuVisible = false;
-
-            if (_engine.GraphState != GraphState.Reset)
-            {
-                int nStreams = _engine.AudioStreams;
-
-                if (nStreams > 0)
-                {
-                    var command = new GenericRelayCommand<NumberedMenuItemData>(
-                        data =>
-                        {
-                            if (data != null)
-                                _engine.CurrentAudioStream = data.Number;
-                        },
-                        data =>
-                            {
-                                return data != null &&
-                                       (_engine.SourceType != SourceType.Dvd ||
-                                        ((_engine.IsAudioStreamEnabled(data.Number)) && (_engine.UOPS & VALID_UOP_FLAG.UOP_FLAG_Select_Audio_Stream) == 0));
-                            });
-
-                    if (nStreams > 8)
-                        nStreams = 8;
-
-                    for (int i = 0; i < nStreams; i++)
-                    {
-                        _audioStreams.Add(new LeafItem<NumberedMenuItemData>(_engine.GetAudioStreamName(i), new NumberedMenuItemData(i), command));
-                    }
-
-                    AudioStreamsMenuVisible = true;
-                }
-            }
-        }
-
-        private bool _audioStreamsMenuVisible;
-        public bool AudioStreamsMenuVisible
-        {
-            get { return _audioStreamsMenuVisible; }
-            set
-            {
-                _audioStreamsMenuVisible = value;
-                RaisePropertyChanged("AudioStreamsMenuVisible");
-            }
-        }
-
-        private readonly ObservableCollection<IHierarchicalItem> _audioStreams = new ObservableCollection<IHierarchicalItem>();
-        public ObservableCollection<IHierarchicalItem> AudioStreams
-        {
-            get { return _audioStreams; }
-        }
-
-        private void UpdateDvdChaptersMenu()
-        {
-            _dvdChapters.Clear();
-            DvdChaptersMenuVisible = false;
-
-            if (_engine.GraphState != GraphState.Reset)
-            {
-                int ulTitles = _engine.NumberOfTitles;
-
-                if (ulTitles > 0)
-                {
-                    var command = new GenericRelayCommand<TitleChapterMenuItemData>(
-                        data =>
-                        {
-                            if (data != null)
-                                _engine.GoTo(data.Title, data.Chapter);
-                        },
-                        data =>
-                        {
-                            return data != null ?
-                                    (_engine.UOPS & VALID_UOP_FLAG.UOP_FLAG_Play_Chapter) == 0
-                                    :
-                                    false;
-                        });
-
-                    if (ulTitles == 1)
-                    {
-                    	int nChapters = _engine.GetNumChapters(1);
-                        for (int i = 1; i <= nChapters; i++)
-                        {
-                            _dvdChapters.Add(new LeafItem<TitleChapterMenuItemData>(string.Format(Resources.Resources.mi_chapter_format, i),
-                                new TitleChapterMenuItemData(1, i), command));
-                        }
-                    }
-                    else
-                    {
-                        for (int title = 1; title <= ulTitles; title++)
-                        {
-                            var titleItem = new ParentDataItem<TitleChapterMenuItemData>(string.Format(Resources.Resources.mi_title_format, title),
-                                new TitleChapterMenuItemData(title, 0));
-                            
-                            int nChapters = _engine.GetNumChapters(title);
-                            for (int i = 1; i <= nChapters; i++)
-                            {
-                                titleItem.SubItems.Add(new LeafItem<TitleChapterMenuItemData>(string.Format(Resources.Resources.mi_chapter_format, i),
-                                    new TitleChapterMenuItemData(title, i), command));
-                            }
-
-                            _dvdChapters.Add(titleItem);
-                        }
-                    }
-
-                    DvdChaptersMenuVisible = true;
-                }
-            }
-        }
-
-        private bool _dvdChaptersMenuVisible;
-        public bool DvdChaptersMenuVisible
-        {
-            get { return _dvdChaptersMenuVisible; }
-            set
-            {
-                _dvdChaptersMenuVisible = value;
-                RaisePropertyChanged("DvdChaptersMenuVisible");
-            }
-        }
-
-        private readonly ObservableCollection<IHierarchicalItem> _dvdChapters = new ObservableCollection<IHierarchicalItem>();
-        
-        public ObservableCollection<IHierarchicalItem> DvdChapters
-        {
-            get { return _dvdChapters; }
         }
 
         public ICommand SettingsCommand
