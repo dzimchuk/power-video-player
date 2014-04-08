@@ -105,6 +105,7 @@
     <Compile Include="IFileAssociatorRegistration.cs" />
     <Compile Include="Messaging\KeyboardMouseActionEventArgs.cs" />
     <Compile Include="Messaging\MainWindowResizeSuggestedEventArgs.cs" />
+    <Compile Include="Messaging\PlayDiscMessage.cs" />
     <Compile Include="Messaging\ResizeMainWindowCommandMessage.cs" />
     <Compile Include="Service\CursorManager.cs" />
     <Compile Include="Service\DisplayService.cs" />
@@ -133,6 +134,7 @@
     <Compile Include="ViewModel\HierarchicalMenu\Extensions.cs" />
     <Compile Include="ViewModel\HierarchicalMenu\ParentDataItem.cs" />
     <Compile Include="ViewModel\MainView\AudioMenuViewModel.cs" />
+    <Compile Include="ViewModel\MainView\DiscMenuViewModel.cs" />
     <Compile Include="ViewModel\MainView\DvdAnglesMenuViewModel.cs" />
     <Compile Include="ViewModel\MainView\DvdChaptersMenuViewModel.cs" />
     <Compile Include="ViewModel\MainView\DvdMenuLanguagesViewModel.cs" />
@@ -178,7 +180,7 @@
     <Compile Include="ViewModel\Settings\SettingChangeEventArgs.cs" />
     <Compile Include="Service\SettingsProvider.cs" />
     <Compile Include="Util\PropertyBag.cs" />
-    <Compile Include="ViewModel\CDRomCommand.cs" />
+    <Compile Include="ViewModel\MainView\DiscCommand.cs" />
     <Compile Include="ViewModel\IDriveInfo.cs" />
     <Compile Include="ViewModel\IDriveService.cs" />
     <Compile Include="ViewModel\IDurationProvider.cs" />

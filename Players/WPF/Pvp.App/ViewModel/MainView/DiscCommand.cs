@@ -1,14 +1,15 @@
+using System;
 using System.ComponentModel;
 using System.Threading;
 using System.Windows.Input;
 
-namespace Pvp.App.ViewModel
+namespace Pvp.App.ViewModel.MainView
 {
-    internal class CDRomCommand : INotifyPropertyChanged
+    internal class DiscCommand : INotifyPropertyChanged
     {
         private readonly SynchronizationContext _context;
 
-        public CDRomCommand(SynchronizationContext context)
+        public DiscCommand(SynchronizationContext context)
         {
             _context = context;
         }

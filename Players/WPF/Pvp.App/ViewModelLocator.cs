@@ -57,6 +57,11 @@ namespace Pvp.App
             get { return DependencyResolver.Current.Resolve<DvdChaptersMenuViewModel>(); }
         }
 
+        public static DiscMenuViewModel DiscMenuViewModel
+        {
+            get { return DependencyResolver.Current.Resolve<DiscMenuViewModel>(); }
+        }
+
         public static SettingsViewModel SettingsViewModel
         {
             get { return DependencyResolver.Current.Resolve<SettingsViewModel>(); }
