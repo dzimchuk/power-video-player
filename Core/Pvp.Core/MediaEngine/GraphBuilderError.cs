@@ -22,6 +22,7 @@ namespace Pvp.Core.MediaEngine
         CantPlayDisc,
         NoVideoDimension,
         AddEVR,
-        ConfigureEVR
+        ConfigureEVR,
+        CantRenderSubpicture
     }
 }

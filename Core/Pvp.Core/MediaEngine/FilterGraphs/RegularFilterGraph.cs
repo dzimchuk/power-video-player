@@ -258,6 +258,7 @@ namespace Pvp.Core.MediaEngine.FilterGraphs
         {
             _sourceFilterHandler.RenderVideo(GraphBuilder, Renderer);
             _sourceFilterHandler.RenderAudio(GraphBuilder);
+            _sourceFilterHandler.RenderSubpicture(GraphBuilder, Renderer);
         }
 
 //        public IEnumerable<StreamInfo> ReportUnrenderedPins()

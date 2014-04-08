@@ -1,18 +1,8 @@
-/* ****************************************************************************
- *
- * Copyright (c) Andrei Dzimchuk. All rights reserved.
- *
- * This software is subject to the Microsoft Public License (Ms-PL). 
- * A copy of the license can be found in the license.htm file included 
- * in this distribution.
- *
- * You must not remove this notice, or any other, from this software.
- *
- * ***************************************************************************/
-
 using System;
+using Pvp.Core.MediaEngine.FilterRegistry;
 using Pvp.Core.Native;
 using Pvp.Core.DirectShow;
+using MediaType = Pvp.Core.DirectShow.MediaType;
 
 namespace Pvp.Core.MediaEngine.Description
 {
@@ -170,7 +160,7 @@ namespace Pvp.Core.MediaEngine.Description
             if (strFormat.Length != 0)
                 return strFormat;
             strFormat = _mediaTypeManager.GetTypeName(MajorType, SubType);
-            return strFormat != null ? strFormat : _mediaTypeManager.GetFourCC(SubType);
+            return strFormat != null ? strFormat : MediaTypeManager.GetFourCC(SubType);
         }
 
         public string GetInterlaceMode()

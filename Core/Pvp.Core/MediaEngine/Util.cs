@@ -6,7 +6,7 @@ namespace Pvp.Core.MediaEngine
 {
     internal static class Util
     {
-        public static void ThrowExceptionForHR(this int hr, GraphBuilderError error)
+        public static void ThrowExceptionForHR(this int hr, GraphBuilderError error = GraphBuilderError.Unknown)
         {
             try
             {
@@ -80,6 +80,9 @@ namespace Pvp.Core.MediaEngine
                     break;
                 case GraphBuilderError.ConfigureEVR:
                     text = Resources.Resources.error_cant_configure_evr;
+                    break;
+                case GraphBuilderError.CantRenderSubpicture:
+                    text = Resources.Resources.error_cant_render_subpicture;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException("error");

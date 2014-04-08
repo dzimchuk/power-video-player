@@ -15,6 +15,7 @@ namespace Pvp.Core.MediaEngine.SourceFilterHandlers
         private bool _disposed;
 
         private IAudioStreamHandler _audioStreamHandler;
+        private ISubpictureStreamHandler _subpictureStreamHandler;
 
         public RegularSourceFilterHandler(IBaseFilter sourceFilter)
         {
@@ -30,12 +31,17 @@ namespace Pvp.Core.MediaEngine.SourceFilterHandlers
 
             if (_sourceOutPin != null)
             {
-                Marshal.FinalReleaseComObject(_sourceOutPin);
+                Marshal.ReleaseComObject(_sourceOutPin);
             }
 
             if (_audioStreamHandler != null)
             {
                 _audioStreamHandler.Dispose();
+            }
+
+            if (_subpictureStreamHandler != null)
+            {
+                _subpictureStreamHandler.Dispose();
             }
 
             if (_splitterFilter != _sourceFilter)
@@ -52,11 +58,11 @@ namespace Pvp.Core.MediaEngine.SourceFilterHandlers
         {
             InsureSourceOutPin();
 
-            var pVideoRendererInputPin = renderer.GetInputPin();
-            if (pVideoRendererInputPin != null)
+            var videoRendererInputPin = renderer.GetInputPin();
+            if (videoRendererInputPin != null)
             {
-                var hr = pGraphBuilder.Connect(_sourceOutPin, pVideoRendererInputPin);
-                Marshal.ReleaseComObject(pVideoRendererInputPin);
+                var hr = pGraphBuilder.Connect(_sourceOutPin, videoRendererInputPin);
+                Marshal.ReleaseComObject(videoRendererInputPin);
 
                 // that's it, if hr > 0 (partial success) the video stream is already rendered but there are unrendered (audio) streams
 
@@ -73,21 +79,25 @@ namespace Pvp.Core.MediaEngine.SourceFilterHandlers
             if (FindSplitter(pGraphBuilder))
             {
                 _audioStreamHandler = AudioStreamHandlerFactory.GetHandler(_splitterFilter);
-                _audioStreamHandler.RenderAudio(pGraphBuilder, _splitterFilter);
+                if (_audioStreamHandler != null)
+                {
+                    _audioStreamHandler.RenderAudio(pGraphBuilder, _splitterFilter);
+                }
             }
         }
 
-        //        protected void GetFilter(Guid majortype, Guid subtype, out IBaseFilter filter)
-        //        {
-        //            filter = null;
-        //            Guid guidFilter = Guid.Empty;
-        //            using (var manager = new MediaTypeManager())
-        //            {
-        //                guidFilter = manager.GetTypeClsid(majortype, subtype);
-        //            }
-        //            if (guidFilter != Guid.Empty)
-        //                GetFilter(guidFilter, out filter);
-        //        }
+        public void RenderSubpicture(IGraphBuilder pGraphBuilder, IRenderer renderer)
+        {
+            if (FindSplitter(pGraphBuilder))
+            {
+                _subpictureStreamHandler = SubpictureStreamHandlerFactory.GetHandler(_splitterFilter);
+                if (_subpictureStreamHandler != null)
+                {
+                    _subpictureStreamHandler.RenderSubpicture(pGraphBuilder, _splitterFilter, renderer);
+                    DsUtils.RemoveRedundantFilters(_sourceFilter, pGraphBuilder);
+                }
+            }
+        }
 
         private void InsureSourceOutPin()
         {
@@ -127,15 +137,13 @@ namespace Pvp.Core.MediaEngine.SourceFilterHandlers
                 pPin = DsUtils.GetPin(pFilter, PinDirection.Output, false, 0);
                 if (pPin != null)
                 {
-                    if (!bSplitterFound)
+                    if (DsUtils.IsMediaTypeSupported(pPin, MediaType.Audio) == 0 ||
+                        DsUtils.IsMediaTypeSupported(pPin, MediaType.Subtitle) == 0)
                     {
-                        if (DsUtils.IsMediaTypeSupported(pPin, MediaType.Audio) == 0)
-                        {
-                            //this unconnected pin supports audio type!
-                            bSplitterFound = true;
-                            bCanRelease = false;
-                            _splitterFilter = pFilter;
-                        }
+                        //this unconnected pin supports audio or subpicture type!
+                        bSplitterFound = true;
+                        bCanRelease = false;
+                        _splitterFilter = pFilter;
                     }
                     Marshal.ReleaseComObject(pPin);
                 }
@@ -162,7 +170,7 @@ namespace Pvp.Core.MediaEngine.SourceFilterHandlers
                         if (hr == DsHlp.S_OK)
                         {
                             PinInfo info = new PinInfo();
-                            pInputPin.QueryPinInfo(out info);
+                            hr = pInputPin.QueryPinInfo(out info);
                             if (hr == DsHlp.S_OK)
                             {
                                 _splitterFilter = info.pFilter;
@@ -194,9 +202,10 @@ namespace Pvp.Core.MediaEngine.SourceFilterHandlers
 
                 while ((pPin = DsUtils.GetPin(_splitterFilter, PinDirection.Output, true, nSkip)) != null)
                 {
-                    if (DsUtils.IsMediaTypeSupported(pPin, MediaType.Audio) == 0)
+                    if (DsUtils.IsMediaTypeSupported(pPin, MediaType.Audio) == 0 ||
+                        DsUtils.IsMediaTypeSupported(pPin, MediaType.Subtitle) == 0)
                     {
-                        // this connected pin supports audio type!                    
+                        // this connected pin supports audio or subpicture type!                    
                         DsUtils.Disconnect(pGraphBuilder, pPin);
                     }
                     else
@@ -295,28 +304,53 @@ namespace Pvp.Core.MediaEngine.SourceFilterHandlers
             {
                 _audioStreamHandler.OnExternalStreamSelection();
             }
+
+            if (_subpictureStreamHandler != null)
+            {
+                _subpictureStreamHandler.OnExternalStreamSelection();
+            }
         }
 
-        public int NumberOfSubpictureStreams { get; private set; }
-        public int CurrentSubpictureStream { get; set; }
+        public int NumberOfSubpictureStreams
+        {
+            get { return _subpictureStreamHandler != null ? _subpictureStreamHandler.SubpictureStreamsCount : 0; }
+        }
+
+        public int CurrentSubpictureStream
+        {
+            get { return _subpictureStreamHandler != null ? _subpictureStreamHandler.CurrentSubpictureStream : 0; }
+            set
+            {
+                if (_subpictureStreamHandler == null)
+                    return;
+
+                _subpictureStreamHandler.CurrentSubpictureStream = value;
+            }
+        }
+
         public bool EnableSubpicture(bool bEnable)
         {
-            throw new NotImplementedException();
+            if (_subpictureStreamHandler != null)
+            {
+                return _subpictureStreamHandler.EnableSubpicture(bEnable);
+            }
+
+            return false;
         }
 
         public string GetSubpictureStreamName(int nStream)
         {
-            throw new NotImplementedException();
+            return _subpictureStreamHandler != null ? _subpictureStreamHandler.GetSubpictureStreamName(nStream) : string.Empty;
         }
 
         public bool IsSubpictureEnabled()
         {
-            throw new NotImplementedException();
+            return _subpictureStreamHandler != null && _subpictureStreamHandler.IsSubpictureEnabled();
         }
 
-        public bool IsSubpictureStreamEnabled(int ulStreamNum)
+        public bool IsSubpictureStreamEnabled(int nStream)
         {
-            throw new NotImplementedException();
+            return _subpictureStreamHandler != null && _subpictureStreamHandler.IsSubpictureStreamEnabled(nStream);
         }
     }
 }
