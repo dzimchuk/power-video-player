@@ -43,7 +43,8 @@
         </DataTemplate>
 
         <HierarchicalDataTemplate x:Key="HierarchicalParentTemplate">
-            <MenuItem Header="{Binding Title}" />
+            <MenuItem Header="{Binding Title}"
+                      IsChecked="{Binding Path=IsChecked}"/>
             <HierarchicalDataTemplate.ItemsSource>
                 <Binding Path="SubItems" />
             </HierarchicalDataTemplate.ItemsSource>
