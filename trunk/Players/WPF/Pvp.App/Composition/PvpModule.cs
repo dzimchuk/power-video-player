@@ -42,6 +42,7 @@ namespace Pvp.App.Composition
             Bind<DvdMenuLanguagesViewModel>().ToSelf().InSingletonScope();
             Bind<DvdAnglesMenuViewModel>().ToSelf().InSingletonScope();
             Bind<DvdChaptersMenuViewModel>().ToSelf().InSingletonScope();
+            Bind<DiscMenuViewModel>().ToSelf().InSingletonScope();
 
             Bind<IImageCreaterFactory>().To<ImageCreaterFactory>().InSingletonScope();
 

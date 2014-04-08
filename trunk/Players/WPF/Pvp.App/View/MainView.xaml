@@ -64,8 +64,9 @@
                 <MenuItem Header="{Binding LS, Source={StaticResource LocHelper}, Converter={StaticResource LocConverter}, ConverterParameter=mi_file_open}" Command="{Binding Path=OpenCommand}"/>
                 <MenuItem Header="{Binding LS, Source={StaticResource LocHelper}, Converter={StaticResource LocConverter}, ConverterParameter=mi_file_close}" Command="{Binding Path=CloseCommand}"/>
                 <Separator/>
-                <MenuItem Header="{Binding LS, Source={StaticResource LocHelper}, Converter={StaticResource LocConverter}, ConverterParameter=mi_file_play_dvd}"
-                          ItemsSource="{Binding Path=CDRomMenuItems}"
+                <MenuItem DataContext="{x:Static app:ViewModelLocator.DiscMenuViewModel}"
+                          Header="{Binding LS, Source={StaticResource LocHelper}, Converter={StaticResource LocConverter}, ConverterParameter=mi_file_play_dvd}"
+                          ItemsSource="{Binding Path=DiscMenuItems}"
                           ItemTemplate="{StaticResource BoundCommandTemplate}" />
                 <Separator/>
                 <MenuItem Header="{Binding LS, Source={StaticResource LocHelper}, Converter={StaticResource LocConverter}, ConverterParameter=mi_file_information}" Command="{Binding InfoCommand}"/> 

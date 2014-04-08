@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -26,7 +24,6 @@ namespace Pvp.App.ViewModel.MainView
 
         private readonly IFileSelector _fileSelector;
         private readonly IDialogService _dialogService;
-        private readonly IDriveService _driveService;
         private readonly ISettingsProvider _settingsProvider;
         private readonly IImageCreaterFactory _imageCreaterFactory;
         private readonly IDisplayService _displayService;
@@ -70,7 +67,6 @@ namespace Pvp.App.ViewModel.MainView
             ControlPanelViewModel controlViewModel,
             IFileSelector fileSelector,
             IDialogService dialogService,
-            IDriveService driveService,
             ISettingsProvider settingsProvider, 
             IImageCreaterFactory imageCreaterFactory, 
             IDisplayService displayService, 
@@ -81,7 +77,6 @@ namespace Pvp.App.ViewModel.MainView
             _controlViewModel = controlViewModel;
             _fileSelector = fileSelector;
             _dialogService = dialogService;
-            _driveService = driveService;
             _settingsProvider = settingsProvider;
             _imageCreaterFactory = imageCreaterFactory;
             _displayService = displayService;
@@ -95,8 +90,8 @@ namespace Pvp.App.ViewModel.MainView
             Messenger.Default.Register<PropertyChangedMessageBase>(this, true, OnPropertyChanged);
             Messenger.Default.Register<EventMessage>(this, true, OnEventMessage);
             Messenger.Default.Register<PlayNewFileMessage>(this, true, OnPlayNewFile);
+            Messenger.Default.Register<PlayDiscMessage>(this, true, OnPlayDisc);
 
-            PopulateCDRomMenu();
             PackUpCommandBag();
         }
 
@@ -445,6 +440,11 @@ namespace Pvp.App.ViewModel.MainView
             PlayFile(message.Content);
         }
 
+        private void OnPlayDisc(PlayDiscMessage message)
+        {
+            PlayDvd(message.Content);
+        }
+
         private void OnPropertyChanged(PropertyChangedMessageBase message)
         {
             if (message.Sender != this)
@@ -497,7 +497,6 @@ namespace Pvp.App.ViewModel.MainView
             else if (message.Content == Event.ContextMenuOpened)
             {
                 _isContextMenuOpen = true;
-            	ScanCDRomDrives();
             }
             else if (message.Content == Event.ContextMenuClosed)
             {
@@ -586,67 +585,6 @@ namespace Pvp.App.ViewModel.MainView
             Messenger.Default.Send(new EventMessage(Event.StateRefreshSuggested));
         }
         
-        private readonly ObservableCollection<CDRomCommand> _cdRomMenuItems = new ObservableCollection<CDRomCommand>();
-        public ObservableCollection<CDRomCommand> CDRomMenuItems
-        {
-            get { return _cdRomMenuItems; }
-        }
-
-        private void PopulateCDRomMenu()
-        {
-            var command = new RelayCommand<CDRomCommand>(
-                d =>
-                {
-                    if (d != null)
-                    {
-                    	PlayDvd(d.DriveInfo.Name);
-                    }
-                },
-                d =>
-                {
-                    return d != null ? d.IsEnabled : false;
-                });
-
-        	var drives = _driveService.GetAvailableCDRomDrives();
-            foreach (var drive in drives)
-            {
-                _cdRomMenuItems.Add(new CDRomCommand(SynchronizationContext.Current)
-                {
-                    DriveInfo = drive,
-                    Title = drive.Name,
-                    Command = command
-                });
-            }
-        }
-
-        private void ScanCDRomDrives()
-        {
-            ThreadPool.QueueUserWorkItem(state =>
-            {
-                var builder = new StringBuilder();
-
-                foreach (var item in _cdRomMenuItems)
-                {
-                    item.IsEnabled = false;
-                    builder.Append(item.DriveInfo.Name);
-                    try
-                    {
-                        if (item.DriveInfo.IsReady)
-                        {
-                        	builder.Append(item.DriveInfo.VolumeLabel);
-
-                            item.Title = builder.ToString();
-                            item.IsEnabled = true;
-                        }
-                    }
-                    catch {}
-
-                    item.Title = builder.ToString();
-                    builder.Remove(0, builder.Length);
-                }
-            });
-        }
-
         public ICommand SettingsCommand
         {
             get
@@ -944,7 +882,7 @@ namespace Pvp.App.ViewModel.MainView
             {
                 _language = value;
 
-                CultureInfo ci = null;
+                CultureInfo ci;
                 switch(value)
                 {
                     case SupportedLanguage.English:
