@@ -63,6 +63,21 @@ namespace Pvp.Core.MediaEngine.Renderers
             return pPin;
         }
 
+        public IPin GetConnectedSourcePin()
+        {
+            IPin sourcePin = null;
+            if (BaseFilter != null)
+            {
+                IPin pPin;
+                if ((pPin = DsUtils.GetPin(BaseFilter, PinDirection.Input, true)) != null)
+                {
+                    pPin.ConnectedTo(out sourcePin);
+                    Marshal.ReleaseComObject(pPin);
+                }
+            }
+            return sourcePin;
+        }
+
         private bool GetPins(out IPin rendererInputPin, out IPin decoderOutPin)
         {
             bool bRet = false;

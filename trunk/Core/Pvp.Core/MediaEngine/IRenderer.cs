@@ -50,6 +50,7 @@ namespace Pvp.Core.MediaEngine
         
         /// <summary>
         /// Gets the unconnected input pin of the renderer. If the pin was connected before it gets unconnected.
+        /// The caller is responsible for releasing the returned pin.
         /// </summary>
         /// <returns>Unconnected input pin.</returns>
         IPin GetInputPin();
@@ -74,5 +75,12 @@ namespace Pvp.Core.MediaEngine
         /// Removes the renderer from the graph and releases all interfaces associated with it.
         /// </summary>
         void RemoveFromGraph();
+
+        /// <summary>
+        /// Gets an output pin of the filter that is connected to the renderer's input pin.
+        /// The caller is responsible for releasing the returned pin.
+        /// </summary>
+        /// <returns>Output pin of the filter that is connected to the renderer's input pin.</returns>
+        IPin GetConnectedSourcePin();
     }
 }

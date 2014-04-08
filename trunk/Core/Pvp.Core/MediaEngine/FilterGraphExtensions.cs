@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using Pvp.Core.DirectShow;
+using Pvp.Core.MediaEngine.FilterRegistry;
+using MediaType = Pvp.Core.MediaEngine.FilterRegistry.MediaType;
 
 namespace Pvp.Core.MediaEngine
 {
@@ -37,6 +39,21 @@ namespace Pvp.Core.MediaEngine
             }
 
             return new Tuple<IBaseFilter, IBasicAudio>(baseFilter, basicAudio);
+        }
+
+        public static IBaseFilter AddFilter(this IGraphBuilder pGraphBuilder, FilterDescription filterDescription)
+        {
+            var baseFilter = DsUtils.GetFilter(filterDescription.ClassId, true);
+            var hr = pGraphBuilder.AddFilter(baseFilter, filterDescription.Name);
+            
+            if (DsHlp.FAILED(hr))
+            {
+                Marshal.FinalReleaseComObject(baseFilter);
+
+                hr.ThrowExceptionForHR();
+            }
+
+            return baseFilter;
         }
 
         public static IEnumerable<SelectableStream> GetSelectableStreams(this IAMStreamSelect pStreamSelect)
@@ -151,27 +168,42 @@ namespace Pvp.Core.MediaEngine
             {
                 nPinsToSkip++;
 
-                IEnumMediaTypes pEnumTypes;
+                var pin = pPin;
+                pPin.EnumMediaTypes(mt => action(pin, mt));
 
-                var hr = pPin.EnumMediaTypes(out pEnumTypes);
-                if (hr == DsHlp.S_OK)
-                {
-                    IntPtr ptr;
-                    int cFetched;
-
-                    if (pEnumTypes.Next(1, out ptr, out cFetched) == DsHlp.S_OK)
-                    {
-                        AMMediaType mt = (AMMediaType)Marshal.PtrToStructure(ptr, typeof(AMMediaType));
-
-                        action(pPin, mt);
-
-                        DsUtils.FreeFormatBlock(ptr);
-                        Marshal.FreeCoTaskMem(ptr);
-                    }
-                    Marshal.ReleaseComObject(pEnumTypes);
-                }
                 Marshal.ReleaseComObject(pPin);
             }
+        }
+
+        public static void EnumMediaTypes(this IPin pPin, Action<AMMediaType> action)
+        {
+            IEnumMediaTypes pEnumTypes;
+
+            var hr = pPin.EnumMediaTypes(out pEnumTypes);
+            if (hr == DsHlp.S_OK)
+            {
+                IntPtr ptr;
+                int cFetched;
+
+                if (pEnumTypes.Next(1, out ptr, out cFetched) == DsHlp.S_OK)
+                {
+                    AMMediaType mt = (AMMediaType)Marshal.PtrToStructure(ptr, typeof(AMMediaType));
+
+                    action(mt);
+
+                    DsUtils.FreeFormatBlock(ptr);
+                    Marshal.FreeCoTaskMem(ptr);
+                }
+                Marshal.ReleaseComObject(pEnumTypes);
+            }
+        }
+
+        public static MediaType[] GetMediaTypes(this IPin pPin)
+        {
+            var mediaTypes = new List<MediaType>();
+            pPin.EnumMediaTypes(mt => mediaTypes.Add(new MediaType(mt.majorType, mt.subType)));
+
+            return mediaTypes.ToArray();
         }
     }
 }

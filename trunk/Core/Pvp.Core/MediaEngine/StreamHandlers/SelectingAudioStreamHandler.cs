@@ -68,6 +68,13 @@ namespace Pvp.Core.MediaEngine.StreamHandlers
                     {
                         _audioStreams.AddRange(_streamSelect.GetSelectableStreams().Where(s => s.MajorType == MediaType.Audio));
                     }
+                    else
+                    {
+                        pGraphBuilder.RemoveFilter(_directSoundBaseFilter);
+                        Marshal.FinalReleaseComObject(_directSoundBaseFilter);
+                        _directSoundBaseFilter = null;
+                        _basicAudio = null;
+                    }
                 }
 
                 Marshal.ReleaseComObject(pPin);

@@ -349,6 +349,15 @@ namespace Pvp.Core.MediaEngine.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Can&apos;t render subpicture..
+        /// </summary>
+        internal static string error_cant_render_subpicture {
+            get {
+                return ResourceManager.GetString("error_cant_render_subpicture", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Could not retrieve all necessary Filter Graph Manager&apos;s interfaces..
         /// </summary>
         internal static string error_cant_retrieve_all_interfaces {

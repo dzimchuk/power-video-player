@@ -7,6 +7,8 @@ namespace Pvp.Core.MediaEngine.FilterGraphs
     {
         void RenderVideo(IGraphBuilder pGraphBuilder, IRenderer renderer);
         void RenderAudio(IGraphBuilder pGraphBuilder);
+        void RenderSubpicture(IGraphBuilder pGraphBuilder, IRenderer renderer);
+
         void GetMainStreamSubtype(Action<AMMediaType> inspect);
         void GetStreamsMediaTypes(Action<AMMediaType> inspect);
         int AudioStreamsCount { get; }
@@ -21,6 +23,6 @@ namespace Pvp.Core.MediaEngine.FilterGraphs
         bool EnableSubpicture(bool bEnable);
         string GetSubpictureStreamName(int nStream);
         bool IsSubpictureEnabled();
-        bool IsSubpictureStreamEnabled(int ulStreamNum);
+        bool IsSubpictureStreamEnabled(int nStream);
     }
 }

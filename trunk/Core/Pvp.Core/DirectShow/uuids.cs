@@ -107,6 +107,9 @@ namespace Pvp.Core.DirectShow
     
         // MEDIATYPE_DVD_ENCRYPTED_PACK
         public static readonly Guid DVD_ENCRYPTED_PACK = new Guid(0xed0b916a, 0x044d, 0x11d1, 0xaa, 0x78, 0x00, 0xc0, 0x04f, 0xc3, 0x1d, 0x60);
+
+        // MEDIATYPE_Subtitle
+        public static readonly Guid Subtitle = new Guid("E487EB08-6B26-4BE9-9DD3-993434D313FD");
     }
 
     [ComVisible(false)]
