@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
      xmlns:netfx="http://schemas.microsoft.com/wix/NetFxExtension">
-  <Product Id="262D8430-F78D-43C0-8AB2-003D4A222F22" Name="Power Video Player" Language="1033" Version="2.0.0.0" Manufacturer="Andrei Dzimchuk" 
+  <Product Id="262D8430-F78D-43C0-8AB2-003D4A222F22" Name="Power Video Player" Language="1033" Version="2.1.0.0" Manufacturer="Andrei Dzimchuk" 
            UpgradeCode="95049F34-9EEE-4BE6-B523-D36DE8186857">
     <Package Id ="*" InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
 
@@ -92,8 +92,8 @@
         <File Source="$(var.Pvp.App.TargetDir)\nwnd.dll" KeyPath="yes" />
       </Component>
       <Component Id="MVVMLight" Guid="8DAD15FF-2B4E-4AE1-9B9B-4BD8DE16EDB9">
-        <File Source="$(var.Pvp.App.TargetDir)\GalaSoft.MvvmLight.Extras.WPF4.dll" />
-        <File Source="$(var.Pvp.App.TargetDir)\GalaSoft.MvvmLight.WPF4.dll" KeyPath="yes" />
+        <File Source="$(var.Pvp.App.TargetDir)\GalaSoft.MvvmLight.Extras.WPF45.dll" />
+        <File Source="$(var.Pvp.App.TargetDir)\GalaSoft.MvvmLight.WPF45.dll" KeyPath="yes" />
         <File Source="$(var.Pvp.App.TargetDir)\System.Windows.Interactivity.dll" />
       </Component>
       <Component Id="Ninject" Guid="E602B1EF-2B87-496D-A29E-E9EAB9899CD0">
