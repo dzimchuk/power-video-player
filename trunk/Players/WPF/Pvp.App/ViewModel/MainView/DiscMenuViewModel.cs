@@ -22,6 +22,8 @@ namespace Pvp.App.ViewModel.MainView
                 },
                 d => d != null && d.IsEnabled);
 
+        private static readonly object _syncRoot = new object();
+
         public DiscMenuViewModel(IDriveService driveService)
         {
             _driveService = driveService;
@@ -49,16 +51,19 @@ namespace Pvp.App.ViewModel.MainView
 
             uiContext.Send(state =>
                            {
-                               _discMenuItems.Clear();
-
-                               foreach (var drive in drives)
+                               lock (_syncRoot)
                                {
-                                   _discMenuItems.Add(new DiscCommand(uiContext)
-                                                      {
-                                                          DriveInfo = drive,
-                                                          Title = drive.Name,
-                                                          Command = _cdRomCommand
-                                                      });
+                                   _discMenuItems.Clear();
+
+                                   foreach (var drive in drives)
+                                   {
+                                       _discMenuItems.Add(new DiscCommand(uiContext)
+                                                          {
+                                                              DriveInfo = drive,
+                                                              Title = drive.Name,
+                                                              Command = _cdRomCommand
+                                                          });
+                                   }
                                }
                            }, null);
         }
@@ -69,28 +74,31 @@ namespace Pvp.App.ViewModel.MainView
                                          {
                                              PopulateDiscMenu((SynchronizationContext)state);
 
-                                             var builder = new StringBuilder();
-
-                                             foreach (var item in _discMenuItems)
+                                             lock (_syncRoot)
                                              {
-                                                 item.IsEnabled = false;
-                                                 builder.Append(item.DriveInfo.Name);
-                                                 try
+                                                 var builder = new StringBuilder();
+
+                                                 foreach (var item in _discMenuItems)
                                                  {
-                                                     if (item.DriveInfo.IsReady)
+                                                     item.IsEnabled = false;
+                                                     builder.Append(item.DriveInfo.Name);
+                                                     try
                                                      {
-                                                         builder.Append(item.DriveInfo.VolumeLabel);
+                                                         if (item.DriveInfo.IsReady)
+                                                         {
+                                                             builder.Append(item.DriveInfo.VolumeLabel);
 
-                                                         item.Title = builder.ToString();
-                                                         item.IsEnabled = true;
+                                                             item.Title = builder.ToString();
+                                                             item.IsEnabled = true;
+                                                         }
                                                      }
-                                                 }
-                                                 catch
-                                                 {
-                                                 }
+                                                     catch
+                                                     {
+                                                     }
 
-                                                 item.Title = builder.ToString();
-                                                 builder.Remove(0, builder.Length);
+                                                     item.Title = builder.ToString();
+                                                     builder.Remove(0, builder.Length);
+                                                 }
                                              }
 
                                          }, SynchronizationContext.Current);
