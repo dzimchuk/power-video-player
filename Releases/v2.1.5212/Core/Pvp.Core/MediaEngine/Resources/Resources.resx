@@ -1,0 +1,345 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="dvd_audio_stream" xml:space="preserve">
+    <value>audio stream</value>
+  </data>
+  <data name="dvd_cant_render_volume" xml:space="preserve">
+    <value>Could not render the DVD volume.</value>
+  </data>
+  <data name="dvd_failed_streams_format" xml:space="preserve">
+    <value>{0} out of {1} DVD-Video streams failed to render properly</value>
+  </data>
+  <data name="dvd_incompatible_dshow" xml:space="preserve">
+    <value>This version of the application cannot run using the current DirectShow components.</value>
+  </data>
+  <data name="dvd_invalid_volume" xml:space="preserve">
+    <value>Specified DVD-Video volume was invalid</value>
+  </data>
+  <data name="dvd_not_enough_decoders" xml:space="preserve">
+    <value>There are not enough decoders to decode all streams.</value>
+  </data>
+  <data name="dvd_no_line21in" xml:space="preserve">
+    <value>The video decoder doesn't produce closed captioning data</value>
+  </data>
+  <data name="dvd_no_line21out" xml:space="preserve">
+    <value>Decoded closed caption data not rendered properly</value>
+  </data>
+  <data name="dvd_question_continue" xml:space="preserve">
+    <value>Do you want to continue?</value>
+  </data>
+  <data name="dvd_subpicture_stream" xml:space="preserve">
+    <value>subpicture stream</value>
+  </data>
+  <data name="dvd_unknown_error" xml:space="preserve">
+    <value>An unknown error has occurred!</value>
+  </data>
+  <data name="dvd_unknown_volume" xml:space="preserve">
+    <value>No valid DVD-Video volume could be located</value>
+  </data>
+  <data name="dvd_video_stream" xml:space="preserve">
+    <value>video stream</value>
+  </data>
+  <data name="error" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="error_cant_add_ds" xml:space="preserve">
+    <value>Could not add the DirectSound filter to the Graph.</value>
+  </data>
+  <data name="error_cant_add_evr" xml:space="preserve">
+    <value>Could not add the Enhanced Video Renderer to the Graph.</value>
+  </data>
+  <data name="error_cant_add_vmr" xml:space="preserve">
+    <value>Could not add the VMR to the Graph.</value>
+  </data>
+  <data name="error_cant_add_vmr9" xml:space="preserve">
+    <value>Could not add the VMR9 to the Graph.</value>
+  </data>
+  <data name="error_cant_add_vr" xml:space="preserve">
+    <value>Could not add the Video Renderer filter to the Graph.</value>
+  </data>
+  <data name="error_cant_configure_vmr" xml:space="preserve">
+    <value>Could not configure the VMR.</value>
+  </data>
+  <data name="error_cant_configure_vmr9" xml:space="preserve">
+    <value>Could not configure the VMR9.</value>
+  </data>
+  <data name="error_cant_create_ds" xml:space="preserve">
+    <value>Could not create an instance of the DirectSound filter.</value>
+  </data>
+  <data name="error_cant_create_dvd_builder" xml:space="preserve">
+    <value>Could not create the DVD Graph Builder.</value>
+  </data>
+  <data name="error_cant_create_fgm" xml:space="preserve">
+    <value>Could not create the Filter Graph Manager.</value>
+  </data>
+  <data name="error_cant_create_vr" xml:space="preserve">
+    <value>Could not create an instance of the Video Renderer filter.</value>
+  </data>
+  <data name="error_cant_get_video_size" xml:space="preserve">
+    <value>Could not retrieve the video dimension.</value>
+  </data>
+  <data name="error_cant_play_disc" xml:space="preserve">
+    <value>Sorry, can't play this disc.</value>
+  </data>
+  <data name="error_cant_play_file" xml:space="preserve">
+    <value>Sorry, can't play this file.</value>
+  </data>
+  <data name="error_cant_render_file" xml:space="preserve">
+    <value>Sorry, can't render this file.</value>
+  </data>
+  <data name="error_cant_retrieve_all_interfaces" xml:space="preserve">
+    <value>Could not retrieve all necessary Filter Graph Manager's interfaces.</value>
+  </data>
+  <data name="error_no_source_filter" xml:space="preserve">
+    <value>Can't find a source filter for this file.</value>
+  </data>
+  <data name="fgb_question_open_anyway" xml:space="preserve">
+    <value>The selected file may not be a video file. Do you want to open it anyway?</value>
+  </data>
+  <data name="mi_aiff" xml:space="preserve">
+    <value>AIFF</value>
+  </data>
+  <data name="mi_asf" xml:space="preserve">
+    <value>Advanced Systems Format (ASF)</value>
+  </data>
+  <data name="mi_au" xml:space="preserve">
+    <value>AU</value>
+  </data>
+  <data name="mi_avi" xml:space="preserve">
+    <value>AVI</value>
+  </data>
+  <data name="mi_dss_audio" xml:space="preserve">
+    <value>Dss Audio</value>
+  </data>
+  <data name="mi_dss_video" xml:space="preserve">
+    <value>Dss Video</value>
+  </data>
+  <data name="mi_dvd_disc" xml:space="preserve">
+    <value>DVD disc</value>
+  </data>
+  <data name="mi_mpeg1_audio" xml:space="preserve">
+    <value>MPEG1 audio</value>
+  </data>
+  <data name="mi_mpeg1_system" xml:space="preserve">
+    <value>MPEG1 system</value>
+  </data>
+  <data name="mi_mpeg1_video" xml:space="preserve">
+    <value>MPEG1 video</value>
+  </data>
+  <data name="mi_mpeg1_video_cd" xml:space="preserve">
+    <value>MPEG1 video CD</value>
+  </data>
+  <data name="mi_wav" xml:space="preserve">
+    <value>WAV</value>
+  </data>
+  <data name="mw_accept_change_question" xml:space="preserve">
+    <value>Accept Change?</value>
+  </data>
+  <data name="mw_accept_parental_level_format" xml:space="preserve">
+    <value>Accept Parental Level Change Request to level {0}?</value>
+  </data>
+  <data name="mw_dvd_copyprotect_failed" xml:space="preserve">
+    <value>Key exchange for DVD copy protection failed.\nCan't playback this DVD-Video disc.</value>
+  </data>
+  <data name="mw_dvd_disc_decoder_regions" xml:space="preserve">
+    <value>This DVD-Video disc cannot be played on this system, because it is\nnot authored to be played in the installed decoder's region.</value>
+  </data>
+  <data name="mw_dvd_invalid_disc" xml:space="preserve">
+    <value>This DVD-Video disc is incorrectly authored for v1.0 of the spec.\nCan't playback this disc.</value>
+  </data>
+  <data name="mw_dvd_invalid_region" xml:space="preserve">
+    <value>This DVD-Video disc cannot be played, because it is not\nauthored to play in the current system region.\nThe region mismatch may be fixed by changing the\nsystem region.</value>
+  </data>
+  <data name="mw_dvd_low_parental_level" xml:space="preserve">
+    <value>Player parental level is set lower than the lowest parental\nlevel available in this DVD-Video content.\nCannot playback this DVD-Video disc.</value>
+  </data>
+  <data name="mw_dvd_macrovision_error" xml:space="preserve">
+    <value>This DVD-Video content is protected by Macrovision.\nThe system does not satisfy Macrovision requirement.\nCan't continue playing this disc.</value>
+  </data>
+  <data name="mw_dvd_system_decoder_regions" xml:space="preserve">
+    <value>No DVD-Video disc can be played on this system, because \nthe system region does not match the decoder region.\nPlease contact the manufacturer of this system.</value>
+  </data>
+  <data name="mw_dvd_unexpected_error" xml:space="preserve">
+    <value>An unexpected error (possibly incorrectly authored content)\nwas encountered.\nCan't playback this DVD-Video disc.</value>
+  </data>
+  <data name="mw_dvd_warning_cant_open_file" xml:space="preserve">
+    <value>A file on the DVD disc could not be opened. Playback may not continue.</value>
+  </data>
+  <data name="mw_dvd_warning_cant_read" xml:space="preserve">
+    <value>Could not read part of a file on the DVD disc. Playback may not continue.</value>
+  </data>
+  <data name="mw_dvd_warning_cant_seek" xml:space="preserve">
+    <value>Could not move to a different part of a file on the DVD disc. Playback may not continue.</value>
+  </data>
+  <data name="mw_error_occured" xml:space="preserve">
+    <value>An error occured.</value>
+  </data>
+  <data name="mw_play_aborted" xml:space="preserve">
+    <value>The play is aborted.</value>
+  </data>
+  <data name="mw_stream_format" xml:space="preserve">
+    <value>Stream {0}</value>
+  </data>
+  <data name="si_audio" xml:space="preserve">
+    <value>Audio</value>
+  </data>
+  <data name="si_byte_stream" xml:space="preserve">
+    <value>Byte stream with no time stamps</value>
+  </data>
+  <data name="si_interleaved_audio_and_video" xml:space="preserve">
+    <value>Interleaved audio and video</value>
+  </data>
+  <data name="si_line21data" xml:space="preserve">
+    <value>Line 21 data</value>
+  </data>
+  <data name="si_midi" xml:space="preserve">
+    <value>MIDI</value>
+  </data>
+  <data name="si_script_command" xml:space="preserve">
+    <value>Script command</value>
+  </data>
+  <data name="si_text" xml:space="preserve">
+    <value>Text</value>
+  </data>
+  <data name="si_timecode" xml:space="preserve">
+    <value>Timecode data</value>
+  </data>
+  <data name="si_unknown_compression_type" xml:space="preserve">
+    <value>Unrecognized compression type</value>
+  </data>
+  <data name="si_video" xml:space="preserve">
+    <value>Video</value>
+  </data>
+  <data name="error_cant_configure_evr" xml:space="preserve">
+    <value>Could not configure the Enhanced Video Renderer.</value>
+  </data>
+  <data name="error_no_hwnd" xml:space="preserve">
+    <value>Invalid HWND provided.</value>
+  </data>
+  <data name="error_cant_create_media_window" xml:space="preserve">
+    <value>Can't create media window.</value>
+  </data>
+  <data name="accept_parental_level_format" xml:space="preserve">
+    <value>Accept Parental Level Change Request to level {0}?</value>
+  </data>
+  <data name="error_cant_render_subpicture" xml:space="preserve">
+    <value>Can't render subpicture.</value>
+  </data>
+</root>

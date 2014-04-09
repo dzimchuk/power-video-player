@@ -1,0 +1,29 @@
+Present:
+
+Convenient UI
+Plays almost all multimedia formats (requires appropriate codecs to be present on the client system)
+Full DVD Support (MPEG-2 and AC3 decoders should be installed on the client system)  
+Video control: Video size, aspect ratio
+Playback speed control
+Windowed and fullscreen playback
+Displays detailed information about each video and audio stream
+Reports the format that could not be rendered because of the missing codec(s)
+Customizable keyboard and mouse actions  
+Multilingual interface: English, Russian  
+Skinnable
+Supports various video renderers: Legacy Video Renderer, VMR/VMR9, EVR
+Ability to take screenshots of a movie
+Drag-and-drop support 
+Subtitles support (requires DirectVobSub aka VSFilter)
+
+
+Future:
+
+Preferred filters
+Subtitles support: *.SUB,*.SRT,*.SSA  
+Subtitles control: position, font, color, transparency, background... 
+Multi-audio media support 
+Infrared Remotes support: (WinLIRC)
+Advanced video control: brightness, contrast, sharpness...
+Play directory  
+Playlists with bookmarks (media library)
