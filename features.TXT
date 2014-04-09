@@ -14,6 +14,7 @@ Skinnable
 Supports various video renderers: Legacy Video Renderer, VMR/VMR9, EVR
 Ability to take screenshots of a movie
 Drag-and-drop support 
+Subtitles support (requires DirectVobSub aka VSFilter)
 
 
 Future:
