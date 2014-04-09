@@ -1,3 +1,10 @@
+v2.1.5212
+04/09/2014
+9155 - Fix file association in Windows 8
+9251 - Support audio stream switching when a source/splitter filter implementes IAMStreamSelect
+9252 - Support subtitles if a source/splitter stream provides an appropriate stream
+9265 - Properly report present audio streams when a source/splitter filter implementes IAMStreamSelect
+
 v2.0.4960
 07/31/2013
 8918 - Can't play DVD when LAV filters are installed
