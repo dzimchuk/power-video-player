@@ -142,15 +142,18 @@ namespace Pvp.Core.MediaEngine
             var hr = pStreamSelect.Info(index, out ppmt, out pdwFlags, out plcid, out pdwGroup, out ppszName, out ppObject, out ppUnk);
             if (DsHlp.SUCCEEDED(hr))
             {
-                var mt = (AMMediaType)Marshal.PtrToStructure(ppmt, typeof(AMMediaType));
+                var mt = ppmt != IntPtr.Zero ? (AMMediaType)Marshal.PtrToStructure(ppmt, typeof(AMMediaType)) : new AMMediaType();
                 var name = Marshal.PtrToStringAuto(ppszName);
                 var enabled = (pdwFlags & AMStreamSelectInfoFlags.Enabled) != AMStreamSelectInfoFlags.Disabled ||
                               (pdwFlags & AMStreamSelectInfoFlags.Exclusive) != AMStreamSelectInfoFlags.Disabled;
 
                 inspect(mt, name, enabled);
 
-                DsUtils.FreeFormatBlock(ppmt);
-                Marshal.FreeCoTaskMem(ppmt);
+                if (ppmt != IntPtr.Zero)
+                {
+                    DsUtils.FreeFormatBlock(ppmt);
+                    Marshal.FreeCoTaskMem(ppmt);
+                }
 
                 Marshal.FreeCoTaskMem(ppszName);
                 if (ppObject != IntPtr.Zero)
