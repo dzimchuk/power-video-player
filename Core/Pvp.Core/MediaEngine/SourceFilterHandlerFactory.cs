@@ -11,7 +11,7 @@ namespace Pvp.Core.MediaEngine
         {
             IBaseFilter sourceFilter;
 
-            var hr = graphBuilder.AddSourceFilter(source, null, out sourceFilter);
+            var hr = graphBuilder.AddSourceFilter(source, "Source", out sourceFilter);
             hr.ThrowExceptionForHR(GraphBuilderError.SourceFilter);
 
             return new RegularSourceFilterHandler(sourceFilter);
