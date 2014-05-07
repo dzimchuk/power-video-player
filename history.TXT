@@ -1,5 +1,5 @@
-v2.1.5212 (2.1.5217)
-04/09/2014 (04/14/2014)
+v2.1.5212 (2.1.5217, 2.1.5217)
+04/09/2014 (04/14/2014, 05/07/2014)
 9155 - Fix file association in Windows 8
 9251 - Support audio stream switching when a source/splitter filter implementes IAMStreamSelect
 9252 - Support subtitles if a source/splitter stream provides an appropriate stream
