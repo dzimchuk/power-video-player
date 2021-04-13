@@ -1,0 +1,301 @@
+﻿<UserControl x:Class="Pvp.App.View.MainView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:app="clr-namespace:Pvp.App"
+             xmlns:ctrls="clr-namespace:Pvp.App.Controls"
+             xmlns:view="clr-namespace:Pvp.App.View"
+             xmlns:core="clr-namespace:Pvp.Core.Wpf;assembly=Pvp.Core.Wpf"
+             xmlns:engine="clr-namespace:Pvp.Core.MediaEngine;assembly=Pvp.Core"
+             xmlns:util="clr-namespace:Pvp.App.Util"
+             mc:Ignorable="d" 
+             d:DesignHeight="350" d:DesignWidth="525"
+             DataContext="{x:Static app:ViewModelLocator.MainViewModel}"
+             core:MediaControl.MWDoubleClick="_mediaControl_MWDoubleClick"
+             core:MediaControl.MWContextMenu="_mediaControl_MWContextMenu"
+             core:MediaControl.MWMouseMove="_mediaControl_MWMouseMove">
+    <UserControl.Resources>
+
+        <view:FullSceenPanelVisibilityValueConverter x:Key="FullSceenPanelVisibilityValueConverter" />
+        <view:RegularControlPanelVisibilityValueConverter x:Key="RegularControlPanelVisibilityValueConverter" />
+        <view:BooleanToVisibilityValueConverter x:Key="BooleanToVisibilityValueConverter" />
+        <view:PercentToStringValueConverter x:Key="PercentToStringValueConverter" />
+        <view:VideoSizeToBooleanValueConverter x:Key="VideoSizeToBooleanValueConverter" />
+        <view:AspectRatioToBooleanValueConverter x:Key="AspectRatioToBooleanValueConverter" />
+        <view:DoubleToBooleanValueConverter x:Key="DoubleToBooleanValueConverter" />
+        <view:SupportedLanguageToBooleanValueConverter x:Key="SupportedLanguageToBooleanValueConverter" />
+
+        <view:HierarchicalDataTemplateSelector x:Key="HierarchicalDataTemplateSelector" />
+        
+        <view:LocalizationHelper x:Key="LocHelper" />
+        <view:LocalizationConverter x:Key="LocConverter" />
+
+        <DataTemplate x:Key="HierarchicalSeparatorTemplate">
+            <Separator/>
+        </DataTemplate>
+
+        <DataTemplate x:Key="HierarchicalLeafTemplate">
+            <MenuItem Header="{Binding Path=Title}"
+                      Command="{Binding Path=Command}"
+                      util:BoundCommand.Parameter="{Binding Path=Data}"
+                      IsChecked="{Binding Path=IsChecked}"/>
+        </DataTemplate>
+
+        <HierarchicalDataTemplate x:Key="HierarchicalParentTemplate">
+            <MenuItem Header="{Binding Title}"
+                      IsChecked="{Binding Path=IsChecked}"/>
+            <HierarchicalDataTemplate.ItemsSource>
+                <Binding Path="SubItems" />
+            </HierarchicalDataTemplate.ItemsSource>
+            <HierarchicalDataTemplate.ItemTemplateSelector>
+                <StaticResource ResourceKey="HierarchicalDataTemplateSelector" />
+            </HierarchicalDataTemplate.ItemTemplateSelector>
+        </HierarchicalDataTemplate>
+
+        <DataTemplate x:Key="BoundCommandTemplate">
+            <MenuItem Header="{Binding Path=Title}"
+                      Command="{Binding Path=Command}"
+                      util:BoundCommand.Parameter="{Binding}"
+                      IsChecked="{Binding Path=IsChecked}"/>
+        </DataTemplate>
+
+        <ContextMenu x:Key="PvpContextMenu" Opened="ContextMenu_Opened" Closed="ContextMenu_Closed">
+            <MenuItem Header="{Binding LS, Source={StaticResource LocHelper}, Converter={StaticResource LocConverter}, ConverterParameter=mi_file}">
+                <MenuItem Header="{Binding LS, Source={StaticResource LocHelper}, Converter={StaticResource LocConverter}, ConverterParameter=mi_file_open}" Command="{Binding Path=OpenCommand}"/>
+                <MenuItem Header="{Binding LS, Source={StaticResource LocHelper}, Converter={StaticResource LocConverter}, ConverterParameter=mi_file_close}" Command="{Binding Path=CloseCommand}"/>
+                <Separator/>
+                <MenuItem DataContext="{x:Static app:ViewModelLocator.DiscMenuViewModel}"
+                          Header="{Binding LS, Source={StaticResource LocHelper}, Converter={StaticResource LocConverter}, ConverterParameter=mi_file_play_dvd}"
+                          ItemsSource="{Binding Path=DiscMenuItems}"
+                          ItemTemplate="{StaticResource BoundCommandTemplate}" />
+                <Separator/>
+                <MenuItem Header="{Binding LS, Source={StaticResource LocHelper}, Converter={StaticResource LocConverter}, ConverterParameter=mi_file_information}" Command="{Binding InfoCommand}"/> 
+            </MenuItem>
+            <Separator/>
+            <MenuItem Header="{Binding LS, Source={StaticResource LocHelper}, Converter={StaticResource LocConverter}, ConverterParameter=mi_play}" Command="{Binding Path=PlayCommand}"/>
+            <MenuItem Header="{Binding LS, Source={StaticResource LocHelper}, Converter={StaticResource LocConverter}, ConverterParameter=mi_pause}" Command="{Binding Path=PauseCommand}"/>
+            <MenuItem Header="{Binding LS, Source={StaticResource LocHelper}, Converter={StaticResource LocConverter}, ConverterParameter=mi_stop}" Command="{Binding Path=StopCommand}"/>
+            <MenuItem Header="{Binding LS, Source={StaticResource LocHelper}, Converter={StaticResource LocConverter}, ConverterParameter=mi_repeat}" Command="{Binding Path=RepeatCommand}" IsChecked="{Binding Path=IsRepeat}"/>
+            <Separator/>
+            <MenuItem Header="{Binding LS, Source={StaticResource LocHelper}, Converter={StaticResource LocConverter}, ConverterParameter=mi_fullscreen}" Command="{Binding Path=FullScreenCommand}" IsChecked="{Binding Path=IsFullScreen}"/>
+            <Separator/>
+            <MenuItem Header="{Binding LS, Source={StaticResource LocHelper}, Converter={StaticResource LocConverter}, ConverterParameter=mi_video_size}">
+                <MenuItem Header="{Binding MenuItemName, Converter={StaticResource PercentToStringValueConverter}, ConverterParameter='0.5'}" 
+                          IsCheckable="True"
+                          IsChecked="{Binding VideoSize, Mode=TwoWay, Converter={StaticResource VideoSizeToBooleanValueConverter}, ConverterParameter='{x:Static engine:VideoSize.SIZE50}'}"/>
+                <MenuItem Header="{Binding MenuItemName, Converter={StaticResource PercentToStringValueConverter}, ConverterParameter='1'}" 
+                          IsCheckable="True"
+                          IsChecked="{Binding VideoSize, Mode=TwoWay, Converter={StaticResource VideoSizeToBooleanValueConverter}, ConverterParameter='{x:Static engine:VideoSize.SIZE100}'}"/>
+                <MenuItem Header="{Binding MenuItemName, Converter={StaticResource PercentToStringValueConverter}, ConverterParameter='2'}" 
+                          IsCheckable="True"
+                          IsChecked="{Binding VideoSize, Mode=TwoWay, Converter={StaticResource VideoSizeToBooleanValueConverter}, ConverterParameter='{x:Static engine:VideoSize.SIZE200}'}"/>
+                <Separator/>
+                <MenuItem Header="{Binding LS, Source={StaticResource LocHelper}, Converter={StaticResource LocConverter}, ConverterParameter=mi_video_size_free}" 
+                          IsCheckable="True"
+                          IsChecked="{Binding VideoSize, Mode=TwoWay, Converter={StaticResource VideoSizeToBooleanValueConverter}, ConverterParameter='{x:Static engine:VideoSize.SIZE_FREE}'}"/>
+            </MenuItem>
+            <MenuItem Header="{Binding LS, Source={StaticResource LocHelper}, Converter={StaticResource LocConverter}, ConverterParameter=mi_aspect_ratio}">
+                <MenuItem Header="{Binding LS, Source={StaticResource LocHelper}, Converter={StaticResource LocConverter}, ConverterParameter=mi_aspect_ratio_original}"
+                          IsCheckable="True"
+                          IsChecked="{Binding AspectRatio, Mode=TwoWay, Converter={StaticResource AspectRatioToBooleanValueConverter}, ConverterParameter='{x:Static engine:AspectRatio.AR_ORIGINAL}'}" />
+                <Separator/>
+                <MenuItem Header="4:3" IsCheckable="True" IsChecked="{Binding AspectRatio, Mode=TwoWay, Converter={StaticResource AspectRatioToBooleanValueConverter}, ConverterParameter='{x:Static engine:AspectRatio.AR_4x3}'}" />
+                <MenuItem Header="16:9" IsCheckable="True" IsChecked="{Binding AspectRatio, Mode=TwoWay, Converter={StaticResource AspectRatioToBooleanValueConverter}, ConverterParameter='{x:Static engine:AspectRatio.AR_16x9}'}" />
+                <MenuItem Header="47:20" IsCheckable="True" IsChecked="{Binding AspectRatio, Mode=TwoWay, Converter={StaticResource AspectRatioToBooleanValueConverter}, ConverterParameter='{x:Static engine:AspectRatio.AR_47x20}'}" />
+                <MenuItem Header="1:1" IsCheckable="True" IsChecked="{Binding AspectRatio, Mode=TwoWay, Converter={StaticResource AspectRatioToBooleanValueConverter}, ConverterParameter='{x:Static engine:AspectRatio.AR_1x1}'}" />
+                <MenuItem Header="5:4" IsCheckable="True" IsChecked="{Binding AspectRatio, Mode=TwoWay, Converter={StaticResource AspectRatioToBooleanValueConverter}, ConverterParameter='{x:Static engine:AspectRatio.AR_5x4}'}" />
+                <MenuItem Header="16:10" IsCheckable="True" IsChecked="{Binding AspectRatio, Mode=TwoWay, Converter={StaticResource AspectRatioToBooleanValueConverter}, ConverterParameter='{x:Static engine:AspectRatio.AR_16x10}'}" />
+                <Separator/>
+                <MenuItem Header="{Binding LS, Source={StaticResource LocHelper}, Converter={StaticResource LocConverter}, ConverterParameter=mi_aspect_ratio_free}"
+                          IsCheckable="True"
+                          IsChecked="{Binding AspectRatio, Mode=TwoWay, Converter={StaticResource AspectRatioToBooleanValueConverter}, ConverterParameter='{x:Static engine:AspectRatio.AR_FREE}'}" />
+            </MenuItem>
+            <MenuItem Header="{Binding LS, Source={StaticResource LocHelper}, Converter={StaticResource LocConverter}, ConverterParameter=mi_playrate}" IsEnabled="{Binding PlayRateChangePossible}">
+                <MenuItem Header="{Binding MenuItemName, Converter={StaticResource PercentToStringValueConverter}, ConverterParameter='0.5'}"
+                          IsCheckable="True"
+                          IsChecked="{Binding PlayRate, Mode=TwoWay, Converter={StaticResource DoubleToBooleanValueConverter}, ConverterParameter='0.5'}"/>
+                <MenuItem Header="{Binding MenuItemName, Converter={StaticResource PercentToStringValueConverter}, ConverterParameter='0.75'}"
+                          IsCheckable="True"
+                          IsChecked="{Binding PlayRate, Mode=TwoWay, Converter={StaticResource DoubleToBooleanValueConverter}, ConverterParameter='0.75'}"/>
+                <MenuItem Header="{Binding MenuItemName, Converter={StaticResource PercentToStringValueConverter}, ConverterParameter='1.0'}"
+                          IsCheckable="True"
+                          IsChecked="{Binding PlayRate, Mode=TwoWay, Converter={StaticResource DoubleToBooleanValueConverter}, ConverterParameter='1.0'}"/>
+                <MenuItem Header="{Binding MenuItemName, Converter={StaticResource PercentToStringValueConverter}, ConverterParameter='1.25'}"
+                          IsCheckable="True"
+                          IsChecked="{Binding PlayRate, Mode=TwoWay, Converter={StaticResource DoubleToBooleanValueConverter}, ConverterParameter='1.25'}"/>
+                <MenuItem Header="{Binding MenuItemName, Converter={StaticResource PercentToStringValueConverter}, ConverterParameter='1.5'}"
+                          IsCheckable="True"
+                          IsChecked="{Binding PlayRate, Mode=TwoWay, Converter={StaticResource DoubleToBooleanValueConverter}, ConverterParameter='1.5'}"/>
+                <MenuItem Header="{Binding MenuItemName, Converter={StaticResource PercentToStringValueConverter}, ConverterParameter='2.0'}"
+                          IsCheckable="True"
+                          IsChecked="{Binding PlayRate, Mode=TwoWay, Converter={StaticResource DoubleToBooleanValueConverter}, ConverterParameter='2.0'}"/>
+            </MenuItem>
+            <MenuItem Header="{Binding LS, Source={StaticResource LocHelper}, Converter={StaticResource LocConverter}, ConverterParameter=mi_volume}">
+                <MenuItem Header="{Binding LS, Source={StaticResource LocHelper}, Converter={StaticResource LocConverter}, ConverterParameter=mi_volume_up}" Command="{Binding Path=VolumeUpCommand}"/>
+                <MenuItem Header="{Binding LS, Source={StaticResource LocHelper}, Converter={StaticResource LocConverter}, ConverterParameter=mi_volume_down}" Command="{Binding Path=VolumeDownCommand}"/>
+                <MenuItem Header="{Binding LS, Source={StaticResource LocHelper}, Converter={StaticResource LocConverter}, ConverterParameter=mi_volume_mute}" Command="{Binding Path=MuteCommand}" IsChecked="{Binding Path=IsMute}"/>
+            </MenuItem>
+            <Separator/>
+            
+            <MenuItem Header="{Binding LS, Source={StaticResource LocHelper}, Converter={StaticResource LocConverter}, ConverterParameter=mi_goto_menu}" 
+                      DataContext="{x:Static app:ViewModelLocator.DvdChaptersMenuViewModel}"
+                      Visibility="{Binding Path=DvdChaptersMenuVisible, Converter={StaticResource BooleanToVisibilityValueConverter}}"
+                      ItemsSource="{Binding Path=DvdChapters}"
+                      ItemTemplateSelector="{StaticResource HierarchicalDataTemplateSelector}">
+                <MenuItem.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <ctrls:WrapBreakPanel Orientation="Vertical" />
+                    </ItemsPanelTemplate>
+                </MenuItem.ItemsPanel>
+            </MenuItem>
+            
+            <MenuItem Header="{Binding LS, Source={StaticResource LocHelper}, Converter={StaticResource LocConverter}, ConverterParameter=mi_audio_streams}" 
+                      DataContext="{x:Static app:ViewModelLocator.AudioMenuViewModel}"
+                      Visibility="{Binding Path=AudioStreamsMenuVisible, Converter={StaticResource BooleanToVisibilityValueConverter}}"
+                      ItemsSource="{Binding Path=AudioStreams}"
+                      ItemTemplateSelector="{StaticResource HierarchicalDataTemplateSelector}" />
+            
+            <MenuItem Header="{Binding LS, Source={StaticResource LocHelper}, Converter={StaticResource LocConverter}, ConverterParameter=mi_subpictures}" 
+                      DataContext="{x:Static app:ViewModelLocator.SubpictureMenuViewModel}"
+                      Visibility="{Binding Path=SubpictureStreamsMenuVisible, Converter={StaticResource BooleanToVisibilityValueConverter}}"
+                      ItemsSource="{Binding Path=SubpictureStreams}"
+                      ItemTemplateSelector="{StaticResource HierarchicalDataTemplateSelector}">
+                <MenuItem.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <ctrls:WrapBreakPanel Orientation="Vertical" />
+                    </ItemsPanelTemplate>
+                </MenuItem.ItemsPanel>
+            </MenuItem>
+            
+            <MenuItem Header="{Binding LS, Source={StaticResource LocHelper}, Converter={StaticResource LocConverter}, ConverterParameter=mi_angles}" 
+                      DataContext="{x:Static app:ViewModelLocator.DvdAnglesMenuViewModel}"
+                      Visibility="{Binding Path=DvdAnglesMenuVisible, Converter={StaticResource BooleanToVisibilityValueConverter}}"
+                      ItemsSource="{Binding Path=DvdAngles}"
+                      ItemTemplateSelector="{StaticResource HierarchicalDataTemplateSelector}" />
+            
+            <MenuItem Header="{Binding LS, Source={StaticResource LocHelper}, Converter={StaticResource LocConverter}, ConverterParameter=mi_menu_languages}" 
+                      DataContext="{x:Static app:ViewModelLocator.DvdMenuLanguagesViewModel}"
+                      Visibility="{Binding Path=DvdMenuLanguagesMenuVisible, Converter={StaticResource BooleanToVisibilityValueConverter}}"
+                      ItemsSource="{Binding Path=DvdMenuLanguages}"
+                      ItemTemplateSelector="{StaticResource HierarchicalDataTemplateSelector}" />
+            
+            <MenuItem Header="{Binding LS, Source={StaticResource LocHelper}, Converter={StaticResource LocConverter}, ConverterParameter=mi_filters}" 
+                      DataContext="{x:Static app:ViewModelLocator.FiltersMenuViewModel}"
+                      Visibility="{Binding Path=FiltersMenuVisible, Converter={StaticResource BooleanToVisibilityValueConverter}}"
+                      ItemsSource="{Binding Path=Filters}"
+                      ItemTemplateSelector="{StaticResource HierarchicalDataTemplateSelector}" />
+            <Separator Visibility="{Binding Path=FiltersMenuVisible, Converter={StaticResource BooleanToVisibilityValueConverter}}"
+                       DataContext="{x:Static app:ViewModelLocator.FiltersMenuViewModel}"/>
+            
+            <MenuItem Header="{Binding LS, Source={StaticResource LocHelper}, Converter={StaticResource LocConverter}, ConverterParameter=mi_select_menu}"
+                      DataContext="{x:Static app:ViewModelLocator.DvdMenuViewModel}"
+                      Visibility="{Binding Path=DvdMenuVisible, Converter={StaticResource BooleanToVisibilityValueConverter}}"
+                      ItemsSource="{Binding Path=DvdMenuItems}"
+                      ItemTemplateSelector="{StaticResource HierarchicalDataTemplateSelector}" />
+            <MenuItem Header="{Binding LS, Source={StaticResource LocHelper}, Converter={StaticResource LocConverter}, ConverterParameter=mi_close_menu_resume}"
+                      DataContext="{x:Static app:ViewModelLocator.DvdMenuViewModel}"
+                      Visibility="{Binding Path=DvdMenuVisible, Converter={StaticResource BooleanToVisibilityValueConverter}}"
+                      Command="{Binding Path=DvdResumeCommand}"/>
+            <Separator Visibility="{Binding Path=DvdMenuVisible, Converter={StaticResource BooleanToVisibilityValueConverter}}"
+                       DataContext="{x:Static app:ViewModelLocator.DvdMenuViewModel}"/>
+            
+            <MenuItem Header="{Binding LS, Source={StaticResource LocHelper}, Converter={StaticResource LocConverter}, ConverterParameter=mi_application}">
+                <MenuItem Header="{Binding LS, Source={StaticResource LocHelper}, Converter={StaticResource LocConverter}, ConverterParameter=mi_controlbar}" Command="{Binding Path=ControlPanelVisibilityToggleCommand}" IsChecked="{Binding Path=IsControlPanelVisible}"/>
+                <Separator/>
+                <MenuItem Header="{Binding LS, Source={StaticResource LocHelper}, Converter={StaticResource LocConverter}, ConverterParameter=mi_app_lang}">
+                    <MenuItem Header="{Binding LS, Source={StaticResource LocHelper}, Converter={StaticResource LocConverter}, ConverterParameter=mi_app_lang_default}"
+                              IsCheckable="True"
+                              IsChecked="{Binding Language, Mode=TwoWay, Converter={StaticResource SupportedLanguageToBooleanValueConverter}, ConverterParameter={x:Static app:SupportedLanguage.English}}"/>
+                    <MenuItem Header="{Binding LS, Source={StaticResource LocHelper}, Converter={StaticResource LocConverter}, ConverterParameter=mi_app_lang_russian}"
+                              IsCheckable="True"
+                              IsChecked="{Binding Language, Mode=TwoWay, Converter={StaticResource SupportedLanguageToBooleanValueConverter}, ConverterParameter={x:Static app:SupportedLanguage.Russian}}"/>
+                </MenuItem>
+                <MenuItem Header="{Binding LS, Source={StaticResource LocHelper}, Converter={StaticResource LocConverter}, ConverterParameter=mi_preferences}" Command="{Binding Path=SettingsCommand}"/>
+                <MenuItem Header="{Binding LS, Source={StaticResource LocHelper}, Converter={StaticResource LocConverter}, ConverterParameter=mi_about}" Command="{Binding Path=AboutCommand}"/>
+            </MenuItem>
+            <MenuItem Header="{Binding LS, Source={StaticResource LocHelper}, Converter={StaticResource LocConverter}, ConverterParameter=mi_exit}" Command="{Binding Path=ExitCommand}"/>
+        </ContextMenu>
+        
+    </UserControl.Resources>
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <core:MediaControl x:Name="_mediaControl" Grid.Row="0" BorderThickness="0" Background="Black" 
+                           LogoBrush="{StaticResource Logo}" LogoMaxHeight="160" ContextMenu="{StaticResource PvpContextMenu}"
+                           LogoVisible="{Binding ShowLogo}" AutoPlay="{Binding AutoPlay}" InitSize="_mediaControl_InitSize">
+            <!--<core:MediaControl.ContextMenu>
+                <StaticResource ResourceKey="PvpContextMenu"/>
+            </core:MediaControl.ContextMenu>-->
+        </core:MediaControl>
+        
+        <Popup IsOpen="{Binding IsFullScreen}" PlacementTarget="{Binding ElementName=_mediaControl}" 
+               x:Name="_fullScreenPanelHolder" Placement="Custom" CustomPopupPlacementCallback="fullscreenPlacementCallback"
+               Width="{Binding ElementName=_mediaControl, Path=ActualWidth}" AllowsTransparency="True">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <ctrls:FullScreenControlPanel Grid.Row="0" x:Name="_fullScreenControlPanel" MouseLeave="_fullScreenControlPanel_MouseLeave"
+                                       HorizontalAlignment="Stretch" VerticalAlignment="Bottom"
+                                       DataContext="{Binding Path=ControlViewModel, Mode=OneTime}"
+                                       Style="{DynamicResource FullScreenControlPanelStyle}"
+                                       PlayCommand="{Binding Path=PlayCommand}"
+                                       PauseCommand="{Binding Path=PauseCommand}"
+                                       StopCommand="{Binding Path=StopCommand}"
+                                       ForwardCommand="{Binding Path=ForwardCommand}"
+                                       BackwardCommand="{Binding Path=BackwardCommand}"
+                                       ToEndCommand="{Binding Path=ToEndCommand}"
+                                       ToBeginingCommand="{Binding Path=ToBeginingCommand}"
+                                       RepeatCommand="{Binding Path=RepeatCommand}"
+                                       MuteCommand="{Binding Path=MuteCommand}"
+                                       Volume="{Binding Path=Volume, Mode=TwoWay}"
+                                       Duration="{Binding Path=Duration, Mode=OneWay}"
+                                       CurrentPosition="{Binding Path=CurrentPosition, Mode=TwoWay}"
+                                       IsRepeat="{Binding Path=IsRepeat}"
+                                       IsMute="{Binding Path=IsMute}"
+                                       IsInPlayingMode="{Binding Path=IsInPlayingMode}">
+                    <ctrls:FullScreenControlPanel.Visibility>
+                        <MultiBinding Converter="{StaticResource FullSceenPanelVisibilityValueConverter}">
+                            <Binding Path="IsFullScreen"/>
+                            <Binding Path="IsControlPanelVisible"/>
+                        </MultiBinding>
+                    </ctrls:FullScreenControlPanel.Visibility>
+                </ctrls:FullScreenControlPanel>
+            </Grid>
+        </Popup>
+
+        <ctrls:RegularControlPanel Grid.Row="1"
+                                       DataContext="{Binding Path=ControlViewModel, Mode=OneTime}"
+                                       Style="{DynamicResource RegularControlPanelStyle}"
+                                       HorizontalAlignment="Stretch" 
+                                       PlayCommand="{Binding Path=PlayCommand}"
+                                       PauseCommand="{Binding Path=PauseCommand}"
+                                       StopCommand="{Binding Path=StopCommand}"
+                                       ForwardCommand="{Binding Path=ForwardCommand}"
+                                       BackwardCommand="{Binding Path=BackwardCommand}"
+                                       ToEndCommand="{Binding Path=ToEndCommand}"
+                                       ToBeginingCommand="{Binding Path=ToBeginingCommand}"
+                                       RepeatCommand="{Binding Path=RepeatCommand}"
+                                       MuteCommand="{Binding Path=MuteCommand}"
+                                       Volume="{Binding Path=Volume, Mode=TwoWay}"
+                                       Duration="{Binding Path=Duration, Mode=OneWay}"
+                                       CurrentPosition="{Binding Path=CurrentPosition, Mode=TwoWay}"
+                                       IsRepeat="{Binding Path=IsRepeat}"
+                                       IsMute="{Binding Path=IsMute}"
+                                       IsInPlayingMode="{Binding Path=IsInPlayingMode}">
+            <ctrls:RegularControlPanel.Visibility>
+                <MultiBinding Converter="{StaticResource RegularControlPanelVisibilityValueConverter}">
+                    <Binding Path="IsFullScreen"/>
+                    <Binding Path="IsControlPanelVisible"/>
+                </MultiBinding>
+            </ctrls:RegularControlPanel.Visibility>
+        </ctrls:RegularControlPanel>
+        
+    </Grid>
+</UserControl>

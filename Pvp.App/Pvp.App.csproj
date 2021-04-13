@@ -1,0 +1,363 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{F3EDD60A-1420-47D9-85F6-6BA5BE8D1ACF}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Pvp.App</RootNamespace>
+    <AssemblyName>Pvp.App</AssemblyName>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <Utf8Output>true</Utf8Output>
+    <ExpressionBlendVersion>4.0.30816.0</ExpressionBlendVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>pvp.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>..\..\..\Keypairs\ADKeyPair.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="GalaSoft.MvvmLight.Extras.WPF45">
+      <HintPath>..\..\..\packages\MvvmLightLibs.4.2.30.0\lib\net45\GalaSoft.MvvmLight.Extras.WPF45.dll</HintPath>
+    </Reference>
+    <Reference Include="GalaSoft.MvvmLight.WPF45">
+      <HintPath>..\..\..\packages\MvvmLightLibs.4.2.30.0\lib\net45\GalaSoft.MvvmLight.WPF45.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.ServiceLocation">
+      <HintPath>..\..\..\packages\CommonServiceLocator.1.0\lib\NET35\Microsoft.Practices.ServiceLocation.dll</HintPath>
+    </Reference>
+    <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\packages\Ninject.3.2.0.0\lib\net45-full\Ninject.dll</HintPath>
+    </Reference>
+    <Reference Include="Ookii.Dialogs.Wpf">
+      <HintPath>..\..\..\lib\Ookii.Dialogs\Ookii.Dialogs.Wpf.dll</HintPath>
+    </Reference>
+    <Reference Include="ReuxablesLegacy, Version=3.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\lib\Reuxables\ReuxablesLegacy.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Runtime.Remoting" />
+    <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\MvvmLightLibs.4.2.30.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Compile Include="Composition\DesignTimeComposition.cs" />
+    <Compile Include="Controls\CommandSlider.cs" />
+    <Compile Include="Controls\ControlPanelBase.cs" />
+    <Compile Include="Controls\FullScreenControlPanel.cs" />
+    <Compile Include="Controls\WrapBreakPanel.cs" />
+    <Compile Include="IFileAssociatorRegistration.cs" />
+    <Compile Include="Messaging\KeyboardMouseActionEventArgs.cs" />
+    <Compile Include="Messaging\MainWindowResizeSuggestedEventArgs.cs" />
+    <Compile Include="Messaging\PlayDiscMessage.cs" />
+    <Compile Include="Messaging\ResizeMainWindowCommandMessage.cs" />
+    <Compile Include="Service\CursorManager.cs" />
+    <Compile Include="Service\DisplayService.cs" />
+    <Compile Include="Service\DriveInfo.cs" />
+    <Compile Include="Service\DriveService.cs" />
+    <Compile Include="Service\FailedStreamsContainer.cs" />
+    <Compile Include="Service\FileAssociatorWrapper.cs" />
+    <Compile Include="Service\MouseWheelInterpreter.cs" />
+    <Compile Include="Service\SelectedKeyCombinationItemResolver.cs" />
+    <Compile Include="SupportedLanguage.cs" />
+    <Compile Include="Util\FileTypes\AppRegisterer.cs" />
+    <Compile Include="Util\FileTypes\DefaultProgramsFileAssociator.cs" />
+    <Compile Include="Util\FileTypes\DefaultProgramsFileAssociator8.cs" />
+    <Compile Include="Util\FileTypes\DocTypeInfo.cs" />
+    <Compile Include="Util\FileTypes\FileAssociator.cs" />
+    <Compile Include="Util\FileTypes\FileAssociatorFactory.cs" />
+    <Compile Include="Util\FileTypes\IFileAssociator.cs" />
+    <Compile Include="Util\FileTypes\RegistryHelper.cs" />
+    <Compile Include="Util\WindowCustomizer.cs" />
+    <Compile Include="ViewModel\AboutAppViewModel.cs" />
+    <Compile Include="ViewModel\CommandConstants.cs" />
+    <Compile Include="ViewModel\DefaultSettings.cs" />
+    <Compile Include="ViewModel\Extensions.cs" />
+    <Compile Include="ViewModel\FailedStreamsViewModel.cs" />
+    <Compile Include="ViewModel\FileTypes.cs" />
+    <Compile Include="ViewModel\HierarchicalMenu\Extensions.cs" />
+    <Compile Include="ViewModel\HierarchicalMenu\ParentDataItem.cs" />
+    <Compile Include="ViewModel\MainView\AudioMenuViewModel.cs" />
+    <Compile Include="ViewModel\MainView\DiscMenuViewModel.cs" />
+    <Compile Include="ViewModel\MainView\DvdAnglesMenuViewModel.cs" />
+    <Compile Include="ViewModel\MainView\DvdChaptersMenuViewModel.cs" />
+    <Compile Include="ViewModel\MainView\DvdMenuLanguagesViewModel.cs" />
+    <Compile Include="ViewModel\MainView\DvdMenuViewModel.cs" />
+    <Compile Include="ViewModel\MainView\FiltersMenuViewModel.cs" />
+    <Compile Include="ViewModel\MainView\MenuViewModelBase.cs" />
+    <Compile Include="ViewModel\MainView\SubpictureMenuViewModel.cs" />
+    <Compile Include="ViewModel\NumberedMenuItemData.cs" />
+    <Compile Include="ViewModel\HierarchicalMenu\ContentItem.cs" />
+    <Compile Include="ViewModel\HierarchicalMenu\HierarchicalItemType.cs" />
+    <Compile Include="ViewModel\HierarchicalMenu\IHierarchicalItem.cs" />
+    <Compile Include="ViewModel\HierarchicalMenu\LeafItem.cs" />
+    <Compile Include="ViewModel\HierarchicalMenu\ParentItem.cs" />
+    <Compile Include="ViewModel\HierarchicalMenu\SeparatorItem.cs" />
+    <Compile Include="ViewModel\ICursorManager.cs" />
+    <Compile Include="ViewModel\IDisplayService.cs" />
+    <Compile Include="ViewModel\IFailedStreamsContainer.cs" />
+    <Compile Include="ViewModel\IImageCreaterFactory.cs" />
+    <Compile Include="Service\ImageCreaterFactory.cs" />
+    <Compile Include="ViewModel\IKeyInterpreter.cs" />
+    <Compile Include="ViewModel\IMouseWheelInterpreter.cs" />
+    <Compile Include="ViewModel\KeyCombination.cs" />
+    <Compile Include="Service\KeyInterpreter.cs" />
+    <Compile Include="ViewModel\MediaInfoItem.cs" />
+    <Compile Include="ViewModel\MediaInformationViewModel.cs" />
+    <Compile Include="ViewModel\MouseWheelAction.cs" />
+    <Compile Include="ViewModel\SelectableStreamMenuItemData.cs" />
+    <Compile Include="ViewModel\Settings\EnterKeyViewModel.cs" />
+    <Compile Include="ViewModel\Settings\FileTypeItem.cs" />
+    <Compile Include="ViewModel\Settings\IFileAssociator.cs" />
+    <Compile Include="ViewModel\Settings\ISelectedKeyCombinationItemResolver.cs" />
+    <Compile Include="ViewModel\Settings\ISettingsViewModel.cs" />
+    <Compile Include="ViewModel\Settings\KeyCombinationItem.cs" />
+    <Compile Include="View\AboutAppWindow.xaml.cs">
+      <DependentUpon>AboutAppWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\FailedStreamsWindow.xaml.cs">
+      <DependentUpon>FailedStreamsWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\FileTypeTranslateConverter.cs" />
+    <Compile Include="View\HierarchicalDataTemplateSelector.cs" />
+    <Compile Include="View\KeyCombinationTranslateConverter.cs" />
+    <Compile Include="ViewModel\Settings\SettingChangeEventArgs.cs" />
+    <Compile Include="Service\SettingsProvider.cs" />
+    <Compile Include="Util\PropertyBag.cs" />
+    <Compile Include="ViewModel\MainView\DiscCommand.cs" />
+    <Compile Include="ViewModel\IDriveInfo.cs" />
+    <Compile Include="ViewModel\IDriveService.cs" />
+    <Compile Include="ViewModel\IDurationProvider.cs" />
+    <Compile Include="Controls\RegularControlPanel.cs" />
+    <Compile Include="Composition\DependencyResolver.cs" />
+    <Compile Include="Composition\IDependencyResolver.cs" />
+    <Compile Include="Composition\NinjectDependencyResolver.cs" />
+    <Compile Include="Composition\PvpModule.cs" />
+    <Compile Include="Controls\TimeSpanToDoubleValueConverter.cs" />
+    <Compile Include="Controls\TimeSpanToStringValueConverter.cs" />
+    <Compile Include="IMediaControlAcceptor.cs" />
+    <Compile Include="IMediaEngineFacade.cs" />
+    <Compile Include="Messaging\PlayNewFileMessage.cs" />
+    <Compile Include="Service\WindowHandleProvider.cs" />
+    <Compile Include="Service\MediaEngineFacade.cs" />
+    <Compile Include="Messaging\CommandMessage.cs" />
+    <Compile Include="Messaging\Command.cs" />
+    <Compile Include="Messaging\Event.cs" />
+    <Compile Include="Messaging\EventMessage.cs" />
+    <Compile Include="Resources\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Service\DialogService.cs" />
+    <Compile Include="Service\FileSelector.cs" />
+    <Compile Include="Util\BoundCommand.cs" />
+    <Compile Include="Util\Extensions.cs" />
+    <Compile Include="Util\SingleInstance.cs" />
+    <Compile Include="ViewModelLocator.cs" />
+    <Compile Include="ViewModel\ControlPanelViewModel.cs" />
+    <Compile Include="Util\GenericRelayCommand.cs" />
+    <Compile Include="ViewModel\IDialogService.cs" />
+    <Compile Include="ViewModel\IFileSelector.cs" />
+    <Compile Include="ViewModel\IWindowHandleProvider.cs" />
+    <Compile Include="ViewModel\MainView\MainViewModel.cs" />
+    <Compile Include="ViewModel\MainWindowViewModel.cs" />
+    <Compile Include="ViewModel\Settings\FileTypesSettingsViewModel.cs" />
+    <Compile Include="ViewModel\Settings\FiltersSettingsViewModel.cs" />
+    <Compile Include="ViewModel\Settings\GeneralSettingsViewModel.cs" />
+    <Compile Include="ViewModel\Settings\ISettingsProvider.cs" />
+    <Compile Include="ViewModel\Settings\KeyboardMouseSettingsViewModel.cs" />
+    <Compile Include="ViewModel\SettingsConstants.cs" />
+    <Compile Include="ViewModel\Settings\SettingsViewModel.cs" />
+    <Compile Include="ViewModel\Settings\VideoSettingsViewModel.cs" />
+    <Compile Include="ViewModel\TitleChapterMenuItemData.cs" />
+    <Compile Include="View\AspectRatioToBooleanValueConverter.cs" />
+    <Compile Include="View\BooleanToVisibilityValueConverter.cs" />
+    <Compile Include="View\BooleanToWindowStartupLocationValueConverter.cs" />
+    <Compile Include="View\DoubleToBooleanValueConverter.cs" />
+    <Compile Include="View\EnterKeyWindow.xaml.cs">
+      <DependentUpon>EnterKeyWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\FullSceenPanelVisibilityValueConverter.cs" />
+    <Compile Include="View\LocalizationConverter.cs" />
+    <Compile Include="View\LocalizationHelper.cs" />
+    <Compile Include="View\MediaInformationWindow.xaml.cs">
+      <DependentUpon>MediaInformationWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\MouseWheelActionToBooleanConverter.cs" />
+    <Compile Include="View\PercentToStringValueConverter.cs" />
+    <Compile Include="View\RegularControlPanelVisibilityValueConverter.cs" />
+    <Compile Include="View\MainView.xaml.cs">
+      <DependentUpon>MainView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\RendererToBooleanValueConverter.cs" />
+    <Compile Include="View\SettingsWindow.xaml.cs">
+      <DependentUpon>SettingsWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\SingleSelectionGrid.cs" />
+    <Compile Include="View\SupportedLanguageToBooleanValueConverter.cs" />
+    <Compile Include="View\VideoSizeToBooleanValueConverter.cs" />
+    <Page Include="logo.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Properties\DesignTimeResources.xaml" Condition="'$(DesignTime)'=='true' OR ('$(SolutionPath)'!='' AND Exists('$(SolutionPath)') AND '$(BuildingInsideVisualStudio)'!='true' AND '$(BuildingInsideExpressionBlend)'!='true')">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <ContainsDesignTimeResources>true</ContainsDesignTimeResources>
+    </Page>
+    <Page Include="View\AboutAppWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\EnterKeyWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\FailedStreamsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="View\MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Page Include="Themes\Classic.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\MainWindowTemplate.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\Templates.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\MainView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\MediaInformationWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\SettingsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <None Include="..\..\..\Keypairs\ADKeyPair.snk">
+      <Link>ADKeyPair.snk</Link>
+    </None>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Core\Pvp.Core.Wpf\Pvp.Core.Wpf.csproj">
+      <Project>{E20389D6-73AD-410A-BB08-D4009B897E4A}</Project>
+      <Name>Pvp.Core.Wpf</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Core\Pvp.Core\Pvp.Core.csproj">
+      <Project>{C2E6EE93-B834-4445-9AA2-28F6A6E23D8E}</Project>
+      <Name>Pvp.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="pvp.ico" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Resources.ru-RU.resx" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

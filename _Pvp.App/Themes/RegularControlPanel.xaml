@@ -1,0 +1,46 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:ctrls="clr-namespace:Dzimchuk.Pvp.App.Controls">
+    <Style TargetType="{x:Type ctrls:RegularControlPanel}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ctrls:RegularControlPanel}">
+                    <Border Background="Gray" BorderBrush="Black" BorderThickness="2">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            
+                            <ctrls:CommandSlider x:Name="PART_SeekSlider" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Minimum="0" Maximum="50"/>
+                            
+                            <StackPanel Grid.Row="1" Grid.Column="0" Grid.RowSpan="2" Orientation="Horizontal">
+                                <StackPanel Orientation="Horizontal">
+                                    <Button x:Name="PART_PlayButton" Content="Play" />
+                                    <Button x:Name="PART_PauseButton" Content="Pause" />
+                                    <Button x:Name="PART_StopButton" Content="Stop" />
+                                </StackPanel>
+                                
+                                <StackPanel Orientation="Horizontal">
+                                    <Button x:Name="PART_ToBeginingButton" Content="--" />
+                                    <Button x:Name="PART_BackwardButton" Content="-" />
+                                    <Button x:Name="PART_ForwardButton" Content="-" />
+                                    <Button x:Name="PART_ToEndButton" Content="--" />
+                                </StackPanel>
+                                
+                                
+                            </StackPanel>
+                            
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

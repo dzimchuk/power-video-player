@@ -1,0 +1,792 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="about_copyright" xml:space="preserve">
+    <value>Copyright 2004-2014 - Andrei Dzimchuk</value>
+  </data>
+  <data name="about_pvp" xml:space="preserve">
+    <value>О программе</value>
+  </data>
+  <data name="file_type_asf" xml:space="preserve">
+    <value>.asf - Advanced Streaming Format</value>
+  </data>
+  <data name="file_type_avi" xml:space="preserve">
+    <value>.avi - Audio-Video Interleaved</value>
+  </data>
+  <data name="file_type_dat" xml:space="preserve">
+    <value>.dat - MPEG movie on VCD or SVCD</value>
+  </data>
+  <data name="file_type_divx" xml:space="preserve">
+    <value>.divx - Avi file compressed with DivX codec</value>
+  </data>
+  <data name="file_type_m1v" xml:space="preserve">
+    <value>.m1v - MPEG1 video only</value>
+  </data>
+  <data name="file_type_m2v" xml:space="preserve">
+    <value>.m2v - MPEG2 video only</value>
+  </data>
+  <data name="file_type_mkv" xml:space="preserve">
+    <value>.mkv - Matroska video</value>
+  </data>
+  <data name="file_type_mov" xml:space="preserve">
+    <value>.mov - QuickTime movie</value>
+  </data>
+  <data name="file_type_mp4" xml:space="preserve">
+    <value>.mp4 - MPEG4</value>
+  </data>
+  <data name="file_type_mpe" xml:space="preserve">
+    <value>.mpe - Motion Picture Experts Group</value>
+  </data>
+  <data name="file_type_mpeg" xml:space="preserve">
+    <value>.mpeg - Motion Picture Experts Group</value>
+  </data>
+  <data name="file_type_mpg" xml:space="preserve">
+    <value>.mpg - Motion Picture Experts Group</value>
+  </data>
+  <data name="file_type_qt" xml:space="preserve">
+    <value>.qt - QuickTime movie</value>
+  </data>
+  <data name="file_type_vob" xml:space="preserve">
+    <value>.vob - Video Object</value>
+  </data>
+  <data name="file_type_wmv" xml:space="preserve">
+    <value>.wmv - Windows Media Video</value>
+  </data>
+  <data name="infodialog_Aspect_Ratio" xml:space="preserve">
+    <value>Пропорции</value>
+  </data>
+  <data name="infodialog_Bit_Rate" xml:space="preserve">
+    <value>Скорость потока</value>
+  </data>
+  <data name="infodialog_bitrate_value_format" xml:space="preserve">
+    <value>{0} Кбит/сек</value>
+  </data>
+  <data name="infodialog_bits_per_sample_format" xml:space="preserve">
+    <value>, {0} бит на сэмпл</value>
+  </data>
+  <data name="infodialog_channel_format" xml:space="preserve">
+    <value>, {0} канал</value>
+  </data>
+  <data name="infodialog_channels_format" xml:space="preserve">
+    <value>, число каналов: {0}</value>
+  </data>
+  <data name="infodialog_Current_Chapter" xml:space="preserve">
+    <value>Текущая глава</value>
+  </data>
+  <data name="infodialog_Current_Domain" xml:space="preserve">
+    <value>Текущий домен</value>
+  </data>
+  <data name="infodialog_Current_Title" xml:space="preserve">
+    <value>Видео приложение (тайтл)</value>
+  </data>
+  <data name="infodialog_duration" xml:space="preserve">
+    <value>Продолжительность</value>
+  </data>
+  <data name="infodialog_dvd_frequency_value_format" xml:space="preserve">
+    <value>{0} Гц</value>
+  </data>
+  <data name="infodialog_dvddomain_FirstPlay" xml:space="preserve">
+    <value>FirstPlay</value>
+  </data>
+  <data name="infodialog_dvddomain_Stop" xml:space="preserve">
+    <value>Stop</value>
+  </data>
+  <data name="infodialog_dvddomain_Title" xml:space="preserve">
+    <value>Title</value>
+  </data>
+  <data name="infodialog_dvddomain_VideoManagerMenu" xml:space="preserve">
+    <value>VideoManagerMenu</value>
+  </data>
+  <data name="infodialog_dvddomain_VideoTitleSetMenu" xml:space="preserve">
+    <value>VideoTitleSetMenu</value>
+  </data>
+  <data name="infodialog_Format" xml:space="preserve">
+    <value>Формат</value>
+  </data>
+  <data name="infodialog_Format_Type" xml:space="preserve">
+    <value>Тип</value>
+  </data>
+  <data name="infodialog_Frame_Rate" xml:space="preserve">
+    <value>Частота кадров</value>
+  </data>
+  <data name="infodialog_framerate_value_format" xml:space="preserve">
+    <value>{0:f3} Гц</value>
+  </data>
+  <data name="infodialog_Interlace_Mode" xml:space="preserve">
+    <value>Чересстрочная развертка</value>
+  </data>
+  <data name="infodialog_Language" xml:space="preserve">
+    <value>Язык</value>
+  </data>
+  <data name="infodialog_media_source" xml:space="preserve">
+    <value>Источник</value>
+  </data>
+  <data name="infodialog_samplerate_value_format" xml:space="preserve">
+    <value>{0} Гц</value>
+  </data>
+  <data name="infodialog_Title_Duration" xml:space="preserve">
+    <value>Продолжительность тайтла</value>
+  </data>
+  <data name="infodialog_TV_System" xml:space="preserve">
+    <value>ТВ система</value>
+  </data>
+  <data name="infodialog_tv_system_value_format" xml:space="preserve">
+    <value>{0}/{1} Гц</value>
+  </data>
+  <data name="infodialog_type_format" xml:space="preserve">
+    <value>Тип/Формат</value>
+  </data>
+  <data name="infodialog_Video_Format" xml:space="preserve">
+    <value>Формат видео</value>
+  </data>
+  <data name="infodialog_Video_Size" xml:space="preserve">
+    <value>Размер видео</value>
+  </data>
+  <data name="infodialog_Stream_format" xml:space="preserve">
+    <value>Поток {0}</value>
+  </data>
+  <data name="keys_about" xml:space="preserve">
+    <value>О программе</value>
+  </data>
+  <data name="keys_app" xml:space="preserve">
+    <value>Программа</value>
+  </data>
+  <data name="keys_ar_16_9" xml:space="preserve">
+    <value>16:9</value>
+  </data>
+  <data name="keys_ar_4_3" xml:space="preserve">
+    <value>4:3</value>
+  </data>
+  <data name="keys_ar_47_20" xml:space="preserve">
+    <value>47:20</value>
+  </data>
+  <data name="keys_ar_free" xml:space="preserve">
+    <value>Произвольные</value>
+  </data>
+  <data name="keys_ar_original" xml:space="preserve">
+    <value>Как есть</value>
+  </data>
+  <data name="keys_aspect_ratio" xml:space="preserve">
+    <value>Пропорции</value>
+  </data>
+  <data name="keys_backward" xml:space="preserve">
+    <value>Назад</value>
+  </data>
+  <data name="keys_close_file" xml:space="preserve">
+    <value>Закрыть</value>
+  </data>
+  <data name="keys_exit" xml:space="preserve">
+    <value>Выход</value>
+  </data>
+  <data name="keys_file" xml:space="preserve">
+    <value>Файл</value>
+  </data>
+  <data name="keys_file_info" xml:space="preserve">
+    <value>Информация о файле</value>
+  </data>
+  <data name="keys_forward" xml:space="preserve">
+    <value>Вперед</value>
+  </data>
+  <data name="keys_full_screen" xml:space="preserve">
+    <value>На весь экран</value>
+  </data>
+  <data name="keys_open_file" xml:space="preserve">
+    <value>Открыть</value>
+  </data>
+  <data name="keys_pause" xml:space="preserve">
+    <value>Пауза/Воспроизведение</value>
+  </data>
+  <data name="keys_play" xml:space="preserve">
+    <value>Воспроизведение</value>
+  </data>
+  <data name="keys_playback" xml:space="preserve">
+    <value>Управление воспроизведением</value>
+  </data>
+  <data name="keys_pref" xml:space="preserve">
+    <value>Настройки</value>
+  </data>
+  <data name="keys_repeat" xml:space="preserve">
+    <value>Повтор</value>
+  </data>
+  <data name="keys_seek" xml:space="preserve">
+    <value>Поиск</value>
+  </data>
+  <data name="keys_stop" xml:space="preserve">
+    <value>Стоп</value>
+  </data>
+  <data name="keys_video_size" xml:space="preserve">
+    <value>Размер видео</value>
+  </data>
+  <data name="keys_video_size_100" xml:space="preserve">
+    <value>100%</value>
+  </data>
+  <data name="keys_video_size_200" xml:space="preserve">
+    <value>200%</value>
+  </data>
+  <data name="keys_video_size_50" xml:space="preserve">
+    <value>50%</value>
+  </data>
+  <data name="keys_video_size_free" xml:space="preserve">
+    <value>Произвольный</value>
+  </data>
+  <data name="keys_volume" xml:space="preserve">
+    <value>Громкость</value>
+  </data>
+  <data name="keys_volume_decrease" xml:space="preserve">
+    <value>Уменьшить</value>
+  </data>
+  <data name="keys_volume_increase" xml:space="preserve">
+    <value>Увеличить</value>
+  </data>
+  <data name="keys_volume_mute" xml:space="preserve">
+    <value>Отключить звук</value>
+  </data>
+  <data name="mi_about" xml:space="preserve">
+    <value>О программе</value>
+  </data>
+  <data name="mi_angle_format" xml:space="preserve">
+    <value>Угол {0}</value>
+  </data>
+  <data name="mi_angle_menu" xml:space="preserve">
+    <value>Меню углов обзора</value>
+  </data>
+  <data name="mi_angles" xml:space="preserve">
+    <value>Углы обзора</value>
+  </data>
+  <data name="mi_app_lang" xml:space="preserve">
+    <value>Язык интерфейса</value>
+  </data>
+  <data name="mi_app_lang_default" xml:space="preserve">
+    <value>Английский</value>
+  </data>
+  <data name="mi_app_lang_russian" xml:space="preserve">
+    <value>Русский</value>
+  </data>
+  <data name="mi_application" xml:space="preserve">
+    <value>Программа</value>
+  </data>
+  <data name="mi_aspect_ratio" xml:space="preserve">
+    <value>Пропорции</value>
+  </data>
+  <data name="mi_aspect_ratio_free" xml:space="preserve">
+    <value>Произвольные</value>
+  </data>
+  <data name="mi_aspect_ratio_original" xml:space="preserve">
+    <value>Как есть</value>
+  </data>
+  <data name="mi_audio_menu" xml:space="preserve">
+    <value>Аудио меню</value>
+  </data>
+  <data name="mi_audio_streams" xml:space="preserve">
+    <value>Звуковые потоки</value>
+  </data>
+  <data name="mi_chapter_format" xml:space="preserve">
+    <value>Глава {0}</value>
+  </data>
+  <data name="mi_chapter_menu" xml:space="preserve">
+    <value>Меню глав</value>
+  </data>
+  <data name="mi_close_menu_resume" xml:space="preserve">
+    <value>Закрыть меню (Продолжить воспроизведение)</value>
+  </data>
+  <data name="mi_controlbar" xml:space="preserve">
+    <value>Панель управления</value>
+  </data>
+  <data name="mi_display_subpictures" xml:space="preserve">
+    <value>Показывать субтитры</value>
+  </data>
+  <data name="mi_exit" xml:space="preserve">
+    <value>Выход</value>
+  </data>
+  <data name="mi_file" xml:space="preserve">
+    <value>Файл</value>
+  </data>
+  <data name="mi_file_close" xml:space="preserve">
+    <value>Закрыть</value>
+  </data>
+  <data name="mi_file_information" xml:space="preserve">
+    <value>Информация</value>
+  </data>
+  <data name="mi_file_open" xml:space="preserve">
+    <value>Открыть</value>
+  </data>
+  <data name="mi_file_play_dvd" xml:space="preserve">
+    <value>Воспроизведение DVD</value>
+  </data>
+  <data name="mi_filters" xml:space="preserve">
+    <value>Фильтры</value>
+  </data>
+  <data name="mi_fullscreen" xml:space="preserve">
+    <value>Во весь экран</value>
+  </data>
+  <data name="mi_goto_menu" xml:space="preserve">
+    <value>Перейти...</value>
+  </data>
+  <data name="mi_menu_languages" xml:space="preserve">
+    <value>Языковое меню</value>
+  </data>
+  <data name="mi_pause" xml:space="preserve">
+    <value>Пауза</value>
+  </data>
+  <data name="mi_play" xml:space="preserve">
+    <value>Воспроизведение</value>
+  </data>
+  <data name="mi_playrate" xml:space="preserve">
+    <value>Скорость воспроизведения</value>
+  </data>
+  <data name="mi_preferences" xml:space="preserve">
+    <value>Настройки</value>
+  </data>
+  <data name="mi_repeat" xml:space="preserve">
+    <value>Повтор</value>
+  </data>
+  <data name="mi_root_menu" xml:space="preserve">
+    <value>Головное меню</value>
+  </data>
+  <data name="mi_select_menu" xml:space="preserve">
+    <value>Выбор меню</value>
+  </data>
+  <data name="mi_stop" xml:space="preserve">
+    <value>Стоп</value>
+  </data>
+  <data name="mi_subpicture_menu" xml:space="preserve">
+    <value>Меню субтитров</value>
+  </data>
+  <data name="mi_subpictures" xml:space="preserve">
+    <value>Субтитры</value>
+  </data>
+  <data name="mi_title_format" xml:space="preserve">
+    <value>Видео приложение {0}</value>
+  </data>
+  <data name="mi_title_menu" xml:space="preserve">
+    <value>Меню видео приложения</value>
+  </data>
+  <data name="mi_video_size" xml:space="preserve">
+    <value>Размер видео</value>
+  </data>
+  <data name="mi_video_size_free" xml:space="preserve">
+    <value>Произвольный</value>
+  </data>
+  <data name="mi_volume" xml:space="preserve">
+    <value>Громкость</value>
+  </data>
+  <data name="mi_volume_down" xml:space="preserve">
+    <value>Уменьшить</value>
+  </data>
+  <data name="mi_volume_mute" xml:space="preserve">
+    <value>Отключить звук</value>
+  </data>
+  <data name="mi_volume_up" xml:space="preserve">
+    <value>Увеличить</value>
+  </data>
+  <data name="ok" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="preferred_filter_auto" xml:space="preserve">
+    <value>Авто</value>
+  </data>
+  <data name="program_name" xml:space="preserve">
+    <value>Power Video Player</value>
+  </data>
+  <data name="systray_warning_format" xml:space="preserve">
+    <value>Вы изменили настройки "System Tray".{0}Необходимо перезапустить приложение, чтобы новые настройки вступили в силу.</value>
+  </data>
+  <data name="file_type_3g2" xml:space="preserve">
+    <value>.3g2 - 3GPP2</value>
+  </data>
+  <data name="file_type_3gp" xml:space="preserve">
+    <value>.3gp - 3GPP</value>
+  </data>
+  <data name="file_type_flv" xml:space="preserve">
+    <value>.flv - Flash Video</value>
+  </data>
+  <data name="file_type_ifo" xml:space="preserve">
+    <value>.ifo - DVD file</value>
+  </data>
+  <data name="program_description" xml:space="preserve">
+    <value>Powerful and convenient video player for Windows 2000, XP, Vista, 7 and 8. The player is capable to play most video formats (given the necessary decoders are present on the system) and provides full DVD support. In addition, it provides advanced functionality like configuration of preferred decoders and renderers.</value>
+  </data>
+  <data name="about_license" xml:space="preserve">
+    <value>Продукт лицензирован на условиях Ms-PL.</value>
+  </data>
+  <data name="keys_screenshot" xml:space="preserve">
+    <value>Сделать скриншот</value>
+  </data>
+  <data name="captionbar_close" xml:space="preserve">
+    <value>Закрыть</value>
+  </data>
+  <data name="captionbar_maximize" xml:space="preserve">
+    <value>Развернуть</value>
+  </data>
+  <data name="captionbar_minimize" xml:space="preserve">
+    <value>Свернуть</value>
+  </data>
+  <data name="captionbar_restore" xml:space="preserve">
+    <value>Восстановить</value>
+  </data>
+  <data name="controlbar_backward" xml:space="preserve">
+    <value>Назад</value>
+  </data>
+  <data name="controlbar_forward" xml:space="preserve">
+    <value>Вперед</value>
+  </data>
+  <data name="controlbar_mute" xml:space="preserve">
+    <value>Отключить звук</value>
+  </data>
+  <data name="controlbar_pause" xml:space="preserve">
+    <value>Пауза</value>
+  </data>
+  <data name="controlbar_play" xml:space="preserve">
+    <value>Воспроизведение</value>
+  </data>
+  <data name="controlbar_repeat" xml:space="preserve">
+    <value>Повтор</value>
+  </data>
+  <data name="controlbar_seekbar" xml:space="preserve">
+    <value>Поиск</value>
+  </data>
+  <data name="controlbar_stop" xml:space="preserve">
+    <value>Стоп</value>
+  </data>
+  <data name="controlbar_to_begining" xml:space="preserve">
+    <value>В начало</value>
+  </data>
+  <data name="controlbar_to_end" xml:space="preserve">
+    <value>В конец</value>
+  </data>
+  <data name="controlbar_volume" xml:space="preserve">
+    <value>Громкость</value>
+  </data>
+  <data name="apply" xml:space="preserve">
+    <value>Применить</value>
+  </data>
+  <data name="cancel" xml:space="preserve">
+    <value>Отмена</value>
+  </data>
+  <data name="settings_caption" xml:space="preserve">
+    <value>Настройки</value>
+  </data>
+  <data name="settings_general_caption" xml:space="preserve">
+    <value>Общие</value>
+  </data>
+  <data name="settings_general_autoplay" xml:space="preserve">
+    <value>Автоматически проигрывать файл</value>
+  </data>
+  <data name="settings_general_center_window" xml:space="preserve">
+    <value>Размещать окно проигрывателя по центру экрана</value>
+  </data>
+  <data name="settings_general_player_options" xml:space="preserve">
+    <value>Настройки проигрывателя</value>
+  </data>
+  <data name="settings_general_remember_volume" xml:space="preserve">
+    <value>Запоминать уровень громкости</value>
+  </data>
+  <data name="settings_general_show_logo" xml:space="preserve">
+    <value>Показывать логотип</value>
+  </data>
+  <data name="settings_general_start_fullscreen" xml:space="preserve">
+    <value>Запуск в режиме 'на весь экран'</value>
+  </data>
+  <data name="settings_general_topmost" xml:space="preserve">
+    <value>Размещать окно проигрывателя поверх других окон</value>
+  </data>
+  <data name="settings_video_caption" xml:space="preserve">
+    <value>Видео</value>
+  </data>
+  <data name="settings_video_evr" xml:space="preserve">
+    <value>Enhanced Video Renderer</value>
+  </data>
+  <data name="settings_video_recommended" xml:space="preserve">
+    <value>Рекомендуемые настройки</value>
+  </data>
+  <data name="settings_video_renderer" xml:space="preserve">
+    <value>Показывать видео, используя:</value>
+  </data>
+  <data name="settings_video_vmr" xml:space="preserve">
+    <value>Video Mixing Renderer</value>
+  </data>
+  <data name="settings_video_vmr9" xml:space="preserve">
+    <value>Video Mixing Renderer 9</value>
+  </data>
+  <data name="settings_video_vmr9_windowed" xml:space="preserve">
+    <value>Video Mixing Renderer 9 (Windowed)</value>
+  </data>
+  <data name="settings_video_vmr_windowed" xml:space="preserve">
+    <value>Video Mixing Renderer (Windowed)</value>
+  </data>
+  <data name="settings_video_vr" xml:space="preserve">
+    <value>Video Renderer</value>
+  </data>
+  <data name="settings_general_button_choose" xml:space="preserve">
+    <value>Выбрать</value>
+  </data>
+  <data name="settings_general_screenshots_folder" xml:space="preserve">
+    <value>Папка для сохранения скриншотов</value>
+  </data>
+  <data name="folder_select_dialog_caption" xml:space="preserve">
+    <value>Обзор папок</value>
+  </data>
+  <data name="settings_keyboard_caption" xml:space="preserve">
+    <value>Клавиатура/Мышь</value>
+  </data>
+  <data name="enter_key_message" xml:space="preserve">
+    <value>Пожалуйста, введите желаемую комбинацию клавиш:</value>
+  </data>
+  <data name="settings_keyboard_clear" xml:space="preserve">
+    <value>Убрать</value>
+  </data>
+  <data name="settings_keyboard_clear_all" xml:space="preserve">
+    <value>Убрать все</value>
+  </data>
+  <data name="settings_keyboard_defaults" xml:space="preserve">
+    <value>По умолчанию</value>
+  </data>
+  <data name="settings_keyboard_mousewheel_action" xml:space="preserve">
+    <value>Команда, выполняемая колесиком мыши:</value>
+  </data>
+  <data name="settings_mousewheel_action_seek" xml:space="preserve">
+    <value>Поиск</value>
+  </data>
+  <data name="settings_mousewheel_action_volume" xml:space="preserve">
+    <value>Изменение громкости</value>
+  </data>
+  <data name="settings_keyboard_about" xml:space="preserve">
+    <value>О программе</value>
+  </data>
+  <data name="settings_keyboard_aspectratio16x10" xml:space="preserve">
+    <value>Пропорции: 16x10</value>
+  </data>
+  <data name="settings_keyboard_aspectratio16x9" xml:space="preserve">
+    <value>Пропорции: 16x9</value>
+  </data>
+  <data name="settings_keyboard_aspectratio1x1" xml:space="preserve">
+    <value>Пропорции: 1x1</value>
+  </data>
+  <data name="settings_keyboard_aspectratio47x20" xml:space="preserve">
+    <value>Пропорции: 47x20</value>
+  </data>
+  <data name="settings_keyboard_aspectratio4x3" xml:space="preserve">
+    <value>Пропорции: 4x3</value>
+  </data>
+  <data name="settings_keyboard_aspectratio5x4" xml:space="preserve">
+    <value>Пропорции: 5x4</value>
+  </data>
+  <data name="settings_keyboard_aspectratiofree" xml:space="preserve">
+    <value>Пропорции: Произвольные</value>
+  </data>
+  <data name="settings_keyboard_aspectratiooriginal" xml:space="preserve">
+    <value>Пропорции: Как есть</value>
+  </data>
+  <data name="settings_keyboard_back" xml:space="preserve">
+    <value>Назад</value>
+  </data>
+  <data name="settings_keyboard_close" xml:space="preserve">
+    <value>Закрыть</value>
+  </data>
+  <data name="settings_keyboard_exit" xml:space="preserve">
+    <value>Выход</value>
+  </data>
+  <data name="settings_keyboard_forth" xml:space="preserve">
+    <value>Вперед</value>
+  </data>
+  <data name="settings_keyboard_fullscreen" xml:space="preserve">
+    <value>На весь экран</value>
+  </data>
+  <data name="settings_keyboard_info" xml:space="preserve">
+    <value>Информация о файле</value>
+  </data>
+  <data name="settings_keyboard_mute" xml:space="preserve">
+    <value>Отключить звук</value>
+  </data>
+  <data name="settings_keyboard_open" xml:space="preserve">
+    <value>Открыть</value>
+  </data>
+  <data name="settings_keyboard_pause" xml:space="preserve">
+    <value>Пауза/Воспроизведение</value>
+  </data>
+  <data name="settings_keyboard_play" xml:space="preserve">
+    <value>Воспроизведение</value>
+  </data>
+  <data name="settings_keyboard_repeat" xml:space="preserve">
+    <value>Повтор</value>
+  </data>
+  <data name="settings_keyboard_settings" xml:space="preserve">
+    <value>Настройки</value>
+  </data>
+  <data name="settings_keyboard_stop" xml:space="preserve">
+    <value>Стоп</value>
+  </data>
+  <data name="settings_keyboard_takescreenshot" xml:space="preserve">
+    <value>Сделать скриншот</value>
+  </data>
+  <data name="settings_keyboard_videosize100" xml:space="preserve">
+    <value>Размер видео: 100%</value>
+  </data>
+  <data name="settings_keyboard_videosize200" xml:space="preserve">
+    <value>Размер видео: 200%</value>
+  </data>
+  <data name="settings_keyboard_videosize50" xml:space="preserve">
+    <value>Размер видео: 50%</value>
+  </data>
+  <data name="settings_keyboard_videosizefree" xml:space="preserve">
+    <value>Размер видео: Произвольный</value>
+  </data>
+  <data name="settings_keyboard_volumedown" xml:space="preserve">
+    <value>Уменьшить громкость</value>
+  </data>
+  <data name="settings_keyboard_volumeup" xml:space="preserve">
+    <value>Увеличить громкость</value>
+  </data>
+  <data name="settings_filetypes_caption" xml:space="preserve">
+    <value>Ассоциация файлов</value>
+  </data>
+  <data name="settings_filetypes_clear_all" xml:space="preserve">
+    <value>Отменить все</value>
+  </data>
+  <data name="settings_filetypes_description" xml:space="preserve">
+    <value>Выберите типы файлов, для которых Вы бы хотели, чтобы Power Video Player был проигрывателем по умолчанию.</value>
+  </data>
+  <data name="settings_filetypes_select_all" xml:space="preserve">
+    <value>Выбрать все</value>
+  </data>
+  <data name="infodialog_caption" xml:space="preserve">
+    <value>Информация</value>
+  </data>
+  <data name="failedstreams_caption" xml:space="preserve">
+    <value>Внимание</value>
+  </data>
+  <data name="failedstreams_msg1" xml:space="preserve">
+    <value>Некоторые потоки не были прорендерены PVP. Подробности представлены ниже.</value>
+  </data>
+  <data name="failedstreams_msg2" xml:space="preserve">
+    <value>Наиболее вероятно, что необходимые декодеры не установлены в системе.</value>
+  </data>
+  <data name="file_type_m2ts" xml:space="preserve">
+    <value>Blu-ray Disc Audio-Video MPEG-2 Transport Stream</value>
+  </data>
+  <data name="settings_show_external_ui_text" xml:space="preserve">
+    <value>Открыть панель настройки программ по умолчанию</value>
+  </data>
+  <data name="settings_launch_external_ui_error" xml:space="preserve">
+    <value>Произошла ошибка при открытии панели настройки программ по умолчанию. Пожалуйста, убедитесь, что Вы зарегистрировали PVP, запустив его из командной строки с параметром: -regapp</value>
+  </data>
+  <data name="mi_properties" xml:space="preserve">
+    <value>Свойства</value>
+  </data>
+</root>

@@ -1,0 +1,43 @@
+﻿<Window x:Class="Pvp.App.View.AboutAppWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+        xmlns:res="clr-namespace:Pvp.App.Resources" 
+        xmlns:app="clr-namespace:Pvp.App"
+        Title="{x:Static res:Resources.about_pvp}" 
+        Height="250" Width="450"
+        WindowStyle="None"
+        ResizeMode="NoResize"
+        DataContext="{x:Static app:ViewModelLocator.AboutAppViewModel}">
+    <Window.Background>
+        <RadialGradientBrush GradientOrigin="0.1, 0.1" RadiusX="1" RadiusY="1">
+            <GradientStop Color="AliceBlue" Offset="0" />
+            <GradientStop Color="Silver"  Offset="1" />
+        </RadialGradientBrush>
+    </Window.Background>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        
+        <Rectangle Height="70" Width="100" Fill="{StaticResource Logo}" HorizontalAlignment="Left" Margin="10,5,5,5" />
+        
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Margin="10">
+                <TextBlock Text="{Binding ProgramNameAndVersion, Mode=OneTime}"/>
+                <TextBlock Text="{Binding CopyRight, Mode=OneTime}"/>
+                <TextBlock Text="{Binding License, Mode=OneTime}"/>
+            </StackPanel>
+            
+            <Button Grid.Column="1" IsDefault="True" IsCancel="True" Content="{x:Static res:Resources.ok}" 
+                Margin="10" Padding="40,2,40,2" HorizontalAlignment="Right" VerticalAlignment="Bottom" />
+        </Grid>
+        
+    </Grid>
+</Window>
