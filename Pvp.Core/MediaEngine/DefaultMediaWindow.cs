@@ -196,7 +196,7 @@ namespace Pvp.Core.MediaEngine
 
         public void Move(GDI.RECT rcDest)
         {
-            if (_hwnd != null)
+            if (_hwnd != IntPtr.Zero)
             {
                 WindowsManagement.MoveWindow(_hwnd, rcDest.left, rcDest.top, rcDest.right - rcDest.left, rcDest.bottom - rcDest.top, true);
             }
